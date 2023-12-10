@@ -1,5 +1,6 @@
-import { type AppRouter } from "@/server/root";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
+import { type AppRouter } from "@/server/root";
 
 function getBaseUrl() {
   if (typeof window !== "undefined")

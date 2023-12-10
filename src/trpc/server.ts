@@ -1,13 +1,18 @@
 // SERVER ONLY
-
-import { createTRPCProxyClient, loggerLink, TRPCClientError } from "@trpc/client"
+import {
+  TRPCClientError,
+  createTRPCProxyClient,
+  loggerLink,
+} from "@trpc/client";
 import { callProcedure } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { type TRPCErrorResponse } from "@trpc/server/rpc";
-import { cache } from "react";
-import { createTRPCContext } from "./config"
 import { cookies } from "next/headers";
+import { cache } from "react";
+
 import { appRouter } from "@/server/root";
+
+import { createTRPCContext } from "./config";
 
 /**
  * Wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -17,10 +22,10 @@ const createContext = cache(() => {
   return createTRPCContext({
     headers: new Headers({
       cookie: cookies().toString(),
-      "x-trpc-source": "rsc"
-    })
-  })
-})
+      "x-trpc-source": "rsc",
+    }),
+  });
+});
 
 export const api = createTRPCProxyClient<typeof appRouter>({
   links: [
