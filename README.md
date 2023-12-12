@@ -3,20 +3,16 @@
 ## Getting Started
 
 1. Install Node.js directly ([LTS](https://nodejs.org/en/download/) or [Current](https://nodejs.org/en/download/current)) or use Node version manager ([`nvm` for macOS and Linux](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating); [`nvm` for Windows](https://github.com/coreybutler/nvm-windows?tab=readme-ov-file#overview)) to install Node.js.
-2. Optional: install [`pnpm` using Corepack](https://pnpm.io/installation#using-corepack).
+2. Install [`pnpm` using Corepack](https://pnpm.io/installation#using-corepack).
 3. Install dependencies:
 
 ```bash
-npm install
-# or
 pnpm install
 ```
 
 4. Run the development server:
 
 ```bash
-npm run dev
-# or
 pnpm dev
 ```
 
@@ -32,7 +28,7 @@ git checkout -b bob/leaderboard-router
 git push -u origin bob/leaderboard-router
 ```
 
-2. Commit on your feature branch and push to repository.
+2. Commit on your feature branch and push to repository (Note: [Husky](https://typicode.github.io/husky/) will automatically lint and format your code before commit).
 
 ```bash
 git add .
