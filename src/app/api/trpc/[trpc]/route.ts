@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { type NextRequest } from "next/server";
 
@@ -20,7 +21,7 @@ function handler(request: NextRequest) {
     router: appRouter,
     createContext: () => createContext(request),
     onError:
-      process.env.NODE_ENV === "development"
+      env.NODE_ENV === "development"
         ? ({ path, error }) => {
             console.error(
               `tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
