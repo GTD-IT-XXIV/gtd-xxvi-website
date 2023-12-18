@@ -4,8 +4,6 @@ import { ZodError } from "zod";
 import { db } from "@/server/db";
 
 export const createTRPCContext = async function (opts: { headers: Headers }) {
-  // Remove eslint disable comment once schema.prisma is initialized
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return { db, ...opts };
 };
 
@@ -24,4 +22,4 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
-export const procedure = t.procedure;
+export const publicProcedure = t.procedure;
