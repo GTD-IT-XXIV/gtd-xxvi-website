@@ -9,3 +9,49 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Event {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String
+  startDate   DateTime   @db.Date
+  endDate     DateTime   @db.Date
+  bundles     Bundle[]
+  timeslots   Timeslot[]
+}
+
+model Bundle {
+  id      Int      @id @default(autoincrement())
+  name    String
+  price   Decimal
+  eventId Int
+  event   Event    @relation(fields: [eventId], references: [id])
+  tickets Ticket[]
+
+  @@unique([name, eventId])
+}
+
+model Timeslot {
+  id             Int      @id @default(autoincrement())
+  startTime      DateTime
+  endTime        DateTime
+  remainingSlots Int
+  eventId        Int
+  event          Event    @relation(fields: [eventId], references: [id])
+  tickets        Ticket[]
+}
+
+model Ticket {
+  id            Int         @id @default(autoincrement())
+  bundleId      Int
+  bundle        Bundle      @relation(fields: [bundleId], references: [id])
+  timeslotId    Int
+  timeslot      Timeslot    @relation(fields: [timeslotId], references: [id])
+  transactionId Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+}
+
+model Transaction {
+  id      Int      @id @default(autoincrement())
+  tickets Ticket[]
+}

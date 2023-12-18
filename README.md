@@ -10,14 +10,15 @@
 pnpm install
 ```
 
-4. Run the development server:
+4. Copy `.env.example` contents to `.env` and modify the environment variables.
+5. Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-6. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+7. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Workflow
 

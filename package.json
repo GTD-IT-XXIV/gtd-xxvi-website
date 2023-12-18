@@ -11,7 +11,8 @@
     "lint": "next lint",
     "prettier:check": "prettier . --check",
     "prettier:write": "prettier . --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
@@ -51,8 +52,7 @@
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=20.10.0",
+    "node": ">=20",
     "pnpm": ">=8"
-  },
-  "packageManager": "pnpm@8.12.0"
+  }
 }
