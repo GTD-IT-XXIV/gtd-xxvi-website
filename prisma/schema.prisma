@@ -43,6 +43,7 @@ model Timeslot {
 
 model Ticket {
   id            Int         @id @default(autoincrement())
+  status        Status      @default(PENDING)
   bundleId      Int
   bundle        Bundle      @relation(fields: [bundleId], references: [id])
   timeslotId    Int
@@ -54,4 +55,9 @@ model Ticket {
 model Transaction {
   id      Int      @id @default(autoincrement())
   tickets Ticket[]
+}
+
+enum Status {
+  PENDING
+  RECEIVED
 }
