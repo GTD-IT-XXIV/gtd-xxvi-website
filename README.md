@@ -38,6 +38,19 @@ git push
 ```
 
 3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add other tags if necessary.
+4. See specific workflows.
+
+### Frontend Workflow :construction:
+
+### Backend Workflow
+
+1. Open [Prisma Studio](https://www.prisma.io/studio) to view database information & create new rows for development/testing purposes:
+
+```bash
+pnpm db:studio
+```
+
+2. Create tRPC routers/controllers at `src/server/controllers/<your-router>` and add them to the app router at `src/server/root.ts`.
 
 ## Tech Stack
 
