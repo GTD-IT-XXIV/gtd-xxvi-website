@@ -43,7 +43,7 @@ model Timeslot {
 
 model Ticket {
   id            Int         @id @default(autoincrement())
-  status        Status      @default(PENDING)
+  status        Status
   bundleId      Int
   bundle        Bundle      @relation(fields: [bundleId], references: [id])
   timeslotId    Int
