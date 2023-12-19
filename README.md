@@ -37,7 +37,7 @@ git commit -m "feat: add leaderboard router"
 git push
 ```
 
-3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add other tags if necessary.
+3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags if necessary.
 4. See specific workflows.
 
 ### Frontend Workflow :construction:
