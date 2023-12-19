@@ -10,7 +10,7 @@ import { useState } from "react";
 
 import { type AppRouter } from "@/server/root";
 
-import { getUrl } from "./utils";
+import { getUrl, transformer } from "./utils";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -22,6 +22,7 @@ export default function TRPCReactProvider(props: {
 
   const [trpcClient] = useState(() =>
     api.createClient({
+      transformer,
       links: [
         loggerLink({
           enabled: (op) =>

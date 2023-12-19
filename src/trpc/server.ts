@@ -13,6 +13,7 @@ import { cache } from "react";
 import { appRouter } from "@/server/root";
 
 import { createTRPCContext } from "./config";
+import { transformer } from "./utils";
 
 /**
  * Wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -28,6 +29,7 @@ const createContext = cache(() => {
 });
 
 export const api = createTRPCProxyClient<typeof appRouter>({
+  transformer,
   links: [
     loggerLink({
       enabled: (op) =>

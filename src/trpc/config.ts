@@ -1,13 +1,16 @@
 import { initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
 
-import { db } from "@/server/db";
+import { prisma } from "@/server/db";
+
+import { transformer } from "./utils";
 
 export const createTRPCContext = async function (opts: { headers: Headers }) {
-  return { db, ...opts };
+  return { prisma, ...opts };
 };
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer,
   errorFormatter({ shape, error }) {
     return {
       ...shape,
