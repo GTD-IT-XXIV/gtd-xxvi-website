@@ -12,7 +12,10 @@
     "prettier:check": "prettier . --check",
     "prettier:write": "prettier . --write",
     "prepare": "husky install",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "docker:build": "docker build -t gtd-xxvi/nextjs-docker .",
+    "docker:run": "docker run --name gtd-xxvi-website -p 3000:3000 gtd-xxvi/nextjs-docker",
+    "fly:deploy": "flyctl deploy"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",

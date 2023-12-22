@@ -1,6 +1,3 @@
-# docker build -t nextjs-docker .
-# docker run --name gtd-xxvi-website -p 3000:3000 nextjs-docker
-
 FROM node:20-alpine AS base
 
 ENV PNPM_HOME="/pnpm"
@@ -40,7 +37,7 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/publi[c] ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
