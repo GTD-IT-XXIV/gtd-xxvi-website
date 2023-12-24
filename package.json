@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "@stripe/react-stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^2.2.2",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.44.1",
@@ -33,6 +35,8 @@
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
     "sharp": "^0.33.1",
+    "stripe": "^14.10.0",
+    "stripe-js": "link:@stripe/stripe-js",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
