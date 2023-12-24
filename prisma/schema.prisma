@@ -22,12 +22,12 @@ model Event {
 
 model Bundle {
   id      Int      @id @default(autoincrement())
+  quantity Int
   name    String
   price   Decimal
   eventId Int
   event   Event    @relation(fields: [eventId], references: [id])
   tickets Ticket[]
-
   @@unique([name, eventId])
 }
 
