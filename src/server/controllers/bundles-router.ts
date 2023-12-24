@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/trpc/config";
 
 export const bundlesRouter = createTRPCRouter({
-  getAllForEvent: publicProcedure
+  getBundlesByEvent: publicProcedure
     .input(z.number().positive())
     .query(({ ctx, input }) => {
       return ctx.prisma.bundle.findMany({
