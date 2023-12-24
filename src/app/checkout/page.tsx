@@ -11,7 +11,7 @@ import { useBoundStore } from "../store";
 
 export default function App() {
   const stripe = useStripe();
-  const { clientSecret, isLoading, message, setMessage } = useBoundStore();
+  const { isLoading, message, setMessage } = useBoundStore();
   const { data: bundles } = api.bundles.getBundlesByEvent.useQuery(1);
 
   useEffect(() => {
@@ -47,7 +47,6 @@ export default function App() {
     };
     void getPaymentStatus();
   }, [stripe]);
-  const options = { clientSecret };
 
   return (
     <div className="App">
