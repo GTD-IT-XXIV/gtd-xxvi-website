@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/config";
 
+import { bundlesRouter } from "./controllers/bundles-router";
 import { eventsRouter } from "./controllers/events-router";
 import { timeslotsRouter } from "./controllers/timeslots-router";
 
@@ -8,6 +9,7 @@ export const appRouter = createTRPCRouter({
   // Insert TRPC routers here
   events: eventsRouter,
   timeslots: timeslotsRouter,
+  bundles: bundlesRouter,
 });
 
 export type AppRouter = typeof appRouter;
