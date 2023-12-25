@@ -12,7 +12,7 @@ sequenceDiagram
   User-)RegistrationPage: open
   activate RegistrationPage
 
-  create participant BundleSelection
+  %% create participant BundleSelection
   participant LocalStorage
 
   RegistrationPage->>BundleSelection: show
@@ -23,9 +23,9 @@ sequenceDiagram
   TimeslotsRouter-->>-BundleSelection: timeslots
   BundleSelection->>BundleSelection: check bundles' availability
   User->>BundleSelection: select an available bundle
-  deactivate BundleSelection
-  destroy BundleSelection
+  %% destroy BundleSelection
   BundleSelection-->>RegistrationPage: selected bundle
+  deactivate BundleSelection
 
   User-)RegistrationPage: fill details
   RegistrationPage-)LocalStorage: save form details & bundle
