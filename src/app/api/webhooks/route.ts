@@ -1,7 +1,10 @@
 import { env } from "@/env";
 import { stripe } from "@/lib/stripe";
+import { type OrderMetadata } from "@/types/order-metadata";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
+
+import { prisma } from "@/server/db";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -27,26 +30,44 @@ export async function POST(req: Request) {
   console.log("✅ Success:", event.id);
 
   const permittedEvents: string[] = [
-    "checkout.session.completed",
     "payment_intent.succeeded",
     "payment_intent.payment_failed",
   ];
 
   if (permittedEvents.includes(event.type)) {
     try {
+      const data = event.data.object as Stripe.PaymentIntent;
+      const metadata = data.metadata as unknown as OrderMetadata;
       switch (event.type) {
         case "payment_intent.payment_failed":
-          // disable for now as we might need to use it later
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const failedData = event.data.object as Stripe.PaymentIntent;
+          console.log(`❌ Payment failed: ${data.last_payment_error?.message}`);
           console.log(
-            `❌ Payment failed: ${failedData.last_payment_error?.message}`,
+            `Relinquishing timeslot with ID: ${metadata.timeslot_id} of ${metadata.quantity} slots`,
           );
+          await prisma.timeslot.update({
+            where: { id: Number(metadata.timeslot_id) },
+            data: { remainingSlots: { increment: Number(metadata.quantity) } },
+          });
           break;
         case "payment_intent.succeeded":
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const successData = event.data.object as Stripe.PaymentIntent;
-          console.log(`💰 PaymentIntent status: ${successData.status}`);
+          console.log(`💰 PaymentIntent status: ${data.status}`);
+          console.log(
+            `Generating ${metadata.quantity} tickets of timeslot with ID: ${metadata.timeslot_id}`,
+          );
+          // TODO: sending an email to user
+          // use email as the owner of a ticket in the future after the schema changed
+          const tickets = await prisma.ticket.createMany({
+            data: Array(metadata.quantity)
+              .fill(0)
+              .map((_) => ({
+                status: "RECEIVED", // both to be unused changes
+                bundleId: metadata.bundle_id,
+                timeslotId: metadata.timeslot_id,
+                transactionId: 0, // both to be unused after schema changes
+              })),
+          });
+          console.log("Ticket details: ");
+          console.log(tickets);
           break;
         default:
           throw new Error(`Unhandled event: ${event.type}`);

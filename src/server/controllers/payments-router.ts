@@ -1,4 +1,5 @@
 import { stripe } from "@/lib/stripe";
+import { type OrderMetadata } from "@/types/order-metadata";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -12,11 +13,12 @@ export const paymentsRouter = createTRPCRouter({
         quantity: z.number(),
         bundle_id: z.number(),
         timeslot_id: z.number(),
+        email: z.string(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const { quantity, bundle_id, timeslot_id } = input;
+        const { quantity, bundle_id, timeslot_id, email } = input;
         const bundle = await ctx.prisma.bundle.findUnique({
           where: { id: bundle_id },
         });
@@ -62,6 +64,8 @@ export const paymentsRouter = createTRPCRouter({
           amount,
           currency: "sgd",
           payment_method_types: ["paynow"],
+          metadata: { timeslot_id, quantity, bundle_id } as OrderMetadata,
+          receipt_email: email,
         });
 
         return {
