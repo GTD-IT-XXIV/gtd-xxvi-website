@@ -1,16 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { BundleCard } from "@/components/bundle-card";
 
 import { api } from "@/trpc/provider";
 
-import { useBoundStore } from "../store";
-
 export default function TicketApp() {
-  const { isLoading, message } = useBoundStore();
   const { data: bundles } = api.bundles.getBundlesByEvent.useQuery(1);
 
   const searchParams = useSearchParams();
@@ -33,10 +30,11 @@ export default function TicketApp() {
   return (
     <div className="App">
       <h1>Bundles</h1>
-      Status: {isLoading ? "Loading..." : "Idle"}
-      {message && `Message: ${message}`}
-      {email && `Email: ${email}`}
-      {status && `Payment status: ${status}`}
+      {sessionId && (
+        <div>
+          {email} with payment status: {status}
+        </div>
+      )}
       {bundles?.map((bundle) => <BundleCard key={bundle.id} bundle={bundle} />)}
     </div>
   );

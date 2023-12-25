@@ -14,11 +14,10 @@ export const paymentsRouter = createTRPCRouter({
         quantity: z.number(),
         bundle_id: z.number(),
         timeslot_id: z.number(),
-        email: z.string(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { quantity, bundle_id, timeslot_id, email } = input;
+      const { quantity, bundle_id, timeslot_id } = input;
       const bundle = await ctx.prisma.bundle.findUnique({
         where: { id: bundle_id },
       });
@@ -83,7 +82,7 @@ export const paymentsRouter = createTRPCRouter({
         )}/ticket?session_id={CHECKOUT_SESSION_ID}`,
       });
 
-      return { clientSecret: session.client_secret, amount };
+      return { clientSecret: session.client_secret };
     }),
   retrieveCheckoutSession: publicProcedure
     .input(
