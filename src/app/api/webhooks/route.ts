@@ -29,18 +29,37 @@ export async function POST(req: Request) {
   // Successfully constructed event.
   console.log("✅ Success:", event.id);
 
-  const permittedEvents: string[] = [
-    "payment_intent.succeeded",
-    "payment_intent.payment_failed",
-  ];
+  const permittedEvents: string[] = ["checkout.session.completed"];
 
   if (permittedEvents.includes(event.type)) {
     try {
-      const data = event.data.object as Stripe.PaymentIntent;
-      const metadata = data.metadata as unknown as OrderMetadata;
+      let data;
+      let metadata;
       switch (event.type) {
-        case "payment_intent.payment_failed":
-          console.log(`❌ Payment failed: ${data.last_payment_error?.message}`);
+        case "checkout.session.completed":
+          data = event.data.object as unknown as Stripe.Checkout.Session;
+          const { bundle_id, timeslot_id, quantity } =
+            data.metadata as unknown as OrderMetadata;
+          console.log(`💰 CheckoutSession status: ${data.payment_status}`);
+          // TODO: sending an email to user
+          // use email as the owner of a ticket in the future after the schema changed
+          const tickets = await prisma.ticket.createMany({
+            data: Array(quantity)
+              .fill(0)
+              .map((_) => ({
+                status: "RECEIVED", // both to be unused changes
+                bundleId: bundle_id,
+                timeslotId: timeslot_id,
+                transactionId: 0, // both to be unused after schema changes
+              })),
+          });
+          console.log("Ticket details: ");
+          console.log(tickets);
+          break;
+        case "checkout.session.expired":
+          data = event.data.object as unknown as Stripe.Checkout.Session;
+          metadata = data.metadata as unknown as OrderMetadata;
+          console.log(`❌ Payment failed with session: ${data.id}`);
           console.log(
             `Relinquishing timeslot with ID: ${metadata.timeslot_id} of ${metadata.quantity} slots`,
           );
@@ -48,26 +67,6 @@ export async function POST(req: Request) {
             where: { id: Number(metadata.timeslot_id) },
             data: { remainingSlots: { increment: Number(metadata.quantity) } },
           });
-          break;
-        case "payment_intent.succeeded":
-          console.log(`💰 PaymentIntent status: ${data.status}`);
-          console.log(
-            `Generating ${metadata.quantity} tickets of timeslot with ID: ${metadata.timeslot_id}`,
-          );
-          // TODO: sending an email to user
-          // use email as the owner of a ticket in the future after the schema changed
-          const tickets = await prisma.ticket.createMany({
-            data: Array(metadata.quantity)
-              .fill(0)
-              .map((_) => ({
-                status: "RECEIVED", // both to be unused changes
-                bundleId: metadata.bundle_id,
-                timeslotId: metadata.timeslot_id,
-                transactionId: 0, // both to be unused after schema changes
-              })),
-          });
-          console.log("Ticket details: ");
-          console.log(tickets);
           break;
         default:
           throw new Error(`Unhandled event: ${event.type}`);

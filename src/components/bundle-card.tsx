@@ -1,27 +1,28 @@
 import type { Bundle } from "@prisma/client";
-import { Elements } from "@stripe/react-stripe-js";
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
 
 import { useBoundStore } from "@/app/store";
 
 import { api } from "@/trpc/provider";
 import getStripe from "@/utils/get-stripejs";
 
-import { CheckoutForm } from "./checkout-form";
-
 const stripePromise = getStripe();
 
 export function BundleCard({ bundle }: { bundle: Bundle }) {
   const { clientSecret, setClientSecret, amount, setAmount } = useBoundStore();
   const options = { clientSecret };
-  const { mutateAsync: createPaymentIntent } =
-    api.payments.createPaymentIntent.useMutation();
-
+  const { mutateAsync: createCheckoutSession } =
+    api.payments.createCheckoutSession.useMutation();
   const handleCheckout = async (quantity: number, bundleID: number) => {
     try {
-      const { clientSecret, amount } = await createPaymentIntent({
+      const { clientSecret, amount } = await createCheckoutSession({
         quantity,
         bundle_id: bundleID,
         timeslot_id: 1,
+        email: "dummy@gmail.com", // needs to be fulfilled
       });
 
       if (typeof clientSecret === "string") {
@@ -41,14 +42,14 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
       <button className="border" onClick={() => handleCheckout(1, bundle.id)}>
         buy this bundle
       </button>
-      {clientSecret && (
-        <>
-          <Elements options={options} stripe={stripePromise}>
-            <>Pay: {amount}</>
-            <CheckoutForm />
-          </Elements>
-        </>
-      )}
+      amount: {amount}
+      <div id="checkout">
+        {clientSecret && (
+          <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        )}
+      </div>
     </div>
   );
 }
