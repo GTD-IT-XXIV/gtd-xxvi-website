@@ -1,4 +1,7 @@
 import { type Order } from "@/types/order";
+import { TRPCError } from "@trpc/server";
+
+import { prisma } from "./db";
 
 const DOLLAR = 100;
 export const calculateOrderAmount = async (order: Order): Promise<number> => {
@@ -10,5 +13,16 @@ export const calculateOrderAmount = async (order: Order): Promise<number> => {
 const getBundleAmountPerQuantity = async (
   bundleID: number,
 ): Promise<number> => {
-  return bundleID * DOLLAR;
+  try {
+    const { price } = await prisma.bundle.findUniqueOrThrow({
+      where: { id: bundleID },
+    });
+
+    return Number(price) * DOLLAR;
+  } catch (err) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Bundle is not found",
+    });
+  }
 };

@@ -11,20 +11,21 @@ import { CheckoutForm } from "./checkout-form";
 const stripePromise = getStripe();
 
 export function BundleCard({ bundle }: { bundle: Bundle }) {
-  const { clientSecret, setClientSecret } = useBoundStore();
+  const { clientSecret, setClientSecret, amount, setAmount } = useBoundStore();
   const options = { clientSecret };
   const { mutateAsync: createPaymentIntent } =
     api.payments.createPaymentIntent.useMutation();
 
   const handleCheckout = async (quantity: number, bundleID: number) => {
     try {
-      const { clientSecret } = await createPaymentIntent({
+      const { clientSecret, amount } = await createPaymentIntent({
         quantity,
         bundle_id: bundleID,
       });
 
       if (typeof clientSecret === "string") {
         setClientSecret(clientSecret);
+        setAmount(amount / 100); // convert from cents to sgd
       }
     } catch (err) {
       console.error(err);
@@ -42,6 +43,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
       {clientSecret && (
         <>
           <Elements options={options} stripe={stripePromise}>
+            <>Pay: {amount}</>
             <CheckoutForm />
           </Elements>
         </>
