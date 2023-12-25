@@ -33,26 +33,26 @@ export async function POST(req: Request) {
     "checkout.session.completed",
     "checkout.session.expired",
   ];
+  console.log(event.type);
 
   if (permittedEvents.includes(event.type)) {
     try {
       let data;
-      let metadata;
+      let metadata: OrderMetadata;
       switch (event.type) {
         case "checkout.session.completed":
           data = event.data.object as unknown as Stripe.Checkout.Session;
-          const { bundle_id, timeslot_id, quantity } =
-            data.metadata as unknown as OrderMetadata;
+          metadata = data.metadata as unknown as OrderMetadata;
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
           // TODO: sending an email to user
           // use email as the owner of a ticket in the future after the schema changed
           const tickets = await prisma.ticket.createMany({
-            data: Array(quantity)
+            data: Array(Number(metadata.quantity))
               .fill(0)
               .map((_) => ({
                 status: "RECEIVED", // both to be unused changes
-                bundleId: bundle_id,
-                timeslotId: timeslot_id,
+                bundleId: Number(metadata.bundle_id),
+                timeslotId: Number(metadata.timeslot_id),
                 transactionId: 0, // both to be unused after schema changes
               })),
           });
@@ -81,6 +81,8 @@ export async function POST(req: Request) {
         { status: 500 },
       );
     }
+  } else {
+    console.log(`Unpermitted event handled: ${event.type}`);
   }
   // Return a response to acknowledge receipt of the event.
   return NextResponse.json({ message: "Received" }, { status: 200 });
