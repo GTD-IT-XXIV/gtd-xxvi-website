@@ -63,7 +63,7 @@ export const paymentsRouter = createTRPCRouter({
         ui_mode: "embedded",
         line_items: [
           {
-            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+            // can provide price_id if we predefine price_id on stripe dashboard
             price_data: {
               product_data: {
                 name: bundle.name,
