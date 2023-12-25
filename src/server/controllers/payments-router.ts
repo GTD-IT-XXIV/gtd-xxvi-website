@@ -80,6 +80,7 @@ export const paymentsRouter = createTRPCRouter({
         return_url: `${ctx.headers.get(
           "origin",
         )}/ticket?session_id={CHECKOUT_SESSION_ID}`,
+        expires_at: Date.now() + 5 * 60,
       });
 
       return { clientSecret: session.client_secret };
