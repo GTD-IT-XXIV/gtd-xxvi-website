@@ -21,6 +21,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
       const { clientSecret, amount } = await createPaymentIntent({
         quantity,
         bundle_id: bundleID,
+        timeslot_id: 1,
       });
 
       if (typeof clientSecret === "string") {
