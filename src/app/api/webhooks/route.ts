@@ -29,7 +29,10 @@ export async function POST(req: Request) {
   // Successfully constructed event.
   console.log("✅ Success:", event.id);
 
-  const permittedEvents: string[] = ["checkout.session.completed"];
+  const permittedEvents: string[] = [
+    "checkout.session.completed",
+    "checkout.session.expired",
+  ];
 
   if (permittedEvents.includes(event.type)) {
     try {
