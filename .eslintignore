@@ -44,3 +44,7 @@ package.json
 .husky
 .eslintignore
 .prettierignore
+*.md
+*.toml
+Dockerfile
+prisma/migrations

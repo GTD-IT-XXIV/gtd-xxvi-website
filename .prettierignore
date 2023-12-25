@@ -28,6 +28,7 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+.env.example
 
 # vercel
 .vercel
@@ -43,3 +44,6 @@ pnpm-lock.yaml
 .husky
 .eslintignore
 .prettierignore
+*.toml
+Dockerfile
+prisma/migrations
