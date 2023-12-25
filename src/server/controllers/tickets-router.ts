@@ -18,4 +18,9 @@ export const ticketsRouter = createTRPCRouter({
         where: { timeslot: { eventId: input } },
       });
     }),
+  deleteById: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.prisma.ticket.delete({
+      where: { id: input },
+    });
+  }),
 });
