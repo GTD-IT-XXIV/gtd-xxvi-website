@@ -57,7 +57,7 @@ export const paymentsRouter = createTRPCRouter({
           isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
         },
       );
-
+      const expiresAt = Date.now() + 30 * 60 * 1000; // timeout the payment after 30 minutes since it is the minimum time to timeout the transaction if there is no payment
       // if reservation successful
       const session = await stripe.checkout.sessions.create({
         ui_mode: "embedded",
@@ -80,7 +80,7 @@ export const paymentsRouter = createTRPCRouter({
         return_url: `${ctx.headers.get(
           "origin",
         )}/ticket?session_id={CHECKOUT_SESSION_ID}`,
-        expires_at: Date.now() + 5 * 60,
+        expires_at: Math.floor(expiresAt / 1000), // since stripe time in seconds
       });
 
       return { clientSecret: session.client_secret };
