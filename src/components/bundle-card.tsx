@@ -20,7 +20,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
       const { clientSecret } = await createCheckoutSession({
         quantity,
         bundle_id: bundleID,
-        timeslot_id: 1,
+        timeslot_id: 1, // needs to be passed when selecting timeslot
       });
 
       if (typeof clientSecret === "string") {
