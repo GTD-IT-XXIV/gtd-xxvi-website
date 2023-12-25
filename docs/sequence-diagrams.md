@@ -68,22 +68,29 @@ sequenceDiagram
     CheckoutPage-)LocalStorage: save pending ticket
   end
 
-  CheckoutPage->>+PaymentsRouter: create payment intent
-  PaymentsRouter-->>-CheckoutPage: client secret
-  CheckoutPage->>+Stripe: get PayNow QR
-  Stripe-->>-CheckoutPage: PayNow QR
-  User-)CheckoutPage: scan & pay
+  alt User does not click pay within 5 minutes after selecting a timeslot
+    CheckoutPage->>LocalStorage: remove bundle & pending ticket
+    CheckoutPage-)+TicketsRouter: delete pending ticket
+    CheckoutPage->>RegistrationPage: navigate
+  else
+    User-)CheckoutPage: click pay
+    CheckoutPage->>+PaymentsRouter: create payment intent
+    PaymentsRouter-->>-CheckoutPage: client secret
+    CheckoutPage->>+Stripe: get PayNow QR
+    Stripe-->>-CheckoutPage: PayNow QR
+    User-)CheckoutPage: scan & pay
 
-  loop while payment failed
-  CheckoutPage->>CheckoutPage: display error message
-  User-)CheckoutPage: scan & pay
+    loop while payment failed
+    CheckoutPage->>CheckoutPage: display error message
+    User-)CheckoutPage: scan & pay
+    end
+
+    note over CheckoutPage: payment successful
+    CheckoutPage-)+TicketsRouter: change pending ticket to received
+    TicketsRouter-->>-CheckoutPage: ticket
+    CheckoutPage-)LocalStorage: remove all
+    deactivate LocalStorage
+    User-)CheckoutPage: save ticket
+    deactivate CheckoutPage
   end
-
-  note over CheckoutPage: payment successful
-  CheckoutPage-)+TicketsRouter: change pending ticket to received
-  TicketsRouter-->>-CheckoutPage: ticket
-  CheckoutPage-)LocalStorage: remove all
-  deactivate LocalStorage
-  User-)CheckoutPage: save ticket
-  deactivate CheckoutPage
 ```

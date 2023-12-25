@@ -1,3 +1,3 @@
 export default function GTDFest() {
-  return <main></main>;
+  return <main>GTD Fest Page</main>;
 }

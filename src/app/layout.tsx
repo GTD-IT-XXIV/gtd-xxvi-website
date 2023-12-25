@@ -7,9 +7,8 @@ import TRPCReactProvider from "@/trpc/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// TODO: change/finalize
 export const metadata: Metadata = {
-  metadataBase: new URL("https://gtd-xxvi-website-dev.vercel.app/"),
+  metadataBase: new URL("https://gtd-xxvi-website.fly.dev"),
   title: "GTD XXVI Website",
   description: "PINTU Get Together Day XXVI Website",
 };
