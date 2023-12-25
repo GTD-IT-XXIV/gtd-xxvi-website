@@ -44,3 +44,4 @@ package.json
 .husky
 .eslintignore
 .prettierignore
+*.md
