@@ -45,3 +45,6 @@ package.json
 .eslintignore
 .prettierignore
 *.md
+*.toml
+Dockerfile
+prisma/migrations
