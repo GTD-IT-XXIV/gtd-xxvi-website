@@ -8,7 +8,7 @@ import { BundleCard } from "@/components/bundle-card";
 import { api } from "@/trpc/provider";
 
 export default function TicketApp() {
-  const { data: bundles } = api.bundles.getBundlesByEvent.useQuery(1);
+  const { data: bundles } = api.bundles.getManyByEvent.useQuery(1);
 
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
