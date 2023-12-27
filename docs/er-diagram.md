@@ -1,46 +1,120 @@
 # Entity-Relationship Diagram
 
+## Prisma Schema
+
 ```mermaid
 erDiagram
-  event ||--|{ timeslot: ""
-  event ||--|{ bundle: ""
-  event {
-    serial id
+  Event {
+    Int id PK
+    String name
+    String description
+    Date startDate
+    Date endDate
+  }
+  Bundle {
+    Int id PK
+    Int eventId FK
+    String name
+    String[] details
+    Decimal price
+    Int quantity
+    Int remainingAmount
+  }
+  Timeslot {
+    Int id PK
+    Int eventId FK
+    DateTime startTime
+    DateTime endTime
+    Int remainingSlots
+  }
+  Ticket {
+    Int id PK
+    Int bookingId FK
+    Int bundleId FK
+    Int timeslotId FK
+    String paymentIntentId
+  }
+  Booking {
+    Int id PK
+    String name
+    String email
+    String telegramHandle
+    String phoneNumber
+    Boolean valid
+    DateTime created
+  }
+
+  Event ||--|{ Bundle : ""
+  Event ||--|{ Timeslot : ""
+  Bundle ||--o{ Ticket : ""
+  Timeslot ||--o{ Ticket : ""
+  Ticket }o--|| Booking : ""
+```
+
+## Database Schema
+
+```mermaid
+erDiagram
+  Event {
+    integer id PK
     text name
     text description
-    date start_date
-    date end_date
+    date startDate
+    date endDate
   }
-  timeslot ||--o{ ticket: ""
-  timeslot {
-    serial id
-    timestamp(3) start_time
-    timestamp(3) end_time
-    integer remaining_slots
-   }
-  bundle ||--o{ ticket: ""
-  bundle {
-    serial id
-    integer quantity
+  Bundle {
+    integer id PK
+    integer eventId FK
     text name
-    decimal price
+    text[] details
+    numeric price
+    integer quantity
+    integer remainingAmount
   }
-  ticket }|--o| transaction: ""
-  ticket {
-    serial id
-    Status status
+  Timeslot {
+    integer id PK
+    integer eventId FK
+    timestamp startTime
+    timestamp endTime
+    Int remainingSlots
   }
-  transaction ||--|| "stripe.payment_intent": ""
-  transaction {
-    serial id
+  Ticket {
+    integer id PK
+    integer bookingId FK
+    integer bundleId FK
+    integer timeslotId FK
+    text paymentIntentId
   }
-  "stripe.payment_intent" {
+  Booking {
+    integer id PK
+    text name
+    text email
+    text telegramHandle
+    text phoneNumber
+    boolean valid
+    timestamp created
+  }
+  PaymentIntent {
     text id
     text customer
     bigint amount
     text currency
     text payment_method
     timestamp created
-    jsonb attrs
+    attrs jsonb
   }
+
+  Event ||--|{ Bundle : ""
+  Event ||--|{ Timeslot : ""
+  Bundle ||--o{ Ticket : ""
+  Timeslot ||--o{ Ticket : ""
+  Ticket }o--|| Booking : ""
+  Ticket }o..|| PaymentIntent: ""
 ```
+
+## Notes
+
+- `Bundle.quantity`: number of slots this bundle occupies; number of people in this bundle
+- `Bundle.remainingAmount`: number of bundles available
+- `Ticket.paymentIntentId`: reference for Stripe PaymentIntent ID; not a foreign key
+- `Booking.valid`: validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
