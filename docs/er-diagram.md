@@ -42,6 +42,7 @@ erDiagram
     String phoneNumber
     Boolean valid
     DateTime created
+    String paymentIntentId
   }
 
   Event ||--|{ Bundle : ""
@@ -93,6 +94,7 @@ erDiagram
     text phoneNumber
     boolean valid
     timestamp created
+    text paymentIntentId
   }
   PaymentIntent {
     text id
@@ -110,6 +112,7 @@ erDiagram
   Timeslot ||--o{ Ticket : ""
   Ticket }o--|| Booking : ""
   Ticket }o..|| PaymentIntent: ""
+  Booking ||..o| PaymentIntent: ""
 ```
 
 ## Notes
@@ -117,4 +120,5 @@ erDiagram
 - `Bundle.quantity`: number of slots this bundle occupies; number of people in this bundle
 - `Bundle.remainingAmount`: number of bundles available
 - `Ticket.paymentIntentId`: reference for Stripe PaymentIntent ID; not a foreign key
+- `Booking.paymentIntentId`: reference for Stripe PaymentIntent ID; not a foreign key
 - `Booking.valid`: validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking

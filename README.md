@@ -10,7 +10,7 @@
 pnpm install
 ```
 
-4. Copy `.env.example` contents to `.env` and modify the environment variables.
+4. Copy `.env.example` contents to `.env.development.local` and modify the environment variables.
 5. Run the development server:
 
 ```bash

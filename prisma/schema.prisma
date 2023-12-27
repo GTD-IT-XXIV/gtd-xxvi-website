@@ -27,8 +27,8 @@ model Bundle {
   price           Decimal
   /// Number of slots this bundle occupies; number of people in this bundle
   quantity        Int
-  /// Number of bundles available
-  remainingAmount Int
+  /// Number of bundles available; number is limited by timeslots if this is null
+  remainingAmount Int?
   eventId         Int
   event           Event    @relation(fields: [eventId], references: [id])
   tickets         Ticket[]
@@ -59,13 +59,15 @@ model Ticket {
 }
 
 model Booking {
-  id             Int      @id @default(autoincrement())
-  name           String
-  email          String
-  telegramHandle String
-  phoneNumber    String
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String
+  telegramHandle  String
+  phoneNumber     String
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
-  valid          Boolean  @default(true)
-  created        DateTime @default(now())
-  tickets        Ticket[]
+  valid           Boolean  @default(true)
+  created         DateTime @default(now())
+  /// Reference for Stripe PaymentIntent ID; not a foreign key
+  paymentIntentId String
+  tickets         Ticket[]
 }
