@@ -50,3 +50,4 @@ prisma/migrations
 *.jpg
 *.jpeg
 *.png
+*.gitkeep

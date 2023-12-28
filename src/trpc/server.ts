@@ -1,4 +1,3 @@
-// SERVER ONLY
 import {
   TRPCClientError,
   createTRPCProxyClient,
@@ -9,6 +8,7 @@ import { observable } from "@trpc/server/observable";
 import { type TRPCErrorResponse } from "@trpc/server/rpc";
 import { cookies } from "next/headers";
 import { cache } from "react";
+import "server-only";
 
 import { appRouter } from "@/server/root";
 
