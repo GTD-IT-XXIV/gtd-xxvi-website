@@ -11,6 +11,8 @@
   "plugins": [
     "prettier-plugin-tailwindcss",
     "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-prisma"
-  ]
+    "prettier-plugin-prisma",
+    "prettier-plugin-sql"
+  ],
+  "language": "postgresql"
 }
