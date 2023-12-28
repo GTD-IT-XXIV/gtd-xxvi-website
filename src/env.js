@@ -26,6 +26,12 @@ export const env = createEnv({
         (str) => !(str === ""),
         "You forgot to add your Stripe webhooks endpoint secret",
       ),
+    GMAIL_APP_PASSWORD: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Gmail app password",
+      ),
   },
 
   /**
@@ -53,6 +59,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful for Docker builds.
