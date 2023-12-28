@@ -10,7 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env
+      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env;
+      - run: echo "STRIPE_SECRET_KEY=${{ secrets.DEV_STRIPE_SECRET_KEY }}" >> ./.env
+      - run: echo "STRIPE_WEBHOOK_SECRET=${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}" >> ./.env
+      - run: echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}" >> ./.env
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
