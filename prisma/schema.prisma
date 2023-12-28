@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "zod-prisma-types"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -61,13 +65,13 @@ model Ticket {
 model Booking {
   id              Int      @id @default(autoincrement())
   name            String
-  email           String
+  email           String   @unique
   telegramHandle  String
   phoneNumber     String
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
   valid           Boolean  @default(true)
   created         DateTime @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
-  paymentIntentId String
+  paymentIntentId String?
   tickets         Ticket[]
 }

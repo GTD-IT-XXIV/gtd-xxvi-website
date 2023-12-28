@@ -48,9 +48,11 @@ package.json
 *.toml
 Dockerfile
 prisma/migrations
+prisma/generated
 *.prisma
 *.sql
 *.jpg
 *.jpeg
 *.png
 *yaml
+*.json

@@ -47,6 +47,7 @@ pnpm-lock.yaml
 *.toml
 Dockerfile
 prisma/migrations
+prisma/generated
 *.jpg
 *.jpeg
 *.png
