@@ -48,8 +48,6 @@ model Timeslot {
 
 model Ticket {
   id              Int      @id @default(autoincrement())
-  bookingId       Int
-  booking         Booking  @relation(fields: [bookingId], references: [id])
   bundleId        Int
   bundle          Bundle   @relation(fields: [bundleId], references: [id])
   timeslotId      Int
@@ -69,5 +67,4 @@ model Booking {
   created         DateTime @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
   paymentIntentId String?
-  tickets         Ticket[]
 }
