@@ -11,14 +11,27 @@ pnpm install
 ```
 
 4. Copy `.env.example` contents to `.env.development.local` and modify the environment variables.
-5. Run the development server:
+5. Change the `DATABASE_URL` environment variable or start the development database (requires [Docker](https://docs.docker.com/desktop/) installation):
+
+```bash
+pnpm dev:db:start
+```
+
+6. If the development database is started for the first time, initialize it:
+
+```bash
+pnpm dev:db:init
+```
+
+7. You can clear or reset the development database by running `pnpm dev:db:clear` or `pnpm dev:db:reset`.
+8. Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-7. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+9. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+10. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Workflow
 
@@ -37,7 +50,7 @@ git commit -m "feat: add leaderboard router"
 git push
 ```
 
-3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags if necessary.
+3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
 4. See specific workflows.
 
 ### Frontend Workflow :construction:
