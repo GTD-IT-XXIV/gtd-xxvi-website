@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  web:
+    image: gtd-xxvi/website-dev
+    build:
+      context: ../..
+      dockerfile: docker/development/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgresql://postgres:gtd-xxvi-website-dev-postgres@db:5432/postgres
+
+  db:
+    image: postgres:15.1
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: gtd-xxvi-website-dev-postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+    name: gtd-xxvi-website-dev-pgdata

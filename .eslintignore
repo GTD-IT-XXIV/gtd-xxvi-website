@@ -50,3 +50,7 @@ Dockerfile
 prisma/migrations
 *.prisma
 *.sql
+*.jpg
+*.jpeg
+*.png
+*yaml

@@ -1,4 +1,4 @@
-# Entity-Relationship Diagram
+# Entity-Relationship Diagrams
 
 ## Prisma Schema
 
