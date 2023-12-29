@@ -12,6 +12,10 @@ jobs:
         node-version: [20]
     steps:
       - uses: actions/checkout@v3
+      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env;
+      - run: echo "STRIPE_SECRET_KEY=${{ secrets.DEV_STRIPE_SECRET_KEY }}" >> ./.env
+      - run: echo "STRIPE_WEBHOOK_SECRET=${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}" >> ./.env
+      - run: echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}" >> ./.env
       - uses: pnpm/action-setup@v2
         with:
           version: 8
