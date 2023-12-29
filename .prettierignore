@@ -40,15 +40,5 @@ next-env.d.ts
 # editor/IDE
 .vscode
 
-pnpm-lock.yaml
-.husky
-.eslintignore
-.prettierignore
-*.toml
-Dockerfile
 prisma/migrations
 prisma/generated
-*.jpg
-*.jpeg
-*.png
-*.gitkeep
