@@ -1,0 +1,3 @@
+{
+  "**/*.(js|jsx|ts|tsx|json|prisma|sql)": ["eslint --fix", "prettier --write"]
+}
