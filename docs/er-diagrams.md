@@ -49,7 +49,6 @@ erDiagram
   Event ||--|{ Timeslot : ""
   Bundle ||--o{ Ticket : ""
   Timeslot ||--o{ Ticket : ""
-  Ticket }o--|| Booking : ""
 ```
 
 ## Database Schema
@@ -110,7 +109,6 @@ erDiagram
   Event ||--|{ Timeslot : ""
   Bundle ||--o{ Ticket : ""
   Timeslot ||--o{ Ticket : ""
-  Ticket }o--|| Booking : ""
   Ticket }o..|| PaymentIntent: ""
   Booking ||..o| PaymentIntent: ""
 ```
