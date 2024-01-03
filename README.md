@@ -10,19 +10,33 @@
 pnpm install
 ```
 
-4. Copy `.env.example` contents to `.env` and modify the environment variables.
-5. Run the development server:
+4. Copy `.env.example` contents to `.env.development.local` and modify the environment variables.
+5. Change the `DATABASE_URL` environment variable or start the development database in a [Docker](https://docs.docker.com/desktop/) container:
+
+```bash
+pnpm dev:db:start
+```
+
+6. If the development database is started for the first time, initialize it:
+
+```bash
+pnpm dev:db:init
+```
+
+7. You can clear the development database by running `pnpm dev:db:clear`.
+8. You can reset the development database by running `pnpm dev:db:reset`.
+9. Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-7. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+10. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+11. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Workflow
 
-1. Create new feature branch with the following format `name/feature` and push the new branch to repository:
+1. Create new feature branch with the following format `name/feature` and push the new branch to remote (this repository):
 
 ```bash
 git checkout -b bob/leaderboard-router
@@ -37,8 +51,10 @@ git commit -m "feat: add leaderboard router"
 git push
 ```
 
-3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags if necessary.
-4. See specific workflows.
+3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
+4. See specific workflows:
+   - [Frontend workflow](#frontend-workflow-construction)
+   - [Backend worflow](#backend-workflow)
 
 ### Frontend Workflow :construction:
 
@@ -47,52 +63,10 @@ git push
 1. Open [Prisma Studio](https://www.prisma.io/studio) to view database information & create new rows for development/testing purposes:
 
 ```bash
-pnpm db:studio
+pnpm dev:prisma:studio
 ```
 
 2. Create tRPC routers/controllers at `src/server/controllers/<your-router>` and add them to the app router at `src/server/root.ts`.
-
-## Tech Stack
-
-- Meta-framework: **Next.js v14**
-- Frontend:
-  - UI library: **React v18.2**
-  - Styling: **Tailwind CSS v3.3** & shadcn/ui
-  - State management: zustand v4.4
-  - Asynchronous state management: TanStack Query v4
-- Backend:
-  - Route Handling: **Next.js v14**
-  - API: tRPC v10
-  - ORM: Prsima v5.7
-  - Database: Supabase Postgres database
-  - Payment: Stripe SAAS Supabase integration
-- Miscellaneous:
-  - Schema validation: Zod v3.22
-
-## Directory Structure
-
-```
-gtd-xxvi-website/
-├── prisma/
-│   └── schema.prisma             # Prisma's schemas
-├── public/                       # Static assets
-└── src/
-    ├── app/
-    │   └── api/                  # Route handlers; put all route handlers here
-    │       └── trpc/             # tRPC route handlers
-    ├── components/               # React components: put all components here &
-    │   │                           separate by function or page for
-    │   │                           page-specific components
-    │   └── ui/                   # shadcn/ui components
-    ├── server/                   # Backend code; put all backend code here
-    │   ├── controllers/          # Routers
-    │   ├── db.ts                 # Database/PrismaClient configuration
-    │   ├── middlewares/          # Route middlewares
-    │   └── root.ts               # The main app tRPC router
-    ├── styles/                   # CSS files; put all CSS files here
-    ├── trpc/                     # tRPC-related files
-    └── utils/                    # Utilities
-```
 
 ## Style Guide
 
@@ -105,6 +79,6 @@ Optional but recommended:
 
 ## Learn More
 
-Learning resources: [github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources](https://github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources)
-
-Official documentation: [Tailwind CSS](https://tailwindcss.com/docs/utility-first), [shadcn/ui](https://ui.shadcn.com/docs/cli), [Next.js](https://nextjs.org/docs), [tRPC](https://trpc.io/docs), [Zod](https://zod.dev/), [Prisma](https://www.prisma.io/docs/orm), [Supabase](https://supabase.com/docs)
+- [This repository's documentation](docs/README.md)
+- Learning resources: [github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources](https://github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources)
+- Official documentation: [Tailwind CSS](https://tailwindcss.com/docs/utility-first), [shadcn/ui](https://ui.shadcn.com/docs/cli), [Next.js](https://nextjs.org/docs), [tRPC](https://trpc.io/docs), [Zod](https://zod.dev/), [Prisma](https://www.prisma.io/docs/orm), [Supabase](https://supabase.com/docs)

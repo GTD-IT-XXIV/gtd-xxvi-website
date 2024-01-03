@@ -14,8 +14,18 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    STRIPE_SECRET_KEY: z.string(),
-    STRIPE_WEBHOOK_SECRET: z.string(),
+    STRIPE_SECRET_KEY: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Stripe API secret key",
+      ),
+    STRIPE_WEBHOOK_SECRET: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Stripe webhooks endpoint secret",
+      ),
   },
 
   /**
@@ -24,7 +34,12 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Stripe API publishable key",
+      ),
   },
 
   /**
@@ -39,11 +54,6 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   },
-  /**
-   * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
-   * useful for Docker builds.
-   */
-  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   /**
    * Makes it so that empty strings are treated as undefined.
    * `SOME_VAR: z.string()` and `SOME_VAR=''` will throw an error.

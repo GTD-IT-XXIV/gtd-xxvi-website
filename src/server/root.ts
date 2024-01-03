@@ -1,10 +1,10 @@
 import { createTRPCRouter } from "@/trpc/config";
 
-import { bundlesRouter } from "./controllers/bundles-router";
-import { eventsRouter } from "./controllers/events-router";
-import { paymentsRouter } from "./controllers/payments-router";
-import { ticketsRouter } from "./controllers/tickets-router";
-import { timeslotsRouter } from "./controllers/timeslots-router";
+import { bundlesRouter } from "./routers/bundles";
+import { eventsRouter } from "./routers/events";
+import { paymentsRouter } from "./routers/payments";
+import { ticketsRouter } from "./routers/tickets";
+import { timeslotsRouter } from "./routers/timeslots";
 
 // Primary server router
 export const appRouter = createTRPCRouter({

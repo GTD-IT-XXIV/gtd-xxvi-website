@@ -28,6 +28,7 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+.env.example
 
 # vercel
 .vercel
@@ -39,7 +40,5 @@ next-env.d.ts
 # editor/IDE
 .vscode
 
-pnpm-lock.yaml
-.husky
-.eslintignore
-.prettierignore
+prisma/migrations
+prisma/generated

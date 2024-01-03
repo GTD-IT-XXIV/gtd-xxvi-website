@@ -21,13 +21,18 @@ model Event {
 }
 
 model Bundle {
-  id      Int      @id @default(autoincrement())
-  quantity Int
-  name    String
-  price   Decimal
-  eventId Int
-  event   Event    @relation(fields: [eventId], references: [id])
-  tickets Ticket[]
+  id              Int      @id @default(autoincrement())
+  name            String
+  details         String[]
+  price           Decimal
+  /// Number of slots this bundle occupies; number of people in this bundle
+  quantity        Int
+  /// Number of bundles available; number is limited by timeslots if this is null
+  remainingAmount Int?
+  eventId         Int
+  event           Event    @relation(fields: [eventId], references: [id])
+  tickets         Ticket[]
+
   @@unique([name, eventId])
 }
 
@@ -42,22 +47,24 @@ model Timeslot {
 }
 
 model Ticket {
-  id            Int         @id @default(autoincrement())
-  status        Status
-  bundleId      Int
-  bundle        Bundle      @relation(fields: [bundleId], references: [id])
-  timeslotId    Int
-  timeslot      Timeslot    @relation(fields: [timeslotId], references: [id])
-  transactionId Int
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  id              Int      @id @default(autoincrement())
+  bundleId        Int
+  bundle          Bundle   @relation(fields: [bundleId], references: [id])
+  timeslotId      Int
+  timeslot        Timeslot @relation(fields: [timeslotId], references: [id])
+  /// Reference for Stripe PaymentIntent ID; not a foreign key
+  paymentIntentId String
 }
 
-model Transaction {
-  id      Int      @id @default(autoincrement())
-  tickets Ticket[]
-}
-
-enum Status {
-  PENDING
-  RECEIVED
+model Booking {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String   @unique
+  telegramHandle  String
+  phoneNumber     String
+  /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
+  valid           Boolean  @default(true)
+  created         DateTime @default(now())
+  /// Reference for Stripe PaymentIntent ID; not a foreign key
+  paymentIntentId String?
 }

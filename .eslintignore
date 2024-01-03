@@ -39,8 +39,8 @@ next-env.d.ts
 # editor/IDE
 .vscode
 
-pnpm-lock.yaml
-package.json
-.husky
-.eslintignore
-.prettierignore
+prisma/migrations
+prisma/generated
+*.prisma
+*.sql
+*.json
