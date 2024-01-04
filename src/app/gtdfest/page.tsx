@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function GTDFest() {
   return (
     <main>
-      <h1 className="text-2xl font-semibold">GTD Fest Page</h1>
+      <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
       <Link href="/register">
         <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
           Register
