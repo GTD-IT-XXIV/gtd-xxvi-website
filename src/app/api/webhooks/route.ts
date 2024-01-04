@@ -37,23 +37,34 @@ export async function POST(req: Request) {
 
   if (permittedEvents.includes(event.type)) {
     try {
-      let data;
+      let data: Stripe.Checkout.Session;
       let metadata: OrderMetadata;
       switch (event.type) {
         case "checkout.session.completed":
           data = event.data.object as unknown as Stripe.Checkout.Session;
           metadata = data.metadata as unknown as OrderMetadata;
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
+
+          const booking = await prisma.booking.findUnique({
+            where: { id: metadata.bookingId },
+          });
+          if (!booking || !booking.valid) {
+            throw new Error("Booking invalid");
+          }
+
+          await prisma.booking.delete({ where: { id: metadata.bookingId } });
+
           // TODO: sending an email to user
           // use email as the owner of a ticket in the future after the schema changed
+
           const tickets = await prisma.ticket.createMany({
             data: Array(Number(metadata.quantity))
               .fill(0)
               .map((_) => ({
-                status: "RECEIVED", // both to be unused changes
-                bundleId: Number(metadata.bundle_id),
-                timeslotId: Number(metadata.timeslot_id),
-                transactionId: 0, // both to be unused after schema changes
+                bundleId: Number(metadata.bundleId),
+                timeslotId: Number(metadata.timeslotId),
+                bookingId: Number(metadata.bookingId),
+                paymentIntentId: String(data.payment_intent),
               })),
           });
           console.log("Ticket details: ");
@@ -64,10 +75,10 @@ export async function POST(req: Request) {
           metadata = data.metadata as unknown as OrderMetadata;
           console.log(`❌ Payment failed with session: ${data.id}`);
           console.log(
-            `Relinquishing timeslot with ID: ${metadata.timeslot_id} of ${metadata.quantity} slots`,
+            `Relinquishing timeslot with ID: ${metadata.timeslotId} of ${metadata.quantity} slots`,
           );
           await prisma.timeslot.update({
-            where: { id: Number(metadata.timeslot_id) },
+            where: { id: Number(metadata.timeslotId) },
             data: { remainingSlots: { increment: Number(metadata.quantity) } },
           });
           break;

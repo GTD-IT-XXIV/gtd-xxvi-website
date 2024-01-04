@@ -12,31 +12,46 @@ export const paymentsRouter = createTRPCRouter({
     .input(
       z.object({
         quantity: z.number(),
-        bundle_id: z.number(),
-        timeslot_id: z.number(),
+        bundleId: z.number().positive(),
+        timeslotId: z.number().positive(),
+        bookingId: z.number().positive(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { quantity, bundle_id, timeslot_id } = input;
+      const { quantity, bundleId, timeslotId, bookingId } = input;
       const bundle = await ctx.prisma.bundle.findUnique({
-        where: { id: bundle_id },
+        where: { id: bundleId },
       });
 
       if (!bundle) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Invalid bundle",
+          message: "Invalid bundle (bundle not found)",
         });
       }
 
-      const slots = quantity * bundle.quantity;
-      const amount = quantity * Number(bundle.price) * 100; // as stripe charges in cents
+      const partySize = quantity * bundle.quantity;
+      const priceCents = quantity * Number(bundle.price) * 100; // Stripe charges in cents
 
       await ctx.prisma.$transaction(
         async (tx) => {
+          if (bundle.remainingAmount !== null) {
+            const bundle = await tx.bundle.update({
+              where: { id: bundleId, remainingAmount: { gte: quantity } },
+              data: { remainingAmount: { decrement: quantity } },
+            });
+
+            if (bundle.remainingAmount) {
+              throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: "Insufficient number of bundle tickets",
+              });
+            }
+          }
+
           const timeslot = await tx.timeslot.update({
-            where: { id: timeslot_id, remainingSlots: { gte: slots } },
-            data: { remainingSlots: { decrement: slots } },
+            where: { id: timeslotId, remainingSlots: { gte: partySize } },
+            data: { remainingSlots: { decrement: partySize } },
           });
 
           if (!timeslot) {
@@ -69,14 +84,19 @@ export const paymentsRouter = createTRPCRouter({
                 name: bundle.name,
               },
               currency: "sgd",
-              unit_amount: amount,
+              unit_amount: priceCents,
             },
             quantity,
           },
         ],
         mode: "payment",
         payment_method_types: ["paynow"],
-        metadata: { timeslot_id, quantity, bundle_id } as OrderMetadata,
+        metadata: {
+          bundleId,
+          timeslotId,
+          bookingId,
+          quantity,
+        } as OrderMetadata,
         return_url: `${ctx.headers.get(
           "origin",
         )}/ticket?session_id={CHECKOUT_SESSION_ID}`,
@@ -85,19 +105,20 @@ export const paymentsRouter = createTRPCRouter({
 
       return { clientSecret: session.client_secret };
     }),
+
   retrieveCheckoutSession: publicProcedure
     .input(
       z.object({
-        session_id: z.string(),
+        sessionId: z.string(),
       }),
     )
     .query(async ({ input }) => {
       const session: Stripe.Checkout.Session =
-        await stripe.checkout.sessions.retrieve(input.session_id);
+        await stripe.checkout.sessions.retrieve(input.sessionId);
 
       return {
         status: session.status,
-        customer_email: session?.customer_details?.email,
+        customerEmail: session?.customer_details?.email,
       };
     }),
 });

@@ -10,21 +10,28 @@ export const bundlesRouter = createTRPCRouter({
         where: { eventId: input },
       });
     }),
+
   getById: publicProcedure
     .input(z.number().positive())
     .query(({ ctx, input }) => {
       return ctx.prisma.bundle.findUnique({ where: { id: input } });
     }),
-  getByIdAndName: publicProcedure
+
+  getByEventAndName: publicProcedure
     .input(
       z.object({
-        id: z.number().positive(),
+        eventId: z.number().positive(),
         name: z.string(),
       }),
     )
     .query(({ ctx, input }) => {
       return ctx.prisma.bundle.findUnique({
-        where: { id: input.id, name: input.name },
+        where: {
+          name_eventId: {
+            name: input.name,
+            eventId: input.eventId,
+          },
+        },
       });
     }),
 });

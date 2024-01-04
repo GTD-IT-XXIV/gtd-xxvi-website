@@ -1,5 +1,6 @@
 export type OrderMetadata = {
-  timeslot_id: number;
+  bundleId: number;
+  timeslotId: number;
+  bookingId: number;
   quantity: number;
-  bundle_id: number;
 };
