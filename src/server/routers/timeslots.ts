@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/trpc/config";
 
 export const timeslotsRouter = createTRPCRouter({
-  getAllForEvent: publicProcedure
+  getManyByEvent: publicProcedure
     .input(z.number().positive())
     .query(({ ctx, input }) => {
       return ctx.prisma.timeslot.findMany({
