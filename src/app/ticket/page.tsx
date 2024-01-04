@@ -17,10 +17,10 @@ export default function TicketApp() {
   sessionId &&
     api.payments.retrieveCheckoutSession.useQuery(
       {
-        session_id: sessionId,
+        sessionId: sessionId,
       },
       {
-        onSuccess: ({ status, customer_email }) => {
+        onSuccess: ({ status, customerEmail: customer_email }) => {
           setStatus(status);
           setEmail(customer_email!);
         },
