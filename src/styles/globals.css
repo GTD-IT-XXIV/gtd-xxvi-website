@@ -4,6 +4,38 @@
 
 @layer base {
   :root {
+    --gtd-red-primary-bright: 0 85% 42%;
+    --gtd-red-primary-dim: 0 78% 32%;
+    --gtd-red-secondary-bright: 47 100% 42%;
+    --gtd-red-secondary-dim: 47 98% 49%;
+
+    --gtd-green-primary-bright: 149 84% 17%;
+    --gtd-green-primary-dim: 149 84% 12%;
+    --gtd-green-secondary-bright: 150 4% 50%;
+    --gtd-green-secondary-dim: 153 8% 28%;
+
+    --gtd-blue-primary-bright: 223 71% 32%;
+    --gtd-blue-primary-dim: 223 81% 23%;
+    --gtd-blue-secondary-bright: 0 0% 90%;
+    --gtd-blue-secondary-dim: 0 0% 76%;
+
+    --gtd-yellow-primary-bright: 42 90% 57%;
+    --gtd-yellow-primary-dim: 42 97% 74%;
+    --gtd-yellow-secondary-bright: 27 15% 39%;
+    --gtd-yellow-secondary-dim: 26 27% 25%;
+
+    --gtd-primary-10: 47 100% 62%;
+    --gtd-primary-20: 39 79% 48%;
+    --gtd-primary-30: 35 85% 40%;
+
+    --gtd-secondary-10: 33 35% 65%;
+    --gtd-secondary-20: 0 9% 30%;
+    --gtd-secondary-30: 0 9% 21%;
+
+    --gtd-tertiary-10: 52 100% 91%;
+    --gtd-tertiary-20: 53 70% 82%;
+    --gtd-tertiary-30: 35 54% 56%;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
