@@ -1,8 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { eventsFormDataAtom } from "@/lib/atoms/events-registration";
 
 import {
   Form,
@@ -20,16 +23,28 @@ export const registrationFormSchema = z.object({
   phone: z.string().min(3),
 });
 
-export default function RegistrationForm() {
+export const DEFAULT_REGISTRATION_FORM = {
+  name: "",
+  email: "",
+  telegram: "",
+  phone: "+65",
+} as const;
+
+export type RegistrationFormProps = {
+  onSubmit: () => void;
+};
+
+export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
-    defaultValues: {
-      phone: "+65",
-    },
+    defaultValues: DEFAULT_REGISTRATION_FORM,
   });
+  const [_, setFormData] = useAtom(eventsFormDataAtom);
 
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {
     console.log("Submitted", values);
+    setFormData(values);
+    onSubmit();
   }
 
   return (
@@ -81,14 +96,14 @@ export default function RegistrationForm() {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <input className="border border-black" {...field} />
+                <input type="tel" className="border border-black" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <button type="submit" className="p-2 bg-slate-200 hover:bg-slate-100">
-          Submit
+          Next
         </button>
       </form>
     </Form>

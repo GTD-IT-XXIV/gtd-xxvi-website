@@ -1,10 +1,10 @@
-import { stripe } from "@/lib/stripe";
-import { type OrderMetadata } from "@/types/order-metadata";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 
+import { stripe } from "@/lib/stripe";
+import { type OrderMetadata } from "@/lib/types/order-metadata";
 import { createTRPCRouter, publicProcedure } from "@/trpc/config";
 
 export const paymentsRouter = createTRPCRouter({

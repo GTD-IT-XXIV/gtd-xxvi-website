@@ -3,7 +3,7 @@
     "^@/app/(.*)$",
     "^@/components/(.*)$",
     "^@/server/(.*)$",
-    "^(@/styles/(.*))|(@/trpc/(.*))|(@/utils/(.*))$",
+    "^(@/styles/(.*))|(@/trpc/(.*))|(@/lib/(.*))$",
     "^[./]"
   ],
   "importOrderSeparation": true,
