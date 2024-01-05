@@ -1,4 +1,4 @@
-"use client";
+import "client-only";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
@@ -23,30 +23,23 @@ export const registrationFormSchema = z.object({
   phone: z.string().min(3),
 });
 
-export const DEFAULT_REGISTRATION_FORM = {
-  name: "",
-  email: "",
-  telegram: "",
-  phone: "+65",
-} as const;
-
 export type RegistrationFormProps = {
   onSubmit: () => void;
 };
 
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
+  const [formData, setFormData] = useAtom(eventsFormDataAtom);
+
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
-    defaultValues: DEFAULT_REGISTRATION_FORM,
+    defaultValues: formData,
   });
-  const [_, setFormData] = useAtom(eventsFormDataAtom);
 
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {
     console.log("Submitted", values);
     setFormData(values);
     onSubmit();
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>

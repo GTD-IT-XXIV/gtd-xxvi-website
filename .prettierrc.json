@@ -1,5 +1,7 @@
 {
   "importOrder": [
+    "^(client-only|server-only)$",
+    "<THIRD_PARTY_MODULES>",
     "^@/app/(.*)$",
     "^@/components/(.*)$",
     "^@/server/(.*)$",
