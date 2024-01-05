@@ -38,3 +38,6 @@ next-env.d.ts
 
 # editor/IDE
 .vscode
+
+# eslint
+.eslintcache

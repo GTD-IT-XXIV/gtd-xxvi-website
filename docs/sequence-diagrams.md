@@ -14,15 +14,6 @@ sequenceDiagram
   activate RegistrationPage
   RegistrationPage -->> User : display page
 
-  RegistrationPage -) BookingsRouter : check booking by email
-  activate BookingsRouter
-  break booking exists
-    BookingsRouter -->> RegistrationPage : booking
-    Note over RegistrationPage : ref: PayForEvent
-  end
-  BookingsRouter -->> RegistrationPage : not found
-  deactivate BookingsRouter
-
   RegistrationPage ->> BundleSelection : show popup
   activate BundleSelection
   BundleSelection -) +BundlesRouter : get all bundles by event
@@ -41,6 +32,16 @@ sequenceDiagram
   RegistrationPage ->> Store : save details
 
   User ->> RegistrationPage : click next
+
+  RegistrationPage -) BookingsRouter : check booking by email
+  activate BookingsRouter
+  break booking exists
+    BookingsRouter -->> RegistrationPage : booking
+    Note over RegistrationPage : ref: PayForEvent
+  end
+  BookingsRouter -->> RegistrationPage : not found
+  deactivate BookingsRouter
+
   deactivate RegistrationPage
 
   Note over RegistrationPage : ref: BookForEvent

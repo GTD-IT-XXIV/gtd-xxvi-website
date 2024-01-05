@@ -1,9 +1,11 @@
 {
   "importOrder": [
+    "^(client-only|server-only)$",
+    "<THIRD_PARTY_MODULES>",
     "^@/app/(.*)$",
     "^@/components/(.*)$",
     "^@/server/(.*)$",
-    "^(@/styles/(.*))|(@/trpc/(.*))|(@/utils/(.*))$",
+    "^(@/styles/(.*))|(@/trpc/(.*))|(@/lib/(.*))$",
     "^[./]"
   ],
   "importOrderSeparation": true,

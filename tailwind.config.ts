@@ -17,6 +17,63 @@ module.exports = {
     },
     extend: {
       colors: {
+        gtd: {
+          primary: {
+            10: "hsl(var(--gtd-primary-10))",
+            20: "hsl(var(--gtd-primary-20))",
+            30: "hsl(var(--gtd-primary-30))",
+          },
+          secondary: {
+            10: "hsl(var(--gtd-secondary-10))",
+            20: "hsl(var(--gtd-secondary-20))",
+            30: "hsl(var(--gtd-secondary-30))",
+          },
+          tertiary: {
+            10: "hsl(var(--gtd-tertiary-10))",
+            20: "hsl(var(--gtd-tertiary-20))",
+            30: "hsl(var(--gtd-tertiary-30))",
+          },
+          red: {
+            primary: {
+              bright: "hsl(var(--gtd-red-primary-bright))",
+              dim: "hsl(var(--gtd-red-primary-dim))",
+            },
+            secondary: {
+              bright: "hsl(var(--gtd-red-secondary-bright))",
+              dim: "hsl(var(--gtd-red-secondary-dim))",
+            },
+          },
+          green: {
+            primary: {
+              bright: "hsl(var(--gtd-green-primary-bright))",
+              dim: "hsl(var(--gtd-green-primary-dim))",
+            },
+            secondary: {
+              bright: "hsl(var(--gtd-green-secondary-bright))",
+              dim: "hsl(var(--gtd-green-secondary-dim))",
+            },
+          },
+          blue: {
+            primary: {
+              bright: "hsl(var(--gtd-blue-primary-bright))",
+              dim: "hsl(var(--gtd-blue-primary-dim))",
+            },
+            secondary: {
+              bright: "hsl(var(--gtd-blue-secondary-bright))",
+              dim: "hsl(var(--gtd-blue-secondary-dim))",
+            },
+          },
+          yellow: {
+            primary: {
+              bright: "hsl(var(--gtd-yellow-primary-bright))",
+              dim: "hsl(var(--gtd-yellow-primary-dim))",
+            },
+            secondary: {
+              bright: "hsl(var(--gtd-yellow-secondary-bright))",
+              dim: "hsl(var(--gtd-yellow-secondary-dim))",
+            },
+          },
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

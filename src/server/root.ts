@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/config";
 
+import { bookingsRouter } from "./routers/bookings";
 import { bundlesRouter } from "./routers/bundles";
 import { eventsRouter } from "./routers/events";
 import { paymentsRouter } from "./routers/payments";
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   bundles: bundlesRouter,
   tickets: ticketsRouter,
   payments: paymentsRouter,
+  bookings: bookingsRouter,
 });
 
 export type AppRouter = typeof appRouter;

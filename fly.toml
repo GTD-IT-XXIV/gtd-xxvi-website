@@ -7,6 +7,7 @@ app = "gtd-xxvi-website"
 primary_region = "sin"
 
 [build]
+  dockerfile = "docker/production/Dockerfile"
 
 [http_service]
   internal_port = 3000

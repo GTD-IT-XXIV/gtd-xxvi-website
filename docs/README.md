@@ -18,7 +18,7 @@
 - Frontend:
   - UI library: **React v18.2**
   - Styling: **Tailwind CSS v3.4** & shadcn/ui
-  - State management: zustand v4.4
+  - State management: zustand v4.4, Jotai v2.6
   - Asynchronous state management: TanStack Query v4
 - Backend:
   - Route Handling: **Next.js v14**
@@ -38,18 +38,29 @@ gtd-xxvi-website/
 ├── public/                       # Static assets
 └── src/
     ├── app/
-    │   └── api/                  # Route handlers; put all route handlers here
-    │       └── trpc/             # tRPC route handlers
+    │   ├── (events)/             # Event-specific pages
+    │   ├── api/                  # Route handlers; put all route handlers here
+    │   │   └── trpc/             # tRPC route handlers
+    │   └── events/
+    │       ├── book/             # Event booking page
+    │       ├── checkout/         # Event checkout page
+    │       └── register/         # Event registration page
     ├── components/               # React components: put all components here &
     │   │                           separate by function or page for
     │   │                           page-specific components
-    │   └── ui/                   # shadcn/ui components
+    │   └── ui/                   # shadcn/ui files (components, hooks, etc.)
+    ├── lib/                      # Libraries of utils, helpers, etc.
+    │   ├── atoms/                # Jotai atoms
+    │   ├── slices/               # zustand slices
+    │   ├── hooks.ts              # Custom hooks
+    │   └── utils.ts              # Utilities & helpers
     ├── server/                   # Backend code; put all backend code here
-    │   ├── controllers/          # Routers
-    │   ├── db.ts                 # Database/PrismaClient configuration
+    │   ├── routers/              # Routers
     │   ├── middlewares/          # Route middlewares
+    │   ├── db.ts                 # Database/PrismaClient configuration
     │   └── root.ts               # The main app tRPC router
     ├── styles/                   # CSS files; put all CSS files here
+    ├── tests/                    # Test files
     ├── trpc/                     # tRPC-related files
-    └── utils/                    # Utilities
+    └── env.js                    # Environment variables validation
 ```

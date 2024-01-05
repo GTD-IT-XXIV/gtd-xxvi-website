@@ -1,4 +1,0 @@
-{
-  "**/*.(js|jsx|ts|tsx|json|prisma|sql)": ["eslint --fix", "prettier --write"],
-  "**/*.(ts|ts|cts|mts)": "tsc --noEmit"
-}
