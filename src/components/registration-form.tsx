@@ -27,12 +27,20 @@ export type RegistrationFormProps = {
   onSubmit: () => void;
 };
 
+export const DEFAULT_REGISTRATION_FORM = {
+  name: "",
+  email: "",
+  telegram: "",
+  phone: "+65",
+};
+
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   const [formData, setFormData] = useAtom(eventsFormDataAtom);
 
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
-    defaultValues: formData,
+    defaultValues: DEFAULT_REGISTRATION_FORM,
+    values: formData,
   });
 
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {

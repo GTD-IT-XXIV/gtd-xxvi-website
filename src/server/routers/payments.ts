@@ -103,6 +103,11 @@ export const paymentsRouter = createTRPCRouter({
         expires_at: Math.floor(expiresAt / 1000), // since stripe time in seconds
       });
 
+      await ctx.prisma.booking.update({
+        where: { id: bookingId },
+        data: { paymentIntentId: String(session.payment_intent) },
+      });
+
       return { clientSecret: session.client_secret };
     }),
 

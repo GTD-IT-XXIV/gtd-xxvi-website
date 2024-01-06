@@ -12,15 +12,19 @@ import { useToast } from "@/components/ui/use-toast";
 import {
   eventDetailsAtom,
   eventsFormDataAtom,
+  registrationCompletionAtom,
 } from "@/lib/atoms/events-registration";
 import { api } from "@/trpc/provider";
 
-export default function GTDFestRegisterPage() {
+export default function GTDFestRegistrationPage() {
   const router = useRouter();
   const { toast } = useToast();
 
   const [formData] = useAtom(eventsFormDataAtom);
   const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
+  const [registrationCompletion, setRegistrationCompletion] = useAtom(
+    registrationCompletionAtom,
+  );
 
   // eventId 9 is Sample GTD Fest
   const { data: gtdfestEvent, isLoading: gtdFestEventIsLoading } =
@@ -30,10 +34,6 @@ export default function GTDFestRegisterPage() {
     api.events.getById.useQuery(10);
   const { data: booking, isLoading: bookingIsLoading } =
     api.bookings.getByEmail.useQuery(formData.email);
-
-  if (!bookingIsLoading && booking) {
-    router.push("/events/checkout/gtdfest");
-  }
 
   function handleFormSubmit() {
     if (
@@ -49,13 +49,20 @@ export default function GTDFestRegisterPage() {
       return;
     }
 
-    if (booking) router.push("/events/checkout");
+    if (booking) router.push("/checkout");
+
+    setRegistrationCompletion({ ...registrationCompletion, register: true });
     router.push("/events/book");
+  }
+
+  if (!bookingIsLoading && booking) {
+    router.push("/checkout");
   }
 
   useEffect(() => {
     let ignored = false;
     if (!ignored) {
+      // save the events the user is registering for a single time
       if (
         !gtdFestEventIsLoading &&
         !escapeRoomEventIsLoading &&
@@ -66,8 +73,18 @@ export default function GTDFestRegisterPage() {
       ) {
         setEventDetails({
           ...eventDetails,
-          [gtdfestEvent.id]: { bundle: null, timeslot: null },
-          [escapeRoomEvent.id]: { bundle: null, timeslot: null },
+          [gtdfestEvent.id]: {
+            name: gtdfestEvent.name,
+            quantity: 0,
+            bundle: null,
+            timeslot: null,
+          },
+          [escapeRoomEvent.id]: {
+            name: escapeRoomEvent.name,
+            quantity: 0,
+            bundle: null,
+            timeslot: null,
+          },
         });
       }
     }

@@ -38,12 +38,12 @@ gtd-xxvi-website/
 ├── public/                       # Static assets
 └── src/
     ├── app/
-    │   ├── (events)/             # Event-specific pages
     │   ├── api/                  # Route handlers; put all route handlers here
     │   │   └── trpc/             # tRPC route handlers
-    │   └── events/
+    │   ├── checkout/             # Checkout page
+    │   └── events/               # Events page & event-related pages
     │       ├── book/             # Event booking page
-    │       ├── checkout/         # Event checkout page
+    │       ├── gtdfest/          # GTD Fest page
     │       └── register/         # Event registration page
     ├── components/               # React components: put all components here &
     │   │                           separate by function or page for

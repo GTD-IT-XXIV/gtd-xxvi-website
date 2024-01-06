@@ -15,15 +15,16 @@ export default function BundlePopupContent({
   eventId: number;
   eventName: string;
 }) {
-  const { data: bundles, isLoading: bundlesIsLoading } =
-    api.bundles.getManyByEvent.useQuery(eventId);
-  const { data: timeslots, isLoading: timeslotsIsLoading } =
-    api.timeslots.getManyByEvent.useQuery(eventId);
   const [bundlesAvailability, setBundlesAvailability] = useState<Record<
     number,
     boolean
   > | null>(null);
   const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
+
+  const { data: bundles, isLoading: bundlesIsLoading } =
+    api.bundles.getManyByEvent.useQuery(eventId);
+  const { data: timeslots, isLoading: timeslotsIsLoading } =
+    api.timeslots.getManyByEvent.useQuery(eventId);
 
   function getBundlesAvailability() {
     const totalTimeslots =
@@ -47,8 +48,22 @@ export default function BundlePopupContent({
       setEventDetails({
         ...eventDetails,
         [eventId]: {
-          ...eventDetails[eventId]!,
+          name: eventName,
+          quantity: 1,
+          timeslot: eventDetails[eventId]?.timeslot ?? null,
           bundle: bundles!.find((bundle) => bundle.id === bundleId)!,
+        },
+      });
+    }
+  }
+
+  function changeQuantity(amount: number) {
+    if (eventDetails[eventId]) {
+      setEventDetails({
+        ...eventDetails,
+        [eventId]: {
+          ...eventDetails[eventId]!,
+          quantity: amount,
         },
       });
     }
@@ -104,6 +119,18 @@ export default function BundlePopupContent({
             >
               Select Bundle
             </button>
+            {!!eventDetails[eventId]?.bundle &&
+              eventDetails[eventId]!.bundle!.id === bundle.id && (
+                <input
+                  type="number"
+                  min={1}
+                  value={eventDetails[eventId]!.quantity}
+                  onChange={({ target }) =>
+                    changeQuantity(parseInt(target.value))
+                  }
+                  className="border border-black"
+                />
+              )}
           </section>
         ))
       )}

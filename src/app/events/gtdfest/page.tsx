@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function GTDFest() {
+export default function GTDFestPage() {
   return (
     <main>
       <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
