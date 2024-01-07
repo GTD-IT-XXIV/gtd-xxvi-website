@@ -1,6 +1,6 @@
 export default {
   "**/*.(prisma|sql)": "prettier --write --list-different",
-  "**/*.(js|jsx|json)": [
+  "**/*.(js|mjs|jsx|json)": [
     "eslint --cache --fix",
     "prettier --write --list-different",
   ],

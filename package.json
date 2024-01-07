@@ -2,6 +2,7 @@
   "name": "gtd-xxvi-website",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "next start",
     "prepare": "husky install",
@@ -42,6 +43,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@next/bundle-analyzer": "^14.0.4",
     "@prisma/client": "^5.7.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
