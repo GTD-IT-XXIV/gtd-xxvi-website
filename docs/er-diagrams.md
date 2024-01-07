@@ -29,7 +29,10 @@ erDiagram
   }
   Ticket {
     Int id PK
-    Int bookingId FK
+    String name
+    String email
+    String telegramHandle
+    String phoneNumber
     Int bundleId FK
     Int timeslotId FK
     String paymentIntentId
@@ -40,77 +43,25 @@ erDiagram
     String email
     String telegramHandle
     String phoneNumber
-    Boolean valid
+    Int eventId FK
+    Int bundleId FK
+    Int timeslotId FK
+    Int quantity
     DateTime created
+    Boolean valid
     String paymentIntentId
   }
+  PaymentIntent {}
 
-  Event ||--|{ Bundle : ""
-  Event ||--|{ Timeslot : ""
+  Event ||--o{ Bundle: ""
+  Event ||--o{ Booking : ""
+  Booking }o--|| Bundle : ""
+  Booking }o..|| PaymentIntent : ""
+  Booking }o--|| Timeslot : ""
+  Event ||--o{ Timeslot: ""
   Bundle ||--o{ Ticket : ""
+  PaymentIntent ||..o{ Ticket : ""
   Timeslot ||--o{ Ticket : ""
-```
-
-## Database Schema
-
-```mermaid
-erDiagram
-  Event {
-    integer id PK
-    text name
-    text description
-    date startDate
-    date endDate
-  }
-  Bundle {
-    integer id PK
-    integer eventId FK
-    text name
-    text[] details
-    numeric price
-    integer quantity
-    integer remainingAmount
-  }
-  Timeslot {
-    integer id PK
-    integer eventId FK
-    timestamp startTime
-    timestamp endTime
-    Int remainingSlots
-  }
-  Ticket {
-    integer id PK
-    integer bookingId FK
-    integer bundleId FK
-    integer timeslotId FK
-    text paymentIntentId
-  }
-  Booking {
-    integer id PK
-    text name
-    text email
-    text telegramHandle
-    text phoneNumber
-    boolean valid
-    timestamp created
-    text paymentIntentId
-  }
-  PaymentIntent {
-    text id
-    text customer
-    bigint amount
-    text currency
-    text payment_method
-    timestamp created
-    attrs jsonb
-  }
-
-  Event ||--|{ Bundle : ""
-  Event ||--|{ Timeslot : ""
-  Bundle ||--o{ Ticket : ""
-  Timeslot ||--o{ Ticket : ""
-  Ticket }o..|| PaymentIntent: ""
-  Booking ||..o| PaymentIntent: ""
 ```
 
 ## Notes

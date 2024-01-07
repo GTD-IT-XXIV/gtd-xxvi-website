@@ -18,8 +18,9 @@ export default function GTDFestPage() {
   const isLoading = !hasMounted || gtdfestIsLoading || escapeRoomIsLoading;
 
   function handleClickRegister() {
-    if (!gtdFest || !escapeRoom)
+    if (!gtdFest || !escapeRoom) {
       throw new Error("GTD Fest or Escape Room event not found");
+    }
     setEventDetails({
       ...eventDetails,
       [gtdFest.id]: {
@@ -37,7 +38,9 @@ export default function GTDFestPage() {
   }
 
   // TODO: separate client and server logic to improve page performance
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <main>

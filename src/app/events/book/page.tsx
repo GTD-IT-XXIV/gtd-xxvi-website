@@ -26,22 +26,23 @@ export default function BookingPage() {
     ),
   );
   const createBooking = api.bookings.create.useMutation();
-  const createCheckoutSession =
-    api.payments.createCheckoutSession.useMutation();
 
   const timeslotsAreLoading = timeslotsQueries.reduce(
     (accum, query) => (accum ||= query.isLoading),
     false,
   );
 
-  if (!hasMounted || timeslotsAreLoading) return <p>Loading...</p>;
+  if (!hasMounted || timeslotsAreLoading) {
+    return <p>Loading...</p>;
+  }
   if (
     timeslotsQueries.reduce(
       (accum, query) => (accum ||= query.data?.length === 0),
       false,
     )
-  )
+  ) {
     return <p>Timeslots for one or more of the events not found</p>;
+  }
 
   const onlyOneTimeslotPerEvent = timeslotsQueries.reduce(
     (accum, query) => (accum &&= query.data?.length === 1),
@@ -56,26 +57,25 @@ export default function BookingPage() {
 
   // Kalau cmn ada 1 timeslot, redirect ke checkout page
   if (onlyOneTimeslotPerEvent) {
-    createBooking.mutate(
-      {
-        name: formData.name,
-        email: formData.email,
-        telegramHandle: formData.telegram,
-        phoneNumber: formData.phone,
-      },
-      {
-        onSuccess: (booking) => {
-          Object.values(eventDetails).forEach((eventDetail, idx) => {
-            createCheckoutSession.mutate({
-              quantity: eventDetail.quantity,
-              bundleId: eventDetail.bundle!.id,
-              timeslotId: timeslotsQueries[idx]!.data![0]!.id,
-              bookingId: booking.id,
-            });
-          });
-        },
-      },
-    );
+    Object.entries(eventDetails)
+      .map(([key, value]) => [Number(key), value] as [number, typeof value])
+      .forEach(([eventId, eventDetail], idx) => {
+        if (!eventDetail.bundle) {
+          throw new Error(
+            `No bundle selected for event ${eventDetail.name} (id: ${eventId})`,
+          );
+        }
+        createBooking.mutate({
+          name: formData.name,
+          email: formData.email,
+          telegramHandle: formData.telegram,
+          phoneNumber: formData.phone,
+          quantity: eventDetail.quantity,
+          eventId: eventId,
+          bundleId: eventDetail.bundle.id,
+          timeslotId: timeslotsQueries[idx]!.data![0]!.id,
+        });
+      });
     router.push("/checkout");
   }
 

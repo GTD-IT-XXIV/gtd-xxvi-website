@@ -18,10 +18,11 @@ model Event {
   endDate     DateTime   @db.Date
   bundles     Bundle[]
   timeslots   Timeslot[]
+  bookings    Booking[]
 }
 
 model Bundle {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   name            String
   details         String[]
   price           Decimal
@@ -30,24 +31,30 @@ model Bundle {
   /// Number of bundles available; number is limited by timeslots if this is null
   remainingAmount Int?
   eventId         Int
-  event           Event    @relation(fields: [eventId], references: [id])
+  event           Event     @relation(fields: [eventId], references: [id])
+  bookings        Booking[]
   tickets         Ticket[]
 
   @@unique([name, eventId])
 }
 
 model Timeslot {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   startTime      DateTime
   endTime        DateTime
   remainingSlots Int
   eventId        Int
-  event          Event    @relation(fields: [eventId], references: [id])
+  event          Event     @relation(fields: [eventId], references: [id])
+  bookings       Booking[]
   tickets        Ticket[]
 }
 
 model Ticket {
   id              Int      @id @default(autoincrement())
+  name            String
+  email           String
+  telegramHandle  String
+  phoneNumber     String
   bundleId        Int
   bundle          Bundle   @relation(fields: [bundleId], references: [id])
   timeslotId      Int
@@ -59,12 +66,22 @@ model Ticket {
 model Booking {
   id              Int      @id @default(autoincrement())
   name            String
-  email           String   @unique
+  email           String
   telegramHandle  String
   phoneNumber     String
+  eventId         Int
+  event           Event    @relation(fields: [eventId], references: [id])
+  bundleId        Int
+  bundle          Bundle   @relation(fields: [bundleId], references: [id])
+  timeslotId      Int
+  timeslot        Timeslot @relation(fields: [timeslotId], references: [id])
+  /// Number of bundles to book
+  quantity        Int
+  created         DateTime @default(now())
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
   valid           Boolean  @default(true)
-  created         DateTime @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
   paymentIntentId String?
+
+  @@unique([email, eventId])
 }

@@ -28,7 +28,7 @@ export default function RegistrationPage() {
   );
 
   const { data: booking, isLoading: bookingIsLoading } =
-    api.bookings.getByEmail.useQuery(formData.email);
+    api.bookings.getManyByEmail.useQuery(formData.email);
 
   function handleFormSubmit() {
     const eventsBundleSelected = Object.keys(eventDetails).reduce(
@@ -50,8 +50,12 @@ export default function RegistrationPage() {
     router.push("/events/book");
   }
 
-  if (!hasMounted) return <p>Loading...</p>;
-  if (!bookingIsLoading && booking) router.push("/checkout");
+  if (!hasMounted) {
+    return <p>Loading...</p>;
+  }
+  if (!bookingIsLoading && booking) {
+    router.push("/checkout");
+  }
 
   return (
     <>
