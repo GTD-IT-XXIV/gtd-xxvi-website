@@ -16,7 +16,7 @@ export default function BundlePopupContent({
   eventName: string;
 }) {
   const [bundlesAvailability, setBundlesAvailability] = useState<Record<
-    number,
+    number, // bundleId
     boolean
   > | null>(null);
   const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);

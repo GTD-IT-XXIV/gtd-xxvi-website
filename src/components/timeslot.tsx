@@ -3,23 +3,25 @@ import "client-only";
 import { type Timeslot } from "@prisma/client";
 import dayjs from "dayjs";
 
-export const DEFAULT_TIMESLOT_FORMAT = "HH.mm";
+export const DEFAULT_TIMESLOT_FORMAT = "ddd, HH.mm";
 
 export default function Timeslot({ timeslot }: { timeslot: Timeslot }) {
-  let startTimeLabel = dayjs(timeslot.startTime).format(
+  const startTimeLabel = dayjs(timeslot.startTime).format(
     DEFAULT_TIMESLOT_FORMAT,
   );
-  let endTimeLabel = dayjs(timeslot.endTime).format(DEFAULT_TIMESLOT_FORMAT);
+  const endTimeLabel = dayjs(timeslot.endTime).format(DEFAULT_TIMESLOT_FORMAT);
 
-  if (timeslot.startTime.getDate() !== timeslot.endTime.getDate()) {
-    const timeslotFormat = `ddd, D MMM ${DEFAULT_TIMESLOT_FORMAT}`;
-    startTimeLabel = dayjs(timeslot.startTime).format(timeslotFormat);
-    endTimeLabel = dayjs(timeslot.endTime).format(timeslotFormat);
+  function handleClick() {
+    console.log(`clicked timeslot ${timeslot.id}`);
   }
 
   return (
-    <div className="p-2 border-2 border-slate-300">
-      {startTimeLabel}-{endTimeLabel}
-    </div>
+    <button
+      type="button"
+      onClick={handleClick}
+      className="p-2 bg-slate-200 hover:bg-slate-100 border-2 border-slate-300"
+    >
+      {startTimeLabel} - {endTimeLabel}
+    </button>
   );
 }

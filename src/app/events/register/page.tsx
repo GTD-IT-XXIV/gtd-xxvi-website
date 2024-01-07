@@ -13,10 +13,12 @@ import {
   eventsFormDataAtom,
   registrationCompletionAtom,
 } from "@/lib/atoms/events-registration";
+import { useHasMounted } from "@/lib/hooks";
 import { api } from "@/trpc/provider";
 
 export default function RegistrationPage() {
   const router = useRouter();
+  const hasMounted = useHasMounted();
   const { toast } = useToast();
 
   const [formData] = useAtom(eventsFormDataAtom);
@@ -48,18 +50,19 @@ export default function RegistrationPage() {
     router.push("/events/book");
   }
 
+  if (!hasMounted) return <p>Loading...</p>;
   if (!bookingIsLoading && booking) router.push("/checkout");
 
   return (
     <>
       <BundlePopup>
-        {Object.keys(eventDetails)
-          .map((key) => Number(key))
-          .map((eventId) => (
+        {Object.entries(eventDetails)
+          .map(([key, value]) => [Number(key), value] as [number, typeof value])
+          .map(([eventId, eventDetail]) => (
             <BundlePopupContent
               key={eventId}
               eventId={eventId}
-              eventName={eventDetails[eventId]!.name}
+              eventName={eventDetail.name}
             />
           ))}
       </BundlePopup>
