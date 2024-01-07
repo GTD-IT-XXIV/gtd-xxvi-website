@@ -15,8 +15,8 @@ export const eventDetailsAtom = atomWithStorage<
     {
       name: string;
       quantity: number;
-      bundle: Bundle | null;
-      timeslot: Timeslot | null;
+      bundle?: Bundle;
+      timeslot?: Timeslot;
     }
   >
 >(`${BASE_KEY}-event-details`, {});

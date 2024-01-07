@@ -50,7 +50,7 @@ export default function BundlePopupContent({
         [eventId]: {
           name: eventName,
           quantity: 1,
-          timeslot: eventDetails[eventId]?.timeslot ?? null,
+          timeslot: eventDetails[eventId]?.timeslot,
           bundle: bundles!.find((bundle) => bundle.id === bundleId)!,
         },
       });
@@ -80,7 +80,7 @@ export default function BundlePopupContent({
           newEventDetails[eventId]?.bundle &&
           !newBundlesAvailability[newEventDetails[eventId]!.bundle!.id]
         ) {
-          newEventDetails[eventId]!.bundle = null;
+          newEventDetails[eventId]!.bundle = undefined;
         }
         setEventDetails(newEventDetails);
         setBundlesAvailability(newBundlesAvailability);

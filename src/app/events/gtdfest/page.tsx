@@ -4,16 +4,18 @@ import { useAtom } from "jotai";
 import Link from "next/link";
 
 import { eventDetailsAtom } from "@/lib/atoms/events-registration";
+import { useHasMounted } from "@/lib/hooks";
 import { api } from "@/trpc/provider";
 
 export default function GTDFestPage() {
+  const hasMounted = useHasMounted();
   const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
 
   const { data: gtdFest, isLoading: gtdfestIsLoading } =
     api.events.getById.useQuery(9);
   const { data: escapeRoom, isLoading: escapeRoomIsLoading } =
     api.events.getById.useQuery(10);
-  const isLoading = gtdfestIsLoading || escapeRoomIsLoading;
+  const isLoading = !hasMounted || gtdfestIsLoading || escapeRoomIsLoading;
 
   function handleClickRegister() {
     if (!gtdFest || !escapeRoom)
@@ -21,16 +23,14 @@ export default function GTDFestPage() {
     setEventDetails({
       ...eventDetails,
       [gtdFest.id]: {
+        ...eventDetails[gtdFest.id],
         name: gtdFest.name,
         quantity: 0,
-        bundle: null,
-        timeslot: null,
       },
       [escapeRoom.id]: {
+        ...eventDetails[escapeRoom.id],
         name: escapeRoom.name,
         quantity: 0,
-        bundle: null,
-        timeslot: null,
       },
     });
     console.log("register button click");
