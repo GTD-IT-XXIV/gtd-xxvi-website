@@ -128,14 +128,6 @@ export async function POST(req: Request) {
               });
             }
           });
-
-          // console.log(
-          //   `Relinquishing timeslot with ID: ${metadata.timeslotId} of ${metadata.quantity} slots`,
-          // );
-          // await prisma.timeslot.updateMany({
-          //   where: { id: Number(metadata.timeslotId) },
-          //   data: { remainingSlots: { increment: Number(metadata.quantity) } },
-          // });
           break;
         }
         default: {

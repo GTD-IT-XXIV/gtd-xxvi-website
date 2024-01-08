@@ -34,7 +34,7 @@ export default function GTDFestPage() {
         quantity: 0,
       },
     });
-    console.log("register button click");
+    // console.log("register button click");
   }
 
   // TODO: separate client and server logic to improve page performance

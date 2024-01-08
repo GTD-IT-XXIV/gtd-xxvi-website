@@ -56,7 +56,7 @@ erDiagram
   Event ||--o{ Bundle: ""
   Event ||--o{ Booking : ""
   Booking }o--|| Bundle : ""
-  Booking }o..|| PaymentIntent : ""
+  Booking }o..o| PaymentIntent : ""
   Booking }o--|| Timeslot : ""
   Event ||--o{ Timeslot: ""
   Bundle ||--o{ Ticket : ""

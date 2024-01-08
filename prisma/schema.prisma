@@ -47,6 +47,8 @@ model Timeslot {
   event          Event     @relation(fields: [eventId], references: [id])
   bookings       Booking[]
   tickets        Ticket[]
+
+  @@unique([startTime, endTime, eventId])
 }
 
 model Ticket {

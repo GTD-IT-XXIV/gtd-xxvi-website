@@ -23,12 +23,18 @@ export default function RegistrationPage() {
 
   const [formData] = useAtom(eventsFormDataAtom);
   const [eventDetails] = useAtom(eventDetailsAtom);
-  const [registrationCompletion, setRegistrationCompletion] = useAtom(
-    registrationCompletionAtom,
-  );
+  const [completion, setCompletion] = useAtom(registrationCompletionAtom);
 
-  const { data: booking, isLoading: bookingIsLoading } =
+  const { data: bookings, isLoading: bookingsAreLoading } =
     api.bookings.getManyByEmail.useQuery(formData.email);
+  const deleteBookings = api.bookings.deleteManyByEmail.useMutation();
+  const updateBooking = api.bookings.updateByEmailAndEvent.useMutation();
+
+  const hasPendingPayments =
+    bookings?.reduce(
+      (accum, booking) => (accum ||= !!booking.paymentIntentId),
+      false,
+    ) ?? false;
 
   function handleFormSubmit() {
     const eventsBundleSelected = Object.keys(eventDetails).reduce(
@@ -46,14 +52,47 @@ export default function RegistrationPage() {
       return;
     }
 
-    setRegistrationCompletion({ ...registrationCompletion, register: true });
+    const bookingsHasCorrectEvents = Object.keys(eventDetails).reduce(
+      (accum, eventId) =>
+        (accum &&= !!bookings?.find(
+          (booking) => Number(eventId) === booking.eventId,
+        )),
+      true,
+    );
+    if (!bookingsHasCorrectEvents) {
+      deleteBookings.mutate(formData.email);
+    } else {
+      for (const [key, eventDetail] of Object.entries(eventDetails)) {
+        const eventId = Number(key);
+
+        // Unreachable code but required for type safety
+        if (!eventDetail.bundle) {
+          throw new Error("Bundle for event does not exist");
+        }
+
+        try {
+          updateBooking.mutate({
+            email: formData.email,
+            eventId,
+            quantity: eventDetail.quantity,
+            bundleId: eventDetail.bundle.id,
+          });
+        } catch (error) {
+          deleteBookings.mutate(formData.email);
+        }
+      }
+    }
+
+    setCompletion({ ...completion, register: true });
     router.push("/events/book");
   }
 
   if (!hasMounted) {
     return <p>Loading...</p>;
   }
-  if (!bookingIsLoading && booking) {
+
+  if (!bookingsAreLoading && bookings && hasPendingPayments) {
+    setCompletion({ register: true, book: true });
     router.push("/checkout");
   }
 

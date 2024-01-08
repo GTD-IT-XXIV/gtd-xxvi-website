@@ -16,7 +16,7 @@ import { api } from "@/trpc/provider";
 export default function BookingPage() {
   const router = useRouter();
   const hasMounted = useHasMounted();
-  const [registrationCompletion] = useAtom(registrationCompletionAtom);
+  const [completion, setCompletion] = useAtom(registrationCompletionAtom);
   const [eventDetails] = useAtom(eventDetailsAtom);
   const [formData] = useAtom(eventsFormDataAtom);
 
@@ -36,10 +36,14 @@ export default function BookingPage() {
     return <p>Loading...</p>;
   }
   if (
-    timeslotsQueries.reduce(
-      (accum, query) => (accum ||= query.data?.length === 0),
-      false,
-    )
+    timeslotsQueries.reduce((accum, query) => {
+      // console.log({
+      //   accum,
+      //   join: query.data?.length === 0,
+      //   result: accum || query.data?.length === 0,
+      // });
+      return (accum ||= query.data?.length === 0);
+    }, false)
   ) {
     return <p>Timeslots for one or more of the events not found</p>;
   }
@@ -50,12 +54,12 @@ export default function BookingPage() {
   );
 
   // Cmn bisa masuk page ini kalau udh isi form registration
-  if (!registrationCompletion.register) {
-    console.log({ hasMounted, registrationCompletion });
+  if (!completion.register) {
+    // console.log({ hasMounted, registrationCompletion: completion });
     router.push("/events/register");
   }
 
-  // Kalau cmn ada 1 timeslot, redirect ke checkout page
+  // Kalau cmn ada 1 timeslot buat setiap event, redirect ke checkout page
   if (onlyOneTimeslotPerEvent) {
     Object.entries(eventDetails)
       .map(([key, value]) => [Number(key), value] as [number, typeof value])
@@ -76,6 +80,7 @@ export default function BookingPage() {
           timeslotId: timeslotsQueries[idx]!.data![0]!.id,
         });
       });
+    setCompletion({ ...completion, book: true });
     router.push("/checkout");
   }
 

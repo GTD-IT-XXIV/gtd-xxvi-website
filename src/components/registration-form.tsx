@@ -44,7 +44,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   });
 
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {
-    console.log("Submitted", values);
+    // console.log("Submitted", values);
     setFormData(values);
     onSubmit();
   }
