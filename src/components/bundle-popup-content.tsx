@@ -50,7 +50,6 @@ export default function BundlePopupContent({
         [eventId]: {
           name: eventName,
           quantity: 1,
-          timeslot: eventDetails[eventId]?.timeslot,
           bundle: bundles!.find((bundle) => bundle.id === bundleId)!,
         },
       });

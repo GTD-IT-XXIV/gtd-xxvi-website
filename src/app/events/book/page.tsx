@@ -1,9 +1,11 @@
 "use client";
 
 import { useAtom } from "jotai";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import Timeslots from "@/components/timeslots";
+import { useToast } from "@/components/ui/use-toast";
 
 import {
   eventDetailsAtom,
@@ -16,6 +18,8 @@ import { api } from "@/trpc/provider";
 export default function BookingPage() {
   const router = useRouter();
   const hasMounted = useHasMounted();
+  const { toast } = useToast();
+
   const [completion, setCompletion] = useAtom(registrationCompletionAtom);
   const [eventDetails] = useAtom(eventDetailsAtom);
   const [formData] = useAtom(eventsFormDataAtom);
@@ -52,6 +56,10 @@ export default function BookingPage() {
     (accum, query) => (accum &&= query.data?.length === 1),
     true,
   );
+
+  function handleClick() {
+    console.log("click!");
+  }
 
   // Cmn bisa masuk page ini kalau udh isi form registration
   if (!completion.register) {
@@ -96,6 +104,11 @@ export default function BookingPage() {
             eventName={eventDetail.name}
           />
         ))}
+      <Link href="/checkout">
+        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
+          Next
+        </button>
+      </Link>
     </main>
   );
 }

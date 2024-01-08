@@ -24,7 +24,7 @@ export default function Timeslots({
 }) {
   const [selectedId, setSelectedId] = useState(0); // selected timeslot id
   const [formData] = useAtom(eventsFormDataAtom);
-  const [eventDetails] = useAtom(eventDetailsAtom);
+  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
 
   const { data: timeslots, isLoading: timeslotsAreLoading } =
     api.timeslots.getManyByEvent.useQuery(eventId);
