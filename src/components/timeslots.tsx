@@ -37,19 +37,6 @@ export default function Timeslots({
   const updateBooking = api.bookings.updateByEmailAndEvent.useMutation();
 
   const isLoading = timeslotsAreLoading || bookingIsLoading;
-  const sortedTimeslots = !timeslots
-    ? []
-    : [...timeslots].sort((a, b) => {
-        const aStartDayjs = dayjs(a.startTime);
-        const bStartDayjs = dayjs(b.startTime);
-        if (aStartDayjs.isSame(bStartDayjs)) {
-          return 0;
-        }
-        if (aStartDayjs.isBefore(bStartDayjs)) {
-          return -1;
-        }
-        return 1;
-      });
 
   useEffect(() => {
     let ignored = false;
@@ -98,22 +85,34 @@ export default function Timeslots({
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <h2 className="text-xl font-medium">Timeslots for {eventName}</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : !timeslots || timeslots.length === 0 ? (
         <p>Event timeslots not found</p>
       ) : (
-        sortedTimeslots.map((timeslot) => (
-          <Timeslot
-            key={timeslot.id}
-            timeslot={timeslot}
-            disabled={createBooking.isLoading || updateBooking.isLoading}
-            selected={timeslot.id === selectedId}
-            onClick={() => handleSelect(timeslot.id)}
-          />
-        ))
+        [...timeslots]
+          .sort((a, b) => {
+            const aStartDayjs = dayjs(a.startTime);
+            const bStartDayjs = dayjs(b.startTime);
+            if (aStartDayjs.isSame(bStartDayjs)) {
+              return 0;
+            }
+            if (aStartDayjs.isBefore(bStartDayjs)) {
+              return -1;
+            }
+            return 1;
+          })
+          .map((timeslot) => (
+            <Timeslot
+              key={timeslot.id}
+              timeslot={timeslot}
+              disabled={createBooking.isLoading || updateBooking.isLoading}
+              selected={timeslot.id === selectedId}
+              onClick={() => handleSelect(timeslot.id)}
+            />
+          ))
       )}
     </div>
   );
