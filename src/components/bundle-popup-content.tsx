@@ -15,15 +15,16 @@ export default function BundlePopupContent({
   eventId: number;
   eventName: string;
 }) {
+  const [bundlesAvailability, setBundlesAvailability] = useState<Record<
+    number, // bundleId
+    boolean
+  > | null>(null);
+  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
+
   const { data: bundles, isLoading: bundlesIsLoading } =
     api.bundles.getManyByEvent.useQuery(eventId);
   const { data: timeslots, isLoading: timeslotsIsLoading } =
     api.timeslots.getManyByEvent.useQuery(eventId);
-  const [bundlesAvailability, setBundlesAvailability] = useState<Record<
-    number,
-    boolean
-  > | null>(null);
-  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
 
   function getBundlesAvailability() {
     const totalTimeslots =
@@ -47,8 +48,21 @@ export default function BundlePopupContent({
       setEventDetails({
         ...eventDetails,
         [eventId]: {
-          ...eventDetails[eventId]!,
+          name: eventName,
+          quantity: 1,
           bundle: bundles!.find((bundle) => bundle.id === bundleId)!,
+        },
+      });
+    }
+  }
+
+  function changeQuantity(amount: number) {
+    if (eventDetails[eventId]) {
+      setEventDetails({
+        ...eventDetails,
+        [eventId]: {
+          ...eventDetails[eventId]!,
+          quantity: amount,
         },
       });
     }
@@ -65,7 +79,7 @@ export default function BundlePopupContent({
           newEventDetails[eventId]?.bundle &&
           !newBundlesAvailability[newEventDetails[eventId]!.bundle!.id]
         ) {
-          newEventDetails[eventId]!.bundle = null;
+          newEventDetails[eventId]!.bundle = undefined;
         }
         setEventDetails(newEventDetails);
         setBundlesAvailability(newBundlesAvailability);
@@ -104,6 +118,18 @@ export default function BundlePopupContent({
             >
               Select Bundle
             </button>
+            {!!eventDetails[eventId]?.bundle &&
+              eventDetails[eventId]!.bundle!.id === bundle.id && (
+                <input
+                  type="number"
+                  min={1}
+                  value={eventDetails[eventId]!.quantity}
+                  onChange={({ target }) =>
+                    changeQuantity(parseInt(target.value))
+                  }
+                  className="border border-black"
+                />
+              )}
           </section>
         ))
       )}

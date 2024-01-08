@@ -3,7 +3,7 @@
   "parserOptions": {
     "project": true
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "unicorn"],
   "extends": [
     "plugin:@next/next/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
@@ -26,6 +26,8 @@
     "@typescript-eslint/no-misused-promises": [
       "error",
       { "checksVoidReturn": { "attributes": false } }
-    ]
+    ],
+    "unicorn/switch-case-braces": ["warn", "always"],
+    "curly": ["warn", "all"]
   }
 }

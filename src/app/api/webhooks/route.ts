@@ -1,11 +1,14 @@
 import { env } from "@/env";
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
+import { z } from "zod";
 
 import { prisma } from "@/server/db";
 
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
+import { Prettify } from "@/lib/utils";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -19,7 +22,9 @@ export async function POST(req: Request) {
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error";
     // On error, log and return the error message.
-    if (err instanceof Error) console.log(err);
+    if (err instanceof Error) {
+      console.log(err);
+    }
     console.log(`❌ Error message: ${errorMessage}`);
     return NextResponse.json(
       { message: `Webhook Error: ${errorMessage}` },
@@ -41,50 +46,93 @@ export async function POST(req: Request) {
       let data: Stripe.Checkout.Session;
       let metadata: OrderMetadata;
       switch (event.type) {
-        case "checkout.session.completed":
+        case "checkout.session.completed": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
           metadata = data.metadata as unknown as OrderMetadata;
+          const bookingIds = z
+            .number()
+            .positive()
+            .array()
+            .parse(JSON.parse(metadata.bookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
-          const booking = await prisma.booking.findUnique({
-            where: { id: metadata.bookingId },
+          const bookings = await prisma.booking.findMany({
+            where: { id: { in: bookingIds } },
           });
-          if (!booking || !booking.valid) {
-            throw new Error("Booking invalid");
+          if (bookings.length !== bookingIds.length) {
+            throw new Error("Not all bookings were found in database");
           }
-
-          await prisma.booking.delete({ where: { id: metadata.bookingId } });
+          const bookingsAreValid = bookings.reduce(
+            (accum, booking) => (accum &&= booking.valid),
+            true,
+          );
+          if (!bookingsAreValid) {
+            throw new Error("Bookings invalid");
+          }
 
           // TODO: sending an email to user
           // use email as the owner of a ticket in the future after the schema changed
 
           const tickets = await prisma.ticket.createMany({
-            data: Array(Number(metadata.quantity))
-              .fill(0)
-              .map((_) => ({
-                bundleId: Number(metadata.bundleId),
-                timeslotId: Number(metadata.timeslotId),
-                bookingId: Number(metadata.bookingId),
-                paymentIntentId: String(data.payment_intent),
-              })),
+            data: bookings.flatMap((booking) =>
+              Array(booking.quantity)
+                .fill(0)
+                .map(() => ({
+                  name: booking.name,
+                  email: booking.email,
+                  telegramHandle: booking.telegramHandle,
+                  phoneNumber: booking.phoneNumber,
+                  bundleId: Number(booking.bundleId),
+                  timeslotId: Number(booking.timeslotId),
+                  paymentIntentId: String(data.payment_intent),
+                })),
+            ),
           });
           console.log("Ticket details: ");
           console.log(tickets);
-          break;
-        case "checkout.session.expired":
-          data = event.data.object as unknown as Stripe.Checkout.Session;
-          metadata = data.metadata as unknown as OrderMetadata;
-          console.log(`❌ Payment failed with session: ${data.id}`);
-          console.log(
-            `Relinquishing timeslot with ID: ${metadata.timeslotId} of ${metadata.quantity} slots`,
-          );
-          await prisma.timeslot.update({
-            where: { id: Number(metadata.timeslotId) },
-            data: { remainingSlots: { increment: Number(metadata.quantity) } },
+
+          await prisma.booking.deleteMany({
+            where: { id: { in: bookingIds } },
           });
           break;
-        default:
+        }
+        case "checkout.session.expired": {
+          data = event.data.object as unknown as Stripe.Checkout.Session;
+          metadata = data.metadata as unknown as OrderMetadata;
+          const bookingIds = z
+            .number()
+            .positive()
+            .array()
+            .parse(JSON.parse(metadata.bookingIds));
+          console.log(`❌ Payment failed with session: ${data.id}`);
+
+          const bookings = await prisma.booking.findMany({
+            where: { id: { in: bookingIds } },
+            include: { bundle: true, timeslot: true },
+          });
+
+          await prisma.$transaction(async (tx) => {
+            for (const booking of bookings) {
+              const partySize = booking.quantity * booking.bundle.quantity;
+
+              await tx.bundle.update({
+                where: { id: Number(booking.bundleId) },
+                data: {
+                  remainingAmount: { increment: Number(booking.quantity) },
+                },
+              });
+
+              await tx.timeslot.update({
+                where: { id: Number(booking.timeslotId) },
+                data: { remainingSlots: { increment: Number(partySize) } },
+              });
+            }
+          });
+          break;
+        }
+        default: {
           throw new Error(`Unhandled event: ${event.type}`);
+        }
       }
     } catch (error) {
       console.log(error);
