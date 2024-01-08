@@ -15,17 +15,22 @@ export default function BundlePopupContent({
   eventId: number;
   eventName: string;
 }) {
+  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
   const [bundlesAvailability, setBundlesAvailability] = useState<Record<
     number, // bundleId
     boolean
   > | null>(null);
-  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
 
   const { data: bundles, isLoading: bundlesIsLoading } =
     api.bundles.getManyByEvent.useQuery(eventId);
   const { data: timeslots, isLoading: timeslotsIsLoading } =
     api.timeslots.getManyByEvent.useQuery(eventId);
 
+  /**
+   * Calculates the bundles' avalability based on its quanitty and the remaining
+   * timeslots.
+   * @returns The bundles' availability as a record indexed by the bundles' id
+   */
   function getBundlesAvailability() {
     const totalTimeslots =
       timeslots?.reduce((sum, timeslot) => sum + timeslot.remainingSlots, 0) ??
@@ -43,29 +48,46 @@ export default function BundlePopupContent({
     );
   }
 
-  function selectBundle(bundleId: number) {
-    if (eventDetails[eventId]) {
-      setEventDetails({
-        ...eventDetails,
-        [eventId]: {
-          name: eventName,
-          quantity: 1,
-          bundle: bundles!.find((bundle) => bundle.id === bundleId)!,
-        },
-      });
+  /**
+   * Save the selected bundle to the `eventDetails` storage atom. This should
+   * be called after the component is mounted so that `eventDetails` is
+   * synchronized with `localStorage`. This is called by the "Select Bundle"
+   * button which is rendered for each bundle.
+   * @param id - The selected bundle id
+   */
+  function selectBundle(id: number) {
+    // Unreachable but necessary for typesafety
+    if (!bundles) {
+      throw new Error("Bundles not found");
     }
+    setEventDetails({
+      ...eventDetails,
+      [eventId]: {
+        name: eventName,
+        quantity: 1,
+        bundle: bundles.find((bundle) => bundle.id === id),
+      },
+    });
   }
 
+  /**
+   * Change quantity of the selected bundle. This should be called after the
+   * component is mounted so that `eventDetails` is synchronized with
+   * `localStorage`.
+   * @param amount - The new quantity
+   */
   function changeQuantity(amount: number) {
-    if (eventDetails[eventId]) {
-      setEventDetails({
-        ...eventDetails,
-        [eventId]: {
-          ...eventDetails[eventId]!,
-          quantity: amount,
-        },
-      });
+    // Unreachable but necessary for typesafety
+    if (!eventDetails[eventId]) {
+      throw new Error("Event detail not found");
     }
+    setEventDetails({
+      ...eventDetails,
+      [eventId]: {
+        ...eventDetails[eventId]!,
+        quantity: amount,
+      },
+    });
   }
 
   useEffect(() => {
@@ -74,9 +96,13 @@ export default function BundlePopupContent({
       if (!bundlesIsLoading && !timeslotsIsLoading) {
         const newBundlesAvailability = getBundlesAvailability();
         const newEventDetails = { ...eventDetails };
-        // deselect if bundle no longer available
+        // Unreachable but necessary for typesafety
+        if (!newEventDetails[eventId]) {
+          throw new Error("Event detail not found");
+        }
+        // deselect if bundle is no longer available
         if (
-          newEventDetails[eventId]?.bundle &&
+          newEventDetails[eventId]!.bundle &&
           !newBundlesAvailability[newEventDetails[eventId]!.bundle!.id]
         ) {
           newEventDetails[eventId]!.bundle = undefined;
