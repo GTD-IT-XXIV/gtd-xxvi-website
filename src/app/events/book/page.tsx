@@ -1,11 +1,12 @@
 "use client";
 
+import { getQueryKey } from "@trpc/react-query";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import Timeslots from "@/components/timeslots";
-import { useToast } from "@/components/ui/use-toast";
 
 import {
   eventDetailsAtom,
@@ -18,7 +19,6 @@ import { api } from "@/trpc/provider";
 export default function BookingPage() {
   const router = useRouter();
   const hasMounted = useHasMounted();
-  const { toast } = useToast();
 
   const [completion, setCompletion] = useAtom(registrationCompletionAtom);
   const [eventDetails] = useAtom(eventDetailsAtom);
@@ -29,36 +29,37 @@ export default function BookingPage() {
       api.timeslots.getManyByEvent(Number(eventId)),
     ),
   );
+  const { data: bookings, isLoading: bookingsAreLoading } =
+    api.bookings.getManyByEmail.useQuery(formData.email);
   const createBooking = api.bookings.create.useMutation();
 
   const timeslotsAreLoading = timeslotsQueries.reduce(
     (accum, query) => (accum ||= query.isLoading),
     false,
   );
+  const isBookingComplete = Object.keys(eventDetails).reduce(
+    (accum, eventId) =>
+      (accum &&= !!bookings?.find(
+        (booking) => booking.eventId === Number(eventId),
+      )),
+    true,
+  );
+  const bookingQueryKey = getQueryKey(api.bookings.getManyByEmail);
 
   if (!hasMounted || timeslotsAreLoading) {
     return <p>Loading...</p>;
   }
-  if (
-    timeslotsQueries.reduce((accum, query) => {
-      // console.log({
-      //   accum,
-      //   join: query.data?.length === 0,
-      //   result: accum || query.data?.length === 0,
-      // });
-      return (accum ||= query.data?.length === 0);
-    }, false)
-  ) {
-    return <p>Timeslots for one or more of the events not found</p>;
-  }
 
+  const eventTimeslotsExist = !timeslotsQueries.reduce((accum, query) => {
+    return (accum ||= query.data?.length === 0);
+  }, false);
   const onlyOneTimeslotPerEvent = timeslotsQueries.reduce(
     (accum, query) => (accum &&= query.data?.length === 1),
     true,
   );
 
-  function handleClick() {
-    console.log("click!");
+  if (!eventTimeslotsExist) {
+    return <p>Timeslots for one or more of the events not found</p>;
   }
 
   // Cmn bisa masuk page ini kalau udh isi form registration
@@ -102,10 +103,15 @@ export default function BookingPage() {
             key={eventId}
             eventId={eventId}
             eventName={eventDetail.name}
+            invalidateQueryKey={bookingQueryKey}
           />
         ))}
       <Link href="/checkout">
-        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
+        <button
+          type="button"
+          disabled={bookingsAreLoading || !isBookingComplete}
+          className="p-2 bg-slate-200 hover:bg-slate-100"
+        >
           Next
         </button>
       </Link>

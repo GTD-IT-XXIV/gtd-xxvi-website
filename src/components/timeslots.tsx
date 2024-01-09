@@ -1,8 +1,9 @@
 "use client";
 
+import { type QueryKey, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
 import {
@@ -12,19 +13,24 @@ import {
 import { api } from "@/trpc/provider";
 
 import Timeslot from "./timeslot";
+import { useToast } from "./ui/use-toast";
 
 dayjs.extend(customParseFormat);
 
 export default function Timeslots({
   eventId,
   eventName,
+  invalidateQueryKey,
 }: {
   eventId: number;
   eventName: string;
+  invalidateQueryKey: QueryKey;
 }) {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [selectedId, setSelectedId] = useState(0); // selected timeslot id
-  const [formData] = useAtom(eventsFormDataAtom);
-  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
+  const formData = useAtomValue(eventsFormDataAtom);
+  const eventDetails = useAtomValue(eventDetailsAtom);
 
   const { data: timeslots, isLoading: timeslotsAreLoading } =
     api.timeslots.getManyByEvent.useQuery(eventId);
@@ -33,10 +39,16 @@ export default function Timeslots({
       email: formData.email,
       eventId: eventId,
     });
-  const createBooking = api.bookings.create.useMutation();
-  const updateBooking = api.bookings.updateByEmailAndEvent.useMutation();
+  const createBooking = api.bookings.create.useMutation({
+    onSuccess: () => queryClient.invalidateQueries(invalidateQueryKey),
+  });
+  const updateBooking = api.bookings.updateByEmailAndEvent.useMutation({
+    onSuccess: () => queryClient.invalidateQueries(invalidateQueryKey),
+  });
 
   const isLoading = timeslotsAreLoading || bookingIsLoading;
+  const partySize =
+    (booking?.quantity ?? 0) * (eventDetails[eventId]?.bundle?.quantity ?? 0);
 
   useEffect(() => {
     let ignored = false;
@@ -63,25 +75,46 @@ export default function Timeslots({
       );
     }
     if (!booking) {
-      createBooking.mutate({
-        name: formData.name,
-        email: formData.email,
-        telegramHandle: formData.telegram,
-        phoneNumber: formData.phone,
-        quantity: eventDetails[eventId]!.quantity,
-        eventId: eventId,
-        bundleId: eventDetails[eventId]!.bundle!.id,
-        timeslotId: id,
-      });
+      createBooking.mutate(
+        {
+          name: formData.name,
+          email: formData.email,
+          telegramHandle: formData.telegram,
+          phoneNumber: formData.phone,
+          quantity: eventDetails[eventId]!.quantity,
+          eventId: eventId,
+          bundleId: eventDetails[eventId]!.bundle!.id,
+          timeslotId: id,
+        },
+        {
+          onSuccess: () => setSelectedId(id),
+          onError: () => {
+            toast({
+              title: "No timeslot",
+              description: "Please select another timeslot.",
+            });
+          },
+        },
+      );
     } else {
-      updateBooking.mutate({
-        email: formData.email,
-        eventId: eventId,
-        timeslotId: id,
-        bundleId: booking.bundleId,
-      });
+      updateBooking.mutate(
+        {
+          email: formData.email,
+          eventId: eventId,
+          timeslotId: id,
+          bundleId: booking.bundleId,
+        },
+        {
+          onSuccess: () => setSelectedId(id),
+          onError: () => {
+            toast({
+              title: "No timeslot",
+              description: "Please select another timeslot.",
+            });
+          },
+        },
+      );
     }
-    setSelectedId(id);
   }
 
   return (
@@ -108,7 +141,11 @@ export default function Timeslots({
             <Timeslot
               key={timeslot.id}
               timeslot={timeslot}
-              disabled={createBooking.isLoading || updateBooking.isLoading}
+              disabled={
+                createBooking.isLoading ||
+                updateBooking.isLoading ||
+                timeslot.remainingSlots < partySize
+              }
               selected={timeslot.id === selectedId}
               onClick={() => handleSelect(timeslot.id)}
             />
