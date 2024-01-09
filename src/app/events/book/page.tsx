@@ -65,7 +65,7 @@ export default function BookingPage() {
   // Cmn bisa masuk page ini kalau udh isi form registration
   if (!completion.register) {
     // console.log({ hasMounted, registrationCompletion: completion });
-    router.push("/events/register");
+    router.back();
   }
 
   // Kalau cmn ada 1 timeslot buat setiap event, redirect ke checkout page

@@ -109,5 +109,11 @@
   "engines": {
     "node": ">=20",
     "pnpm": ">=8"
+  },
+  "nextBundleAnalysis": {
+    "budget": 358400,
+    "budgetPercentIncreaseRed": 20,
+    "minimumChangeThreshold": 0,
+    "showDetails": true
   }
 }
