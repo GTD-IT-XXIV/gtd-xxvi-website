@@ -91,6 +91,11 @@ export const bookingsRouter = createTRPCRouter({
               where: { id: bundleId },
               data: { remainingAmount: { decrement: quantity } },
             });
+            console.log({
+              bundleId: bundle.id,
+              decrement: quantity,
+              remainingAmount: bundle.remainingAmount,
+            });
 
             if (bundle.remainingAmount! < 0) {
               throw new TRPCError({
@@ -205,6 +210,11 @@ export const bookingsRouter = createTRPCRouter({
             });
           }
 
+          console.log({
+            oldBundleId: oldBundle.id,
+            decrement: quantity,
+            remainingAmount: oldBundle.remainingAmount,
+          });
           let newBundle = await tx.bundle.findUnique({
             where: { id: bundleId },
           });
@@ -213,6 +223,11 @@ export const bookingsRouter = createTRPCRouter({
             newBundle = await tx.bundle.update({
               where: { id: bundleId },
               data: { remainingAmount: { decrement: booking.quantity } },
+            });
+            console.log({
+              newBundleId: newBundle.id,
+              decrement: quantity,
+              remainingAmount: newBundle.remainingAmount,
             });
 
             if (newBundle.remainingAmount! < 0) {

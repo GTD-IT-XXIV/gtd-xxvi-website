@@ -1,6 +1,7 @@
 "use client";
 
 import { type QueryKey, useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useAtomValue } from "jotai";
@@ -40,8 +41,12 @@ export default function Timeslots({
       email: formData.email,
       eventId: eventId,
     });
+  const bookingQueryKey = getQueryKey(api.bookings.getByEmailAndEvent);
   const createBooking = api.bookings.create.useMutation({
-    onSuccess: () => queryClient.invalidateQueries(invalidateQueryKey),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(invalidateQueryKey);
+      await queryClient.invalidateQueries(bookingQueryKey);
+    },
   });
   const updateBooking = api.bookings.updateByEmailAndEvent.useMutation({
     onSuccess: () => queryClient.invalidateQueries(invalidateQueryKey),
@@ -49,7 +54,8 @@ export default function Timeslots({
 
   const isLoading = timeslotsAreLoading || bookingIsLoading;
   const partySize =
-    (booking?.quantity ?? 0) * (eventDetails[eventId]?.bundle?.quantity ?? 0);
+    (booking?.quantity ?? eventDetails[eventId]!.quantity) *
+    eventDetails[eventId]!.bundle!.quantity;
 
   function handleSelect(id: number) {
     // console.log(`Selected timeslot ${id}!`);
@@ -121,6 +127,11 @@ export default function Timeslots({
       if (timeslots?.length === 1 && timeslots[0]!.id !== selectedId) {
         handleSelect(timeslots[0]!.id);
       }
+      // if (booking && eventDetails[eventId]?.bundle) {
+      //   setPartySize(
+      //     booking.quantity * eventDetails[eventId]!.bundle!.quantity,
+      //   );
+      // }
     }
     return () => {
       ignored = true;
@@ -154,6 +165,7 @@ export default function Timeslots({
               disabled={
                 createBooking.isLoading ||
                 updateBooking.isLoading ||
+                !partySize ||
                 timeslot.remainingSlots < partySize
               }
               selected={timeslot.id === selectedId}

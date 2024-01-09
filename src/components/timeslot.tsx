@@ -32,7 +32,7 @@ export default function Timeslot({
       className={cn(
         "p-2 bg-slate-200 hover:bg-slate-100 border-2",
         selected ? "border-green-500" : "border-slate-300",
-        // disabled ? "text-muted bg-slate-100 cursor-loading" : "", // causes flickering
+        disabled ? "bg-slate-100 cursor-loading" : "", // causes flickering
       )}
     >
       {startTimeLabel} - {endTimeLabel}

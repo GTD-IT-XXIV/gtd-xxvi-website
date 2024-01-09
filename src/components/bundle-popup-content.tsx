@@ -149,6 +149,9 @@ export default function BundlePopupContent({
                 <input
                   type="number"
                   min={1}
+                  max={
+                    eventDetails[eventId]!.bundle!.remainingAmount ?? undefined
+                  }
                   value={eventDetails[eventId]!.quantity}
                   onChange={({ target }) =>
                     changeQuantity(parseInt(target.value))
