@@ -29,6 +29,7 @@ export default function Timeslots({
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [selectedId, setSelectedId] = useState(0); // selected timeslot id
+  const [isInitialized, setIsInitialized] = useState(false);
   const formData = useAtomValue(eventsFormDataAtom);
   const eventDetails = useAtomValue(eventDetailsAtom);
 
@@ -49,18 +50,6 @@ export default function Timeslots({
   const isLoading = timeslotsAreLoading || bookingIsLoading;
   const partySize =
     (booking?.quantity ?? 0) * (eventDetails[eventId]?.bundle?.quantity ?? 0);
-
-  useEffect(() => {
-    let ignored = false;
-    if (!ignored) {
-      if (!bookingIsLoading && booking && selectedId === 0) {
-        setSelectedId(booking.timeslotId);
-      }
-    }
-    return () => {
-      ignored = true;
-    };
-  }, [booking, bookingIsLoading]);
 
   function handleSelect(id: number) {
     // console.log(`Selected timeslot ${id}!`);
@@ -116,6 +105,27 @@ export default function Timeslots({
       );
     }
   }
+
+  useEffect(() => {
+    let ignored = false;
+    if (
+      !ignored &&
+      !isInitialized &&
+      !bookingIsLoading &&
+      !timeslotsAreLoading
+    ) {
+      setIsInitialized(true);
+      if (booking && selectedId === 0) {
+        setSelectedId(booking.timeslotId);
+      }
+      if (timeslots?.length === 1 && timeslots[0]!.id !== selectedId) {
+        handleSelect(timeslots[0]!.id);
+      }
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [booking, bookingIsLoading, timeslots, timeslotsAreLoading]);
 
   return (
     <div className="flex flex-col">

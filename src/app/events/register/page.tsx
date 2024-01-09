@@ -2,6 +2,7 @@
 
 import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import BundlePopup from "@/components/bundle-popup";
 import BundlePopupContent from "@/components/bundle-popup-content";
@@ -22,7 +23,7 @@ export default function RegistrationPage() {
   const { toast } = useToast();
 
   const formData = useAtomValue(eventsFormDataAtom);
-  const eventDetails = useAtomValue(eventDetailsAtom);
+  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
   const [completion, setCompletion] = useAtom(registrationCompletionAtom);
 
   const { data: bookings, isLoading: bookingsAreLoading } =
@@ -35,6 +36,29 @@ export default function RegistrationPage() {
       (accum, booking) => (accum ||= !!booking.paymentIntentId),
       false,
     ) ?? false;
+
+  useEffect(() => {
+    let ignored = false;
+    if (!ignored) {
+      if (hasMounted && !bookingsAreLoading && bookings) {
+        for (const booking of bookings) {
+          if (!eventDetails[booking.eventId]) {
+            continue;
+          }
+          setEventDetails({
+            ...eventDetails,
+            [booking.eventId]: {
+              ...eventDetails[booking.eventId]!,
+              quantity: booking.quantity,
+            },
+          });
+        }
+      }
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [hasMounted, bookings, bookingsAreLoading]);
 
   if (!hasMounted) {
     return <p>Loading...</p>;
