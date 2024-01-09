@@ -1,7 +1,8 @@
 "use client";
 
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import BundlePopup from "@/components/bundle-popup";
 import BundlePopupContent from "@/components/bundle-popup-content";
@@ -21,14 +22,14 @@ export default function RegistrationPage() {
   const hasMounted = useHasMounted();
   const { toast } = useToast();
 
-  const [formData] = useAtom(eventsFormDataAtom);
-  const [eventDetails] = useAtom(eventDetailsAtom);
+  const formData = useAtomValue(eventsFormDataAtom);
+  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
   const [completion, setCompletion] = useAtom(registrationCompletionAtom);
 
   const { data: bookings, isLoading: bookingsAreLoading } =
     api.bookings.getManyByEmail.useQuery(formData.email);
-  const deleteBookings = api.bookings.deleteManyByEmail.useMutation();
   const updateBooking = api.bookings.updateByEmailAndEvent.useMutation();
+  const deleteBookings = api.bookings.deleteManyByEmail.useMutation();
 
   const hasPendingPayments =
     bookings?.reduce(
@@ -36,13 +37,45 @@ export default function RegistrationPage() {
       false,
     ) ?? false;
 
+  useEffect(() => {
+    let ignored = false;
+    if (!ignored) {
+      if (hasMounted && !bookingsAreLoading && bookings) {
+        for (const booking of bookings) {
+          if (!eventDetails[booking.eventId]) {
+            continue;
+          }
+          setEventDetails({
+            ...eventDetails,
+            [booking.eventId]: {
+              ...eventDetails[booking.eventId]!,
+              quantity: booking.quantity,
+            },
+          });
+        }
+      }
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [hasMounted, bookings, bookingsAreLoading]);
+
+  if (!hasMounted) {
+    return <p>Loading...</p>;
+  }
+
+  if (!bookingsAreLoading && bookings && hasPendingPayments) {
+    setCompletion({ register: true, book: true });
+    router.push("/checkout");
+  }
+
   function handleFormSubmit() {
-    const eventsBundleSelected = Object.keys(eventDetails).reduce(
+    const bundlesSelected = Object.keys(eventDetails).reduce(
       (accum, eventId) => (accum &&= !!eventDetails[Number(eventId)]?.bundle),
       true,
     );
 
-    if (!eventsBundleSelected) {
+    if (!bundlesSelected) {
       toast({
         variant: "destructive",
         title: "Event bundle not selected",
@@ -85,15 +118,6 @@ export default function RegistrationPage() {
 
     setCompletion({ ...completion, register: true });
     router.push("/events/book");
-  }
-
-  if (!hasMounted) {
-    return <p>Loading...</p>;
-  }
-
-  if (!bookingsAreLoading && bookings && hasPendingPayments) {
-    setCompletion({ register: true, book: true });
-    router.push("/checkout");
   }
 
   return (

@@ -1,58 +1,25 @@
-"use client";
-
-import { useAtom } from "jotai";
 import Link from "next/link";
 
-import { eventDetailsAtom } from "@/lib/atoms/events-registration";
-import { useHasMounted } from "@/lib/hooks";
-import { api } from "@/trpc/provider";
+import GTDFestRegisterButton from "@/components/gtdfest-register-button";
 
-export default function GTDFestPage() {
-  const hasMounted = useHasMounted();
-  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
+import { api } from "@/trpc/server";
 
-  const { data: gtdFest, isLoading: gtdfestIsLoading } =
-    api.events.getById.useQuery(9);
-  const { data: escapeRoom, isLoading: escapeRoomIsLoading } =
-    api.events.getById.useQuery(10);
-  const isLoading = !hasMounted || gtdfestIsLoading || escapeRoomIsLoading;
+export default async function GTDFestPage() {
+  const gtdFest = await api.events.getById.query(9);
+  const escapeRoom = await api.events.getById.query(10);
 
-  function handleClickRegister() {
-    if (!gtdFest || !escapeRoom) {
-      throw new Error("GTD Fest or Escape Room event not found");
-    }
-    setEventDetails({
-      ...eventDetails,
-      [gtdFest.id]: {
-        ...eventDetails[gtdFest.id],
-        name: gtdFest.name,
-        quantity: 0,
-      },
-      [escapeRoom.id]: {
-        ...eventDetails[escapeRoom.id],
-        name: escapeRoom.name,
-        quantity: 0,
-      },
-    });
-    // console.log("register button click");
+  if (!gtdFest) {
+    throw new Error(`GTD Fest event (id: ${9}) not found`);
   }
-
-  // TODO: separate client and server logic to improve page performance
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (!escapeRoom) {
+    throw new Error(`Escape Room event (id: ${10}) not found`);
   }
 
   return (
     <main>
       <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
       <Link href="/events/register">
-        <button
-          type="button"
-          onClick={handleClickRegister}
-          className="p-2 bg-slate-200 hover:bg-slate-100"
-        >
-          Register
-        </button>
+        <GTDFestRegisterButton gtdFest={gtdFest} escapeRoom={escapeRoom} />
       </Link>
       <h2 className="text-xl font-medium">Custom Colors</h2>
       <ul>
