@@ -2,7 +2,7 @@ import { Prisma, type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/trpc/config";
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 export const bookingSchema = z.object({
   name: z.string(),

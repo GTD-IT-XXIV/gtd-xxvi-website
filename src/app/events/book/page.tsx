@@ -4,7 +4,6 @@ import { getQueryKey } from "@trpc/react-query";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 import Timeslots from "@/components/timeslots";
 
@@ -14,7 +13,7 @@ import {
   registrationCompletionAtom,
 } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";
-import { api } from "@/trpc/provider";
+import { api } from "@/lib/trpc/provider";
 
 export default function BookingPage() {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/trpc/config";
+import { createTRPCRouter } from "@/lib/trpc/config";
 
 import { bookingsRouter } from "./routers/bookings";
 import { bundlesRouter } from "./routers/bundles";

@@ -11,7 +11,7 @@ import {
   eventDetailsAtom,
   eventsFormDataAtom,
 } from "@/lib/atoms/events-registration";
-import { api } from "@/trpc/provider";
+import { api } from "@/lib/trpc/provider";
 
 import Timeslot from "./timeslot";
 import { useToast } from "./ui/use-toast";

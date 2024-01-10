@@ -10,7 +10,7 @@ Use the tRPC client `api` defined in `src/trpc/provider`. Example:
 // example-page.tsx
 "use client";
 
-import { api } from "@/trpc/provider";
+import { api } from "@/lib/trpc/provider";
 
 // example-page.tsx
 
@@ -26,7 +26,7 @@ Use the tRPC client `api` defined in `src/trpc/server`. Example:
 
 ```tsx
 // example-page.tsx
-import { api } from "@/trpc/server";
+import { api } from "@/lib/trpc/server";
 
 export default async function ExamplePage() {
   const event = await api.event.getById.query(1);

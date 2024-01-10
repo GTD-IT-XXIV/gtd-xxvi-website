@@ -15,7 +15,7 @@ import {
   registrationCompletionAtom,
 } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";
-import { api } from "@/trpc/provider";
+import { api } from "@/lib/trpc/provider";
 
 export default function RegistrationPage() {
   const router = useRouter();

@@ -5,8 +5,8 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 import { eventDetailsAtom } from "@/lib/atoms/events-registration";
+import { api } from "@/lib/trpc/provider";
 import { cn } from "@/lib/utils";
-import { api } from "@/trpc/provider";
 
 export default function BundlePopupContent({
   eventId,

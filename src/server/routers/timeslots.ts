@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/trpc/config";
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 export const timeslotsRouter = createTRPCRouter({
   getManyByEvent: publicProcedure

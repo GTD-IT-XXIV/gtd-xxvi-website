@@ -13,8 +13,8 @@ import {
   eventsFormDataAtom,
   registrationCompletionAtom,
 } from "@/lib/atoms/events-registration";
+import { api } from "@/lib/trpc/provider";
 import { getStripe } from "@/lib/utils";
-import { api } from "@/trpc/provider";
 
 const stripePromise = getStripe();
 

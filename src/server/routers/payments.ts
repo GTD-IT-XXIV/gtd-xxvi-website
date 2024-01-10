@@ -3,8 +3,8 @@ import type Stripe from "stripe";
 import { z } from "zod";
 
 import { stripe } from "@/lib/stripe";
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
-import { createTRPCRouter, publicProcedure } from "@/trpc/config";
 
 export const paymentsRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
