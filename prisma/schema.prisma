@@ -66,24 +66,24 @@ model Ticket {
 }
 
 model Booking {
-  id              Int      @id @default(autoincrement())
-  name            String
-  email           String
-  telegramHandle  String
-  phoneNumber     String
-  eventId         Int
-  event           Event    @relation(fields: [eventId], references: [id])
-  bundleId        Int
-  bundle          Bundle   @relation(fields: [bundleId], references: [id])
-  timeslotId      Int
-  timeslot        Timeslot @relation(fields: [timeslotId], references: [id])
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String
+  telegramHandle String
+  phoneNumber    String
+  eventId        Int
+  event          Event    @relation(fields: [eventId], references: [id])
+  bundleId       Int
+  bundle         Bundle   @relation(fields: [bundleId], references: [id])
+  timeslotId     Int
+  timeslot       Timeslot @relation(fields: [timeslotId], references: [id])
   /// Number of bundles to book
-  quantity        Int
-  created         DateTime @default(now())
+  quantity       Int
+  created        DateTime @default(now())
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
-  valid           Boolean  @default(true)
-  /// Reference for Stripe PaymentIntent ID; not a foreign key
-  paymentIntentId String?
+  valid          Boolean  @default(true)
+  /// Reference for Stripe Session ID; not a foreign key
+  sessionId      String?
 
   @@unique([email, eventId])
 }

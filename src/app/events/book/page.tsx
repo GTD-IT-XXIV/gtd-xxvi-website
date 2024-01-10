@@ -1,6 +1,7 @@
 "use client";
 
 import { useAtomValue, useSetAtom } from "jotai";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import SuperJSON from "superjson";
 import { ZodError, z } from "zod";
@@ -91,6 +92,15 @@ export default function BookingPage() {
           amount={event.amount}
         />
       ))}
+      <Link href="/checkout">
+        <button
+          type="button"
+          // disabled={bookingsAreLoading || !isBookingComplete}
+          className="p-2 bg-slate-200 hover:bg-slate-100"
+        >
+          Next
+        </button>
+      </Link>
     </main>
   );
 }

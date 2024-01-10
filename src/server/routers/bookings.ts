@@ -13,7 +13,7 @@ export const bookingSchema = z.object({
   eventId: z.number().positive(),
   bundleId: z.number().positive(),
   timeslotId: z.number().positive(),
-  paymentIntentId: z.string().optional(),
+  sessionId: z.string().optional(),
 });
 
 export const bookingsRouter = createTRPCRouter({
@@ -147,7 +147,7 @@ export const bookingsRouter = createTRPCRouter({
         quantity: z.number().nonnegative().optional(),
         bundleId: z.number().positive().optional(),
         timeslotId: z.number().positive().optional(),
-        paymentIntentId: z.string().optional(),
+        sessionId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -289,7 +289,7 @@ export const bookingsRouter = createTRPCRouter({
         quantity: z.number().nonnegative().optional(),
         bundleId: z.number().positive().optional(),
         timeslotId: z.number().positive().optional(),
-        paymentIntentId: z.string().optional(),
+        sessionId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

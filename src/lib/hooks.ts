@@ -30,9 +30,7 @@ export function useHasPendingPayments() {
   useEffect(() => {
     async function runEffect() {
       if (!isLoading && data) {
-        setHasPendingPayments(
-          data.some((booking) => !!booking.paymentIntentId),
-        );
+        setHasPendingPayments(data.some((booking) => !!booking.sessionId));
       }
     }
 
