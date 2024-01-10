@@ -44,3 +44,4 @@ prisma/generated
 *.prisma
 *.sql
 *.json
+report-bundle-size.js
