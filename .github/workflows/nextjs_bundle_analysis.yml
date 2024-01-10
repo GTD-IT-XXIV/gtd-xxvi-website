@@ -69,7 +69,7 @@ jobs:
       # Here's the first place where next-bundle-analysis' own script is used
       # This step pulls the raw bundle stats for the current bundle
       - name: Analyze bundle
-        run: node report-bundle-size.js
+        run: node report-bundle-size.cjs
         # run: npx -p nextjs-bundle-analysis report
 
       - name: Upload bundle
