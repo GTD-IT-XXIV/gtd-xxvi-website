@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import GTDFestRegisterButton from "@/components/gtdfest-register-button";
-
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
 import { api } from "@/lib/trpc/server";
 
@@ -21,8 +19,17 @@ export default async function GTDFestPage() {
   return (
     <main>
       <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
-      <Link href="/events/register">
-        <GTDFestRegisterButton gtdFest={gtdFest} escapeRoom={escapeRoom} />
+      <Link
+        href={{
+          pathname: "/events/register",
+          query: {
+            event: [GTD_FEST_EVENT_ID, ESCAPE_ROOM_EVENT_ID],
+          },
+        }}
+      >
+        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
+          Register
+        </button>
       </Link>
       <h2 className="text-xl font-medium">Custom Colors</h2>
       <ul>

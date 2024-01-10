@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 import {
   eventDetailsAtom,
-  eventsFormDataAtom,
+  formDataAtom,
 } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/provider";
 
@@ -31,7 +31,7 @@ export default function Timeslots({
   const { toast } = useToast();
   const [selectedId, setSelectedId] = useState(0); // selected timeslot id
   const [isInitialized, setIsInitialized] = useState(false);
-  const formData = useAtomValue(eventsFormDataAtom);
+  const formData = useAtomValue(formDataAtom);
   const eventDetails = useAtomValue(eventDetailsAtom);
 
   const { data: timeslots, isLoading: timeslotsAreLoading } =

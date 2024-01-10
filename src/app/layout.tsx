@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
-import { Toaster } from "@/components/ui/toaster";
+import Notification from "@/components/notification";
 
 import TRPCReactProvider from "@/lib/trpc/provider";
 import "@/styles/globals.css";
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
-          <Toaster />
+          <Notification />
         </TRPCReactProvider>
       </body>
     </html>

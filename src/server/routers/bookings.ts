@@ -46,6 +46,19 @@ export const bookingsRouter = createTRPCRouter({
       return ctx.prisma.booking.findMany({ where: { email: input } });
     }),
 
+  getManyByEmailAndEvents: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        eventIds: z.number().positive().array(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.booking.findMany({
+        where: { email: input.email, eventId: { in: input.eventIds } },
+      });
+    }),
+
   create: publicProcedure
     .input(bookingSchema)
     .mutation(async ({ ctx, input }) => {
