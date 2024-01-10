@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@next/bundle-analyzer": "^14.0.4",
     "@prisma/client": "^5.8.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -79,6 +78,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.4",
     "@swc-jotai/react-refresh": "^0.1.0",
     "@testing-library/react": "^14.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -93,7 +93,7 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "eslint-plugin-unicorn": "^50.0.1",
-    "gzip-size": "6",
+    "gzip-size": "^6.0.0",
     "husky": "^8.0.3",
     "jsdom": "^23.2.0",
     "lint-staged": "^15.2.0",
