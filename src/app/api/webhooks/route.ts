@@ -1,5 +1,4 @@
 import { env } from "@/env";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
 import { z } from "zod";
@@ -8,7 +7,6 @@ import { prisma } from "@/server/db";
 
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
-import { Prettify } from "@/lib/utils";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;

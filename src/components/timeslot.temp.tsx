@@ -1,28 +1,27 @@
+import "client-only";
+
 import { type Timeslot } from "@prisma/client";
 import dayjs from "dayjs";
-import { type MouseEventHandler } from "react";
 
 import { cn } from "@/lib/utils";
 
 export const DEFAULT_TIMESLOT_FORMAT = "ddd, HH.mm";
 
-export type TimeslotProps = {
-  startTime: Date;
-  endTime: Date;
-  disabled?: boolean;
-  selected?: boolean;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-};
-
 export default function Timeslot({
-  startTime,
-  endTime,
+  timeslot,
   disabled = false,
   selected = false,
   onClick,
-}: TimeslotProps) {
-  const startTimeLabel = dayjs(startTime).format(DEFAULT_TIMESLOT_FORMAT);
-  const endTimeLabel = dayjs(endTime).format(DEFAULT_TIMESLOT_FORMAT);
+}: {
+  timeslot: Timeslot;
+  selected?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  const startTimeLabel = dayjs(timeslot.startTime).format(
+    DEFAULT_TIMESLOT_FORMAT,
+  );
+  const endTimeLabel = dayjs(timeslot.endTime).format(DEFAULT_TIMESLOT_FORMAT);
   // console.log(timeslot.id, selected);
 
   return (
