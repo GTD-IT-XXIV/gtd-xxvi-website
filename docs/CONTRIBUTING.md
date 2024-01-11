@@ -24,13 +24,22 @@ git push
 
 ## Backend Workflow
 
-1. Open [Prisma Studio](https://www.prisma.io/studio) to view database information & create new rows for development/testing purposes:
+1. [Sign up](https://dashboard.stripe.com/register) for a Stripe account or [sign in](https://dashboard.stripe.com/login) to your Stripe account. If prompted to activate payments on sign in, close the popup.
+2. Setup 2FA for your Stripe account and generate a restricted key.
+3. [Setup Stripe CLI](https://stripe.com/docs/stripe-cli) for development.
+4. Run the Stripe CLI to listen for events:
+
+```bash
+pnpm dev:stripe
+```
+
+5. Open [Prisma Studio](https://www.prisma.io/studio) to view database information & create new rows for development/testing purposes:
 
 ```bash
 pnpm dev:db:studio
 ```
 
-2. Create tRPC routers/controllers at `src/server/controllers/<your-router>` and add them to the app router at `src/server/root.ts`.
+6. Create tRPC routers/controllers at `src/server/controllers/<your-router>` and add them to the app router at `src/server/root.ts`.
 
 ## Style Guide
 
