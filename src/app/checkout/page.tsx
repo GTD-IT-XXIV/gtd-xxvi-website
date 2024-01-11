@@ -5,7 +5,9 @@ import {
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
 import { useAtomValue, useSetAtom } from "jotai";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import SuperJSON from "superjson";
 
 import { formDataAtom } from "@/lib/atoms/events-registration";
 import { errorAtom } from "@/lib/atoms/message";
@@ -93,19 +95,42 @@ export default function CheckoutPage() {
       )}
       <section>
         <h2 className="text-xl font-medium">Bookings</h2>
-        {bookings?.map((booking) => (
-          <article key={booking.id} className="border-b border-black">
-            <p>ID: {booking.id}</p>
-            <p>Name: {booking.name}</p>
-            <p>Email: {booking.email}</p>
-            <p>Telegram Handle: {booking.telegramHandle}</p>
-            <p>Phone No.: {booking.phoneNumber}</p>
-            <p>Quantity: {booking.phoneNumber}</p>
-            <p>Bundle ID: {booking.bundleId}</p>
-            <p>Timeslot ID: {booking.timeslotId}</p>
-          </article>
-        )) ?? <p>No bookings found</p>}
+        {bookings && bookings.length > 0 ? (
+          bookings.map((booking) => (
+            <article key={booking.id} className="border-b border-black">
+              <p>ID: {booking.id}</p>
+              <p>Name: {booking.name}</p>
+              <p>Email: {booking.email}</p>
+              <p>Telegram Handle: {booking.telegramHandle}</p>
+              <p>Phone No.: {booking.phoneNumber}</p>
+              <p>Quantity: {booking.phoneNumber}</p>
+              <p>Bundle ID: {booking.bundleId}</p>
+              <p>Timeslot ID: {booking.timeslotId}</p>
+            </article>
+          ))
+        ) : (
+          <p>No bookings found</p>
+        )}
       </section>
+      <Link
+        href={{
+          pathname: "/events/book",
+          query: {
+            event: bookings?.map((booking) =>
+              SuperJSON.stringify({
+                id: booking.eventId,
+                bundleId: booking.bundleId,
+                amount: booking.quantity,
+              }),
+            ),
+          },
+        }}
+      >
+        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
+          Back
+        </button>
+      </Link>
+
       <button
         type="button"
         onClick={handleClickCheckout}

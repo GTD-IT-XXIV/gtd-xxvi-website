@@ -1,4 +1,4 @@
-"use client";
+import "client-only";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
@@ -22,12 +22,14 @@ export type TimeslotsProps = {
    * Amount of tickets/bundles to book
    */
   amount: number;
+  onChange: (id: number) => void;
 };
 
 export default function Timeslots({
   eventId,
   bundleId,
   amount,
+  onChange,
 }: TimeslotsProps) {
   const queryClient = useQueryClient();
   const formData = useAtomValue(formDataAtom);
@@ -50,11 +52,16 @@ export default function Timeslots({
     isEventLoading || isBundleLoading || isTimeslotsLoading || isBookingLoading;
   const partySize = amount * (bundle?.quantity ?? 0);
   const timeslotsQueryKey = getQueryKey(api.timeslots.getManyByEvent, eventId);
+  const bookingQueryKey = getQueryKey(api.bookings.getByEmailAndEvent, {
+    email: formData.email,
+    eventId,
+  });
 
   const createBooking = api.bookings.create.useMutation({
     onSuccess: (createdBooking) => {
       setSelectedId(createdBooking.timeslotId);
       void queryClient.invalidateQueries(timeslotsQueryKey);
+      void queryClient.invalidateQueries(bookingQueryKey);
     },
     onError: (error) => {
       setError(
@@ -66,6 +73,7 @@ export default function Timeslots({
     onSuccess: (updatedBooking) => {
       setSelectedId(updatedBooking.timeslotId);
       void queryClient.invalidateQueries(timeslotsQueryKey);
+      void queryClient.invalidateQueries(bookingQueryKey);
     },
     onError: (error) => {
       setError(
@@ -83,20 +91,23 @@ export default function Timeslots({
         bundleId,
         timeslotId: id,
       });
-      return;
+    } else {
+      updateBooking.mutate({
+        email: formData.email,
+        eventId,
+        timeslotId: id,
+      });
     }
-    updateBooking.mutate({
-      email: formData.email,
-      eventId,
-      timeslotId: id,
-    });
+    onChange(id);
   }
 
   useEffect(() => {
     function runEffect() {
       if (!isBookingLoading && !isTimeslotsLoading) {
         if (booking && selectedId === 0) {
+          console.log({ timeslotId: booking.timeslotId });
           setSelectedId(booking.timeslotId);
+          onChange(booking.timeslotId);
         }
         if (
           timeslots?.length === 1 &&

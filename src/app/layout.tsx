@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import Notification from "@/components/notification";
 
 import TRPCReactProvider from "@/lib/trpc/provider";
+
 import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

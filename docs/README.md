@@ -17,17 +17,17 @@
 - Meta-framework: **Next.js v14**
 - Frontend:
   - UI library: **React v18.2**
-  - Styling: **Tailwind CSS v3.4** & shadcn/ui
-  - State management: zustand v4.4, Jotai v2.6
+  - Styling: **Tailwind CSS v3** & shadcn/ui
+  - State management: zustand v4, Jotai v2
   - Asynchronous state management: TanStack Query v4
 - Backend:
   - Route Handling: **Next.js v14**
   - API: tRPC v10
-  - ORM: Prsima v5.7
+  - ORM: Prsima v5
   - Database: Supabase Postgres database
-  - Payment: Stripe SAAS Supabase integration
+  - Payment: Stripe Checkout
 - Miscellaneous:
-  - Schema validation: Zod v3.22
+  - Schema validation: Zod v3
 
 ## Directory Structure
 

@@ -47,7 +47,6 @@ export default function BundleOption({
       {selected && (
         <input
           type="number"
-          defaultValue={1}
           min={1}
           max={maxAmount}
           value={amount !== 0 ? amount : ""}

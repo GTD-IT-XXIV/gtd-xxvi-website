@@ -49,18 +49,18 @@ erDiagram
     Int quantity
     DateTime created
     Boolean valid
-    String paymentIntentId
+    String sessionId
   }
-  PaymentIntent {}
+  Stripe {}
 
   Event ||--o{ Bundle: ""
   Event ||--o{ Booking : ""
   Booking }o--|| Bundle : ""
-  Booking }o..o| PaymentIntent : ""
+  Booking }o..o| Stripe: ""
   Booking }o--|| Timeslot : ""
   Event ||--o{ Timeslot: ""
   Bundle ||--o{ Ticket : ""
-  PaymentIntent ||..o{ Ticket : ""
+  Stripe ||..o{ Ticket : ""
   Timeslot ||--o{ Ticket : ""
 ```
 

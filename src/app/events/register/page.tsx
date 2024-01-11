@@ -83,6 +83,10 @@ export default function RegistrationPage() {
 
   console.log({ bookings, selectedBundlesId, bundlesAmount });
 
+  if (eventIds.length === 0) {
+    router.back();
+  }
+
   if (hasPendingPayments) {
     router.replace("/checkout");
   }

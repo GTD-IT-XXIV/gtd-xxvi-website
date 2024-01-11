@@ -1,0 +1,42 @@
+# Workflow
+
+1. Create new feature branch with the following format `name/feature` and push the new branch to remote (this repository):
+
+```bash
+git checkout -b bob/leaderboard-router
+git push -u origin bob/leaderboard-router
+```
+
+2. Commit on your feature branch and push to repository (Note: [Husky](https://typicode.github.io/husky/) will automatically lint and format your code before commit).
+
+```bash
+git add .
+git commit -m "feat: add leaderboard router"
+git push
+```
+
+3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
+4. See specific workflows:
+   - [Frontend workflow](#frontend-workflow-construction)
+   - [Backend worflow](#backend-workflow)
+
+## Frontend Workflow :construction:
+
+## Backend Workflow
+
+1. Open [Prisma Studio](https://www.prisma.io/studio) to view database information & create new rows for development/testing purposes:
+
+```bash
+pnpm dev:db:studio
+```
+
+2. Create tRPC routers/controllers at `src/server/controllers/<your-router>` and add them to the app router at `src/server/root.ts`.
+
+## Style Guide
+
+Optional but recommended:
+
+- Git commits style guide: [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
+- Use TypeScript types instead of interfaces unless necessary ([_why?_](https://youtu.be/zM9UPcIyyhQ?si=TI7vrg4OZAOpBd1x))
+- Use [`function` declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function) for React components and event handlers
+  - Learn more: [`function` declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#hoisting) vs [`function` expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function) vs [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)

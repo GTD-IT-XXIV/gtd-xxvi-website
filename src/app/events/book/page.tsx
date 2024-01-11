@@ -3,6 +3,7 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import SuperJSON from "superjson";
 import { ZodError, z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -30,16 +31,21 @@ export default function BookingPage() {
       amount: z.number().positive(),
     })
     .array();
-  let events: z.infer<typeof eventsSchema>;
+  let events: z.infer<typeof eventsSchema> = [];
   try {
     events = eventsSchema.parse(eventParams.map((str) => SuperJSON.parse(str)));
   } catch (error) {
     if (error instanceof ZodError) {
       const validationError = fromZodError(error);
-      throw validationError;
+      setError(validationError.message);
     }
-    throw new Error("Invalid query parameters");
+    setError("Invalid query parameters");
   }
+  console.log({ eventParams, events });
+
+  const [isEventTimeslotSelected, setIsEventTimeslotSelected] = useState<
+    Record<number, boolean>
+  >(events.reduce((accum, event) => ({ ...accum, [event.id]: false }), {}));
 
   const timeslotsQueries = api.useQueries((api) =>
     events.map((event) => api.timeslots.getManyByEvent(event.id)),
@@ -58,6 +64,10 @@ export default function BookingPage() {
   const isEveryEventSingleTimeslot = timeslotsQueries.every(
     (query) => query.data && query.data.length === 1,
   );
+  const isBookingComplete = Object.values(isEventTimeslotSelected).every(
+    (isTimeslotSelected) => isTimeslotSelected,
+  );
+  console.log({ isEventTimeslotSelected, isBookingComplete });
 
   if (!isTimeslotsQueriesLoading && isEveryEventSingleTimeslot) {
     events.forEach((event, idx) => {
@@ -77,6 +87,10 @@ export default function BookingPage() {
     router.replace("/checkout");
   }
 
+  if (events.length === 0) {
+    router.back();
+  }
+
   if (hasPendingPayments) {
     router.replace("/checkout");
   }
@@ -90,12 +104,30 @@ export default function BookingPage() {
           eventId={event.id}
           bundleId={event.bundleId}
           amount={event.amount}
+          onChange={(id) =>
+            setIsEventTimeslotSelected((prev) => ({
+              ...prev,
+              [event.id]: id !== 0,
+            }))
+          }
         />
       ))}
+      <Link
+        href={{
+          pathname: "/events/register",
+          query: {
+            event: events.map((event) => event.id),
+          },
+        }}
+      >
+        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
+          Back
+        </button>
+      </Link>
       <Link href="/checkout">
         <button
           type="button"
-          // disabled={bookingsAreLoading || !isBookingComplete}
+          disabled={!isBookingComplete}
           className="p-2 bg-slate-200 hover:bg-slate-100"
         >
           Next
