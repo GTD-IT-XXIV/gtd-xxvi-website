@@ -17,17 +17,17 @@
 - Meta-framework: **Next.js v14**
 - Frontend:
   - UI library: **React v18.2**
-  - Styling: **Tailwind CSS v3.4** & shadcn/ui
-  - State management: zustand v4.4, Jotai v2.6
+  - Styling: **Tailwind CSS v3** & shadcn/ui
+  - State management: zustand v4, Jotai v2
   - Asynchronous state management: TanStack Query v4
 - Backend:
   - Route Handling: **Next.js v14**
   - API: tRPC v10
-  - ORM: Prsima v5.7
+  - ORM: Prsima v5
   - Database: Supabase Postgres database
-  - Payment: Stripe SAAS Supabase integration
+  - Payment: Stripe Checkout
 - Miscellaneous:
-  - Schema validation: Zod v3.22
+  - Schema validation: Zod v3
 
 ## Directory Structure
 
@@ -52,6 +52,9 @@ gtd-xxvi-website/
     ├── lib/                      # Libraries of utils, helpers, etc.
     │   ├── atoms/                # Jotai atoms
     │   ├── slices/               # zustand slices
+    │   ├── trpc/                 # tRPC-related files
+    │   ├── types/                # Custom type & schema definitions
+    │   ├── constants.ts          # Constants definitions
     │   ├── hooks.ts              # Custom hooks
     │   └── utils.ts              # Utilities & helpers
     ├── server/                   # Backend code; put all backend code here
@@ -61,6 +64,5 @@ gtd-xxvi-website/
     │   └── root.ts               # The main app tRPC router
     ├── styles/                   # CSS files; put all CSS files here
     ├── tests/                    # Test files
-    ├── trpc/                     # tRPC-related files
     └── env.js                    # Environment variables validation
 ```

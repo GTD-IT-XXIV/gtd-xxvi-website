@@ -1,14 +1,13 @@
 import { env } from "@/env";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
+import SuperJSON from "superjson";
 import { z } from "zod";
 
 import { prisma } from "@/server/db";
 
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
-import { Prettify } from "@/lib/utils";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -37,6 +36,7 @@ export async function POST(req: Request) {
 
   const permittedEvents: string[] = [
     "checkout.session.completed",
+    "checkout.session.async_payment_succeeded",
     "checkout.session.expired",
   ];
   console.log(event.type);
@@ -46,14 +46,16 @@ export async function POST(req: Request) {
       let data: Stripe.Checkout.Session;
       let metadata: OrderMetadata;
       switch (event.type) {
+        case "checkout.session.async_payment_succeeded":
         case "checkout.session.completed": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
+          console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(JSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
           const bookings = await prisma.booking.findMany({
@@ -88,7 +90,7 @@ export async function POST(req: Request) {
                 })),
             ),
           });
-          console.log("Ticket details: ");
+          console.log("✅ Ticket details: ");
           console.log(tickets);
 
           await prisma.booking.deleteMany({

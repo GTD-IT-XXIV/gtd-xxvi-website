@@ -1,16 +1,24 @@
 import { TRPCError } from "@trpc/server";
-import type Stripe from "stripe";
+import SuperJSON from "superjson";
 import { z } from "zod";
 
 import { stripe } from "@/lib/stripe";
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
-import { createTRPCRouter, publicProcedure } from "@/trpc/config";
 
 export const paymentsRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
     .input(z.object({ bookingIds: z.number().positive().array() }))
     .mutation(async ({ input, ctx }) => {
       const { bookingIds } = input;
+
+      if (bookingIds.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No bookings to checkout for",
+        });
+      }
+
       const bookings = await ctx.prisma.booking.findMany({
         where: { id: { in: bookingIds } },
         include: { event: true, bundle: true, timeslot: true },
@@ -39,7 +47,7 @@ export const paymentsRouter = createTRPCRouter({
         mode: "payment",
         payment_method_types: ["paynow"],
         metadata: {
-          bookingIds: JSON.stringify(bookingIds),
+          bookingIds: SuperJSON.stringify(bookingIds),
         } as OrderMetadata,
         return_url: `${ctx.headers.get(
           "origin",
@@ -49,7 +57,7 @@ export const paymentsRouter = createTRPCRouter({
 
       await ctx.prisma.booking.updateMany({
         where: { id: { in: bookingIds } },
-        data: { paymentIntentId: String(session.payment_intent) },
+        data: { sessionId: String(session.id) },
       });
 
       return { clientSecret: session.client_secret };
@@ -62,12 +70,12 @@ export const paymentsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      const session: Stripe.Checkout.Session =
-        await stripe.checkout.sessions.retrieve(input.sessionId);
+      const session = await stripe.checkout.sessions.retrieve(input.sessionId);
 
       return {
         status: session.status,
-        customerEmail: session?.customer_details?.email,
+        customerEmail: session.customer_details?.email,
+        clientSecret: session.client_secret,
       };
     }),
 });

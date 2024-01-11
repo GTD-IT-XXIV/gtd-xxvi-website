@@ -2,7 +2,7 @@ import { Prisma, type PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/trpc/config";
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 export const bookingSchema = z.object({
   name: z.string(),
@@ -13,7 +13,7 @@ export const bookingSchema = z.object({
   eventId: z.number().positive(),
   bundleId: z.number().positive(),
   timeslotId: z.number().positive(),
-  paymentIntentId: z.string().optional(),
+  sessionId: z.string().optional(),
 });
 
 export const bookingsRouter = createTRPCRouter({
@@ -44,6 +44,19 @@ export const bookingsRouter = createTRPCRouter({
     .input(z.string().email())
     .query(({ ctx, input }) => {
       return ctx.prisma.booking.findMany({ where: { email: input } });
+    }),
+
+  getManyByEmailAndEvents: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        eventIds: z.number().positive().array(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.booking.findMany({
+        where: { email: input.email, eventId: { in: input.eventIds } },
+      });
     }),
 
   create: publicProcedure
@@ -134,7 +147,7 @@ export const bookingsRouter = createTRPCRouter({
         quantity: z.number().nonnegative().optional(),
         bundleId: z.number().positive().optional(),
         timeslotId: z.number().positive().optional(),
-        paymentIntentId: z.string().optional(),
+        sessionId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -276,7 +289,7 @@ export const bookingsRouter = createTRPCRouter({
         quantity: z.number().nonnegative().optional(),
         bundleId: z.number().positive().optional(),
         timeslotId: z.number().positive().optional(),
-        paymentIntentId: z.string().optional(),
+        sessionId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

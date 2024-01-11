@@ -2,10 +2,15 @@ import "client-only";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { eventsFormDataAtom } from "@/lib/atoms/events-registration";
+import {
+  DEFAULT_REGISTRATION_FORM,
+  formDataAtom,
+} from "@/lib/atoms/events-registration";
+import { api } from "@/lib/trpc/provider";
 
 import {
   Form,
@@ -19,23 +24,19 @@ import {
 export const registrationFormSchema = z.object({
   name: z.string().min(3).max(50),
   email: z.string().email(),
-  telegram: z.string().min(4),
-  phone: z.string().min(3),
+  telegramHandle: z.string().min(4),
+  phoneNumber: z.string().min(3),
 });
 
 export type RegistrationFormProps = {
   onSubmit: () => void;
 };
 
-export const DEFAULT_REGISTRATION_FORM = {
-  name: "",
-  email: "",
-  telegram: "",
-  phone: "+65",
-};
-
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
-  const [formData, setFormData] = useAtom(eventsFormDataAtom);
+  const [formData, setFormData] = useAtom(formDataAtom);
+
+  const { data: bookings, isLoading: isBookingsLoading } =
+    api.bookings.getManyByEmail.useQuery(formData.email);
 
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
@@ -43,11 +44,38 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
     values: formData,
   });
 
+  useEffect(() => {
+    function runEffect() {
+      if (
+        !isBookingsLoading &&
+        bookings &&
+        bookings.length > 0 &&
+        bookings[0]
+      ) {
+        setFormData({
+          name: bookings[0].name,
+          email: bookings[0].email,
+          telegramHandle: bookings[0].telegramHandle,
+          phoneNumber: bookings[0].phoneNumber,
+        });
+      }
+    }
+
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [isBookingsLoading]);
+
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {
     // console.log("Submitted", values);
     setFormData(values);
     onSubmit();
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -79,7 +107,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         />
         <FormField
           control={form.control}
-          name="telegram"
+          name="telegramHandle"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Telegram Handle</FormLabel>
@@ -92,7 +120,7 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
         />
         <FormField
           control={form.control}
-          name="phone"
+          name="phoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone Number</FormLabel>

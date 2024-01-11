@@ -2,6 +2,20 @@
 
 ## tRPC
 
+### In Server Components
+
+Use the tRPC client `api` defined in `src/trpc/server`. Example:
+
+```tsx
+// example-page.tsx
+import { api } from "@/lib/trpc/server";
+
+export default async function ExamplePage() {
+  const event = await api.event.getById.query(1);
+  return <main>{event?.name}</main>;
+}
+```
+
 ### In Client Components
 
 Use the tRPC client `api` defined in `src/trpc/provider`. Example:
@@ -10,7 +24,9 @@ Use the tRPC client `api` defined in `src/trpc/provider`. Example:
 // example-page.tsx
 "use client";
 
-import { api } from "@/trpc/provider";
+import { api } from "@/lib/trpc/provider";
+
+// example-page.tsx
 
 // example-page.tsx
 
@@ -20,16 +36,12 @@ export default function ExamplePage() {
 }
 ```
 
-### In Server Components
+## Day.js
 
-Use the tRPC client `api` defined in `src/trpc/server`. Example:
+Do:
 
-```tsx
-// example-page.tsx
-import { api } from "@/trpc/server";
+- Use Day.js to parse, find difference, format, etc. `Date` to `String`
 
-export default async function ExamplePage() {
-  const event = await api.event.getById.query(1);
-  return <main>{event?.name}</main>;
-}
-```
+Don't:
+
+- Use Day.js as prop/state. Use `Date` instead (`dayjs().toDate()`)

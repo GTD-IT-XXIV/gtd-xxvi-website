@@ -1,178 +1,168 @@
-"use client";
+import "client-only";
 
-import { type QueryKey, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 
-import {
-  eventDetailsAtom,
-  eventsFormDataAtom,
-} from "@/lib/atoms/events-registration";
-import { api } from "@/trpc/provider";
+import { formDataAtom } from "@/lib/atoms/events-registration";
+import { errorAtom } from "@/lib/atoms/message";
+import { api } from "@/lib/trpc/provider";
 
 import Timeslot from "./timeslot";
-import { useToast } from "./ui/use-toast";
 
 dayjs.extend(customParseFormat);
 
+export type TimeslotsProps = {
+  eventId: number;
+  bundleId: number;
+  /**
+   * Amount of tickets/bundles to book
+   */
+  amount: number;
+  onChange: (id: number) => void;
+};
+
 export default function Timeslots({
   eventId,
-  eventName,
-  invalidateQueryKey,
-}: {
-  eventId: number;
-  eventName: string;
-  invalidateQueryKey: QueryKey;
-}) {
+  bundleId,
+  amount,
+  onChange,
+}: TimeslotsProps) {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
-  const [selectedId, setSelectedId] = useState(0); // selected timeslot id
-  const [isInitialized, setIsInitialized] = useState(false);
-  const formData = useAtomValue(eventsFormDataAtom);
-  const eventDetails = useAtomValue(eventDetailsAtom);
+  const formData = useAtomValue(formDataAtom);
+  const setError = useSetAtom(errorAtom);
+  const [selectedId, setSelectedId] = useState(0);
 
-  const { data: timeslots, isLoading: timeslotsAreLoading } =
+  const { data: event, isLoading: isEventLoading } =
+    api.events.getById.useQuery(eventId);
+  const { data: bundle, isLoading: isBundleLoading } =
+    api.bundles.getById.useQuery(bundleId);
+  const { data: timeslots, isLoading: isTimeslotsLoading } =
     api.timeslots.getManyByEvent.useQuery(eventId);
-  const { data: booking, isLoading: bookingIsLoading } =
-    api.bookings.getByEmailAndEvent.useQuery({
-      email: formData.email,
-      eventId: eventId,
-    });
-  const bookingQueryKey = getQueryKey(api.bookings.getByEmailAndEvent);
+  const { data: booking, isLoading: isBookingLoading } =
+    api.bookings.getByEmailAndEvent.useQuery(
+      { email: formData.email, eventId },
+      { enabled: !!formData.email },
+    );
+
+  const isLoading =
+    isEventLoading || isBundleLoading || isTimeslotsLoading || isBookingLoading;
+  const partySize = amount * (bundle?.quantity ?? 0);
+  const timeslotsQueryKey = getQueryKey(api.timeslots.getManyByEvent, eventId);
+  const bookingQueryKey = getQueryKey(api.bookings.getByEmailAndEvent, {
+    email: formData.email,
+    eventId,
+  });
+
   const createBooking = api.bookings.create.useMutation({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(invalidateQueryKey);
-      await queryClient.invalidateQueries(bookingQueryKey);
+    onSuccess: (createdBooking) => {
+      setSelectedId(createdBooking.timeslotId);
+      void queryClient.invalidateQueries(timeslotsQueryKey);
+      void queryClient.invalidateQueries(bookingQueryKey);
+    },
+    onError: (error) => {
+      setError(
+        `No timeslot. Please select another timeslot. (Error message: ${error.message})`,
+      );
     },
   });
   const updateBooking = api.bookings.updateByEmailAndEvent.useMutation({
-    onSuccess: () => queryClient.invalidateQueries(invalidateQueryKey),
+    onSuccess: (updatedBooking) => {
+      setSelectedId(updatedBooking.timeslotId);
+      void queryClient.invalidateQueries(timeslotsQueryKey);
+      void queryClient.invalidateQueries(bookingQueryKey);
+    },
+    onError: (error) => {
+      setError(
+        `No timeslot. Please select another timeslot. (Error message: ${error.message})`,
+      );
+    },
   });
 
-  const isLoading = timeslotsAreLoading || bookingIsLoading;
-  const partySize =
-    (booking?.quantity ?? eventDetails[eventId]!.quantity) *
-    eventDetails[eventId]!.bundle!.quantity;
-
-  function handleSelect(id: number) {
-    // console.log(`Selected timeslot ${id}!`);
-    if (!eventDetails[eventId]) {
-      throw new Error(
-        `Event details for ${eventName} (id: ${eventId}) not found`,
-      );
-    }
-    if (!eventDetails[eventId]!.bundle?.id) {
-      throw new Error(
-        `Bundle details for ${eventName} (id: ${eventId}) not found`,
-      );
-    }
+  function handleSelectTimeslot(id: number) {
     if (!booking) {
-      createBooking.mutate(
-        {
-          name: formData.name,
-          email: formData.email,
-          telegramHandle: formData.telegram,
-          phoneNumber: formData.phone,
-          quantity: eventDetails[eventId]!.quantity,
-          eventId: eventId,
-          bundleId: eventDetails[eventId]!.bundle!.id,
-          timeslotId: id,
-        },
-        {
-          onSuccess: () => setSelectedId(id),
-          onError: () => {
-            toast({
-              title: "No timeslot",
-              description: "Please select another timeslot.",
-            });
-          },
-        },
-      );
+      createBooking.mutate({
+        ...formData,
+        quantity: amount,
+        eventId,
+        bundleId,
+        timeslotId: id,
+      });
     } else {
-      updateBooking.mutate(
-        {
-          email: formData.email,
-          eventId: eventId,
-          timeslotId: id,
-          bundleId: booking.bundleId,
-        },
-        {
-          onSuccess: () => setSelectedId(id),
-          onError: () => {
-            toast({
-              title: "No timeslot",
-              description: "Please select another timeslot.",
-            });
-          },
-        },
-      );
+      updateBooking.mutate({
+        email: formData.email,
+        eventId,
+        timeslotId: id,
+      });
     }
+    onChange(id);
   }
 
   useEffect(() => {
+    function runEffect() {
+      if (!isBookingLoading && !isTimeslotsLoading) {
+        if (booking && selectedId === 0) {
+          console.log({ timeslotId: booking.timeslotId });
+          setSelectedId(booking.timeslotId);
+          onChange(booking.timeslotId);
+        }
+        if (
+          timeslots?.length === 1 &&
+          timeslots[0] &&
+          timeslots[0].id !== selectedId
+        ) {
+          handleSelectTimeslot(timeslots[0].id);
+        }
+      }
+    }
+
     let ignored = false;
-    if (
-      !ignored &&
-      !isInitialized &&
-      !bookingIsLoading &&
-      !timeslotsAreLoading
-    ) {
-      setIsInitialized(true);
-      if (booking && selectedId === 0) {
-        setSelectedId(booking.timeslotId);
-      }
-      if (timeslots?.length === 1 && timeslots[0]!.id !== selectedId) {
-        handleSelect(timeslots[0]!.id);
-      }
-      // if (booking && eventDetails[eventId]?.bundle) {
-      //   setPartySize(
-      //     booking.quantity * eventDetails[eventId]!.bundle!.quantity,
-      //   );
-      // }
+    if (!ignored) {
+      runEffect();
     }
     return () => {
       ignored = true;
     };
-  }, [booking, bookingIsLoading, timeslots, timeslotsAreLoading]);
+  }, [booking, isBookingLoading, timeslots, isTimeslotsLoading]);
+
+  if (isLoading || !event) {
+    return <p>Loading...</p>;
+  }
+
+  const sortedTimeslots = timeslots
+    ? [...timeslots].sort((a, b) => {
+        const aStartDayjs = dayjs(a.startTime);
+        const bStartDayjs = dayjs(b.startTime);
+        if (aStartDayjs.isSame(bStartDayjs)) {
+          return 0;
+        }
+        if (aStartDayjs.isBefore(bStartDayjs)) {
+          return -1;
+        }
+        return 1;
+      })
+    : [];
 
   return (
     <div className="flex flex-col">
-      <h2 className="text-xl font-medium">Timeslots for {eventName}</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : !timeslots || timeslots.length === 0 ? (
-        <p>Event timeslots not found</p>
-      ) : (
-        [...timeslots]
-          .sort((a, b) => {
-            const aStartDayjs = dayjs(a.startTime);
-            const bStartDayjs = dayjs(b.startTime);
-            if (aStartDayjs.isSame(bStartDayjs)) {
-              return 0;
-            }
-            if (aStartDayjs.isBefore(bStartDayjs)) {
-              return -1;
-            }
-            return 1;
-          })
-          .map((timeslot) => (
-            <Timeslot
-              key={timeslot.id}
-              timeslot={timeslot}
-              disabled={
-                createBooking.isLoading ||
-                updateBooking.isLoading ||
-                !partySize ||
-                timeslot.remainingSlots < partySize
-              }
-              selected={timeslot.id === selectedId}
-              onClick={() => handleSelect(timeslot.id)}
-            />
-          ))
-      )}
+      <h2 className="text-xl font-medium">Timeslots for {event.name}</h2>
+      {sortedTimeslots.map((timeslot) => (
+        <Timeslot
+          key={timeslot.id}
+          startTime={timeslot.startTime}
+          endTime={timeslot.endTime}
+          selected={timeslot.id === selectedId}
+          disabled={
+            createBooking.isLoading ||
+            updateBooking.isLoading ||
+            timeslot.remainingSlots < partySize
+          }
+          onClick={() => handleSelectTimeslot(timeslot.id)}
+        />
+      ))}
     </div>
   );
 }

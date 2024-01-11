@@ -1,139 +1,158 @@
 "use client";
 
-import { useAtom, useAtomValue } from "jotai";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import SuperJSON from "superjson";
+import { type ZodError, z } from "zod";
+import { fromZodError } from "zod-validation-error";
 
 import BundlePopup from "@/components/bundle-popup";
-import BundlePopupContent from "@/components/bundle-popup-content";
+import BundleSelect from "@/components/bundle-select";
 import RegistrationForm from "@/components/registration-form";
-import { useToast } from "@/components/ui/use-toast";
 
-import {
-  eventDetailsAtom,
-  eventsFormDataAtom,
-  registrationCompletionAtom,
-} from "@/lib/atoms/events-registration";
-import { useHasMounted } from "@/lib/hooks";
-import { api } from "@/trpc/provider";
+import { formDataAtom } from "@/lib/atoms/events-registration";
+import { errorAtom } from "@/lib/atoms/message";
+import { useHasPendingPayments } from "@/lib/hooks";
+import { api } from "@/lib/trpc/provider";
 
 export default function RegistrationPage() {
   const router = useRouter();
-  const hasMounted = useHasMounted();
-  const { toast } = useToast();
+  const searchParams = useSearchParams();
 
-  const formData = useAtomValue(eventsFormDataAtom);
-  const [eventDetails, setEventDetails] = useAtom(eventDetailsAtom);
-  const [completion, setCompletion] = useAtom(registrationCompletionAtom);
+  const hasPendingPayments = useHasPendingPayments();
 
-  const { data: bookings, isLoading: bookingsAreLoading } =
-    api.bookings.getManyByEmail.useQuery(formData.email);
-  const updateBooking = api.bookings.updateByEmailAndEvent.useMutation();
-  const deleteBookings = api.bookings.deleteManyByEmail.useMutation();
+  const setError = useSetAtom(errorAtom);
+  const formData = useAtomValue(formDataAtom);
 
-  const hasPendingPayments =
-    bookings?.reduce(
-      (accum, booking) => (accum ||= !!booking.paymentIntentId),
-      false,
-    ) ?? false;
+  const eventParams = searchParams.getAll("event");
+  const eventIdsSchema = z.coerce.number().positive().array();
+  let eventIds: z.infer<typeof eventIdsSchema> = [];
+  try {
+    eventIds = eventIdsSchema.parse(eventParams);
+  } catch (error) {
+    const validationError = fromZodError(error as ZodError);
+    setError(validationError.message);
+  }
+
+  const {
+    data: bookings,
+    isLoading: isBookingsLoading,
+    isError: isBookingsError,
+  } = api.bookings.getManyByEmailAndEvents.useQuery(
+    { email: formData.email, eventIds },
+    { enabled: !!formData.email },
+  );
+
+  const [selectedBundlesId, setSelectedBundlesId] = useState<
+    Record<number, number>
+  >(eventIds.reduce((accum, eventId) => ({ ...accum, [eventId]: 0 }), {}));
+  const [bundlesAmount, setBundlesAmount] = useState<Record<number, number>>(
+    eventIds.reduce((accum, eventId) => ({ ...accum, [eventId]: 0 }), {}),
+  );
 
   useEffect(() => {
+    function runEffect() {
+      if (!isBookingsLoading && !isBookingsError && bookings) {
+        const [bookingsSelectedBundlesId, bookingsBundlesAmount]: [
+          Record<number, number>,
+          Record<number, number>,
+        ] = bookings.reduce(
+          (accum, booking) => [
+            { ...accum[0], [booking.eventId]: booking.bundleId },
+            { ...accum[1], [booking.eventId]: booking.quantity },
+          ],
+          [{}, {}],
+        );
+        setSelectedBundlesId({
+          ...selectedBundlesId,
+          ...bookingsSelectedBundlesId,
+        });
+        setBundlesAmount({ ...bundlesAmount, ...bookingsBundlesAmount });
+      }
+    }
+
     let ignored = false;
     if (!ignored) {
-      if (hasMounted && !bookingsAreLoading && bookings) {
-        for (const booking of bookings) {
-          if (!eventDetails[booking.eventId]) {
-            continue;
-          }
-          setEventDetails({
-            ...eventDetails,
-            [booking.eventId]: {
-              ...eventDetails[booking.eventId]!,
-              quantity: booking.quantity,
-            },
-          });
-        }
-      }
+      runEffect();
     }
     return () => {
       ignored = true;
     };
-  }, [hasMounted, bookings, bookingsAreLoading]);
+  }, [bookings, isBookingsLoading, isBookingsError]);
 
-  if (!hasMounted) {
-    return <p>Loading...</p>;
+  console.log({ bookings, selectedBundlesId, bundlesAmount });
+
+  if (eventIds.length === 0) {
+    router.back();
   }
 
-  if (!bookingsAreLoading && bookings && hasPendingPayments) {
-    setCompletion({ register: true, book: true });
-    router.push("/checkout");
+  if (hasPendingPayments) {
+    router.replace("/checkout");
+  }
+
+  function handleChangeBundle(eventId: number, bundleId: number) {
+    setSelectedBundlesId({
+      ...selectedBundlesId,
+      [eventId]: bundleId,
+    });
+    setBundlesAmount({
+      ...bundlesAmount,
+      [eventId]: 1,
+    });
+  }
+
+  function handleChangeAmount(eventId: number, amount: number) {
+    setBundlesAmount({
+      ...bundlesAmount,
+      [eventId]: amount,
+    });
   }
 
   function handleFormSubmit() {
-    const bundlesSelected = Object.keys(eventDetails).reduce(
-      (accum, eventId) => (accum &&= !!eventDetails[Number(eventId)]?.bundle),
-      true,
-    );
-
-    if (!bundlesSelected) {
-      toast({
-        variant: "destructive",
-        title: "Event bundle not selected",
-        description:
-          "Please select a bundle for all events before submitting the form.",
-      });
-      return;
-    }
-
-    const bookingsHasCorrectEvents = Object.keys(eventDetails).reduce(
-      (accum, eventId) =>
-        (accum &&= !!bookings?.find(
-          (booking) => Number(eventId) === booking.eventId,
-        )),
-      true,
-    );
-    if (!bookingsHasCorrectEvents) {
-      deleteBookings.mutate(formData.email);
-    } else {
-      for (const [key, eventDetail] of Object.entries(eventDetails)) {
-        const eventId = Number(key);
-
-        // Unreachable code but required for type safety
-        if (!eventDetail.bundle) {
-          throw new Error("Bundle for event does not exist");
-        }
-
-        try {
-          updateBooking.mutate({
-            email: formData.email,
-            eventId,
-            quantity: eventDetail.quantity,
-            bundleId: eventDetail.bundle.id,
-          });
-        } catch (error) {
-          deleteBookings.mutate(formData.email);
-        }
+    const bookSearchParams = new URLSearchParams();
+    for (const eventId of eventIds) {
+      if (selectedBundlesId[eventId] === 0 || bundlesAmount[eventId] === 0) {
+        setError("Please select a bundle for each event");
+        throw new Error("Please select a bundle for each event");
       }
+      bookSearchParams.append(
+        "event",
+        SuperJSON.stringify({
+          id: eventId,
+          bundleId: selectedBundlesId[eventId],
+          amount: bundlesAmount[eventId],
+        }),
+      );
     }
-
-    setCompletion({ ...completion, register: true });
-    router.push("/events/book");
+    console.log("Submitted Form! Book URL: " + bookSearchParams.toString());
+    router.push(`/events/book?${bookSearchParams.toString()}`);
   }
 
   return (
-    <>
-      <BundlePopup>
-        {Object.entries(eventDetails)
-          .map(([key, value]) => [Number(key), value] as [number, typeof value])
-          .map(([eventId, eventDetail]) => (
-            <BundlePopupContent
+    <main>
+      <h1 className="text-2xl font-semibold">Registration Page</h1>
+      <article>
+        <span>Event ID {eventIds}</span>
+        <BundlePopup>
+          {eventIds.map((eventId) => (
+            <BundleSelect
               key={eventId}
               eventId={eventId}
-              eventName={eventDetail.name}
+              selectedBundle={{
+                // id & amount initialized as 0 for all eventId in eventIds
+                id: selectedBundlesId[eventId]!,
+                amount: bundlesAmount[eventId]!,
+              }}
+              onChangeBundle={(bundleId) =>
+                handleChangeBundle(eventId, bundleId)
+              }
+              onChangeAmount={(amount) => handleChangeAmount(eventId, amount)}
             />
           ))}
-      </BundlePopup>
-      <RegistrationForm onSubmit={handleFormSubmit} />
-    </>
+        </BundlePopup>
+        <RegistrationForm onSubmit={handleFormSubmit} />
+      </article>
+    </main>
   );
 }

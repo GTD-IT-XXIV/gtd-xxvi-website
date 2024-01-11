@@ -45,3 +45,4 @@ prisma/generated
 *.sql
 *.json
 report-bundle-size.cjs
+*.temp.*
