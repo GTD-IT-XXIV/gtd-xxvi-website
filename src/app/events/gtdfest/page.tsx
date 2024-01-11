@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
 import { api } from "@/lib/trpc/server";
 
+export const dynamic = "force-static";
+
 export default async function GTDFestPage() {
   const gtdFest = await api.events.getById.query(GTD_FEST_EVENT_ID);
   const escapeRoom = await api.events.getById.query(ESCAPE_ROOM_EVENT_ID);
