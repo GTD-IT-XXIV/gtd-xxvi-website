@@ -29,8 +29,8 @@ export function getStripe() {
 }
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
-type Bundle = ArrElement<RouterOutputs["bundles"]["getManyByEvent"]>;
-type Timeslot = ArrElement<RouterOutputs["timeslots"]["getManyByEvent"]>;
+type Bundle = ArrElement<RouterOutputs["bundle"]["getManyByEvent"]>;
+type Timeslot = ArrElement<RouterOutputs["timeslot"]["getManyByEvent"]>;
 export function getBundlesAvailability(
   bundles: Bundle[],
   timeslots: Timeslot[],

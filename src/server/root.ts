@@ -10,12 +10,12 @@ import { timeslotsRouter } from "./routers/timeslots";
 // Primary server router
 export const appRouter = createTRPCRouter({
   // Insert TRPC routers here
-  events: eventsRouter,
-  timeslots: timeslotsRouter,
-  bundles: bundlesRouter,
-  tickets: ticketsRouter,
-  payments: paymentsRouter,
-  bookings: bookingsRouter,
+  event: eventsRouter,
+  timeslot: timeslotsRouter,
+  bundle: bundlesRouter,
+  ticket: ticketsRouter,
+  payment: paymentsRouter,
+  booking: bookingsRouter,
 });
 
 export type AppRouter = typeof appRouter;

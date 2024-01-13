@@ -61,6 +61,7 @@ model Ticket {
   bundle          Bundle   @relation(fields: [bundleId], references: [id])
   timeslotId      Int
   timeslot        Timeslot @relation(fields: [timeslotId], references: [id])
+  created         DateTime @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
   paymentIntentId String
 }
