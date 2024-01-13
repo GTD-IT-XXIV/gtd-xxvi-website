@@ -1,70 +1,67 @@
 import "client-only";
 
 import { MAX_BUNDLE_PURCHASES } from "@/lib/constants";
-import { api } from "@/lib/trpc/provider";
-import { getBundlesAvailability } from "@/lib/utils";
+import { api } from "@/lib/trpc/client";
 
 import BundleOption from "./bundle-option";
 
 export type BundleSelectProps = {
   eventId: number;
-  selectedBundle: {
-    id: number;
-    amount: number;
-  };
-  onChangeBundle: (id: number) => void;
-  onChangeAmount: (amount: number) => void;
+  quantity?: number;
+  selectedId?: number;
+  onChange: (id: number, quantity: number) => void;
 };
 
 export default function BundleSelect({
   eventId,
-  selectedBundle,
-  onChangeBundle,
-  onChangeAmount,
+  quantity = 0,
+  selectedId = 0,
+  onChange,
 }: BundleSelectProps) {
-  const { data: event, isLoading: isEventLoading } =
-    api.events.getById.useQuery(eventId);
-  const { data: bundles, isLoading: isBundlesLoading } =
-    api.bundles.getManyByEvent.useQuery(eventId);
-  const { data: timeslots, isLoading: isTimeslotsLoading } =
-    api.timeslots.getManyByEvent.useQuery(eventId);
-
-  const isLoading = isEventLoading || isBundlesLoading || isTimeslotsLoading;
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (
-    !event ||
-    !bundles ||
-    !timeslots ||
-    bundles.length === 0 ||
-    timeslots.length === 0
-  ) {
-    return <p>Bundle details not found</p>;
-  }
-
-  const bundlesWithAvailability = getBundlesAvailability(bundles, timeslots);
-  console.log({ bundles: bundlesWithAvailability });
+  const {
+    data: event,
+    error: eventError,
+    isLoading: isEventLoading,
+    isError: isEventError,
+  } = api.event.getById.useQuery({ id: eventId });
+  const {
+    data: bundles,
+    error: bundlesError,
+    isLoading: isBundlesLoading,
+    isError: isBundlesError,
+  } = api.bundle.getManyByEvent.useQuery({ eventId });
 
   return (
     <section>
-      <h2 className="text-xl font-medium">{event.name} Bundles</h2>
-      {bundlesWithAvailability.map((bundle) => {
-        const isSelected = bundle.id === selectedBundle.id;
-        return (
+      {isEventLoading ? (
+        <p>Event loading...</p>
+      ) : isEventError ? (
+        <p>An error occurred: ${eventError.message}</p>
+      ) : (
+        <h2 className="text-xl font-medium">Bundles for {event.name}</h2>
+      )}
+      {isBundlesLoading ? (
+        <p>Bundles loading...</p>
+      ) : isBundlesError ? (
+        <p>An error occurred: ${bundlesError.message}</p>
+      ) : (
+        bundles.map((bundle) => (
           <BundleOption
             key={bundle.id}
             bundle={bundle}
-            selected={isSelected}
-            disabled={!bundle.isAvailable}
-            onSelect={() => onChangeBundle(bundle.id)}
-            amount={isSelected ? selectedBundle.amount : 1}
-            maxAmount={bundle.remainingAmount ?? MAX_BUNDLE_PURCHASES}
-            setAmount={(amount) => onChangeAmount(amount)}
+            quantity={bundle.id === selectedId ? quantity : 1}
+            max={bundle.remainingAmount ?? MAX_BUNDLE_PURCHASES}
+            selected={bundle.id === selectedId}
+            disabled={
+              bundle.remainingAmount !== null && bundle.remainingAmount <= 0
+            }
+            onClick={() => onChange(bundle.id, bundle.id === selectedId ? quantity : 1)}
+            onChange={({ target }) => { console.log({val: target.value})
+              onChange(bundle.id, Number(!!target.value ? target.value : 0))}
+            }
           />
-        );
-      })}
+        ))
+      )}
     </section>
   );
 }

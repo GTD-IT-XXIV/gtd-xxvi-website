@@ -44,9 +44,7 @@ export const bundleRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { eventId, name } = input;
       const bundle = await ctx.db.bundle.findUnique({
-        where: {
-          name_eventId: { name, eventId },
-        },
+        where: { name_eventId: { name, eventId } },
       });
       if (!bundle) {
         throw new TRPCError({
@@ -55,5 +53,20 @@ export const bundleRouter = createTRPCRouter({
         });
       }
       return bundle;
+    }),
+
+  getMinQuantityByEvent: publicProcedure
+    .input(
+      z.object({
+        eventId: z.number().positive(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { eventId } = input;
+      const bundles = await ctx.db.bundle.findMany({
+        where: { eventId },
+        select: { quantity: true },
+      });
+      return Math.min(...bundles.map((bundle) => bundle.quantity));
     }),
 });

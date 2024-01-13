@@ -23,8 +23,6 @@ export default function Timeslot({
 }: TimeslotProps) {
   const startTimeLabel = dayjs(startTime).format(DEFAULT_TIMESLOT_FORMAT);
   const endTimeLabel = dayjs(endTime).format(DEFAULT_TIMESLOT_FORMAT);
-  // console.log(timeslot.id, selected);
-
   return (
     <button
       type="button"

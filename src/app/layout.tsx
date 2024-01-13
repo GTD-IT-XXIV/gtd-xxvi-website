@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
-import Notification from "@/components/notification";
-
-import TRPCReactProvider from "@/lib/trpc/provider";
-
 import "@/styles/globals.css";
+
+import Notification from "@/components/notification";
+import TRPCReactProvider from "@/components/trpc-react-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
