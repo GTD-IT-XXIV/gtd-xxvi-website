@@ -10,7 +10,7 @@ import { useState } from "react";
 
 import { type AppRouter } from "@/server/root";
 
-import { getUrl, transformer } from "./utils";
+import { getUrl, transformer } from "@/lib/trpc/utils";
 
 export const api = createTRPCReact<AppRouter>();
 
