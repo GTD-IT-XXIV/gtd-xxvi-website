@@ -1,9 +1,9 @@
-import { Database, Home, ScanLine, Search } from "lucide-react";
+import { Database, Home, ScanLine } from "lucide-react";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { cn } from "@/lib/utils";
 
 export type DashboardTabsProps = {
   className?: string;

@@ -8,7 +8,7 @@ import SuperJSON from "superjson";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-import BundleSelect from "@/components/bundle-select";
+import BundleSelect from "@/components/registration/bundle-select";
 
 import { bookingsAtom } from "@/lib/atoms/events-registration";
 import { errorAtom } from "@/lib/atoms/message";

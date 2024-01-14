@@ -14,6 +14,9 @@ export const timeslotRouter = createTRPCRouter({
       const { eventId } = input;
       const timeslots = await ctx.db.timeslot.findMany({
         where: { eventId },
+        orderBy: {
+          startTime: "asc",
+        },
       });
       return timeslots;
     }),

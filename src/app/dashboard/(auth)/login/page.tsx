@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import DashboardLoginForm from "@/components/dashboard-login-form";
+import DashboardLoginForm from "@/components/dashboard/dashboard-login-form";
 
 export default function DashboardLoginPage() {
   return (

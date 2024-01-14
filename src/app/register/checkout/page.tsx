@@ -3,9 +3,9 @@
 import { useAtomValue } from "jotai";
 import { useState } from "react";
 
-import BookingItem from "@/components/booking-item";
-import RegistrationForm from "@/components/registration-form";
-import StripeForm from "@/components/stripe-form";
+import BookingItem from "@/components/registration/booking-item";
+import RegistrationForm from "@/components/registration/registration-form";
+import StripeForm from "@/components/registration/stripe-form";
 
 import { bookingsAtom, formDataAtom } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";

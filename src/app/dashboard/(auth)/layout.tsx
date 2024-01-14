@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import DashboardNavbar from "@/components/dashboard-navbar";
+import DashboardNavbar from "@/components/dashboard/dashboard-navbar";
 
 export default function DashboardAuthLayout({
   children,

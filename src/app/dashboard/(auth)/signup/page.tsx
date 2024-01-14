@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import DashboardSignupForm from "@/components/dashboard-signup-form";
+import DashboardSignupForm from "@/components/dashboard/dashboard-signup-form";
 
 export default function DashboardSignupPage() {
   return (
