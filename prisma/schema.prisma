@@ -88,3 +88,40 @@ model Booking {
 
   @@unique([email, eventId])
 }
+
+// Lucia auth schemas
+model User {
+  id    String @id @unique
+  name  String
+  email String @unique
+  role  Role
+
+  auth_session Session[]
+  key          Key[]
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+enum Role {
+  USER
+  SCAN
+  POWER
+  ADMIN
+}
