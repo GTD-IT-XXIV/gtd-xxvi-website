@@ -40,11 +40,11 @@ gtd-xxvi-website/
     ├── app/
     │   ├── api/                  # Route handlers; put all route handlers here
     │   │   └── trpc/             # tRPC route handlers
-    │   ├── checkout/             # Checkout page
+    │   ├── register/             # Registration pages
+    │   ├── ticket/               # Ticket page
     │   └── events/               # Events page & event-related pages
-    │       ├── book/             # Event booking page
-    │       ├── gtdfest/          # GTD Fest page
-    │       └── register/         # Event registration page
+    │       ├── [id]/             # Other events page
+    │       └── gtdfest/          # GTD Fest page
     ├── components/               # React components: put all components here &
     │   │                           separate by function or page for
     │   │                           page-specific components
@@ -61,7 +61,8 @@ gtd-xxvi-website/
     │   ├── routers/              # Routers
     │   ├── middlewares/          # Route middlewares
     │   ├── db.ts                 # Database/PrismaClient configuration
-    │   └── root.ts               # The main app tRPC router
+    │   ├── root.ts               # The main app tRPC router
+    │   └── trpc.ts               # tRPC server files
     ├── styles/                   # CSS files; put all CSS files here
     ├── tests/                    # Test files
     └── env.js                    # Environment variables validation
