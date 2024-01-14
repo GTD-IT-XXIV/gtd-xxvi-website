@@ -12,8 +12,6 @@ import { errorAtom } from "@/lib/atoms/message";
 import { api } from "@/lib/trpc/client";
 import { getStripe } from "@/lib/utils";
 
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-
 const stripePromise = getStripe();
 
 export type StripeFormProps = {

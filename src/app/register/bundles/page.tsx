@@ -1,6 +1,6 @@
 "use client";
 
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -50,7 +50,7 @@ export default function BundlesPage() {
   const isEveryEventBundleSelected = events.every(
     (event) => !!eventBundle[event.id] && !!eventBundleQuantity[event.id],
   );
-  console.log({eventBundle, eventBundleQuantity})
+  console.log({ eventBundle, eventBundleQuantity });
 
   useEffect(() => {
     function runEffect() {

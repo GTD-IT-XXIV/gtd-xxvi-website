@@ -55,10 +55,13 @@ export default function BundleSelect({
             disabled={
               bundle.remainingAmount !== null && bundle.remainingAmount <= 0
             }
-            onClick={() => onChange(bundle.id, bundle.id === selectedId ? quantity : 1)}
-            onChange={({ target }) => { console.log({val: target.value})
-              onChange(bundle.id, Number(!!target.value ? target.value : 0))}
+            onClick={() =>
+              onChange(bundle.id, bundle.id === selectedId ? quantity : 1)
             }
+            onChange={({ target }) => {
+              console.log({ val: target.value });
+              onChange(bundle.id, Number(!!target.value ? target.value : 0));
+            }}
           />
         ))
       )}
