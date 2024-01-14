@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 
 import "@/styles/globals.css";
 
-import Notification from "@/components/notification";
 import TRPCReactProvider from "@/components/trpc-react-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +25,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
-          <Notification />
         </TRPCReactProvider>
       </body>
     </html>
