@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-import EventOption from "@/components/event-option";
+import EventOption from "@/components/registration/event-option";
 
 import { bookingsAtom } from "@/lib/atoms/events-registration";
 import { errorAtom } from "@/lib/atoms/message";

@@ -88,3 +88,10 @@ model Booking {
 
   @@unique([email, eventId])
 }
+
+enum Role {
+  USER
+  SCAN
+  POWER
+  ADMIN
+}

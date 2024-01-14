@@ -8,7 +8,7 @@ import SuperJSON from "superjson";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
-import Timeslots from "@/components/timeslots";
+import Timeslots from "@/components/registration/timeslots";
 
 import { bookingsAtom } from "@/lib/atoms/events-registration";
 import { errorAtom } from "@/lib/atoms/message";

@@ -46,3 +46,4 @@ prisma/generated
 *.json
 report-bundle-size.cjs
 *.temp.*
+app.d.ts
