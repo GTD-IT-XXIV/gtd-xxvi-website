@@ -4,7 +4,7 @@ import type { Stripe } from "stripe";
 import SuperJSON from "superjson";
 import { z } from "zod";
 
-import { prisma } from "@/server/db";
+import { db } from "@/server/db";
 
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
             .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
-          const bookings = await prisma.booking.findMany({
+          const bookings = await db.booking.findMany({
             where: { id: { in: bookingIds } },
           });
           if (bookings.length !== bookingIds.length) {
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
           // TODO: sending an email to user
           // use email as the owner of a ticket in the future after the schema changed
 
-          const tickets = await prisma.ticket.createMany({
+          const tickets = await db.ticket.createMany({
             data: bookings.flatMap((booking) =>
               Array(booking.quantity)
                 .fill(0)
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
           console.log("✅ Ticket details: ");
           console.log(tickets);
 
-          await prisma.booking.deleteMany({
+          await db.booking.deleteMany({
             where: { id: { in: bookingIds } },
           });
           break;
@@ -108,12 +108,12 @@ export async function POST(req: Request) {
             .parse(JSON.parse(metadata.bookingIds));
           console.log(`❌ Payment failed with session: ${data.id}`);
 
-          const bookings = await prisma.booking.findMany({
+          const bookings = await db.booking.findMany({
             where: { id: { in: bookingIds } },
             include: { bundle: true, timeslot: true },
           });
 
-          await prisma.$transaction(async (tx) => {
+          await db.$transaction(async (tx) => {
             for (const booking of bookings) {
               const partySize = booking.quantity * booking.bundle.quantity;
 

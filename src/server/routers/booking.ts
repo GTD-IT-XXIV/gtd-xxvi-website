@@ -16,15 +16,47 @@ export const bookingSchema = z.object({
   sessionId: z.string().optional(),
 });
 
-export const bookingsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.booking.findMany();
-  }),
+export const bookingRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().positive().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 10;
+      const { cursor } = input;
+      const bookings = await ctx.db.booking.findMany({
+        where: {},
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { created: "desc" },
+      });
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (bookings.length > limit) {
+        const nextBooking = bookings.pop();
+        nextCursor = nextBooking?.id ?? undefined;
+      }
+      return { bookings, nextCursor };
+    }),
 
   getById: publicProcedure
-    .input(z.number().positive())
-    .query(({ ctx, input }) => {
-      return ctx.prisma.booking.findUnique({ where: { id: input } });
+    .input(
+      z.object({
+        id: z.number().positive(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const booking = await ctx.db.booking.findUnique({ where: { id } });
+      if (!booking) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No booking with id '${id}'`,
+        });
+      }
+      return booking;
     }),
 
   getByEmailAndEvent: publicProcedure
@@ -34,16 +66,26 @@ export const bookingsRouter = createTRPCRouter({
         eventId: z.number().positive(),
       }),
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.booking.findUnique({
+    .query(async ({ ctx, input }) => {
+      const { email, eventId } = input;
+      const booking = await ctx.db.booking.findUnique({
         where: { email_eventId: { ...input } },
       });
+      if (!booking) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No booking by email '${email}' for event with id '${eventId}'`,
+        });
+      }
+      return booking;
     }),
 
   getManyByEmail: publicProcedure
-    .input(z.string().email())
-    .query(({ ctx, input }) => {
-      return ctx.prisma.booking.findMany({ where: { email: input } });
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ ctx, input }) => {
+      const { email } = input;
+      const bookings = await ctx.db.booking.findMany({ where: { email } });
+      return bookings;
     }),
 
   getManyByEmailAndEvents: publicProcedure
@@ -53,21 +95,22 @@ export const bookingsRouter = createTRPCRouter({
         eventIds: z.number().positive().array(),
       }),
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.booking.findMany({
-        where: { email: input.email, eventId: { in: input.eventIds } },
+    .query(async ({ ctx, input }) => {
+      const { email, eventIds } = input;
+      const bookings = await ctx.db.booking.findMany({
+        where: { email, eventId: { in: eventIds } },
       });
+      return bookings;
     }),
 
   create: publicProcedure
     .input(bookingSchema)
     .mutation(async ({ ctx, input }) => {
-      if (
-        !(await checkEventConsistency(
-          ctx.prisma,
-          bookingEventConsistencySchema.parse(input),
-        ))
-      ) {
+      const isBookingConsistent = await checkEventConsistency(
+        ctx.db,
+        bookingEventConsistencySchema.parse(input),
+      );
+      if (!isBookingConsistent) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Event ids of booking, bundle and timeslot do not match",
@@ -75,41 +118,35 @@ export const bookingsRouter = createTRPCRouter({
       }
 
       const { quantity, bundleId, timeslotId } = input;
-      const bundle = await ctx.prisma.bundle.findUnique({
+      const bundle = await ctx.db.bundle.findUnique({
         where: { id: bundleId },
       });
-      const timeslot = await ctx.prisma.timeslot.findUnique({
+      const timeslot = await ctx.db.timeslot.findUnique({
         where: { id: timeslotId },
       });
 
       if (!bundle) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Bundle not found",
+          code: "NOT_FOUND",
+          message: `No bundle with id '${bundleId}'`,
         });
       }
       if (!timeslot) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Timeslot not found",
+          code: "NOT_FOUND",
+          message: `No timeslot with id '${timeslotId}'`,
         });
       }
 
       const partySize = quantity * bundle.quantity;
 
-      return await ctx.prisma.$transaction(
+      return await ctx.db.$transaction(
         async (tx) => {
           if (bundle.remainingAmount !== null) {
             const bundle = await tx.bundle.update({
               where: { id: bundleId },
               data: { remainingAmount: { decrement: quantity } },
             });
-            console.log({
-              bundleId: bundle.id,
-              decrement: quantity,
-              remainingAmount: bundle.remainingAmount,
-            });
-
             if (bundle.remainingAmount! < 0) {
               throw new TRPCError({
                 code: "BAD_REQUEST",
@@ -122,14 +159,13 @@ export const bookingsRouter = createTRPCRouter({
             where: { id: timeslotId },
             data: { remainingSlots: { decrement: partySize } },
           });
-
           if (timeslot.remainingSlots < 0) {
             throw new TRPCError({
               code: "BAD_REQUEST",
               message: "Insufficient number of timeslots",
             });
           }
-          return await ctx.prisma.booking.create({ data: input });
+          return await ctx.db.booking.create({ data: input });
         },
         {
           isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
@@ -154,66 +190,57 @@ export const bookingsRouter = createTRPCRouter({
       const { id, bundleId, timeslotId, quantity } = input;
 
       if (!quantity && !bundleId && !timeslotId) {
-        return await ctx.prisma.booking.update({
+        return await ctx.db.booking.update({
           where: { id },
           data: { ...input },
         });
       }
 
-      const booking = await ctx.prisma.booking.findUnique({
+      const booking = await ctx.db.booking.findUnique({
         where: { id },
       });
-
       if (!booking) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Booking not found",
+          message: `No booking with id '${id}'`,
         });
       }
 
-      if (
-        !(await checkEventConsistency(ctx.prisma, {
-          eventId: booking.eventId,
-          bundleId: bundleId ?? booking.bundleId,
-          timeslotId: timeslotId ?? booking.timeslotId,
-        }))
-      ) {
+      const isBookingConsistent = await checkEventConsistency(ctx.db, {
+        eventId: booking.eventId,
+        bundleId: bundleId ?? booking.bundleId,
+        timeslotId: timeslotId ?? booking.timeslotId,
+      });
+      if (!isBookingConsistent) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Event ids of booking, bundle and timeslot do not match",
         });
       }
 
-      const oldBundle = await ctx.prisma.bundle.findUnique({
+      const oldBundle = await ctx.db.bundle.findUnique({
         where: { id: booking.bundleId },
       });
-      const newTimeslot = await ctx.prisma.timeslot.findUnique({
+      const oldTimeslot = await ctx.db.timeslot.findUnique({
         where: { id: booking.timeslotId },
       });
-
       if (!oldBundle) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Existing booking bundle not found",
         });
       }
-      if (!newTimeslot) {
+      if (!oldTimeslot) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Existing booking timeslot not found",
-        });
-      }
-      if (oldBundle.eventId !== booking.eventId) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Existing booking",
         });
       }
 
       const oldPartySize = booking.quantity * oldBundle.quantity;
       const newPartySize = quantity ?? booking.quantity * oldBundle.quantity;
 
-      return await ctx.prisma.$transaction(async (tx) => {
+      return await ctx.db.$transaction(async (tx) => {
         if (bundleId && bundleId !== booking.bundleId) {
           if (oldBundle.remainingAmount != null) {
             // free up old bundle slots
@@ -223,26 +250,21 @@ export const bookingsRouter = createTRPCRouter({
             });
           }
 
-          console.log({
-            oldBundleId: oldBundle.id,
-            decrement: quantity,
-            remainingAmount: oldBundle.remainingAmount,
-          });
           let newBundle = await tx.bundle.findUnique({
             where: { id: bundleId },
           });
-          if (newBundle?.remainingAmount != null) {
+          if (!newBundle) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: `No bundle with id '${bundleId}'`,
+            });
+          }
+          if (newBundle.remainingAmount != null) {
             // fill up new bundle slots
             newBundle = await tx.bundle.update({
               where: { id: bundleId },
               data: { remainingAmount: { decrement: booking.quantity } },
             });
-            console.log({
-              newBundleId: newBundle.id,
-              decrement: quantity,
-              remainingAmount: newBundle.remainingAmount,
-            });
-
             if (newBundle.remainingAmount! < 0) {
               throw new TRPCError({
                 code: "BAD_REQUEST",
@@ -263,7 +285,6 @@ export const bookingsRouter = createTRPCRouter({
             where: { id: timeslotId },
             data: { remainingSlots: { decrement: newPartySize } },
           });
-
           if (newTimeslot.remainingSlots < 0) {
             throw new TRPCError({
               code: "BAD_REQUEST",
@@ -296,13 +317,13 @@ export const bookingsRouter = createTRPCRouter({
       const { email, eventId, bundleId, timeslotId, quantity } = input;
 
       if (!quantity && !bundleId && !timeslotId) {
-        return await ctx.prisma.booking.update({
+        return await ctx.db.booking.update({
           where: { email_eventId: { email, eventId } },
           data: { ...input },
         });
       }
 
-      const booking = await ctx.prisma.booking.findUnique({
+      const booking = await ctx.db.booking.findUnique({
         where: { email_eventId: { email, eventId } },
       });
 
@@ -313,49 +334,41 @@ export const bookingsRouter = createTRPCRouter({
         });
       }
 
-      if (
-        !(await checkEventConsistency(ctx.prisma, {
-          eventId: booking.eventId,
-          bundleId: bundleId ?? booking.bundleId,
-          timeslotId: timeslotId ?? booking.timeslotId,
-        }))
-      ) {
+      const isBookingConsistent = await checkEventConsistency(ctx.db, {
+        eventId: booking.eventId,
+        bundleId: bundleId ?? booking.bundleId,
+        timeslotId: timeslotId ?? booking.timeslotId,
+      });
+      if (!isBookingConsistent) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Event ids of booking, bundle and timeslot do not match",
         });
       }
 
-      const oldBundle = await ctx.prisma.bundle.findUnique({
+      const oldBundle = await ctx.db.bundle.findUnique({
         where: { id: booking.bundleId },
       });
-      const newTimeslot = await ctx.prisma.timeslot.findUnique({
+      const oldTimeslot = await ctx.db.timeslot.findUnique({
         where: { id: booking.timeslotId },
       });
-
       if (!oldBundle) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Existing booking bundle not found",
         });
       }
-      if (!newTimeslot) {
+      if (!oldTimeslot) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Existing booking timeslot not found",
-        });
-      }
-      if (oldBundle.eventId !== booking.eventId) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Existing booking",
         });
       }
 
       const oldPartySize = booking.quantity * oldBundle.quantity;
       const newPartySize = quantity ?? booking.quantity * oldBundle.quantity;
 
-      return await ctx.prisma.$transaction(async (tx) => {
+      return await ctx.db.$transaction(async (tx) => {
         if (bundleId && bundleId !== booking.bundleId) {
           if (oldBundle.remainingAmount != null) {
             // free up old bundle slots
@@ -368,7 +381,13 @@ export const bookingsRouter = createTRPCRouter({
           let newBundle = await tx.bundle.findUnique({
             where: { id: bundleId },
           });
-          if (newBundle?.remainingAmount != null) {
+          if (!newBundle) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: `No bundle with id '${bundleId}'`,
+            });
+          }
+          if (newBundle.remainingAmount != null) {
             // fill up new bundle slots
             newBundle = await tx.bundle.update({
               where: { id: bundleId },
@@ -413,7 +432,7 @@ export const bookingsRouter = createTRPCRouter({
   deleteById: publicProcedure
     .input(z.number().positive())
     .mutation(async ({ ctx, input }) => {
-      const booking = await ctx.prisma.booking.findUnique({
+      const booking = await ctx.db.booking.findUnique({
         where: { id: input },
         include: { bundle: true },
       });
@@ -427,17 +446,17 @@ export const bookingsRouter = createTRPCRouter({
 
       const partySize = booking.quantity * booking.bundle.quantity;
       // free up bundles
-      await ctx.prisma.bundle.update({
+      await ctx.db.bundle.update({
         where: { id: booking.bundleId },
         data: { remainingAmount: { increment: booking.quantity } },
       });
       // free up timeslots
-      await ctx.prisma.timeslot.update({
+      await ctx.db.timeslot.update({
         where: { id: booking.timeslotId },
         data: { remainingSlots: { increment: partySize } },
       });
 
-      return await ctx.prisma.booking.delete({ where: { id: input } });
+      return await ctx.db.booking.delete({ where: { id: input } });
     }),
 
   deleteByEmailAndEvent: publicProcedure
@@ -449,7 +468,7 @@ export const bookingsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { email, eventId } = input;
-      const booking = await ctx.prisma.booking.findUnique({
+      const booking = await ctx.db.booking.findUnique({
         where: { email_eventId: { email, eventId } },
         include: { bundle: true },
       });
@@ -463,17 +482,17 @@ export const bookingsRouter = createTRPCRouter({
 
       const partySize = booking.quantity * booking.bundle.quantity;
       // free up bundles
-      await ctx.prisma.bundle.update({
+      await ctx.db.bundle.update({
         where: { id: booking.bundleId },
         data: { remainingAmount: { increment: booking.quantity } },
       });
       // free up timeslots
-      await ctx.prisma.timeslot.update({
+      await ctx.db.timeslot.update({
         where: { id: booking.timeslotId },
         data: { remainingSlots: { increment: partySize } },
       });
 
-      return await ctx.prisma.booking.delete({
+      return await ctx.db.booking.delete({
         where: { email_eventId: { email, eventId } },
       });
     }),
@@ -481,7 +500,7 @@ export const bookingsRouter = createTRPCRouter({
   deleteManyByEmail: publicProcedure
     .input(z.string().email())
     .mutation(async ({ ctx, input }) => {
-      const bookings = await ctx.prisma.booking.findMany({
+      const bookings = await ctx.db.booking.findMany({
         where: { email: input },
         include: { bundle: true },
       });
@@ -496,18 +515,18 @@ export const bookingsRouter = createTRPCRouter({
       for (const booking of bookings) {
         const partySize = booking.quantity * booking.bundle.quantity;
         // free up bundles
-        await ctx.prisma.bundle.update({
+        await ctx.db.bundle.update({
           where: { id: booking.bundleId },
           data: { remainingAmount: { increment: booking.quantity } },
         });
         // free up timeslots
-        await ctx.prisma.timeslot.update({
+        await ctx.db.timeslot.update({
           where: { id: booking.timeslotId },
           data: { remainingSlots: { increment: partySize } },
         });
       }
 
-      return await ctx.prisma.booking.deleteMany({ where: { email: input } });
+      return await ctx.db.booking.deleteMany({ where: { email: input } });
     }),
 });
 
@@ -518,15 +537,15 @@ const bookingEventConsistencySchema = bookingSchema.pick({
 });
 
 export async function checkEventConsistency(
-  prisma: PrismaClient,
+  db: PrismaClient,
   booking: z.infer<typeof bookingEventConsistencySchema>,
 ) {
   const id = booking.eventId; // source of truth
-  const bundle = await prisma.bundle.findUnique({
+  const bundle = await db.bundle.findUnique({
     where: { id: booking.bundleId },
     select: { eventId: true },
   });
-  const timeslot = await prisma.timeslot.findUnique({
+  const timeslot = await db.timeslot.findUnique({
     where: { id: booking.timeslotId },
     select: { eventId: true },
   });

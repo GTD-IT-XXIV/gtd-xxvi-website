@@ -7,6 +7,8 @@ import { twMerge } from "tailwind-merge";
 
 import { type AppRouter } from "@/server/root";
 
+import { type LocalBooking } from "./types/events-registration";
+
 export type Prettify<T> = {
   [K in keyof T]: T[K];
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -29,8 +31,8 @@ export function getStripe() {
 }
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
-type Bundle = ArrElement<RouterOutputs["bundles"]["getManyByEvent"]>;
-type Timeslot = ArrElement<RouterOutputs["timeslots"]["getManyByEvent"]>;
+type Bundle = ArrElement<RouterOutputs["bundle"]["getManyByEvent"]>;
+type Timeslot = ArrElement<RouterOutputs["timeslot"]["getManyByEvent"]>;
 export function getBundlesAvailability(
   bundles: Bundle[],
   timeslots: Timeslot[],
@@ -45,4 +47,11 @@ export function getBundlesAvailability(
       bundle.remainingAmount === null ||
       (bundle.remainingAmount > 0 && bundle.quantity <= totalSlots),
   }));
+}
+
+export function cleanBookings(
+  localBookings: LocalBooking[],
+  eventIds: number[],
+): LocalBooking[] {
+  return localBookings.filter((booking) => eventIds.includes(booking.eventId));
 }

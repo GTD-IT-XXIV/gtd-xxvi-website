@@ -1,18 +1,11 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  createTRPCReact,
-  loggerLink,
-  unstable_httpBatchStreamLink,
-} from "@trpc/react-query";
+import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/react-query";
 import { useState } from "react";
 
-import { type AppRouter } from "@/server/root";
-
-import { getUrl, transformer } from "./utils";
-
-export const api = createTRPCReact<AppRouter>();
+import { api } from "@/lib/trpc/client";
+import { getUrl, transformer } from "@/lib/trpc/utils";
 
 export default function TRPCReactProvider(props: {
   children: React.ReactNode;
