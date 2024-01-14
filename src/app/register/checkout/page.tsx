@@ -1,13 +1,43 @@
 "use client";
 
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
+import { useState } from "react";
 
-import { bookingsAtom } from "@/lib/atoms/events-registration";
+import BookingItem from "@/components/booking-item";
+import RegistrationForm from "@/components/registration-form";
+import StripeForm from "@/components/stripe-form";
+
+import { bookingsAtom, formDataAtom } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";
+import { api } from "@/lib/trpc/client";
 
 export default function CheckoutPage() {
   const hasMounted = useHasMounted();
-  const [bookings, setBookings] = useAtom(bookingsAtom);
+  const bookings = useAtomValue(bookingsAtom);
+  const formData = useAtomValue(formDataAtom);
+  const [bookingIds, setBookingIds] = useState<number[]>([]);
+
+  const createBooking = api.booking.create.useMutation();
+
+  function handleFormSubmit() {
+    const bookingIds: number[] = [];
+    for (const booking of bookings) {
+      createBooking.mutate(
+        {
+          name: formData.name,
+          email: formData.email,
+          telegramHandle: formData.telegramHandle,
+          phoneNumber: formData.phoneNumber,
+          quantity: booking.quantity,
+          eventId: booking.eventId,
+          bundleId: booking.bundleId,
+          timeslotId: booking.timeslotId,
+        },
+        { onSuccess: (data) => bookingIds.push(data.id) },
+      );
+    }
+    setBookingIds(bookingIds);
+  }
 
   return (
     <main>
@@ -18,13 +48,14 @@ export default function CheckoutPage() {
         <p>No bookings</p>
       ) : (
         bookings.map((booking) => (
-          <article
+          <BookingItem
             key={`${booking.eventId}_${booking.bundleId}_${booking.timeslotId}`}
-          >
-            <h2 className="text-xl font-medium">Booking</h2>
-          </article>
+            {...booking}
+          />
         ))
       )}
+      <RegistrationForm onSubmit={handleFormSubmit} />
+      <StripeForm bookingIds={bookingIds} />
     </main>
   );
 }

@@ -6,7 +6,7 @@ import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 import { type OrderMetadata } from "@/lib/types/order-metadata";
 
-export const paymentsRouter = createTRPCRouter({
+export const paymentRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
     .input(z.object({ bookingIds: z.number().positive().array() }))
     .mutation(async ({ input, ctx }) => {
@@ -19,7 +19,7 @@ export const paymentsRouter = createTRPCRouter({
         });
       }
 
-      const bookings = await ctx.prisma.booking.findMany({
+      const bookings = await ctx.db.booking.findMany({
         where: { id: { in: bookingIds } },
         include: { event: true, bundle: true, timeslot: true },
       });
@@ -55,12 +55,15 @@ export const paymentsRouter = createTRPCRouter({
         expires_at: Math.floor(expiresAt / 1000), // since stripe time in seconds
       });
 
-      await ctx.prisma.booking.updateMany({
+      await ctx.db.booking.updateMany({
         where: { id: { in: bookingIds } },
         data: { sessionId: String(session.id) },
       });
 
-      return { clientSecret: session.client_secret };
+      return {
+        clientSecret: session.client_secret,
+        sessionId: String(session.id),
+      };
     }),
 
   retrieveCheckoutSession: publicProcedure

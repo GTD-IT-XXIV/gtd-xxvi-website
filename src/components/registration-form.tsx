@@ -2,15 +2,12 @@ import "client-only";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-  DEFAULT_REGISTRATION_FORM,
   formDataAtom,
 } from "@/lib/atoms/events-registration";
-import { api } from "@/lib/trpc/provider";
 
 import {
   Form,
@@ -20,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { DEFAULT_REGISTRATION_FORM } from "@/lib/constants";
 
 export const registrationFormSchema = z.object({
   name: z.string().min(3).max(50),
@@ -35,43 +33,13 @@ export type RegistrationFormProps = {
 export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
   const [formData, setFormData] = useAtom(formDataAtom);
 
-  const { data: bookings, isLoading: isBookingsLoading } =
-    api.bookings.getManyByEmail.useQuery(formData.email);
-
   const form = useForm<z.infer<typeof registrationFormSchema>>({
     resolver: zodResolver(registrationFormSchema),
     defaultValues: DEFAULT_REGISTRATION_FORM,
     values: formData,
   });
 
-  useEffect(() => {
-    function runEffect() {
-      if (
-        !isBookingsLoading &&
-        bookings &&
-        bookings.length > 0 &&
-        bookings[0]
-      ) {
-        setFormData({
-          name: bookings[0].name,
-          email: bookings[0].email,
-          telegramHandle: bookings[0].telegramHandle,
-          phoneNumber: bookings[0].phoneNumber,
-        });
-      }
-    }
-
-    let ignored = false;
-    if (!ignored) {
-      runEffect();
-    }
-    return () => {
-      ignored = true;
-    };
-  }, [isBookingsLoading]);
-
   function handleSubmit(values: z.infer<typeof registrationFormSchema>) {
-    // console.log("Submitted", values);
     setFormData(values);
     onSubmit();
   }

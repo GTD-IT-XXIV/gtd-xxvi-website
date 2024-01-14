@@ -16,3 +16,8 @@ export const bookingsAtom = atomWithStorage<LocalBooking[]>(
 export const formDataAtom = atomWithStorage<
   z.infer<typeof registrationFormSchema>
 >(`${BASE_KEY}-form-data`, DEFAULT_REGISTRATION_FORM);
+
+export const checkoutSessionAtom = atomWithStorage(
+  `${BASE_KEY}-checkout-session-id`,
+  "",
+);

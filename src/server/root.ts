@@ -3,7 +3,7 @@ import { createTRPCRouter } from "@/lib/trpc/config";
 import { bookingRouter } from "./routers/booking";
 import { bundleRouter } from "./routers/bundle";
 import { eventRouter } from "./routers/event";
-import { paymentsRouter } from "./routers/payments";
+import { paymentRouter } from "./routers/payment";
 import { ticketRouter } from "./routers/ticket";
 import { timeslotRouter } from "./routers/timeslot";
 
@@ -14,7 +14,7 @@ export const appRouter = createTRPCRouter({
   timeslot: timeslotRouter,
   bundle: bundleRouter,
   ticket: ticketRouter,
-  payment: paymentsRouter,
+  payment: paymentRouter,
   booking: bookingRouter,
 });
 

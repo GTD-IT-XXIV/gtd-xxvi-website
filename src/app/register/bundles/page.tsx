@@ -50,6 +50,7 @@ export default function BundlesPage() {
   const isEveryEventBundleSelected = events.every(
     (event) => !!eventBundle[event.id] && !!eventBundleQuantity[event.id],
   );
+  console.log({eventBundle, eventBundleQuantity})
 
   useEffect(() => {
     function runEffect() {
@@ -92,13 +93,13 @@ export default function BundlesPage() {
 
   function handleClickNext() {
     setBookings(
-      events.map((event, idx) => {
-        if (!eventBundle[idx] || !eventBundleQuantity[idx]) {
+      events.map((event) => {
+        if (!eventBundle[event.id] || !eventBundleQuantity[event.id]) {
           throw new Error(`Event with id '${event.id}' has no bundle selected`);
         }
         return {
-          quantity: eventBundleQuantity[idx]!,
-          bundleId: eventBundle[idx]!,
+          quantity: eventBundleQuantity[event.id]!,
+          bundleId: eventBundle[event.id]!,
           eventId: event.id,
           timeslotId: event.timeslotId,
         };

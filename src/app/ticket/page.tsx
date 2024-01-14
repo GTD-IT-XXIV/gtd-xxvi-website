@@ -2,13 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 
-import { api } from "@/lib/trpc/provider";
+import { api } from "@/lib/trpc/client";
 
 export default function TicketPage() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const { data: session, isLoading } =
-    api.payments.retrieveCheckoutSession.useQuery(
+    api.payment.retrieveCheckoutSession.useQuery(
       { sessionId: sessionId! },
       { enabled: !!sessionId },
     );
