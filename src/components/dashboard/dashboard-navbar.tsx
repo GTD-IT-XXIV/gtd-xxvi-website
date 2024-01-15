@@ -1,9 +1,9 @@
+import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
 import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-import logoGTD from "../../../public/static/images/logo-gtd-black-transparent.png";
 import DashboardLogoutButton from "./dashboard-logout-button";
 
 export type DashboardNavbarProps = {

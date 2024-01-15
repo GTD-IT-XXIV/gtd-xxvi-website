@@ -17,9 +17,11 @@ git push
 
 3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
 4. If you need reference/example code, checkout the v0.1.0 tag:
+
 ```bash
 git checkout v0.1.0
 ```
+
 5. See specific workflows:
    - [Frontend workflow](#frontend-workflow-construction)
    - [Backend worflow](#backend-workflow)
