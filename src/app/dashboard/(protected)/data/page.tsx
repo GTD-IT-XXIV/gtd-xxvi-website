@@ -1,6 +1,17 @@
+import { redirect } from "next/navigation";
+
+import { auth } from "@/server/auth";
+
 /**
  * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/47 GitHub Issue}
  */
-export default function DashboardDataPage() {
+export default async function DashboardDataPage() {
+  const session = await auth();
+  const hasAccess =
+    session?.user &&
+    (session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER");
+  if (!hasAccess) {
+    redirect("/dashboard");
+  }
   return <p>Dashboard Data Page</p>;
 }

@@ -6,15 +6,15 @@ import { fromZodError } from "zod-validation-error";
 
 import { db } from "@/server/db";
 
-import { loginSchema } from "../schemas";
+import { loginSchema } from "@/lib/schemas";
 
 export default {
   providers: [
     Credentials({
       authorize: async (credentials) => {
         try {
-          const { email, password } = loginSchema.parse(credentials);
-          const user = await db.user.findUnique({ where: { email } });
+          const { username, password } = loginSchema.parse(credentials);
+          const user = await db.user.findUnique({ where: { username } });
           if (!user?.password) {
             return null;
           }
@@ -31,6 +31,7 @@ export default {
             const validationError = fromZodError(error);
             throw validationError;
           }
+          throw error;
         }
         return null;
       },

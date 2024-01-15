@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 
 import { signOut } from "@/server/auth";
@@ -12,6 +14,7 @@ export default async function DashboardLogoutButton({
   async function logoutDashboard() {
     "use server";
     await signOut();
+    redirect("/dashboard");
   }
   return (
     <form action={logoutDashboard}>

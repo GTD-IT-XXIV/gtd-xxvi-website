@@ -12,19 +12,20 @@ export default async function DashboardContentLayout({
   children: ReactNode;
 }) {
   const session = await auth();
-  const hasDashboardAccess = session?.user && session.user.role !== "USER";
-  if (!hasDashboardAccess) {
+  if (!session) {
     redirect("/dashboard/login");
+  }
+  const hasAccess =
+    session.user.role === "ADMIN" ||
+    session.user.role === "DASHBOARD_USER" ||
+    session.user.role === "SCANNER";
+  if (!hasAccess) {
+    redirect("/dashboard/error");
   }
   return (
     <main className="flex flex-col min-h-screen">
-      <DashboardNavbar
-        className="sticky top-0"
-        authenticated={hasDashboardAccess}
-      />
-      <section className="flex-1">
-        {children} {JSON.stringify(session)}
-      </section>
+      <DashboardNavbar className="sticky top-0" authenticated={hasAccess} />
+      <section className="flex-1">{children}</section>
       <DashboardTabs />
     </main>
   );

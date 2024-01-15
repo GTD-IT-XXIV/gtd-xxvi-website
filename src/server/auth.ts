@@ -1,18 +1,11 @@
+import { type JWT } from "@auth/core/jwt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type Role } from "@prisma/client";
-import NextAuth, { type DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
+import { type Session } from "next-auth/types";
+
+import { db } from "@/server/db";
 
 import authConfig from "@/lib/nextauth/config";
-
-import { db } from "./db";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      role: Role;
-    } & DefaultSession["user"];
-  }
-}
 
 export const {
   handlers: { GET, POST },
@@ -24,26 +17,28 @@ export const {
   session: { strategy: "jwt" },
   callbacks: {
     jwt: async ({ token }) => {
-      if (!token.sub) {
-        return token;
-      }
       const user = await db.user.findUnique({ where: { id: token.sub } });
       if (!user) {
         return token;
       }
-      token.role = user.role;
-      return token;
+      return {
+        ...token,
+        role: user.role,
+      } satisfies JWT;
     },
     session: async ({ token, session }) => {
-      if (!token.sub || !session.user) {
+      const user = await db.user.findUnique({ where: { id: token.sub } });
+      if (!user) {
         return session;
       }
-      session.user.id = token.sub;
-      if (!token.role) {
-        return session;
-      }
-      session.user.role = token.role as Role;
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          ...(token.sub && { id: token.sub }),
+          role: user.role,
+        },
+      } satisfies Session;
     },
   },
   ...authConfig,
