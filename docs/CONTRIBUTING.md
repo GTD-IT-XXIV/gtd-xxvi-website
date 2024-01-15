@@ -26,9 +26,9 @@ git checkout v0.1.0
 
 ## Frontend Workflow
 
-1. Check [shadcn/ui](https://ui.shadcn.com/docs/components/accordion) if the component is in the shadcn/ui library.
-2. Do not modify the base UI provided by shadcn/ui. Create a new component that wraps the base UI instead, adding variants as necessary.
-3. Try not to use many arbritrary values. For colors, check if they have been included inside the tailwind config (GTD colors are included in the tailwind config, e.g., `bg-color-gtd-primary-30`)
+1. Check [shadcn/ui](https://ui.shadcn.com/docs/components/accordion) if the component is already in the shadcn/ui library.
+2. Do not directly modify the base UI provided by shadcn/ui. Either create a new component that wraps the base UI instead or add variants to the base component as necessary.
+3. Try not to use many arbitrary values. For colors, check if they have been included inside the tailwind config (GTD colors are included in the tailwind config, e.g., `bg-color-gtd-primary-30`)
 
 ## Backend Workflow
 
