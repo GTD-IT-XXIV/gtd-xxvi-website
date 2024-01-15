@@ -1,10 +1,7 @@
-import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
 import DashboardNavbar from "@/components/dashboard/dashboard-navbar";
 import { Toaster } from "@/components/ui/toaster";
-
-import { auth } from "@/server/auth";
 
 export default async function DashboardAuthLayout({
   children,

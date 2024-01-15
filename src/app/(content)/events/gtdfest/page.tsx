@@ -4,8 +4,6 @@ import { api } from "@/server/trpc";
 
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
 
-export const dynamic = "force-static";
-
 export default async function GTDFestPage() {
   const gtdFest = await api.event.getById.query({ id: GTD_FEST_EVENT_ID });
   const escapeRoom = await api.event.getById.query({
