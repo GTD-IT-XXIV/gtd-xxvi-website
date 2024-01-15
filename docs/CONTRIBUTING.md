@@ -16,11 +16,19 @@ git push
 ```
 
 3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
-4. See specific workflows:
+4. If you need reference/example code, checkout the v0.1.0 tag:
+```bash
+git checkout v0.1.0
+```
+5. See specific workflows:
    - [Frontend workflow](#frontend-workflow-construction)
    - [Backend worflow](#backend-workflow)
 
-## Frontend Workflow :construction:
+## Frontend Workflow
+
+1. Check [shadcn/ui](https://ui.shadcn.com/docs/components/accordion) if the component is in the shadcn/ui library.
+2. Do not modify the base UI provided by shadcn/ui. Create a new component that wraps the base UI instead, adding variants as necessary.
+3. Try not to use many arbritrary values. For colors, check if they have been included inside the tailwind config (GTD colors are included in the tailwind config, e.g., `bg-color-gtd-primary-30`)
 
 ## Backend Workflow
 
