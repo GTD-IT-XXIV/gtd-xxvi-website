@@ -10,8 +10,8 @@
 pnpm install
 ```
 
-4. Copy `.env.example` contents to `.env.development.local` and modify the environment variables.
-5. Change the `DATABASE_URL` environment variable or start the development database in a [Docker](https://docs.docker.com/desktop/) container:
+4. Copy `.env.example` contents to `.env.development.local` and fill in the environment variables.
+5. Start the development database (requires [Docker](https://docs.docker.com/desktop/)):
 
 ```bash
 pnpm dev:db:start

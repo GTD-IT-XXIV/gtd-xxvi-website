@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,80 +12,116 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { signupSchema } from "@/lib/schemas";
+import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
+
+import { useToast } from "../ui/use-toast";
 
 export type DashboardSignupFormProps = {
   className?: string;
 };
 
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(3),
-  password: z.string().min(8).max(255),
-});
-
 export default function DashboardSignupForm({
   className,
 }: DashboardSignupFormProps) {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const { toast } = useToast();
+  const router = useRouter();
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
+      username: "",
       email: "",
       name: "",
       password: "",
     },
   });
+  const createUser = api.user.create.useMutation({
+    onSuccess: () => {
+      toast({
+        variant: "default",
+        title: "User created successfully!",
+        description: "Please log in.",
+      });
+      router.push("/dashboard/login");
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "User creation failed",
+        description: error.message,
+      });
+    },
+  });
 
-  function handleSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+  function handleSubmit(values: z.infer<typeof signupSchema>) {
+    createUser.mutate(values);
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className={cn("space-y-3", className)}
+        className={cn("space-y-12", className)}
       >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Email" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <div className="space-y-3">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Display Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email Address</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit">Sign up</Button>
       </form>
     </Form>

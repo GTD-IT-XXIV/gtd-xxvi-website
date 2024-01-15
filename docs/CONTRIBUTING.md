@@ -17,9 +17,11 @@ git push
 
 3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
 4. If you need reference/example code, checkout the v0.1.0 tag:
+
 ```bash
 git checkout v0.1.0
 ```
+
 5. See specific workflows:
    - [Frontend workflow](#frontend-workflow-construction)
    - [Backend worflow](#backend-workflow)
@@ -53,6 +55,7 @@ pnpm dev:db:studio
 
 Optional but recommended:
 
+- Use import aliases instead of relative paths for package imports, e.g. `import { Button } from "@/components/ui/button";`
 - Git commits style guide: [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
 - Use TypeScript types instead of interfaces unless necessary ([_why?_](https://youtu.be/zM9UPcIyyhQ?si=TI7vrg4OZAOpBd1x))
 - Use [`function` declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function) for React components and event handlers

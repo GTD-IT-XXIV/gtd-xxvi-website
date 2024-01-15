@@ -1,14 +1,11 @@
 import { z } from "zod";
 
-export const eventIdSchema = z.coerce.number().positive();
-export type EventId = z.infer<typeof eventIdSchema>;
+export const loginSchema = z.object({
+  username: z.string().min(5, { message: "Must be 5 or more characters long" }),
+  password: z.string().min(8, { message: "Must be 8 or more characters long" }),
+});
 
-export const bundlesPageQueryParamsSchema = z
-  .object({
-    id: z.number().positive(),
-    timeslotId: z.number().positive(),
-  })
-  .array();
-export type BundlesPageQueryParams = z.infer<
-  typeof bundlesPageQueryParamsSchema
->;
+export const signupSchema = loginSchema.extend({
+  name: z.string().min(3, { message: "Must be 3 or more characters long" }),
+  email: z.string().email(),
+});

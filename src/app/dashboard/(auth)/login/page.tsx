@@ -1,25 +1,34 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import DashboardLoginForm from "@/components/dashboard/dashboard-login-form";
+import { Separator } from "@/components/ui/separator";
 
-export default function DashboardLoginPage() {
+import { auth } from "@/server/auth";
+
+export default async function DashboardLoginPage() {
+  const session = await auth();
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
-    <article className="py-6 px-4 space-y-8">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Login
-      </h1>
-      <DashboardLoginForm className="px-3" />
-      <aside className="border border-slate-300 bg-white rounded-lg drop-shadow py-3 px-4 mx-3">
-        <p className="text-sm">
-          No account yet?{" "}
+    <article className="py-6 px-4 space-y-3">
+      <header className="space-y-2">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Login
+        </h1>
+        <p className="font-medium">
+          Don't have an account?{" "}
           <Link
             href="/dashboard/signup"
             className="hover:underline underline-offset-4 text-blue-600"
           >
-            Sign up here!
+            Sign Up
           </Link>
         </p>
-      </aside>
+      </header>
+      <Separator />
+      <DashboardLoginForm className="px-3" />
     </article>
   );
 }

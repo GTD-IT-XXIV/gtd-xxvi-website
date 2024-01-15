@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,65 +11,82 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
+import login from "@/server/actions/login";
+
+import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
 export type DashboardLoginFormProps = {
   className?: string;
 };
 
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(255),
-});
-
 export default function DashboardLoginForm({
   className,
 }: DashboardLoginFormProps) {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
-  function handleSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+  async function handleSubmit(values: z.infer<typeof loginSchema>) {
+    const res = await login(values);
+    if (res) {
+      toast({
+        variant: "destructive",
+        title: "Login failed",
+        description: res.error,
+      });
+      return;
+    }
+    toast({
+      variant: "default",
+      title: "Logged in successfully!",
+    });
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className={cn("space-y-3", className)}
+        className={cn("space-y-12", className)}
       >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Email" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <div className="space-y-3">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button type="submit">Login</Button>
       </form>
     </Form>

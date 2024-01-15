@@ -1,12 +1,14 @@
 import { initTRPC } from "@trpc/server";
 import { ZodError } from "zod";
 
+import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 
 import { transformer } from "./utils";
 
 export const createTRPCContext = async function (opts: { headers: Headers }) {
-  return { db, ...opts };
+  const session = await auth();
+  return { db, session, ...opts };
 };
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
