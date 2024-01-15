@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { type z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,30 +14,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import loginDashboard from "@/server/actions/login-dashboard";
+
+import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
 export type DashboardLoginFormProps = {
   className?: string;
 };
 
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(255),
-});
-
 export default function DashboardLoginForm({
   className,
 }: DashboardLoginFormProps) {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function handleSubmit(values: z.infer<typeof loginFormSchema>) {
+  async function handleSubmit(values: z.infer<typeof loginSchema>) {
     console.log(values);
+    await loginDashboard(values);
   }
 
   return (

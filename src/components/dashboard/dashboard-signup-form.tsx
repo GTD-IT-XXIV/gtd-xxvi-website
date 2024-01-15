@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,13 +15,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 export type DashboardSignupFormProps = {
   className?: string;
 };
 
-const loginFormSchema = z.object({
+export const signupFormSchema = z.object({
   email: z.string().email(),
   name: z.string().min(3),
   password: z.string().min(8).max(255),
@@ -29,17 +31,22 @@ const loginFormSchema = z.object({
 export default function DashboardSignupForm({
   className,
 }: DashboardSignupFormProps) {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const router = useRouter();
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       email: "",
       name: "",
       password: "",
     },
   });
+  const createUser = api.user.create.useMutation({
+    onSuccess: () => router.push("/dashboard"),
+  });
 
-  function handleSubmit(values: z.infer<typeof loginFormSchema>) {
+  function handleSubmit(values: z.infer<typeof signupFormSchema>) {
     console.log(values);
+    createUser.mutate(values);
   }
 
   return (
