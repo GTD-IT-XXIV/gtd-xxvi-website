@@ -22,7 +22,8 @@ git push
 git checkout v0.1.0
 ```
 
-5. See specific workflows:
+5. To create an admin user to access the dashboard, sign up and manually modify the role of the user through Prisma Studio.
+6. See specific workflows:
    - [Frontend workflow](#frontend-workflow-construction)
    - [Backend worflow](#backend-workflow)
 
@@ -30,7 +31,7 @@ git checkout v0.1.0
 
 1. Check [shadcn/ui](https://ui.shadcn.com/docs/components/accordion) if the component is already in the shadcn/ui library.
 2. Do not directly modify the base UI provided by shadcn/ui. Either create a new component that wraps the base UI instead or add variants to the base component as necessary.
-3. Try not to use many arbitrary values. For colors, check if they have been included inside the tailwind config (GTD colors are included in the tailwind config, e.g., `bg-color-gtd-primary-30`)
+3. Try not to use many arbitrary values. For colors, check if they have been included inside the tailwind config (GTD colors are included in the tailwind config, e.g., `bg-color-gtd-primary-30`).
 
 ## Backend Workflow
 
