@@ -7,11 +7,10 @@ import { auth } from "@/server/auth";
  */
 export default async function DashboardHomePage() {
   const session = await auth();
-  if (!session?.user) {
-    redirect("/dashboard/login");
-  }
   const hasAccess =
-    session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER";
+    session?.user &&
+    (session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER");
+
   if (!hasAccess) {
     redirect("/dashboard/scan");
   }
