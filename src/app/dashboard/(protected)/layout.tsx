@@ -12,14 +12,13 @@ export default async function DashboardContentLayout({
   children: ReactNode;
 }) {
   const session = await auth();
-  if (!session) {
+  if (!session?.user) {
     redirect("/dashboard/login");
   }
   const hasAccess =
-    session?.user &&
-    (session.user.role === "ADMIN" ||
-      session.user.role === "DASHBOARD_USER" ||
-      session.user.role === "SCANNER");
+    session.user.role === "ADMIN" ||
+    session.user.role === "DASHBOARD_USER" ||
+    session.user.role === "SCANNER";
   if (!hasAccess) {
     redirect("/dashboard/error");
   }
