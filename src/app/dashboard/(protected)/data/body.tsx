@@ -1,8 +1,8 @@
 "use client";
 
-import { time } from "console";
 import { useState } from "react";
-import { set } from "zod";
+import { FiTrash } from "react-icons/fi";
+import { s } from "vitest/dist/reporters-qc5Smpt5.js";
 
 import dummyUsers from "./const";
 import SearchBar from "./searchbar";
@@ -21,6 +21,8 @@ export default function DashboardDataPageBody() {
   const [eventInput, setEventInput] = useState("");
   const [users, setUsers] = useState(dummyUsers);
   const [showAll, setShowAll] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const mapUser = (user: DummyUser) => {
     return (
@@ -41,6 +43,7 @@ export default function DashboardDataPageBody() {
 
   const filterUsers = (email: string) => {
     resetUsers();
+
     if (eventInput) {
       setUsers(
         dummyUsers
@@ -71,7 +74,7 @@ export default function DashboardDataPageBody() {
           <option value="Event 2">Event 2</option>
         </select>
         <span className="p-1 text-sm w-1/4 text-center border-l-2 px-1 py-1">
-          200
+          {eventInput ? users.length : 0}
         </span>
       </div>
 
@@ -127,6 +130,45 @@ export default function DashboardDataPageBody() {
           </div>
         )}
       </div>
+
+      <div
+        className="bg-[#EF4444] w-16 h-16 rounded-full fixed left-[80vw] top-[80vh] flex items-center justify-center hover:bg-gtd-red-primary-bright"
+        onClick={() => {
+          setShowPopUp(true);
+        }}
+      >
+        <FiTrash className="text-white w-10 h-10" />
+      </div>
+
+      {showPopUp && (
+        <div
+          className="fixed left-0 top-0 w-full h-full bg-black opacity-50"
+          onClick={() => setShowPopUp(false)}
+        ></div>
+      )}
+
+      {showPopUp && (
+        <div className="fixed left-[10%] top-1/3 border-[1px] rounded-md w-4/5 h-36 bg-white flex-col flex p-4">
+          <div className="font-semibold text-[2.8vw]">
+            Invalidate bookings by username@gmail.com?
+          </div>
+          <div className="text-[2.45vw] my-2 h-2/3 text-gray-500 font-light">
+            This action cannot be undone. This will permanently invalidate
+            bookings made by username@gmail.com
+          </div>
+          <div className="flex justify-end">
+            <div
+              className="border-[1px] rounded-md py-2 px-3 text-[2.45vw] mx-2 hover:bg-gray-100"
+              onClick={() => setShowPopUp(false)}
+            >
+              Cancel
+            </div>
+            <div className="border-[1px] rounded-md bg-red-500 text-white py-2 text-[2.45vw] px-3 hover:bg-red-600">
+              Invalidate
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
