@@ -9,10 +9,12 @@ import TRPCReactProvider from "@/components/trpc-react-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  // TODO: change
-  metadataBase: new URL("https://gtd-xxvi-website.fly.dev"),
-  title: "GTD XXVI Website",
-  description: "PINTU Get Together Day XXVI Website",
+  metadataBase: new URL("https://pintugtd.com"),
+  title: {
+    template: "%s | PINTU GTD",
+    default: "PINTU Get Together Day",
+  },
+  description: "Get Together Day is an annual orientation event held by PINTU.",
 };
 
 export default function RootLayout({
