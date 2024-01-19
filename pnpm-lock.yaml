@@ -116,6 +116,9 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
+  webcam:
+    specifier: ^3.2.1
+    version: 3.2.1
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -6196,6 +6199,11 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.11
+    dev: false
+
+  /webcam@3.2.1:
+    resolution: {integrity: sha512-TJ68Olwh90wxiiz7CY2fanLh584hdUJGVPPNt2RsjXtMva4Rcf2aJCVadiPWL2DSB0vYUOMorlhJsuz08/ArZQ==}
+    engines: {node: '>=0.10.0'}
     dev: false
 
   /webidl-conversions@7.0.0:
