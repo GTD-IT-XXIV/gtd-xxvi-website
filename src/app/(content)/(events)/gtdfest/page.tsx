@@ -1,8 +1,13 @@
+import { type Metadata } from "next";
 import Link from "next/link";
 
 import { api } from "@/server/trpc";
 
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "GTD Fest x Escape Room",
+};
 
 export default async function GTDFestPage() {
   const gtdFest = await api.event.getById.query({ id: GTD_FEST_EVENT_ID });

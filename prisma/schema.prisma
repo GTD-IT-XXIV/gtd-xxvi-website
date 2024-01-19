@@ -14,8 +14,10 @@ model Event {
   id          Int        @id @default(autoincrement())
   name        String     @unique
   description String
-  startDate   DateTime   @db.Date
-  endDate     DateTime   @db.Date
+  /// Event starting date
+  startDate   DateTime
+  /// Event ending date
+  endDate     DateTime
   bundles     Bundle[]
   timeslots   Timeslot[]
   bookings    Booking[]
@@ -24,11 +26,12 @@ model Event {
 model Bundle {
   id              Int       @id @default(autoincrement())
   name            String
+  /// Bundle terms and conditions
   details         String[]
   price           Decimal
   /// Number of slots this bundle occupies; number of people in this bundle
   quantity        Int
-  /// Number of bundles available; number is limited by timeslots if this is null
+  /// Number of bundles available; bundles are not limited if this is null (might still be limited by timeslots remaining slots)
   remainingAmount Int?
   eventId         Int
   event           Event     @relation(fields: [eventId], references: [id])
