@@ -17,26 +17,21 @@ pnpm install
 pnpm dev:db:start
 ```
 
-6. If the development database is started for the first time, initialize it:
+6. Initialize the development database with sample data:
 
 ```bash
 pnpm dev:db:init
 ```
 
-7. You can clear the development database by running `pnpm dev:db:clear`.
-8. You can reset the development database by running `pnpm dev:db:reset`.
-9. Run the development server:
+7. Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-10. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-11. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-## Workflow
-
-See workflow [here](docs/CONTRIBUTING.md).
+8. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+9. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+10. See [Workflow](docs/CONTRIBUTING.md) to contribute.
 
 ## Learn More
 
