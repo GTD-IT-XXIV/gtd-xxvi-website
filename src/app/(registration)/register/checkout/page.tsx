@@ -5,7 +5,6 @@ import {
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
 import { useAtom } from "jotai";
-import { type Metadata } from "next";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -13,10 +12,6 @@ import { Button } from "@/components/ui/button";
 import { bookingIdsAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 import { getStripe } from "@/lib/utils";
-
-export const metadata: Metadata = {
-  title: "Checkout",
-};
 
 const stripePromise = getStripe();
 
