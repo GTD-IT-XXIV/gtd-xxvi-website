@@ -26,14 +26,6 @@ Use the tRPC client `api` defined in `src/trpc/provider`. Example:
 
 import { api } from "@/lib/trpc/provider";
 
-// example-page.tsx
-
-// example-page.tsx
-
-// example-page.tsx
-
-// example-page.tsx
-
 export default function ExamplePage() {
   const { data: event } = api.event.getById.useQuery(1);
   return <main>{event?.name}</main>;
