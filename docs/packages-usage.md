@@ -8,7 +8,7 @@ Use the tRPC client `api` defined in `src/trpc/server`. Example:
 
 ```tsx
 // example-page.tsx
-import { api } from "@/lib/trpc/server";
+import { api } from "@/server/trpc";
 
 export default async function ExamplePage() {
   const event = await api.event.getById.query(1);
