@@ -62,7 +62,6 @@ export const paymentRouter = createTRPCRouter({
 
       return {
         clientSecret: session.client_secret,
-        sessionId: String(session.id),
       };
     }),
 
