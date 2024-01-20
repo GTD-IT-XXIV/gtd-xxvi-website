@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
-import { type OrderMetadata } from "@/lib/types/order-metadata";
+import { type OrderMetadata } from "@/lib/types";
 
 export const paymentRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
