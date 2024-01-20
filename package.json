@@ -81,8 +81,7 @@
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4",
-    "zod-validation-error": "^2.1.0",
-    "zustand": "^4.4.7"
+    "zod-validation-error": "^2.1.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.0.4",
