@@ -36,8 +36,8 @@ export default function CheckoutPage() {
     }
   };
   return (
-    <section>
-      <h1 className="text-gtd-primary-30 font-semibold text-3xl">Checkout</h1>
+    <section className="px-4 pt-6">
+      <h1 className="text-gtd-primary-30 text-3xl mb-4">Checkout</h1>
       <Button onClick={handleCheckout}>Pay now</Button>
       {clientSecret && (
         <EmbeddedCheckoutProvider
