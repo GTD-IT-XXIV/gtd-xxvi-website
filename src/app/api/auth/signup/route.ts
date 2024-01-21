@@ -3,7 +3,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { LuciaError } from "lucia";
 import * as context from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import { ZodError, z } from "zod";
+import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
 import { auth } from "@/server/auth";

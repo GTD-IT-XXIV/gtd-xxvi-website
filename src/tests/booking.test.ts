@@ -1,14 +1,25 @@
-import { resetTestDatabase } from "@/tests/lib/utils";
+import "server-only";
+
+import {
+  generateTestPrismaClient,
+  getTestDatabaseUri,
+  resetTestDatabase,
+} from "@/tests/lib/utils";
 import { type Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { db, getTestDatabaseUri } from "@/server/db";
+import { db } from "@/server/db";
 import { createCaller } from "@/server/root";
 
 vi.mock("server-only", () => ({
   // mock server-only module
 }))
+
+vi.mock("@/server/db", async () => {
+  const db = await generateTestPrismaClient();
+  return { db };
+});
 
 describe("tRPC bookingRouter", async () => {
   type Booking = Prisma.BookingCreateInput;
