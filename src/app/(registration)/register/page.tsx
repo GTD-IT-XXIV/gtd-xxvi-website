@@ -2,6 +2,8 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
+import TotalPrice from "@/components/registration/total-price";
+
 import Event from "./components/Event";
 
 export const metadata: Metadata = {
@@ -31,7 +33,7 @@ export default function RegisterPage({
   }
 
   return (
-    <section className="p-4">
+    <section className="p-5">
       <p className="text-gtd-primary-30 font-[525] text-3xl mb-[1%]">
         Event Registrations
       </p>
@@ -41,6 +43,7 @@ export default function RegisterPage({
       {eventIds.map((eventId) => (
         <Event key={eventId} eventId={eventId} />
       ))}
+      <TotalPrice />
     </section>
   );
 }
