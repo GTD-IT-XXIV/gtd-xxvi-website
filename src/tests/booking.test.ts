@@ -1,6 +1,7 @@
 import { resetTestDatabase } from "@/tests/lib/utils";
 import { type Prisma } from "@prisma/client";
-import { beforeAll, describe, expect, test, vi } from "vitest";
+import { TRPCError } from "@trpc/server";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { db, getTestDatabaseUri } from "@/server/db";
 import { createCaller } from "@/server/root";
@@ -50,7 +51,7 @@ describe("tRPC bookingRouter", async () => {
 
   const caller = createCaller({ db, session: null, headers: new Headers() });
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     resetTestDatabase(await getTestDatabaseUri());
   });
 
@@ -62,5 +63,19 @@ describe("tRPC bookingRouter", async () => {
     });
 
     expect(queriedBooking).toEqual(createdBooking);
+  });
+
+  test("getById with invalid id throws error", async () => {
+    await db.event.create({ data: event });
+    await db.booking.create({ data: booking });
+    const id = 2;
+    try {
+      await caller.booking.getById({ id });
+    } catch (error) {
+      expect(error).toBeInstanceOf(TRPCError);
+      if (error instanceof TRPCError) {
+        expect(error.message).toContain(`No booking with id '${id}'`);
+      }
+    }
   });
 });
