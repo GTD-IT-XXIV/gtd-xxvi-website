@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/lib/trpc/config";
+import { createCallerFactory, createTRPCRouter } from "@/lib/trpc/config";
 
 import { bookingRouter } from "./routers/booking";
 import { bundleRouter } from "./routers/bundle";
@@ -21,3 +21,5 @@ export const appRouter = createTRPCRouter({
 });
 
 export type AppRouter = typeof appRouter;
+
+export const createCaller = createCallerFactory(appRouter);
