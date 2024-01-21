@@ -369,7 +369,7 @@ describe("Concurrent tRPC bookingRouter", async () => {
       "never decrements bundle.remainingAmount below 0",
       async () => {
         for (const _ of Array(5).keys()) {
-          test("Concurrent call", async () => {
+          test("Concurrent call", async ({ expect }) => {
             try {
               await caller.booking.create({
                 ...testBooking,
@@ -377,7 +377,14 @@ describe("Concurrent tRPC bookingRouter", async () => {
                 bundleId: bundle.id,
                 timeslotId: timeslot.id,
               });
-            } catch (ignored) {}
+            } catch (error) {
+              expect(error).toBeInstanceOf(TRPCError);
+              if (error instanceof TRPCError) {
+                expect(error.message).toContain(
+                  "Insufficient number of bundles",
+                );
+              }
+            }
           }, 10_000);
         }
 
