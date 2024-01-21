@@ -9,3 +9,17 @@ export const signupSchema = loginSchema.extend({
   name: z.string().min(3, { message: "Must be 3 or more characters long" }),
   email: z.string().email(),
 });
+
+/**
+ * Schema for cart used to synchornize registration process. If ID is 0, then
+ * user has not selected that item, e.g., bundleId equals 0 means that user has
+ * not selected a bundle for the event in eventId.
+ */
+export const cartSchema = z
+  .object({
+    eventId: z.number().nonnegative(),
+    bundleId: z.number().nonnegative(),
+    timeslotId: z.number().nonnegative(),
+    quantity: z.number().nonnegative(),
+  })
+  .array();

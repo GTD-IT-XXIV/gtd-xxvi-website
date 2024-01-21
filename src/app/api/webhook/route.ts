@@ -7,7 +7,7 @@ import { z } from "zod";
 import { db } from "@/server/db";
 
 import { stripe } from "@/lib/stripe";
-import { type OrderMetadata } from "@/lib/types/order-metadata";
+import { type OrderMetadata } from "@/lib/types";
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
