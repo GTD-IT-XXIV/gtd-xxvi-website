@@ -24,6 +24,16 @@ vi.mock("server-only", () => ({
   // mock server-only module
 }));
 
+vi.mock("react", async (importOriginal) => {
+  const testCache = <T extends (...args: unknown[]) => unknown>(func: T) =>
+    func;
+  const originalModule = await importOriginal<typeof import("react")>();
+  return {
+    ...originalModule,
+    cache: testCache,
+  };
+});
+
 vi.mock("@/server/db", async () => {
   const db = await generateTestPrismaClient();
   return { db };
