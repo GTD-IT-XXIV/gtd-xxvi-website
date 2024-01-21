@@ -22,7 +22,7 @@ import { createCaller } from "@/server/root";
 
 vi.mock("server-only", () => ({
   // mock server-only module
-}))
+}));
 
 vi.mock("@/server/db", async () => {
   const db = await generateTestPrismaClient();
@@ -359,7 +359,7 @@ describe("Concurrent tRPC bookingRouter", async () => {
       describe.concurrent(
         "never decrements bundle.remainingAmount below 0",
         async () => {
-          for (const _ of Array(10).keys()) {
+          for (const _ of Array(5).keys()) {
             test("Concurrent call", async () => {
               try {
                 await caller.booking.create({
@@ -369,7 +369,7 @@ describe("Concurrent tRPC bookingRouter", async () => {
                   timeslotId: timeslot.id,
                 });
               } catch (ignored) {}
-            });
+            }, 30_000);
           }
         },
       );

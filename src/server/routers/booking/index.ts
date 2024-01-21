@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { dashboardProcedure } from "@/server/procedures/dashboard-procedure";
+
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 import { handleCreate, handleUpdate } from "./handlers";
@@ -78,7 +80,7 @@ export const bookingRouter = createTRPCRouter({
       return await handleCreate({ ctx, input });
     }),
 
-  updateById: publicProcedure
+  updateById: dashboardProcedure
     .input(
       z.object({
         id: z.number().positive(),
@@ -95,7 +97,7 @@ export const bookingRouter = createTRPCRouter({
       return await handleUpdate({ ctx, input });
     }),
 
-  updateByEmailAndEvent: publicProcedure
+  updateByEmailAndEvent: dashboardProcedure
     .input(
       z.object({
         email: z.string().email(),
@@ -113,7 +115,7 @@ export const bookingRouter = createTRPCRouter({
       return await handleUpdate({ ctx, input });
     }),
 
-  deleteById: publicProcedure
+  deleteById: dashboardProcedure
     .input(z.number().positive())
     .mutation(async ({ ctx, input }) => {
       const booking = await ctx.db.booking.findUnique({
@@ -143,7 +145,7 @@ export const bookingRouter = createTRPCRouter({
       return await ctx.db.booking.delete({ where: { id: input } });
     }),
 
-  deleteByEmailAndEvent: publicProcedure
+  deleteByEmailAndEvent: dashboardProcedure
     .input(
       z.object({
         email: z.string().email(),
@@ -181,7 +183,7 @@ export const bookingRouter = createTRPCRouter({
       });
     }),
 
-  deleteManyByEmail: publicProcedure
+  deleteManyByEmail: dashboardProcedure
     .input(z.string().email())
     .mutation(async ({ ctx, input }) => {
       const bookings = await ctx.db.booking.findMany({

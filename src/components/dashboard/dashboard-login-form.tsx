@@ -60,7 +60,7 @@ export default function DashboardLoginForm({
         variant: "default",
         title: "Logged in successfully!",
       });
-      router.push("/dashboard/");
+      router.push("/dashboard");
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
