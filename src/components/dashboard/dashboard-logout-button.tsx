@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
-import { signOut } from "@/server/auth";
+// import { signOut } from "@/server/auth";
 
 export type DashboardLogoutButtonProps = {
   className?: string;
@@ -13,7 +13,7 @@ export default async function DashboardLogoutButton({
 }: DashboardLogoutButtonProps) {
   async function logoutDashboard() {
     "use server";
-    await signOut();
+    // await signOut();
     redirect("/dashboard");
   }
   return (

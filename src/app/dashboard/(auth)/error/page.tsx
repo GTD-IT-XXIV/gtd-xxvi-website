@@ -2,13 +2,16 @@ import { redirect } from "next/navigation";
 
 import DashboardLogoutButton from "@/components/dashboard/dashboard-logout-button";
 
-import { auth } from "@/server/auth";
+import { getPageSession } from "@/server/auth";
 
 export default async function DashboardAuthErrorPage() {
-  const session = await auth();
-  if (!session?.user) {
+  const session = await getPageSession();
+  if (!session) {
     redirect("/dashboard/login");
   }
+  // if (!session?.user) {
+  //   redirect("/dashboard/login");
+  // }
   const hasAccess =
     session.user.role === "ADMIN" ||
     session.user.role === "DASHBOARD_USER" ||

@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { signupSchema } from "@/lib/schemas";
-import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 import { useToast } from "../ui/use-toast";
@@ -40,26 +39,56 @@ export default function DashboardSignupForm({
       password: "",
     },
   });
-  const createUser = api.user.create.useMutation({
-    onSuccess: () => {
+  // const createUser = api.user.create.useMutation({
+  //   onSuccess: () => {
+  //     toast({
+  //       variant: "default",
+  //       title: "User created successfully!",
+  //       description: "Please log in.",
+  //     });
+  //     router.push("/dashboard/login");
+  //   },
+  //   onError: (error) => {
+  //     toast({
+  //       variant: "destructive",
+  //       title: "User creation failed",
+  //       description: error.message,
+  //     });
+  //   },
+  // });
+
+  async function handleSubmit(values: z.infer<typeof signupSchema>) {
+    // createUser.mutate(values);
+    console.log({ values });
+    try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(values)) {
+        formData.append(key, value);
+      }
+      // does not throw error
+      await fetch("/api/auth/signup", {
+        method: "POST",
+        body: formData,
+      });
       toast({
         variant: "default",
         title: "User created successfully!",
         description: "Please log in.",
       });
       router.push("/dashboard/login");
-    },
-    onError: (error) => {
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          variant: "destructive",
+          title: "User creation failed",
+          description: error.message,
+        });
+      }
       toast({
         variant: "destructive",
         title: "User creation failed",
-        description: error.message,
       });
-    },
-  });
-
-  function handleSubmit(values: z.infer<typeof signupSchema>) {
-    createUser.mutate(values);
+    }
   }
 
   return (

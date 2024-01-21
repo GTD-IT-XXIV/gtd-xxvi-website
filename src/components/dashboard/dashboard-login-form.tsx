@@ -14,10 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 
-import login from "@/server/actions/login";
-
+// import { useToast } from "@/components/ui/use-toast";
+// import login from "@/server/actions/login";
 import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +27,7 @@ export type DashboardLoginFormProps = {
 export default function DashboardLoginForm({
   className,
 }: DashboardLoginFormProps) {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,24 +37,26 @@ export default function DashboardLoginForm({
   });
 
   async function handleSubmit(values: z.infer<typeof loginSchema>) {
-    const res = await login(values);
-    if (res) {
-      toast({
-        variant: "destructive",
-        title: "Login failed",
-        description: res.error,
-      });
-      return;
-    }
-    toast({
-      variant: "default",
-      title: "Logged in successfully!",
-    });
+    // const res = await login(values);
+    // if (res) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Login failed",
+    //     description: res.error,
+    //   });
+    //   return;
+    // }
+    // toast({
+    //   variant: "default",
+    //   title: "Logged in successfully!",
+    // });
   }
 
   return (
     <Form {...form}>
       <form
+        action="/api/auth/login"
+        method="POST"
         onSubmit={form.handleSubmit(handleSubmit)}
         className={cn("space-y-12", className)}
       >
