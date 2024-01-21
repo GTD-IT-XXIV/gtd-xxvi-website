@@ -54,6 +54,7 @@ export default async function BundleCard({
                 : (() => {
                     throw new Error("Price is undefined");
                   })()}
+              /
             </p>
             <p className="text-gtd-secondary-10 text-sm self-baseline">pax</p>
           </div>
