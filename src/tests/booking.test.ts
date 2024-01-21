@@ -352,7 +352,7 @@ describe("Concurrent tRPC bookingRouter", async () => {
     resetTestDatabase(await getTestDatabaseUri());
   });
 
-  describe("create", () => {
+  describe("create with nonnull bundle.remainingAmount", () => {
     let event: Event, bundle: Bundle, timeslot: Timeslot;
 
     beforeAll(async () => {
@@ -365,32 +365,30 @@ describe("Concurrent tRPC bookingRouter", async () => {
       });
     });
 
-    describe("with nonnull bundle.remainingAmount", async () => {
-      describe.concurrent(
-        "never decrements bundle.remainingAmount below 0",
-        async () => {
-          for (const _ of Array(5).keys()) {
-            test("Concurrent call", async () => {
-              try {
-                await caller.booking.create({
-                  ...testBooking,
-                  eventId: event.id,
-                  bundleId: bundle.id,
-                  timeslotId: timeslot.id,
-                });
-              } catch (ignored) {}
-            }, 30_000);
-          }
-        },
-      );
+    describe.concurrent(
+      "never decrements bundle.remainingAmount below 0",
+      async () => {
+        for (const _ of Array(5).keys()) {
+          test("Concurrent call", async () => {
+            try {
+              await caller.booking.create({
+                ...testBooking,
+                eventId: event.id,
+                bundleId: bundle.id,
+                timeslotId: timeslot.id,
+              });
+            } catch (ignored) {}
+          }, 30_000);
+        }
 
-      afterAll(async () => {
-        const updatedBundle = await db.bundle.findUnique({
-          where: { id: bundle.id },
+        test.sequential("bundle.remainingAmount not below 0", async () => {
+          const updatedBundle = await db.bundle.findUnique({
+            where: { id: bundle.id },
+          });
+          expect(updatedBundle?.remainingAmount).toBe(0);
         });
-        expect(updatedBundle?.remainingAmount).toBe(0);
-      });
-    });
+      },
+    );
   });
 
   afterAll(async () => {
