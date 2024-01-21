@@ -378,15 +378,18 @@ describe("Concurrent tRPC bookingRouter", async () => {
                 timeslotId: timeslot.id,
               });
             } catch (ignored) {}
-          }, 30_000);
+          }, 10_000);
         }
 
-        test.sequential("bundle.remainingAmount not below 0", async () => {
-          const updatedBundle = await db.bundle.findUnique({
-            where: { id: bundle.id },
-          });
-          expect(updatedBundle?.remainingAmount).toBe(0);
-        });
+        test.sequential(
+          "bundle.remainingAmount not below 0",
+          async ({ expect }) => {
+            const updatedBundle = await db.bundle.findUnique({
+              where: { id: bundle.id },
+            });
+            expect(updatedBundle?.remainingAmount).toBe(0);
+          },
+        );
       },
     );
   });
