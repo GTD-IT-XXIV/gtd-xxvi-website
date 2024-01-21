@@ -39,37 +39,27 @@ export default function DashboardSignupForm({
       password: "",
     },
   });
-  // const createUser = api.user.create.useMutation({
-  //   onSuccess: () => {
-  //     toast({
-  //       variant: "default",
-  //       title: "User created successfully!",
-  //       description: "Please log in.",
-  //     });
-  //     router.push("/dashboard/login");
-  //   },
-  //   onError: (error) => {
-  //     toast({
-  //       variant: "destructive",
-  //       title: "User creation failed",
-  //       description: error.message,
-  //     });
-  //   },
-  // });
 
   async function handleSubmit(values: z.infer<typeof signupSchema>) {
-    // createUser.mutate(values);
-    console.log({ values });
     try {
       const formData = new FormData();
       for (const [key, value] of Object.entries(values)) {
         formData.append(key, value);
       }
-      // does not throw error
-      await fetch("/api/auth/signup", {
+      console.log(formData);
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         body: formData,
       });
+      if (response.status !== 302) {
+        const body = (await response.json()) as { error: string };
+        toast({
+          variant: "destructive",
+          title: "User creation failed",
+          description: body.error,
+        });
+        return;
+      }
       toast({
         variant: "default",
         title: "User created successfully!",
@@ -83,6 +73,7 @@ export default function DashboardSignupForm({
           title: "User creation failed",
           description: error.message,
         });
+        return;
       }
       toast({
         variant: "destructive",

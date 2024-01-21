@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
 
@@ -14,9 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
-// import { useToast } from "@/components/ui/use-toast";
-// import login from "@/server/actions/login";
 import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +27,8 @@ export type DashboardLoginFormProps = {
 export default function DashboardLoginForm({
   className,
 }: DashboardLoginFormProps) {
-  // const { toast } = useToast();
+  const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -37,26 +38,49 @@ export default function DashboardLoginForm({
   });
 
   async function handleSubmit(values: z.infer<typeof loginSchema>) {
-    // const res = await login(values);
-    // if (res) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Login failed",
-    //     description: res.error,
-    //   });
-    //   return;
-    // }
-    // toast({
-    //   variant: "default",
-    //   title: "Logged in successfully!",
-    // });
+    try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(values)) {
+        formData.append(key, value);
+      }
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.status !== 302) {
+        const body = (await response.json()) as { error: string };
+        toast({
+          variant: "destructive",
+          title: "Login failed",
+          description: body.error,
+        });
+        return;
+      }
+      toast({
+        variant: "default",
+        title: "Logged in successfully!",
+      });
+      router.push("/dashboard/");
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast({
+          variant: "destructive",
+          title: "Login failed",
+          description: error.message,
+        });
+        return;
+      }
+      toast({
+        variant: "destructive",
+        title: "Login failed",
+      });
+    }
   }
 
   return (
     <Form {...form}>
       <form
-        action="/api/auth/login"
-        method="POST"
         onSubmit={form.handleSubmit(handleSubmit)}
         className={cn("space-y-12", className)}
       >
