@@ -24,7 +24,8 @@ export async function retryPrismaTransaction<T>(
       }
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: `error: ${(error as Error).message}`,
+        message: (error as Error).message,
+        // message: `error: ${(error as Error).message}`,
         // message: "An error occurred during interactive transaction",
       });
     }
