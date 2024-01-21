@@ -1,9 +1,13 @@
 import { resetTestDatabase } from "@/tests/lib/utils";
 import { type Prisma } from "@prisma/client";
-import { beforeAll, describe, expect, test } from "vitest";
+import { beforeAll, describe, expect, test, vi } from "vitest";
 
 import { db, getTestDatabaseUri } from "@/server/db";
 import { createCaller } from "@/server/root";
+
+vi.mock("server-only", () => ({
+  // mock server-only module
+}))
 
 describe("tRPC bookingRouter", async () => {
   type Booking = Prisma.BookingCreateInput;
