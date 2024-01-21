@@ -30,4 +30,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Test 
-        run: pnpm test run -- --reporter=tap-flat
+        run: pnpm test run
