@@ -1,0 +1,33 @@
+name: Run Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env.test.local
+      - run: echo "STRIPE_SECRET_KEY=${{ secrets.DEV_STRIPE_SECRET_KEY }}" >> ./.env.test.local
+      - run: echo "STRIPE_WEBHOOK_SECRET=${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}" >> ./.env.test.local
+      - run: echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}" >> ./.env.test.local
+      - run: echo "AUTH_SECRET=${{ secrets.DEV_AUTH_SECRET }}" >> ./.env.test.local
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test 
+        run: pnpm test 
