@@ -6,8 +6,7 @@ import { MAX_TRANSACTION_RETRIES } from "@/lib/constants";
 export async function retryPrismaTransaction<T>(
   transaction: () => Promise<T>,
 ): Promise<T> {
-  let retries = 0;
-  while (retries < MAX_TRANSACTION_RETRIES) {
+  for (let retries = 0; retries < MAX_TRANSACTION_RETRIES; retries++) {
     try {
       const booking = await transaction();
       return booking;
@@ -16,7 +15,6 @@ export async function retryPrismaTransaction<T>(
         error instanceof PrismaClientKnownRequestError &&
         error.code === "P2034"
       ) {
-        retries++;
         continue;
       }
       if (error instanceof TRPCError) {
