@@ -85,7 +85,7 @@ export async function handleCreate({ ctx, input }: CreateHandlerOptions) {
             message: "Insufficient number of timeslots",
           });
         }
-        return await ctx.db.booking.create({ data: input });
+        return await tx.booking.create({ data: input });
       },
       {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
