@@ -86,7 +86,6 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
             {dayjs(event.startDate).format("DD/MM/YYYY")}{" "}
           </p>
 
-          {/* // TODO - add Location */}
           <p className="text-gtd-secondary-10 text-sm">
             {" "}
             <MdOutlineLocationOn className="inline scale-[130%] text-black text-base" />{" "}
