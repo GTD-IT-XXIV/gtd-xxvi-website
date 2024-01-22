@@ -6,6 +6,8 @@ import { z } from "zod";
 
 import { db } from "@/server/db";
 
+import { BREVO_EMAIL } from "@/lib/constants";
+import { sendEmail } from "@/lib/email";
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types";
 
@@ -58,23 +60,23 @@ export async function POST(req: Request) {
             .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
+          if (bookingIds.length === 0) {
+            throw new Error("No bookings attached to this CheckoutSession");
+          }
+
           const bookings = await db.booking.findMany({
             where: { id: { in: bookingIds } },
+            include: { event: true },
           });
           if (bookings.length !== bookingIds.length) {
             throw new Error("Not all bookings were found in database");
           }
-          const bookingsAreValid = bookings.reduce(
-            (accum, booking) => (accum &&= booking.valid),
-            true,
-          );
-          if (!bookingsAreValid) {
+          const isAllBookingsValid = bookings.every((booking) => booking.valid);
+          if (!isAllBookingsValid) {
             throw new Error("Bookings invalid");
           }
 
-          // TODO: sending an email to user
           // use email as the owner of a ticket in the future after the schema changed
-
           const tickets = await db.ticket.createMany({
             data: bookings.flatMap((booking) =>
               Array(booking.quantity)
@@ -92,6 +94,32 @@ export async function POST(req: Request) {
           });
           console.log("✅ Ticket details: ");
           console.log(tickets);
+
+          // Unreachable code but necessary for type safety
+          if (!bookings[0]) {
+            throw new Error("An error occurred");
+          }
+
+          const recipient = {
+            name: bookings[0].name,
+            email: bookings[0].email,
+          };
+          const eventName = bookings[0].event.name;
+
+          await sendEmail({
+            sender: {
+              name: "PINTU Get Together Day XXVI",
+              email: BREVO_EMAIL,
+            },
+            replyTo: {
+              name: "PINTU Get Together Day XXVI",
+              email: BREVO_EMAIL,
+            },
+            to: [recipient],
+            subject: `Your Tickets for ${eventName}`,
+            htmlContent: "",
+            textContent: `You bought ${tickets.count} tickets.`,
+          });
 
           await db.booking.deleteMany({
             where: { id: { in: bookingIds } },

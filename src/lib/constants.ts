@@ -12,4 +12,5 @@ export const DEFAULT_REGISTRATION_FORM = {
   phoneNumber: "",
 };
 
+export const BREVO_EMAIL = "devpintugtd@gmail.com";
 export const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";

@@ -8,7 +8,7 @@ export const ticketRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().positive().nullish(),
+        cursor: z.string().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -29,7 +29,7 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   getById: publicProcedure
-    .input(z.object({ id: z.number().positive() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;
       const ticket = await ctx.db.ticket.findUnique({ where: { id } });
@@ -47,7 +47,7 @@ export const ticketRouter = createTRPCRouter({
       z.object({
         eventId: z.number().positive(),
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().positive().nullish(),
+        cursor: z.string().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -68,7 +68,7 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   deleteById: publicProcedure
-    .input(z.object({ id: z.number().positive() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;
       return await ctx.db.ticket.delete({

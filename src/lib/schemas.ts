@@ -36,5 +36,6 @@ export const emailSchema = z.object({
   bcc: emailActorSchema.array().optional(),
   cc: emailActorSchema.array().optional(),
   htmlContent: z.string(),
+  textContent: z.string().optional(),
   subject: z.string(),
 });
