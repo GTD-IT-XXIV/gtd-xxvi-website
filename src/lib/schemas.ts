@@ -23,3 +23,18 @@ export const cartSchema = z
     quantity: z.number().nonnegative(),
   })
   .array();
+
+export const emailActorSchema = z.object({
+  email: z.string().email(),
+  name: z.string().optional(),
+});
+
+export const emailSchema = z.object({
+  sender: emailActorSchema,
+  replyTo: emailActorSchema,
+  to: emailActorSchema.array(),
+  bcc: emailActorSchema.array().optional(),
+  cc: emailActorSchema.array().optional(),
+  htmlContent: z.string(),
+  subject: z.string(),
+});
