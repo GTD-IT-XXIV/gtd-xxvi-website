@@ -1,33 +1,23 @@
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/57 GitHub Issue}
- */
 "use client";
 
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 
-import { priceAtom, selectedAtom } from "@/lib/atoms/events-registration";
-
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/57 GitHub Issue}
- */
+import { cartAtom } from "@/lib/atoms/events-registration";
 
 export default function TotalPrice() {
-  const [price] = useAtom(priceAtom);
-  const [selected] = useAtom(selectedAtom);
+  const cart = useAtomValue(cartAtom);
+  const selected = cart.reduce((accum, item) => accum + item.quantity, 0);
+  const totalPrice = cart.reduce(
+    (accum, item) => accum + item.price * item.quantity,
+    0,
+  );
 
   return (
-    <div className="w-[100%] sticky bottom-0 bg-white flex justify-between items-end pt-2 pb-2">
-      <div>
-        <p className="text-gtd-secondary-10 text-sm mb-[2%]">
-          {selected} Selected
-        </p>
-        <div className="text-gtd-secondary-20 text-sm">
-          $<p className="text-2xl font-medium inline">{price.toNumber()}</p>
-        </div>
+    <div className="space-y-0.5">
+      <p className="text-gtd-secondary-10 text-sm">{selected} Selected</p>
+      <div className="text-gtd-secondary-20 text-sm">
+        $<p className="text-2xl font-medium inline">{totalPrice.toFixed(2)}</p>
       </div>
-      <button className="bg-gtd-primary-30 text-white rounded-lg px-4 py-3">
-        Next Page
-      </button>
     </div>
   );
 }

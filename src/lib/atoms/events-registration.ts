@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { type z } from "zod";
 
@@ -11,9 +9,6 @@ import { type Cart } from "@/lib/types";
 const BASE_KEY = "event-registration";
 
 export const cartAtom = atomWithStorage<Cart>(`${BASE_KEY}-cart`, []);
-
-export const selectedAtom = atom(0);
-export const priceAtom = atom(new Prisma.Decimal(0));
 
 export const formDataAtom = atomWithStorage<
   z.infer<typeof registrationFormSchema>

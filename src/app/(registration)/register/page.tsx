@@ -2,17 +2,13 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
-import TotalPrice from "@/components/registration/total-price";
-
-import Event from "./components/Event";
+import EventCardGroup from "@/components/registration/event-card-group";
+import RegisterPageFooter from "@/components/registration/register-page-footer";
 
 export const metadata: Metadata = {
   title: "Register",
 };
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/49 GitHub Issue}
- */
 export default function RegisterPage({
   searchParams,
 }: {
@@ -33,17 +29,26 @@ export default function RegisterPage({
   }
 
   return (
-    <section className="p-5">
-      <p className="text-gtd-primary-30 font-[525] text-3xl mb-[1%]">
-        Event Registrations
-      </p>
-      <p className="text-sm mb-5 font-light">
-        Choose events you wish to register for
-      </p>
-      {eventIds.map((eventId) => (
-        <Event key={eventId} eventId={eventId} />
-      ))}
-      <TotalPrice />
+    <section>
+      <article className="p-5 space-y-5">
+        <hgroup className="space-y-1">
+          <h1 className="text-gtd-primary-30 font-semibold text-3xl">
+            Event Registrations
+          </h1>
+          <p className="text-sm font-light">
+            Choose events you wish to register for
+          </p>
+        </hgroup>
+        <div className="space-y-4">
+          {eventIds.map((eventId) => (
+            <EventCardGroup key={eventId} eventId={eventId} />
+          ))}
+        </div>
+      </article>
+      <RegisterPageFooter
+        className="sticky bottom-0"
+        pageSearchParams={searchParams}
+      />
     </section>
   );
 }
