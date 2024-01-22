@@ -7,11 +7,17 @@ on:
   workflow_call:
   workflow_dispatch:
 
+env:
+  DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
+  STRIPE_SECRET_KEY: ${{ secrets.DEV_STRIPE_SECRET_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
+  AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
+
 jobs:
   build:
     name: Development build
     uses: ./.github/workflows/development-build.yaml
-    secrets: inherit
   test:
     needs: build
     if: always()
