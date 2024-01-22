@@ -6,7 +6,8 @@ import { type ArrElement } from "./utils";
 /**
  * Used to synchornize registration process. If ID is 0, then
  * user has not selected that item, e.g., bundleId equals 0 means that user has
- * not selected a bundle for the event in eventId.
+ * not selected a bundle for the event in eventId. Price refers to single bundle
+ * price, not total price.
  */
 export type Cart = z.infer<typeof cartSchema>;
 
