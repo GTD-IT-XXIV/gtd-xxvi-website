@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
+import { login } from "@/server/actions/login";
+
 import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
@@ -38,44 +40,20 @@ export default function DashboardLoginForm({
   });
 
   async function handleSubmit(values: z.infer<typeof loginSchema>) {
-    try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(values)) {
-        formData.append(key, value);
-      }
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.status !== 302) {
-        const body = (await response.json()) as { error: string };
-        toast({
-          variant: "destructive",
-          title: "Login failed",
-          description: body.error,
-        });
-        return;
-      }
-      toast({
-        variant: "default",
-        title: "Logged in successfully!",
-      });
-      router.push("/dashboard");
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        toast({
-          variant: "destructive",
-          title: "Login failed",
-          description: error.message,
-        });
-        return;
-      }
+    const response = await login(values);
+    if (response) {
       toast({
         variant: "destructive",
         title: "Login failed",
+        description: response.error,
       });
+      return;
     }
+    toast({
+      variant: "default",
+      title: "Logged in successfully!",
+    });
+    router.push("/dashboard");
   }
 
   return (
