@@ -1,46 +1,30 @@
-import { type JWT } from "@auth/core/jwt";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth from "next-auth";
-import { type Session } from "next-auth/types";
+import { env } from "@/env";
+import { prisma } from "@lucia-auth/adapter-prisma";
+import { lucia } from "lucia";
+import { nextjs_future as nextjs } from "lucia/middleware";
+import * as context from "next/headers";
+import { cache } from "react";
 
 import { db } from "@/server/db";
 
-import authConfig from "@/lib/nextauth/config";
-
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
-  trustHost: true,
-  adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
-  callbacks: {
-    jwt: async ({ token }) => {
-      const user = await db.user.findUnique({ where: { id: token.sub } });
-      if (!user) {
-        return token;
-      }
-      return {
-        ...token,
-        role: user.role,
-      } satisfies JWT;
-    },
-    session: async ({ token, session }) => {
-      const user = await db.user.findUnique({ where: { id: token.sub } });
-      if (!user) {
-        return session;
-      }
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          ...(token.sub && { id: token.sub }),
-          role: user.role,
-        },
-      } satisfies Session;
-    },
+export const auth = lucia({
+  env: env.NODE_ENV === "production" ? "PROD" : "DEV",
+  middleware: nextjs(),
+  sessionCookie: { expires: false },
+  adapter: prisma(db),
+  getUserAttributes: (dbUser) => {
+    return {
+      username: dbUser.username,
+      email: dbUser.email,
+      name: dbUser.name,
+      role: dbUser.role,
+    };
   },
-  ...authConfig,
+});
+
+export type Auth = typeof auth;
+
+export const getPageSession = cache(() => {
+  const authRequest = auth.handleRequest("GET", context);
+  return authRequest.validate();
 });

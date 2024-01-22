@@ -1,17 +1,20 @@
-name: Development Build
+name: Run Tests
 on:
+  push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20]
     steps:
       - uses: actions/checkout@v3
-      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env;
+      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env
       - run: echo "STRIPE_SECRET_KEY=${{ secrets.DEV_STRIPE_SECRET_KEY }}" >> ./.env
       - run: echo "STRIPE_WEBHOOK_SECRET=${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}" >> ./.env
       - run: echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}" >> ./.env
@@ -26,5 +29,5 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build
-        run: pnpm build
+      - name: Test 
+        run: pnpm test run
