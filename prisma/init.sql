@@ -1,17 +1,25 @@
 -- Insert Sample Data
 -- Insert Sample Events
 INSERT INTO
-  "Event" (name, description, "startDate", "endDate")
+  "Event" (
+    name,
+    description,
+    location,
+    "startDate",
+    "endDate"
+  )
 VALUES
   (
     'GTD Fest',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nunc lorem, commodo consequat ligula placerat, ultrices malesuada tellus. Sed consectetur accumsan posuere. Proin tincidunt risus vitae risus iaculis, non dignissim est cursus. Aliquam id nisl nisl. Maecenas pulvinar dapibus tincidunt. Nunc tempor cursus malesuada. Fusce ex urna, varius et auctor in, tempus non lorem.',
+    'NTU',
     '2024-02-17 00:00:00',
     '2024-02-17 23:59:59'
   ),
   (
     'Escape Room',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nunc lorem, commodo consequat ligula placerat, ultrices malesuada tellus. Sed consectetur accumsan posuere. Proin tincidunt risus vitae risus iaculis, non dignissim est cursus. Aliquam id nisl nisl. Maecenas pulvinar dapibus tincidunt. Nunc tempor cursus malesuada. Fusce ex urna, varius et auctor in, tempus non lorem.',
+    'NTU',
     '2024-02-18 00:00:00',
     '2024-02-18 23:59:59'
   );
