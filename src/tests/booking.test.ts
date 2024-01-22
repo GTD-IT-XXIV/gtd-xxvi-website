@@ -45,6 +45,7 @@ const testEvent: Prisma.EventCreateInput = {
   startDate: new Date(2024, 0),
   endDate: new Date(2024, 0, 1, 23, 59, 59),
   description: "Test event 1 description.",
+  location: "Test Event Location",
 };
 
 const testBundle: Omit<Prisma.BundleCreateInput, "event"> = {
