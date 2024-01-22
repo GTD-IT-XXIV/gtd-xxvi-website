@@ -31,7 +31,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
-      - name: Cache next build
+      - name: Restore next build
         uses: actions/cache@v4
         with:
           # if you use a custom build directory, replace all instances of `.next` in this file with your build directory

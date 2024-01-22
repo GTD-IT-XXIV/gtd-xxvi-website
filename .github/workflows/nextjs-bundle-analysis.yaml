@@ -32,6 +32,7 @@ jobs:
   build:
     name: Development build
     uses: ./.github/workflows/development-build.yaml
+    secrets: inherit
   analyze:
     needs: build
     if: always()

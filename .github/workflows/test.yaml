@@ -15,12 +15,7 @@ env:
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
 
 jobs:
-  build:
-    name: Development build
-    uses: ./.github/workflows/development-build.yaml
   test:
-    needs: build
-    if: always()
     runs-on: ubuntu-latest
     strategy:
       matrix:
