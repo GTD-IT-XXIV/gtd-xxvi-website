@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/lib/trpc/config";
+import { createCallerFactory, createTRPCRouter } from "@/lib/trpc/config";
 
 import { bookingRouter } from "./routers/booking";
 import { bundleRouter } from "./routers/bundle";
@@ -6,7 +6,6 @@ import { eventRouter } from "./routers/event";
 import { paymentRouter } from "./routers/payment";
 import { ticketRouter } from "./routers/ticket";
 import { timeslotRouter } from "./routers/timeslot";
-import { userRouter } from "./routers/user";
 
 // Primary server router
 export const appRouter = createTRPCRouter({
@@ -17,7 +16,8 @@ export const appRouter = createTRPCRouter({
   ticket: ticketRouter,
   payment: paymentRouter,
   booking: bookingRouter,
-  user: userRouter,
 });
 
 export type AppRouter = typeof appRouter;
+
+export const createCaller = createCallerFactory(appRouter);
