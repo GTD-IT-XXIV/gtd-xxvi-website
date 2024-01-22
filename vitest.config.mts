@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
-    environment: "node",
+    environment: "jsdom",
     alias: {
       "@/": new URL("./src/", import.meta.url).pathname,
     },

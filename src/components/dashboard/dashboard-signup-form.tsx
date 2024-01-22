@@ -46,7 +46,6 @@ export default function DashboardSignupForm({
       for (const [key, value] of Object.entries(values)) {
         formData.append(key, value);
       }
-      console.log(formData);
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         body: formData,

@@ -9,9 +9,6 @@ export default async function DashboardAuthErrorPage() {
   if (!session) {
     redirect("/dashboard/login");
   }
-  // if (!session?.user) {
-  //   redirect("/dashboard/login");
-  // }
   const hasAccess =
     session.user.role === "ADMIN" ||
     session.user.role === "DASHBOARD_USER" ||

@@ -8,7 +8,6 @@ import { getPageSession } from "@/server/auth";
 
 export default async function DashboardSignupPage() {
   const session = await getPageSession();
-  // const session = await auth();
   if (session) {
     redirect("/dashboard");
   }
