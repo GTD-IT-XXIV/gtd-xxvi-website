@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { FiTrash } from "react-icons/fi";
-import { s } from "vitest/dist/reporters-qc5Smpt5.js";
 
 import dummyUsers from "./const";
 import SearchBar from "./searchbar";
@@ -16,14 +15,12 @@ interface DummyUser {
   event: string;
 }
 
-export default function DashboardDataPageBody() {
+export default async function DashboardDataPageBody() {
   const [emailInput, setEmailInput] = useState("");
   const [eventInput, setEventInput] = useState("");
   const [users, setUsers] = useState(dummyUsers);
   const [showAll, setShowAll] = useState(false);
-  const [selected, setSelected] = useState([]);
   const [showPopUp, setShowPopUp] = useState(false);
-
   const mapUser = (user: DummyUser) => {
     return (
       <tr className="w-full text-xs text-center h-10">
