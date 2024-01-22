@@ -1,8 +1,8 @@
 import React from "react";
 
-import BundleCard from "@/components/registration/bundle-card";
-
 import { api } from "@/server/trpc";
+
+import BundleCard from "./bundle-card";
 
 export default async function EventCardGroup({ eventId }: { eventId: number }) {
   const event = await api.event.getById.query({ id: eventId });

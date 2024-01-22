@@ -2,8 +2,8 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
-import EventCardGroup from "@/components/registration/event-card-group";
-import RegisterPageFooter from "@/components/registration/register-page-footer";
+import EventCardGroup from "./_components/event-card-group";
+import RegisterPageFooter from "./_components/register-page-footer";
 
 export const metadata: Metadata = {
   title: "Register",
@@ -29,8 +29,8 @@ export default function RegisterPage({
   }
 
   return (
-    <section>
-      <article className="p-5 space-y-5">
+    <section className="grow flex flex-col">
+      <article className="flex-1 p-5 space-y-5">
         <hgroup className="space-y-1">
           <h1 className="text-gtd-primary-30 font-semibold text-3xl">
             Event Registrations

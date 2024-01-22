@@ -3,12 +3,11 @@
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 
+import TotalPrice from "@/components/registration/total-price";
 import { Button } from "@/components/ui/button";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
 import { cn } from "@/lib/utils";
-
-import TotalPrice from "./total-price";
 
 export type RegisterPageFooterProps = {
   className?: string;
