@@ -39,8 +39,7 @@ jobs:
           path: .next/cache
           # change this if you prefer a more strict cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-          restore_keys: | 
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+          restore_keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

@@ -13,10 +13,23 @@ env:
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
     
 jobs:
+  build:
+    name: Development build
+    uses: ./.github/workflows/development-build.yaml
+    secrets: inherit
+  test:
+    name: Run tests
+    uses: ./.github/workflows/test.yaml
+    secrets: inherit
   deploy:
+    needs: [build, test]
+    if: always()
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
+      - name: fail if conditional jobs failed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'skipped') || contains(needs.*.result, 'cancelled')
+        run: exit 1
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
