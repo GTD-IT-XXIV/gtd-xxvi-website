@@ -8,8 +8,7 @@ on:
     branches:
       - main # change this if your default branch is named differently
   pull_request:
-    branches:
-      - main
+  workflow_call:
   workflow_dispatch:
 
 defaults:
@@ -23,21 +22,23 @@ permissions:
   pull-requests: write # for comments
 
 jobs:
+  build:
+    name: Development build
+    uses: ./.github/workflows/development-build.yaml
+    secrets: inherit
   analyze:
+    needs: build
+    if: always()
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20]
+        pnpm-version: [8]
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "DATABASE_URL=${{ secrets.DEV_DATABASE_URL }}" >> ./.env;
-      - run: echo "STRIPE_SECRET_KEY=${{ secrets.DEV_STRIPE_SECRET_KEY }}" >> ./.env
-      - run: echo "STRIPE_WEBHOOK_SECRET=${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}" >> ./.env
-      - run: echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}" >> ./.env
-      - run: echo "AUTH_SECRET=${{ secrets.DEV_AUTH_SECRET }}" >> ./.env
+      - uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -47,10 +48,10 @@ jobs:
       # If pnpm is used, you need to switch the previous step with the following one. pnpm does not create a package-lock.json
       # so the step above will fail to pull dependencies
       - uses: pnpm/action-setup@v2
-        name: Install pnpm
+        name: Install pnpm ${{ matrix.pnpm-version }}
         id: pnpm-install
         with:
-          version: 8
+          version: ${{ matrix.pnpm-version }}
           run_install: true
 
       - name: Restore next build
@@ -65,7 +66,7 @@ jobs:
           # change this if you prefer a more strict cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}
 
-      - name: Build next.js app
+      - name: Build Next.js app
         # change this if your site requires a custom build command
         run: ./node_modules/.bin/next build
 
