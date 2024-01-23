@@ -13,8 +13,7 @@ export const signupSchema = loginSchema.extend({
 /**
  * Schema for cart used to synchornize registration process. If ID is 0, then
  * user has not selected that item, e.g., bundleId equals 0 means that user has
- * not selected a bundle for the event in eventId. Price refers to single bundle
- * price, not total price.
+ * not selected a bundle for the event in eventId.
  */
 export const cartSchema = z
   .object({
@@ -22,6 +21,5 @@ export const cartSchema = z
     bundleId: z.number().nonnegative(),
     timeslotId: z.number().nonnegative(),
     quantity: z.number().nonnegative(),
-    price: z.number().nonnegative(),
   })
   .array();
