@@ -2,12 +2,15 @@
 
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useSetAtom } from "jotai";
 
 import { allowCheckoutAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 
 import BookingReviewBundleLoading from "./loading";
+
+dayjs.extend(utc);
 
 export type BookingReviewBundleProps = {
   eventId: number;
@@ -69,12 +72,12 @@ export default function BookingReviewBundle({
           {quantity} x {event.name} ({bundle.name}){" "}
         </div>
         <div className="bundle-description text-[3vw] my-1 text-gtd-secondary-10 font-light">
-          {dayjs(event.startDate).format("dddd, D MMMM YYYY")},{" "}
+          {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")},{" "}
           {isTimeslotError ? (
             <span className="text-red-600">no timeslot chosen</span>
           ) : (
-            `${dayjs(timeslot.startTime).format("h.mm")} -
-              ${dayjs(timeslot.endTime).format("h.mm A")}`
+            `${dayjs.utc(timeslot.startTime).format("h.mm")} -
+              ${dayjs.utc(timeslot.endTime).format("h.mm A")}`
           )}
         </div>
       </div>

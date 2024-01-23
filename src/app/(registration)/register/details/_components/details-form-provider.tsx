@@ -8,12 +8,19 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 
 const formSchema = z.object({
-  name: z.string().min(5, { message: "Must be at least 5 characters long" }),
-  email: z.string().email(),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: "Must be at least 5 characters long" }),
+  email: z.string().trim().email(),
   telegramHandle: z
     .string()
+    .trim()
     .min(5, { message: "Must be at least 5 characters long" }),
-  phoneNumber: z.string(),
+  phoneNumber: z
+    .string()
+    .trim()
+    .min(1, { message: "Phone number is required" }),
 });
 
 export type DetailsFormProviderProps = {
