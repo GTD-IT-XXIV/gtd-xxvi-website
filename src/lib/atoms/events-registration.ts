@@ -1,3 +1,4 @@
+import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { type z } from "zod";
 
@@ -23,3 +24,5 @@ export const checkoutSessionAtom = atomWithStorage(
   `${BASE_KEY}-checkout-session-id`,
   "",
 );
+
+export const allowCheckoutAtom = atom(false);

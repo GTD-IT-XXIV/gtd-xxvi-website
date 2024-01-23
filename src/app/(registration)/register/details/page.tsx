@@ -1,20 +1,21 @@
 import { type Metadata } from "next";
 
-import BookingContainer from "./components/container";
+import BookingContainer from "./_components/container";
+import DetailsFormProvider from "./_components/details-form-provider";
+import DetailsPageFooter from "./_components/details-page-footer";
 
 export const metadata: Metadata = {
   title: "Details",
 };
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/51 GitHub Issue}
- */
-
 export default function DetailsPage() {
   return (
-    // Mobile UI ( width <= ~400 px )
-    <section className="p-4">
-      <BookingContainer />
-    </section>
+    <DetailsFormProvider className="grow flex flex-col">
+      {/* Mobile UI ( width <= ~400 px ) */}
+      <section className="flex-1 p-4">
+        <BookingContainer />
+      </section>
+      <DetailsPageFooter className="sticky bottom-0" />
+    </DetailsFormProvider>
   );
 }
