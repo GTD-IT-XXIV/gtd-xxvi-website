@@ -1,6 +1,6 @@
-"use client";
+import "client-only";
 
-import { CiEraser } from "react-icons/ci";
+import { Delete } from "lucide-react";
 import { IoSearch } from "react-icons/io5";
 
 export default function SearchBar({
@@ -35,7 +35,7 @@ export default function SearchBar({
           setEmailInput("");
         }}
       >
-        <CiEraser className="" />
+        <Delete className="size-4" />
       </button>
     </div>
   );

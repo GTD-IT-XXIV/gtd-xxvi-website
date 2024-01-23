@@ -16,10 +16,9 @@ export default async function DashboardContentLayout({
     redirect("/dashboard/login");
   }
   const hasAccess =
-    session?.user &&
-    (session.user.role === "ADMIN" ||
-      session.user.role === "DASHBOARD_USER" ||
-      session.user.role === "SCANNER");
+    session.user.role === "ADMIN" ||
+    session.user.role === "DASHBOARD_USER" ||
+    session.user.role === "SCANNER";
 
   if (!hasAccess) {
     redirect("/dashboard/error");

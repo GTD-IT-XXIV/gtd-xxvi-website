@@ -9,11 +9,11 @@ import { handleCreate, handleUpdate } from "./handlers";
 import { bookingSchema } from "./schemas";
 
 export const bookingRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAll: dashboardProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().positive().nullish(),
+        cursor: z.number().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -33,7 +33,7 @@ export const bookingRouter = createTRPCRouter({
       return { bookings, nextCursor };
     }),
 
-  getById: publicProcedure
+  getById: dashboardProcedure
     .input(
       z.object({
         id: z.number().positive(),
@@ -51,7 +51,7 @@ export const bookingRouter = createTRPCRouter({
       return booking;
     }),
 
-  getManyByEmail: publicProcedure
+  getManyByEmail: dashboardProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ ctx, input }) => {
       const { email } = input;
@@ -59,7 +59,7 @@ export const bookingRouter = createTRPCRouter({
       return bookings;
     }),
 
-  getManyByEmailAndEvents: publicProcedure
+  getManyByEmailAndEvents: dashboardProcedure
     .input(
       z.object({
         email: z.string().email(),
@@ -72,6 +72,28 @@ export const bookingRouter = createTRPCRouter({
         where: { email, eventId: { in: eventIds } },
       });
       return bookings;
+    }),
+
+  getAllEmails: dashboardProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const take = input.limit ?? 10;
+      const skip = take * (input.cursor ?? 0);
+      const bookings = await ctx.db.booking.findMany({
+        select: {
+          email: true,
+        },
+        take,
+        skip,
+        distinct: ["email"],
+      });
+      const emails = bookings.map((booking) => booking.email);
+      return { emails, nextCursor: input.cursor ? input.cursor + 1 : 0 };
     }),
 
   create: publicProcedure

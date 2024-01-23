@@ -14,8 +14,7 @@ export default async function DashboardDataPage() {
     redirect("/dashboard/login");
   }
   const hasAccess =
-    session?.user &&
-    (session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER");
+    session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER";
 
   if (!hasAccess) {
     redirect("/dashboard");

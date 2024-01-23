@@ -1,39 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { FiTrash } from "react-icons/fi";
 
+import { api } from "@/lib/trpc/client";
+
+import BookingsTableRow from "./bookings-table-row";
 import dummyUsers from "./const";
 import SearchBar from "./searchbar";
 
-interface DummyUser {
-  mark: boolean;
-  status: string;
-  email: string;
-  bookings: number;
-  amount: number;
-  event: string;
-}
-
-export default async function DashboardDataPageBody() {
+export default function DashboardDataPageBody() {
   const [emailInput, setEmailInput] = useState("");
   const [eventInput, setEventInput] = useState("");
   const [users, setUsers] = useState(dummyUsers);
   const [showAll, setShowAll] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
-  const mapUser = (user: DummyUser) => {
-    return (
-      <tr className="w-full text-xs text-center h-10">
-        <td className="w-1/12">
-          <input className="w-full" type="checkbox" checked={user.mark}></input>
-        </td>
-        <td className="w-2/12">{user.status}</td>
-        <td className="w-4/12">{user.email}</td>
-        <td className="w-2/12">{user.bookings}</td>
-        <td className="w-3/12">${user.amount}</td>
-      </tr>
+
+  const { data, error, fetchNextPage, isLoading, isError } =
+    api.booking.getAllEmails.useInfiniteQuery(
+      { limit: 10 },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        initialCursor: 0,
+      },
     );
-  };
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (isError) {
+    return null;
+  }
+
   const resetUsers = () => {
     setUsers(dummyUsers);
   };
@@ -94,11 +93,17 @@ export default async function DashboardDataPageBody() {
             </tr>
           </thead>
           <tbody>
-            {users.length ? (
-              users.length <= 5 || showAll ? (
-                users.map((user) => mapUser(user))
-              ) : (
-                users.slice(0, 5).map((user) => mapUser(user))
+            {data.pages.length ? (
+              data.pages.flatMap((page, idx) =>
+                page.emails.map((email) => (
+                  <BookingsTableRow
+                    key={`${idx}-${email}`}
+                    email={email}
+                    onChange={() => {
+                      console.log("onChange triggered");
+                    }}
+                  />
+                )),
               )
             ) : (
               <tr className="w-full text-xs text-center h-10">
