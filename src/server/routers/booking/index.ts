@@ -97,24 +97,6 @@ export const bookingRouter = createTRPCRouter({
       return await handleUpdate({ ctx, input });
     }),
 
-  updateByEmailAndEvent: dashboardProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        eventId: z.number().positive(),
-        name: z.string().optional(),
-        telegramHandle: z.string().optional(),
-        phoneNumber: z.string().optional(),
-        quantity: z.number().nonnegative().optional(),
-        bundleId: z.number().positive().optional(),
-        timeslotId: z.number().positive().optional(),
-        sessionId: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await handleUpdate({ ctx, input });
-    }),
-
   deleteById: dashboardProcedure
     .input(z.number().positive())
     .mutation(async ({ ctx, input }) => {
@@ -143,44 +125,6 @@ export const bookingRouter = createTRPCRouter({
       });
 
       return await ctx.db.booking.delete({ where: { id: input } });
-    }),
-
-  deleteByEmailAndEvent: dashboardProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        eventId: z.number().positive(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { email, eventId } = input;
-      const booking = await ctx.db.booking.findUnique({
-        where: { email_eventId: { email, eventId } },
-        include: { bundle: true },
-      });
-
-      if (!booking) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Booking not found",
-        });
-      }
-
-      const partySize = booking.quantity * booking.bundle.quantity;
-      // free up bundles
-      await ctx.db.bundle.update({
-        where: { id: booking.bundleId },
-        data: { remainingAmount: { increment: booking.quantity } },
-      });
-      // free up timeslots
-      await ctx.db.timeslot.update({
-        where: { id: booking.timeslotId },
-        data: { remainingSlots: { increment: partySize } },
-      });
-
-      return await ctx.db.booking.delete({
-        where: { email_eventId: { email, eventId } },
-      });
     }),
 
   deleteManyByEmail: dashboardProcedure

@@ -11,11 +11,6 @@ const BASE_KEY = "event-registration";
 
 export const cartAtom = atomWithStorage<Cart>(`${BASE_KEY}-cart`, []);
 
-export const bookingIdsAtom = atomWithStorage<number[]>(
-  `${BASE_KEY}-bookingids`,
-  [],
-);
-
 export const formDataAtom = atomWithStorage<
   z.infer<typeof registrationFormSchema>
 >(`${BASE_KEY}-form-data`, DEFAULT_REGISTRATION_FORM);
@@ -24,5 +19,7 @@ export const checkoutSessionAtom = atomWithStorage(
   `${BASE_KEY}-checkout-session-id`,
   "",
 );
+
+export const bookingIdsAtom = atom<number[]>([]);
 
 export const allowCheckoutAtom = atom(false);

@@ -63,7 +63,6 @@ export default function BookingReviewBundle({
   }
 
   const price = new Prisma.Decimal(bundle.price).times(quantity).toDP(0);
-  console.log({ startTime: timeslot?.startTime, endTime: timeslot?.endTime });
 
   return (
     <div className="flex">
