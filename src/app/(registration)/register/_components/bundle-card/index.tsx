@@ -82,7 +82,7 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           <p className="text-gtd-secondary-10 text-sm">
             {" "}
             <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
-            {dayjs(event.startDate).format("DD/MM/YYYY")}{" "}
+            {dayjs(event.startDate).format("D MMMM")}{" "}
           </p>
 
           <p className="text-gtd-secondary-10 text-sm">
