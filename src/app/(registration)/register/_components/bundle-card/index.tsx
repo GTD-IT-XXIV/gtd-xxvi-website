@@ -66,7 +66,6 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
         eventId: event.id,
         timeslotId: 0,
         quantity: 1,
-        price: new Prisma.Decimal(bundle.price).toNumber(),
       });
     });
   };
