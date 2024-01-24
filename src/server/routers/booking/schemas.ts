@@ -13,8 +13,8 @@ export const bookingSchema = z.object({
 });
 
 export const updateHandlerInputSchema = bookingSchema
-  .merge(z.object({ id: z.number().positive() }))
-  .partial();
+  .partial()
+  .merge(z.object({ id: z.number().positive() }));
 
 export const bookingEventConsistencySchema = bookingSchema.pick({
   eventId: true,

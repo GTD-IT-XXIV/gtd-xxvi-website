@@ -9,11 +9,11 @@ import { handleCreate, handleUpdate } from "./handlers";
 import { bookingSchema } from "./schemas";
 
 export const bookingRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAll: dashboardProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().positive().nullish(),
+        cursor: z.number().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -51,7 +51,7 @@ export const bookingRouter = createTRPCRouter({
       return booking;
     }),
 
-  getManyByEmail: publicProcedure
+  getManyByEmail: dashboardProcedure
     .input(z.object({ email: z.string().email() }))
     .query(async ({ ctx, input }) => {
       const { email } = input;
@@ -59,7 +59,7 @@ export const bookingRouter = createTRPCRouter({
       return bookings;
     }),
 
-  getManyByEmailAndEvents: publicProcedure
+  getManyByEmailAndEvents: dashboardProcedure
     .input(
       z.object({
         email: z.string().email(),
@@ -74,6 +74,28 @@ export const bookingRouter = createTRPCRouter({
       return bookings;
     }),
 
+  getAllEmails: dashboardProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const take = input.limit ?? 10;
+      const skip = take * (input.cursor ?? 0);
+      const bookings = await ctx.db.booking.findMany({
+        select: {
+          email: true,
+        },
+        take,
+        skip,
+        distinct: ["email"],
+      });
+      const emails = bookings.map((booking) => booking.email);
+      return { emails, nextCursor: input.cursor ? input.cursor + 1 : 0 };
+    }),
+
   create: publicProcedure
     .input(bookingSchema)
     .mutation(async ({ ctx, input }) => {
@@ -84,24 +106,6 @@ export const bookingRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number().positive(),
-        name: z.string().optional(),
-        telegramHandle: z.string().optional(),
-        phoneNumber: z.string().optional(),
-        quantity: z.number().nonnegative().optional(),
-        bundleId: z.number().positive().optional(),
-        timeslotId: z.number().positive().optional(),
-        sessionId: z.string().optional(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await handleUpdate({ ctx, input });
-    }),
-
-  updateByEmailAndEvent: dashboardProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        eventId: z.number().positive(),
         name: z.string().optional(),
         telegramHandle: z.string().optional(),
         phoneNumber: z.string().optional(),
@@ -143,44 +147,6 @@ export const bookingRouter = createTRPCRouter({
       });
 
       return await ctx.db.booking.delete({ where: { id: input } });
-    }),
-
-  deleteByEmailAndEvent: dashboardProcedure
-    .input(
-      z.object({
-        email: z.string().email(),
-        eventId: z.number().positive(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { email, eventId } = input;
-      const booking = await ctx.db.booking.findUnique({
-        where: { email_eventId: { email, eventId } },
-        include: { bundle: true },
-      });
-
-      if (!booking) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Booking not found",
-        });
-      }
-
-      const partySize = booking.quantity * booking.bundle.quantity;
-      // free up bundles
-      await ctx.db.bundle.update({
-        where: { id: booking.bundleId },
-        data: { remainingAmount: { increment: booking.quantity } },
-      });
-      // free up timeslots
-      await ctx.db.timeslot.update({
-        where: { id: booking.timeslotId },
-        data: { remainingSlots: { increment: partySize } },
-      });
-
-      return await ctx.db.booking.delete({
-        where: { email_eventId: { email, eventId } },
-      });
     }),
 
   deleteManyByEmail: dashboardProcedure
