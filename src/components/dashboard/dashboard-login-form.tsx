@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
 
@@ -16,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import login from "@/server/actions/login";
+import { login } from "@/server/actions/login";
 
 import { loginSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ export type DashboardLoginFormProps = {
 export default function DashboardLoginForm({
   className,
 }: DashboardLoginFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -38,12 +40,12 @@ export default function DashboardLoginForm({
   });
 
   async function handleSubmit(values: z.infer<typeof loginSchema>) {
-    const res = await login(values);
-    if (res) {
+    const response = await login(values);
+    if (response) {
       toast({
         variant: "destructive",
         title: "Login failed",
-        description: res.error,
+        description: response.error,
       });
       return;
     }
@@ -51,6 +53,7 @@ export default function DashboardLoginForm({
       variant: "default",
       title: "Logged in successfully!",
     });
+    router.push("/dashboard");
   }
 
   return (

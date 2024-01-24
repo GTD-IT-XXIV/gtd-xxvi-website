@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { stripe } from "@/lib/stripe";
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
-import { type OrderMetadata } from "@/lib/types/order-metadata";
+import { type OrderMetadata } from "@/lib/types";
 
 export const paymentRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
@@ -29,6 +29,23 @@ export const paymentRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message: "Not all bookings were not found",
         });
+      }
+
+      if (bookings.some((booking) => booking?.sessionId)) {
+        const sessionId = bookings.find((booking) => booking?.sessionId)
+          ?.sessionId;
+
+        if (!bookings.every((booking) => booking?.sessionId === sessionId)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Not all bookings were not found",
+          });
+        }
+
+        const session = await stripe.checkout.sessions.retrieve(sessionId!);
+        return {
+          clientSecret: session.client_secret,
+        };
       }
 
       const expiresAt = Date.now() + 30 * 60 * 1000; // timeout the payment after 30 minutes since it is the minimum time to timeout the transaction if there is no payment
@@ -62,7 +79,6 @@ export const paymentRouter = createTRPCRouter({
 
       return {
         clientSecret: session.client_secret,
-        sessionId: String(session.id),
       };
     }),
 

@@ -4,13 +4,15 @@ import { type z } from "zod";
 import { type registrationFormSchema } from "@/components/registration/registration-form";
 
 import { DEFAULT_REGISTRATION_FORM } from "@/lib/constants";
-import { type LocalBooking } from "@/lib/types/events-registration";
+import { type Cart } from "@/lib/types";
 
 const BASE_KEY = "event-registration";
 
-export const bookingsAtom = atomWithStorage<LocalBooking[]>(
-  `${BASE_KEY}-bookings`,
-  [] satisfies LocalBooking[],
+export const cartAtom = atomWithStorage<Cart>(`${BASE_KEY}-cart`, []);
+
+export const bookingIdsAtom = atomWithStorage<number[]>(
+  `${BASE_KEY}-bookingids`,
+  [],
 );
 
 export const formDataAtom = atomWithStorage<

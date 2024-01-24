@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/server/auth";
+import { getPageSession } from "@/server/auth";
 
 /**
  * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/47 GitHub Issue}
  */
 export default async function DashboardDataPage() {
-  const session = await auth();
-  if (!session?.user) {
+  const session = await getPageSession();
+  if (!session) {
     redirect("/dashboard/login");
   }
   const hasAccess =

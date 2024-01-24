@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import DashboardLoginForm from "@/components/dashboard/dashboard-login-form";
 import { Separator } from "@/components/ui/separator";
 
-import { auth } from "@/server/auth";
+import { getPageSession } from "@/server/auth";
 
 export default async function DashboardLoginPage() {
-  const session = await auth();
+  const session = await getPageSession();
   if (session) {
     redirect("/dashboard");
   }
