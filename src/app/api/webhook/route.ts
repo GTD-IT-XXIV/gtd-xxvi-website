@@ -1,4 +1,9 @@
 import { env } from "@/env";
+import GTDFestEmail from "@emails/gtdfest-email";
+import { Prisma } from "@prisma/client";
+import { render } from "@react-email/components";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
 import SuperJSON from "superjson";
@@ -10,6 +15,8 @@ import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types";
+
+dayjs.extend(utc);
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -66,7 +73,7 @@ export async function POST(req: Request) {
 
           const bookings = await db.booking.findMany({
             where: { id: { in: bookingIds } },
-            include: { event: true },
+            include: { event: true, bundle: true, timeslot: true },
           });
           if (bookings.length !== bookingIds.length) {
             throw new Error("Not all bookings were found in database");
@@ -77,21 +84,42 @@ export async function POST(req: Request) {
           }
 
           // use email as the owner of a ticket in the future after the schema changed
-          const tickets = await db.ticket.createMany({
-            data: bookings.flatMap((booking) =>
+          // const tickets = await db.ticket.createMany({
+          //   data: bookings.flatMap((booking) =>
+          //     Array(booking.quantity)
+          //       .fill(0)
+          //       .map(() => ({
+          //         name: booking.name,
+          //         email: booking.email,
+          //         telegramHandle: booking.telegramHandle,
+          //         phoneNumber: booking.phoneNumber,
+          //         bundleId: Number(booking.bundleId),
+          //         timeslotId: Number(booking.timeslotId),
+          //         paymentIntentId: String(data.payment_intent),
+          //       })),
+          //   ),
+          // });
+          const tickets = await db.$transaction(
+            bookings.flatMap((booking) =>
               Array(booking.quantity)
                 .fill(0)
-                .map(() => ({
-                  name: booking.name,
-                  email: booking.email,
-                  telegramHandle: booking.telegramHandle,
-                  phoneNumber: booking.phoneNumber,
-                  bundleId: Number(booking.bundleId),
-                  timeslotId: Number(booking.timeslotId),
-                  paymentIntentId: String(data.payment_intent),
-                })),
+                .map(() =>
+                  db.ticket.create({
+                    data: {
+                      name: booking.name,
+                      email: booking.email,
+                      telegramHandle: booking.telegramHandle,
+                      phoneNumber: booking.phoneNumber,
+                      bundleId: Number(booking.bundleId),
+                      timeslotId: Number(booking.timeslotId),
+                      paymentIntentId: String(data.payment_intent),
+                    },
+                    select: { id: true },
+                  }),
+                ),
             ),
-          });
+          );
+          const ticketIds = tickets.map((ticket) => ticket.id);
           console.log("✅ Ticket details: ");
           console.log(tickets);
 
@@ -106,9 +134,45 @@ export async function POST(req: Request) {
           };
           const eventName = bookings[0].event.name;
 
+          const ticketsUrl = `${
+            env.NODE_ENV === "production"
+              ? "https://www.pintugtd.com"
+              : "http://localhost:3000"
+          }/ticket/${btoa(SuperJSON.stringify(ticketIds))}`;
+
+          let orderPrice = 0;
+          const emailHtml = render(
+            GTDFestEmail({
+              name: recipient.name,
+              orders: bookings.map((booking) => {
+                const totalPrice = new Prisma.Decimal(booking.bundle.price)
+                  .times(booking.quantity)
+                  .toNumber();
+                orderPrice += totalPrice;
+
+                return {
+                  eventName: booking.event.name,
+                  bundleName: booking.bundle.name,
+                  timeslot: {
+                    startLabel: dayjs
+                      .utc(booking.timeslot.startTime)
+                      .format("h.mm A"),
+                    endLabel: dayjs
+                      .utc(booking.timeslot.endTime)
+                      .format("h.mm A"),
+                  },
+                  quantity: booking.quantity,
+                  totalPrice,
+                };
+              }),
+              orderPrice,
+              url: ticketsUrl,
+            }),
+          );
+
           await sendEmail({
             sender: {
-              name: "PINTU Get Together Day XXVI",
+              name: "pintu get together day xxvi",
               email: BREVO_EMAIL,
             },
             replyTo: {
@@ -117,8 +181,8 @@ export async function POST(req: Request) {
             },
             to: [recipient],
             subject: `Your Tickets for ${eventName}`,
-            htmlContent: "",
-            textContent: `You bought ${tickets.count} tickets.`,
+            htmlContent: emailHtml,
+            // textContent: `You bought ${tickets.count} tickets.`,
           });
 
           await db.booking.deleteMany({
