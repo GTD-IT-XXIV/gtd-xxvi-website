@@ -1,4 +1,9 @@
 import { env } from "@/env";
+import GTDEmail from "@emails/gtd-email";
+import { Prisma } from "@prisma/client";
+import { render } from "@react-email/components";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { NextResponse } from "next/server";
 import type { Stripe } from "stripe";
 import SuperJSON from "superjson";
@@ -6,8 +11,12 @@ import { z } from "zod";
 
 import { db } from "@/server/db";
 
+import { BREVO_EMAIL } from "@/lib/constants";
+import { sendEmail } from "@/lib/email";
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types";
+
+dayjs.extend(utc);
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -58,40 +67,113 @@ export async function POST(req: Request) {
             .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
+          if (bookingIds.length === 0) {
+            throw new Error("No bookings attached to this CheckoutSession");
+          }
+
           const bookings = await db.booking.findMany({
             where: { id: { in: bookingIds } },
+            include: { event: true, bundle: true, timeslot: true },
           });
           if (bookings.length !== bookingIds.length) {
             throw new Error("Not all bookings were found in database");
           }
-          const bookingsAreValid = bookings.reduce(
-            (accum, booking) => (accum &&= booking.valid),
-            true,
-          );
-          if (!bookingsAreValid) {
+          const isAllBookingsValid = bookings.every((booking) => booking.valid);
+          if (!isAllBookingsValid) {
             throw new Error("Bookings invalid");
           }
 
-          // TODO: sending an email to user
-          // use email as the owner of a ticket in the future after the schema changed
+          if (!data.payment_intent) {
+            throw new Error("Payment intent ID is null");
+          }
 
-          const tickets = await db.ticket.createMany({
-            data: bookings.flatMap((booking) =>
+          // use email as the owner of a ticket in the future after the schema changed
+          const tickets = await db.$transaction(
+            bookings.flatMap((booking) =>
               Array(booking.quantity)
                 .fill(0)
-                .map(() => ({
-                  name: booking.name,
-                  email: booking.email,
-                  telegramHandle: booking.telegramHandle,
-                  phoneNumber: booking.phoneNumber,
-                  bundleId: Number(booking.bundleId),
-                  timeslotId: Number(booking.timeslotId),
-                  paymentIntentId: String(data.payment_intent),
-                })),
+                .map(() =>
+                  db.ticket.create({
+                    data: {
+                      name: booking.name,
+                      email: booking.email,
+                      telegramHandle: booking.telegramHandle,
+                      phoneNumber: booking.phoneNumber,
+                      bundleId: Number(booking.bundleId),
+                      timeslotId: Number(booking.timeslotId),
+                      paymentIntentId: String(data.payment_intent),
+                    },
+                    select: { id: true },
+                  }),
+                ),
             ),
-          });
+          );
+          const ticketIds = tickets.map((ticket) => ticket.id);
           console.log("✅ Ticket details: ");
           console.log(tickets);
+
+          const eventTitle = [
+            ...new Set(bookings.map((booking) => booking.event.name)),
+          ].join(", ");
+
+          // Unreachable code but necessary for type safety
+          if (!bookings[0]) {
+            throw new Error("An error occurred");
+          }
+
+          const recipient = {
+            name: bookings[0].name,
+            email: bookings[0].email,
+          };
+
+          const ticketsUrl = `${req.headers.get("origin")}/ticket/${btoa(
+            SuperJSON.stringify(ticketIds),
+          )}`;
+
+          let orderPrice = 0;
+          const emailHtml = render(
+            GTDEmail({
+              name: recipient.name,
+              orders: bookings.map((booking) => {
+                const totalPrice = new Prisma.Decimal(booking.bundle.price)
+                  .times(booking.quantity)
+                  .toNumber();
+                orderPrice += totalPrice;
+
+                return {
+                  eventName: booking.event.name,
+                  bundleName: booking.bundle.name,
+                  timeslot: {
+                    startLabel: dayjs
+                      .utc(booking.timeslot.startTime)
+                      .format("h.mm A"),
+                    endLabel: dayjs
+                      .utc(booking.timeslot.endTime)
+                      .format("h.mm A"),
+                  },
+                  quantity: booking.quantity,
+                  totalPrice,
+                };
+              }),
+              orderPrice,
+              url: ticketsUrl,
+              eventTitle,
+            }),
+          );
+
+          await sendEmail({
+            sender: {
+              name: "PINTU Get Together Day XXVI",
+              email: BREVO_EMAIL,
+            },
+            replyTo: {
+              name: "PINTU Get Together Day XXVI",
+              email: BREVO_EMAIL,
+            },
+            to: [recipient],
+            subject: `Your ${eventTitle} Tickets`,
+            htmlContent: emailHtml,
+          });
 
           await db.booking.deleteMany({
             where: { id: { in: bookingIds } },

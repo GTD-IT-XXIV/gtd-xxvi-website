@@ -11,6 +11,7 @@ env:
   STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }} 
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
+  BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
     
 jobs:
   build:
@@ -40,6 +41,7 @@ jobs:
           envkey_STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
           envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }} 
           envkey_AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
+          envkey_BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           fail_on_empty: true
       - run: flyctl deploy --remote-only
         env:

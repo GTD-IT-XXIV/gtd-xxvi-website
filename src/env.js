@@ -26,6 +26,9 @@ export const env = createEnv({
         (str) => !(str === ""),
         "You forgot to add your Stripe webhooks endpoint secret",
       ),
+    BREVO_API_KEY: z
+      .string()
+      .refine((str) => !(str === ""), "You forgot to add your Brevo API key"),
   },
 
   /**
@@ -53,6 +56,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    BREVO_API_KEY: process.env.BREVO_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful for Docker builds.

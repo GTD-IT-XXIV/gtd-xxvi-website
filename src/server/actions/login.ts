@@ -2,7 +2,6 @@
 
 import { LuciaError } from "lucia";
 import * as context from "next/headers";
-import { redirect } from "next/navigation";
 import { ZodError, type z } from "zod";
 import { fromZodError } from "zod-validation-error";
 

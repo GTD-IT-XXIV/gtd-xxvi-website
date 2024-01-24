@@ -10,6 +10,7 @@ env:
   STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
+  BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
 
 jobs:
   build:
@@ -39,7 +40,7 @@ jobs:
           path: .next/cache
           # change this if you prefer a more strict cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-          restore_keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+          restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
