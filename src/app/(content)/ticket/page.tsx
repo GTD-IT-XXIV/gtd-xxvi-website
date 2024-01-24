@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 
+import Tickets from "@/components/tickets";
+
 import { api } from "@/lib/trpc/client";
 
 export default function TicketPage({
@@ -41,14 +43,7 @@ export default function TicketPage({
       )}
       {isTicketsLoading && <p>Tickets Loading...</p>}
       {!isTicketsLoading && !isTicketsError && (
-        <section>
-          <h2>Your Tickets</h2>
-          <ul>
-            {tickets.map((ticket) => (
-              <li key={ticket.id}>{ticket.id}</li>
-            ))}
-          </ul>
-        </section>
+        <Tickets ticketIds={tickets.map((ticket) => ticket.id)} />
       )}
     </main>
   );
