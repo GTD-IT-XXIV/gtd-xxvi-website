@@ -5,13 +5,13 @@ import { z } from "zod";
 /**
  * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/50 GitHub Issue}
  */
-import TimeSlotButton from "@/components/registration/timeslot-button";
+import TimeSlotSection from "@/components/registration/timeslot-section";
 
 export const metadata: Metadata = {
   title: "Timeslots",
 };
 
-export default function TimeslotsPage({
+export default async function TimeslotsPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
@@ -30,13 +30,30 @@ export default function TimeslotsPage({
   } else {
     eventIds = [eventParams];
   }
+  const totalParams = z.coerce
+    .number()
+    .or(z.coerce.number())
+    .parse(searchParams.total);
+  const totalTicket = totalParams;
 
-  const date = new Date();
   return (
     <section>
-      <div>
-        <TimeSlotButton startTime={date} endTime={date} remainingSlots={10} />
-        <TimeSlotButton startTime={date} endTime={date} remainingSlots={10} />
+      <h1 className="text-[1.75rem] font-semibold my-3 px-4 text-gtd-primary-30">
+        Escape Room Timeslots
+      </h1>
+      {/* <div className="flex justify-center">
+        <DayButto n day="Mon" selectedDay={selectedDay}></DayButton>
+        <p className="px-[2vw] text-semibold text-gtd-blue-secondary-dim">|</p>
+        <DayButton day="Tue" selectedDay={selectedDay}></DayButton>
+      </div> */}
+      <div className="flex flex-col justify-center text-[4vw]">
+        {eventIds.map((eventId) => (
+          <TimeSlotSection
+            key={eventId}
+            totalTicket={totalTicket}
+            eventId={eventId}
+          />
+        ))}
       </div>
     </section>
   );
