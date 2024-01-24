@@ -15,10 +15,10 @@ export default function BookingReview() {
 
   return (
     <div className="text-gtd-secondary-20">
-      <h1 className="text-[7.5vw] font-medium my-4 text-gtd-primary-30">
+      <h1 className="text-3xl font-medium my-4 text-gtd-primary-30">
         Booking Details
       </h1>
-      <h2 className="text-[5vw] font-medium my-3">Booking Review</h2>
+      <h2 className="text-xl font-medium my-3">Booking Review</h2>
 
       <div id="bundle-details-container">
         {!hasMounted ? (

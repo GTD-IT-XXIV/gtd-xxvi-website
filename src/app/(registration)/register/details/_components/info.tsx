@@ -15,7 +15,7 @@ export default function BookingInfo() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-[5vw] text-gtd-secondary-20 font-medium mt-3 mb-2">
+        <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2">
           Enter Booking Info
         </h2>
         <div className="space-y-2">
