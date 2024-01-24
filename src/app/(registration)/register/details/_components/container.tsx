@@ -1,7 +1,5 @@
 "use client";
 
-import { useAtom } from "jotai";
-
 import BookingInfo from "./info";
 import BookingReview from "./review";
 

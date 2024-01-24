@@ -67,10 +67,10 @@ export default function BookingReviewBundle({
   return (
     <div className="flex">
       <div className="bundle-details my-1.5 w-5/6">
-        <div className="bundle-name text-[3vw] my-1 font-medium">
+        <div className="bundle-name my-1 font-medium">
           {quantity} x {event.name} ({bundle.name}){" "}
         </div>
-        <div className="bundle-description text-[3vw] my-1 text-gtd-secondary-10 font-light">
+        <div className="bundle-description text-sm my-1 text-gtd-secondary-10 font-light">
           {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")},{" "}
           {isTimeslotError ? (
             <span className="text-red-600">no timeslot chosen</span>
@@ -80,7 +80,7 @@ export default function BookingReviewBundle({
           )}
         </div>
       </div>
-      <div className="flex items-center justify-end my-2 text-[3vw] w-1/6">
+      <div className="flex items-center justify-end my-2 w-1/6">
         ${price.toString()}
       </div>
     </div>
