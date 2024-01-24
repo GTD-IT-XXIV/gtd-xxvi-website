@@ -18,7 +18,7 @@ export default async function ExamplePage() {
 
 ### In Client Components
 
-Use the tRPC client `api` defined in `src/trpc/provider`. Example:
+Use the tRPC client `api` defined in `src/trpc/client`. Example:
 
 ```tsx
 // example-page.tsx

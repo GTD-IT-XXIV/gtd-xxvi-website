@@ -26,7 +26,8 @@
     ],
     // Path Aliases
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@emails/*": ["./emails/*"]
     }
   },
   "include": [
