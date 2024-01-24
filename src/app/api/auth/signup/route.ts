@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
   try {
     const input = signupSchema.parse(formInput);
     const { username, email, name, password } = input;
-    console.log({ input });
     const user = await auth.createUser({
       key: {
         providerId: "username",

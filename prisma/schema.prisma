@@ -89,8 +89,6 @@ model Booking {
   valid          Boolean  @default(true)
   /// Reference for Stripe Session ID; not a foreign key
   sessionId      String?
-
-  @@unique([email, eventId])
 }
 
 // Lucia
