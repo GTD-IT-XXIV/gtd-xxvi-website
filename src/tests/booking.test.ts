@@ -8,6 +8,7 @@ import {
 } from "@/tests/lib/utils";
 import type { Booking, Bundle, Event, Prisma, Timeslot } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import type React from "react";
 import {
   afterAll,
   beforeAll,
@@ -28,7 +29,7 @@ vi.mock("server-only", () => ({
 vi.mock("react", async (importOriginal) => {
   const testCache = <T extends (...args: unknown[]) => unknown>(func: T) =>
     func;
-  const originalModule = await importOriginal<typeof import("react")>();
+  const originalModule = await importOriginal<typeof React>();
   return {
     ...originalModule,
     cache: testCache,
