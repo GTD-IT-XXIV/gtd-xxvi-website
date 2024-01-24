@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import GTDFestEmail from "@emails/gtdfest-email";
+import GTDEmail from "@emails/gtd-email";
 import { Prisma } from "@prisma/client";
 import { render } from "@react-email/components";
 import dayjs from "dayjs";
@@ -83,22 +83,11 @@ export async function POST(req: Request) {
             throw new Error("Bookings invalid");
           }
 
+          if (!data.payment_intent) {
+            throw new Error("Payment intent ID is null");
+          }
+
           // use email as the owner of a ticket in the future after the schema changed
-          // const tickets = await db.ticket.createMany({
-          //   data: bookings.flatMap((booking) =>
-          //     Array(booking.quantity)
-          //       .fill(0)
-          //       .map(() => ({
-          //         name: booking.name,
-          //         email: booking.email,
-          //         telegramHandle: booking.telegramHandle,
-          //         phoneNumber: booking.phoneNumber,
-          //         bundleId: Number(booking.bundleId),
-          //         timeslotId: Number(booking.timeslotId),
-          //         paymentIntentId: String(data.payment_intent),
-          //       })),
-          //   ),
-          // });
           const tickets = await db.$transaction(
             bookings.flatMap((booking) =>
               Array(booking.quantity)
@@ -123,6 +112,10 @@ export async function POST(req: Request) {
           console.log("✅ Ticket details: ");
           console.log(tickets);
 
+          const eventTitle = [
+            ...new Set(bookings.map((booking) => booking.event.name)),
+          ].join(", ");
+
           // Unreachable code but necessary for type safety
           if (!bookings[0]) {
             throw new Error("An error occurred");
@@ -132,17 +125,14 @@ export async function POST(req: Request) {
             name: bookings[0].name,
             email: bookings[0].email,
           };
-          const eventName = bookings[0].event.name;
 
-          const ticketsUrl = `${
-            env.NODE_ENV === "production"
-              ? "https://www.pintugtd.com"
-              : "http://localhost:3000"
-          }/ticket/${btoa(SuperJSON.stringify(ticketIds))}`;
+          const ticketsUrl = `${req.headers.get("origin")}/ticket/${btoa(
+            SuperJSON.stringify(ticketIds),
+          )}`;
 
           let orderPrice = 0;
           const emailHtml = render(
-            GTDFestEmail({
+            GTDEmail({
               name: recipient.name,
               orders: bookings.map((booking) => {
                 const totalPrice = new Prisma.Decimal(booking.bundle.price)
@@ -167,12 +157,13 @@ export async function POST(req: Request) {
               }),
               orderPrice,
               url: ticketsUrl,
+              eventTitle,
             }),
           );
 
           await sendEmail({
             sender: {
-              name: "pintu get together day xxvi",
+              name: "PINTU Get Together Day XXVI",
               email: BREVO_EMAIL,
             },
             replyTo: {
@@ -180,9 +171,8 @@ export async function POST(req: Request) {
               email: BREVO_EMAIL,
             },
             to: [recipient],
-            subject: `Your Tickets for ${eventName}`,
+            subject: `Your ${eventTitle} Tickets`,
             htmlContent: emailHtml,
-            // textContent: `You bought ${tickets.count} tickets.`,
           });
 
           await db.booking.deleteMany({

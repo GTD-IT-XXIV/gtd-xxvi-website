@@ -14,7 +14,7 @@ import {
 } from "@react-email/components";
 import { type CSSProperties } from "react";
 
-export type GTDFestEmailProps = {
+export type GTDEmailProps = {
   name: string;
   orders: {
     eventName: string;
@@ -28,15 +28,17 @@ export type GTDFestEmailProps = {
   }[];
   orderPrice: number;
   url: string;
+  eventTitle: string;
 };
 
-const baseUrl = "";
+const baseUrl =
+  process.env.NODE_ENV === "production" ? "https://www.pintugtd.com" : "";
 
-export default function GTDFestEmail(props: GTDFestEmailProps) {
+export default function GTDEmail(props: GTDEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Your PINTU GTD Fest x Escape Room Tickets</Preview>
+      <Preview>Your tickets for {props.eventTitle}</Preview>
 
       <Body
         style={{
@@ -81,7 +83,7 @@ export default function GTDFestEmail(props: GTDFestEmailProps) {
                 marginBottom: "0.5rem",
               }}
             >
-              Hello {props.name}, here are your
+              Hi {props.name}! Here are your tickets for
             </Text>
             <Heading
               as="h2"
@@ -92,7 +94,7 @@ export default function GTDFestEmail(props: GTDFestEmailProps) {
                 marginBottom: "2rem",
               }}
             >
-              GTD Fest x Escape Room tickets!
+              {props.eventTitle}
             </Heading>
             <Button
               href={props.url}

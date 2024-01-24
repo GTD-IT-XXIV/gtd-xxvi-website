@@ -1,17 +1,32 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { z } from "zod";
 
 import { api } from "@/lib/trpc/client";
 
-export default function TicketPage() {
-  const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+export default function TicketPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const sessionId = z.string().safeParse(searchParams.session_id);
   const { data: session, isLoading } =
     api.payment.retrieveCheckoutSession.useQuery(
-      { sessionId: sessionId! },
-      { enabled: !!sessionId },
+      { sessionId: sessionId.success ? sessionId.data : "" },
+      { enabled: sessionId.success },
     );
+
+  const {
+    data: tickets,
+    isLoading: isTicketsLoading,
+    isError: isTicketsError,
+  } = api.ticket.getManyByPaymentIntent.useQuery(
+    { id: String(session?.paymentIntentId) },
+    {
+      enabled: !!session?.paymentIntentId,
+      refetchInterval: (data) => !data && 2000,
+    },
+  );
 
   return (
     <main>
@@ -23,6 +38,17 @@ export default function TicketPage() {
         </>
       ) : (
         <p>Loading...</p>
+      )}
+      {isTicketsLoading && <p>Tickets Loading...</p>}
+      {!isTicketsLoading && !isTicketsError && (
+        <section>
+          <h2>Your Tickets</h2>
+          <ul>
+            {tickets.map((ticket) => (
+              <li key={ticket.id}>{ticket.id}</li>
+            ))}
+          </ul>
+        </section>
       )}
     </main>
   );

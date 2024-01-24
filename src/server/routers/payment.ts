@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import SuperJSON from "superjson";
 import { z } from "zod";
@@ -57,7 +58,9 @@ export const paymentRouter = createTRPCRouter({
               name: `${booking.event.name} ${booking.bundle.name}`,
             },
             currency: "sgd",
-            unit_amount: booking.quantity * Number(booking.bundle.price) * 100, // Stripe charges in cents
+            unit_amount: new Prisma.Decimal(booking.bundle.price)
+              .times(100)
+              .toNumber(), // Stripe charges in cents
           },
           quantity: Number(booking.quantity),
         })),
@@ -94,6 +97,7 @@ export const paymentRouter = createTRPCRouter({
       return {
         status: session.status,
         customerEmail: session.customer_details?.email,
+        paymentIntentId: session.payment_intent,
         clientSecret: session.client_secret,
       };
     }),
