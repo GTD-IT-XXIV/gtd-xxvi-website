@@ -101,28 +101,8 @@ type UpdateHandlerOptions = {
 } & HandlerOptions;
 
 export async function handleUpdate({ ctx, input }: UpdateHandlerOptions) {
-  const { id, email, eventId, bundleId, timeslotId, quantity } = input;
-  let bookingIdentifier: Prisma.BookingWhereUniqueInput | undefined = undefined;
-
-  // if (id) XNOR (email && eventId)
-  if (id ? email && eventId : !(email && eventId)) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Invalid inputs",
-    });
-  }
-  if (id) {
-    bookingIdentifier = { id };
-  }
-  if (email && eventId) {
-    bookingIdentifier = { email_eventId: { email, eventId } };
-  }
-  if (!bookingIdentifier) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Invalid inputs",
-    });
-  }
+  const { id, bundleId, timeslotId, quantity } = input;
+  const bookingIdentifier: Prisma.BookingWhereUniqueInput = { id };
 
   if (!quantity && !bundleId && !timeslotId) {
     return await ctx.db.booking.update({

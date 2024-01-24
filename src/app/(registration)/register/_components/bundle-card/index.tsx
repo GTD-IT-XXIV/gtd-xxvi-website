@@ -2,6 +2,7 @@
 
 import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useAtom } from "jotai";
 import React from "react";
 import { FaRegClock } from "react-icons/fa";
@@ -12,6 +13,8 @@ import { api } from "@/lib/trpc/client";
 
 import BundleCardPopup from "../bundle-card-popup";
 import BundleCardLoading from "./loading";
+
+dayjs.extend(utc);
 
 export type BundleCardProps = {
   event: {
@@ -82,7 +85,7 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           <p className="text-gtd-secondary-10 text-sm">
             {" "}
             <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
-            {dayjs(event.startDate).format("D MMMM")}{" "}
+            {dayjs.utc(event.startDate).format("D MMMM")}{" "}
           </p>
 
           <p className="text-gtd-secondary-10 text-sm">
