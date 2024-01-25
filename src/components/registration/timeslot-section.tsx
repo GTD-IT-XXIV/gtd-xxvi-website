@@ -1,55 +1,72 @@
 "use client";
 
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 import { api } from "@/lib/trpc/client";
 
 import TimeSlotButton from "./timeslot-button";
 
+dayjs.extend(utc);
+
 export type TimeSlotSectionProps = {
   eventId: number;
-  totalTicket: number;
+  bundleId: number;
+  quantity: number;
 };
 
 export default function TimeSlotSection({
   eventId,
-  totalTicket,
+  bundleId,
+  quantity,
 }: TimeSlotSectionProps) {
   const {
     data: event,
-    isLoading: isEventsLoading,
-    isError: isEventsError,
+    isLoading: isEventLoading,
+    isError: isEventError,
   } = api.event.getById.useQuery({ id: eventId });
 
   const {
-    data: timeslots,
-    isLoading: isTimeslotLoading,
-    isError: isTimeslotError,
-  } = api.timeslot.getManyByEvent.useQuery({ eventId });
+    data: bundle,
+    isLoading: isBundleLoading,
+    isError: isBundleError,
+  } = api.bundle.getById.useQuery({ id: bundleId });
 
-  if (isEventsLoading) {
+  const {
+    data: timeslots,
+    isLoading: isTimeslotsLoading,
+    isError: isTimeslotsError,
+  } = api.timeslot.getManyByEvent.useQuery(
+    { eventId },
+    { refetchInterval: false },
+  );
+
+  if (isEventLoading || isBundleLoading) {
     return <div>Loading...</div>;
   }
-  if (isEventsError) {
+  if (isEventError || isBundleError) {
     return <div>Error</div>;
   }
 
-  if (isTimeslotLoading) {
+  if (isTimeslotsLoading) {
     return <div>Loading...</div>;
   }
-  if (isTimeslotError) {
+  if (isTimeslotsError) {
     return <div>Error</div>;
   }
 
   return (
     <div>
-      <div className="px-[.75rem] font-bold my-3 text-[1.25rem] text-gtd-secondary-30">
-        {dayjs(event.startDate).format("dddd, D MMMM YYYY")}
+      <h2 className="font-medium text-gtd-primary-20 text-2xl">
+        {event.name} ({bundle.name}) Timeslots
+      </h2>
+      <div className="font-medium my-3 text-lg text-gtd-secondary-30">
+        {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")}
       </div>
       <div>
         {timeslots.map((timeslot) => {
           const remainingSlots = timeslot.remainingSlots;
-          const disabled = remainingSlots < totalTicket;
+          const disabled = remainingSlots < bundle.quantity * quantity;
           return (
             <TimeSlotButton
               id={timeslot.id}

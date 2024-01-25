@@ -2,10 +2,10 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/50 GitHub Issue}
- */
-import TimeSlotSection from "@/components/registration/timeslot-section";
+import CartCleaner from "@/components/registration/cart-cleaner";
+
+import TimeslotsPageBody from "./_components/timeslots-page-body";
+import TimeslotsPageFooter from "./_components/timeslots-page-footer";
 
 export const metadata: Metadata = {
   title: "Timeslots",
@@ -30,31 +30,26 @@ export default async function TimeslotsPage({
   } else {
     eventIds = [eventParams];
   }
-  const totalParams = z.coerce
-    .number()
-    .or(z.coerce.number())
-    .parse(searchParams.total);
-  const totalTicket = totalParams;
 
   return (
-    <section>
-      <h1 className="text-[1.75rem] font-semibold my-3 px-4 text-gtd-primary-30">
-        Escape Room Timeslots
-      </h1>
-      {/* <div className="flex justify-center">
-        <DayButto n day="Mon" selectedDay={selectedDay}></DayButton>
-        <p className="px-[2vw] text-semibold text-gtd-blue-secondary-dim">|</p>
-        <DayButton day="Tue" selectedDay={selectedDay}></DayButton>
-      </div> */}
-      <div className="flex flex-col justify-center text-[4vw]">
-        {eventIds.map((eventId) => (
-          <TimeSlotSection
-            key={eventId}
-            totalTicket={totalTicket}
-            eventId={eventId}
-          />
-        ))}
-      </div>
-    </section>
+    <CartCleaner eventIds={eventIds}>
+      <section className="grow flex flex-col">
+        <article className="flex-1 p-5 space-y-5">
+          <hgroup className="space-y-1">
+            <h1 className="text-gtd-primary-30 font-semibold text-3xl">
+              Event Timeslots
+            </h1>
+            <p className="text-sm font-light">
+              Select a timeslot for the following bundles
+            </p>
+          </hgroup>
+          <TimeslotsPageBody />
+        </article>
+        <TimeslotsPageFooter
+          className="sticky bottom-0"
+          pageSearchParams={searchParams}
+        />
+      </section>
+    </CartCleaner>
   );
 }

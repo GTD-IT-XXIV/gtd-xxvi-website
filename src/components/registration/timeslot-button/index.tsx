@@ -1,6 +1,11 @@
 "use client";
 
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+import { cn } from "@/lib/utils";
+
+dayjs.extend(utc);
 
 export type TimeSlotButtonProps = {
   id: number;
@@ -21,23 +26,24 @@ export default function TimeSlotButton({
 
   return (
     <button
-      className={
-        (disabled ? "bg-slate-100" : "bg-white") +
-        " flex min-w-[90%] border-box justify-between my-1.5 mx-3 py-3 px-3 border border-slate-300 rounded-[.5rem]"
-      }
+      className={cn(
+        "w-full flex justify-between my-2 p-3 border border-slate-300 rounded-lg",
+        disabled ? "bg-slate-100" : "bg-white",
+      )}
       id={String(id)}
       disabled={disabled ? true : false}
     >
       <div className="text-gtd-secondary-20">
-        {dayjs(startTime).format("h.mm")} - {dayjs(endTime).format("h.mm A")}
+        {dayjs.utc(startTime).format("h.mm")} -{" "}
+        {dayjs.utc(endTime).format("h.mm A")}
       </div>
       <div
         className={
-          (disabled
+          disabled
             ? "text-red-800"
             : remainingSlots >= highAvailability
               ? "text-emerald-800"
-              : "text-yellow-500") + " font-medium"
+              : "text-yellow-500"
         }
       >
         {remainingSlots} slots left
