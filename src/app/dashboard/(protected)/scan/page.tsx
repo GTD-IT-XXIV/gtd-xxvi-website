@@ -24,8 +24,8 @@ export default function DashboardScanPage() {
     if (!result?.data || result.data === ticketId) {
       return;
     }
-    setTicketId(result.data);
-    setTimeout(() => setTicketId(""), 3000);
+    setTicketId(atob(result.data));
+    setTimeout(() => setTicketId(""), 1000);
   }
 
   function handleScanFail(error: string | Error) {
@@ -34,7 +34,7 @@ export default function DashboardScanPage() {
     }
     console.error(error);
   }
-  console.log({ success });
+  console.log({ success, ticketId });
 
   return (
     <div className="relative grow flex items-stretch">

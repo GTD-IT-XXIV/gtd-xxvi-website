@@ -19,6 +19,7 @@ export default function Ticket({ id }: TicketProps) {
           btoa(payload),
           {
             errorCorrectionLevel: "H",
+            version: 6,
           },
           (error) => {
             if (error) {
