@@ -21,7 +21,7 @@ export default function TimeslotsPageFooter({
 }: TimeslotsPageFooterProps) {
   const router = useRouter();
   const cart = useAtomValue(cartAtom);
-  const selected = cart.reduce((accum, item) => accum + item.quantity, 0);
+  const disabled = cart.some((item) => item.timeslotId === 0);
   return (
     <footer
       className={cn(
@@ -51,14 +51,14 @@ export default function TimeslotsPageFooter({
             pathname: "/register/details",
             query: pageSearchParams,
           }}
-          className={selected === 0 ? "pointer-events-none" : undefined}
-          aria-disabled={selected === 0}
-          tabIndex={selected === 0 ? -1 : undefined}
+          className={disabled ? "pointer-events-none" : undefined}
+          aria-disabled={disabled}
+          tabIndex={disabled ? -1 : undefined}
         >
           <Button
             type="button"
             className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
-            disabled={selected === 0}
+            disabled={disabled}
           >
             Next Page
           </Button>

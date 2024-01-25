@@ -46,6 +46,7 @@ export const paymentRouter = createTRPCRouter({
         const session = await stripe.checkout.sessions.retrieve(sessionId!);
         return {
           clientSecret: session.client_secret,
+          sessionId: session.id,
         };
       }
 
@@ -82,6 +83,7 @@ export const paymentRouter = createTRPCRouter({
 
       return {
         clientSecret: session.client_secret,
+        sessionId: session.id,
       };
     }),
 

@@ -11,6 +11,7 @@ import { useHasMounted } from "@/lib/hooks";
 
 export default function TimeslotsPageBody() {
   const router = useRouter();
+  const hasMounted = useHasMounted();
   const [cart, setCart] = useAtom(cartAtom);
   const [skipTimeslots, setSkipTimeslots] = useState<boolean[]>([]);
 
@@ -29,6 +30,7 @@ export default function TimeslotsPageBody() {
   useEffect(() => {
     function runEffect() {
       if (
+        hasMounted &&
         skipTimeslots.length === cart.length &&
         skipTimeslots.every((val) => val)
       ) {

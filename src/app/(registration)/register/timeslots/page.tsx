@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import CartCleaner from "@/components/registration/cart-cleaner";
+import CheckoutWrapper from "@/components/registration/checkout-wrapper";
 
 import TimeslotsPageBody from "./_components/timeslots-page-body";
 import TimeslotsPageFooter from "./_components/timeslots-page-footer";
@@ -32,24 +33,26 @@ export default async function TimeslotsPage({
   }
 
   return (
-    <CartCleaner eventIds={eventIds}>
-      <section className="grow flex flex-col">
-        <article className="flex-1 p-5 space-y-5">
-          <hgroup className="space-y-1">
-            <h1 className="text-gtd-primary-30 font-semibold text-3xl">
-              Event Timeslots
-            </h1>
-            <p className="text-sm font-light">
-              Select a timeslot for the following bundles
-            </p>
-          </hgroup>
-          <TimeslotsPageBody />
-        </article>
-        <TimeslotsPageFooter
-          className="sticky bottom-0"
-          pageSearchParams={searchParams}
-        />
-      </section>
-    </CartCleaner>
+    <CheckoutWrapper>
+      <CartCleaner eventIds={eventIds}>
+        <section className="grow flex flex-col">
+          <article className="flex-1 p-5 space-y-5">
+            <hgroup className="space-y-1">
+              <h1 className="text-gtd-primary-30 font-semibold text-3xl">
+                Event Timeslots
+              </h1>
+              <p className="text-sm font-light">
+                Select a timeslot for the following bundles
+              </p>
+            </hgroup>
+            <TimeslotsPageBody />
+          </article>
+          <TimeslotsPageFooter
+            className="sticky bottom-0"
+            pageSearchParams={searchParams}
+          />
+        </section>
+      </CartCleaner>
+    </CheckoutWrapper>
   );
 }

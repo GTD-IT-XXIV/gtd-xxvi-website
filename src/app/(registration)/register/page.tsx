@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import CartCleaner from "@/components/registration/cart-cleaner";
+import CheckoutWrapper from "@/components/registration/checkout-wrapper";
 
 import EventCardGroup from "./_components/event-card-group";
 import RegisterPageFooter from "./_components/register-page-footer";
@@ -31,28 +32,30 @@ export default function RegisterPage({
   }
 
   return (
-    <CartCleaner eventIds={eventIds}>
-      <section className="grow flex flex-col">
-        <article className="flex-1 p-5 space-y-5">
-          <hgroup className="space-y-1">
-            <h1 className="text-gtd-primary-30 font-semibold text-3xl">
-              Event Registrations
-            </h1>
-            <p className="text-sm font-light">
-              Choose events you wish to register for
-            </p>
-          </hgroup>
-          <div className="space-y-4">
-            {eventIds.map((eventId) => (
-              <EventCardGroup key={eventId} eventId={eventId} />
-            ))}
-          </div>
-        </article>
-        <RegisterPageFooter
-          className="sticky bottom-0"
-          pageSearchParams={searchParams}
-        />
-      </section>
-    </CartCleaner>
+    <CheckoutWrapper>
+      <CartCleaner eventIds={eventIds}>
+        <section className="grow flex flex-col">
+          <article className="flex-1 p-5 space-y-5">
+            <hgroup className="space-y-1">
+              <h1 className="text-gtd-primary-30 font-semibold text-3xl">
+                Event Registrations
+              </h1>
+              <p className="text-sm font-light">
+                Choose events you wish to register for
+              </p>
+            </hgroup>
+            <div className="space-y-4">
+              {eventIds.map((eventId) => (
+                <EventCardGroup key={eventId} eventId={eventId} />
+              ))}
+            </div>
+          </article>
+          <RegisterPageFooter
+            className="sticky bottom-0"
+            pageSearchParams={searchParams}
+          />
+        </section>
+      </CartCleaner>
+    </CheckoutWrapper>
   );
 }

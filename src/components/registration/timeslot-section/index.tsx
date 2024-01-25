@@ -73,18 +73,11 @@ export default function TimeSlotSection({
     };
   }, [timeslots]);
 
-  if (isEventLoading || isBundleLoading) {
+  if (isEventLoading || isBundleLoading || isTimeslotsLoading) {
     return <TimeslotSectionLoading />;
   }
-  if (isEventError || isBundleError) {
-    return <div>Error</div>;
-  }
-
-  if (isTimeslotsLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isTimeslotsError) {
-    return <div>Error</div>;
+  if (isEventError || isBundleError || isTimeslotsError) {
+    return null;
   }
 
   if (timeslots.length === 1 && timeslots[0]) {
