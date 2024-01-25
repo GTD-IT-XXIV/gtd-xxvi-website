@@ -12,6 +12,7 @@ export default async function DashboardHomePage() {
   }
   const hasAccess =
     session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER";
+
   if (!hasAccess) {
     redirect("/dashboard/scan");
   }

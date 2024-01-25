@@ -66,6 +66,7 @@
     "client-only": "^0.0.1",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
+    "fuse.js": "^7.0.0",
     "jotai": "^2.6.1",
     "lucia": "^2.7.6",
     "lucide-react": "^0.294.0",

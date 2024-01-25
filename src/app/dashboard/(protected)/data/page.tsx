@@ -2,9 +2,8 @@ import { redirect } from "next/navigation";
 
 import { getPageSession } from "@/server/auth";
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/47 GitHub Issue}
- */
+import DashboardDataPageBody from "./_components/body";
+
 export default async function DashboardDataPage() {
   const session = await getPageSession();
   if (!session) {
@@ -12,8 +11,14 @@ export default async function DashboardDataPage() {
   }
   const hasAccess =
     session.user.role === "ADMIN" || session.user.role === "DASHBOARD_USER";
+
   if (!hasAccess) {
     redirect("/dashboard");
   }
-  return <p>Dashboard Data Page</p>;
+
+  return (
+    <div>
+      <DashboardDataPageBody />
+    </div>
+  );
 }

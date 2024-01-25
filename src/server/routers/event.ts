@@ -43,4 +43,21 @@ export const eventRouter = createTRPCRouter({
       }
       return event;
     }),
+
+  countBookingsById: publicProcedure
+    .input(z.object({ id: z.number().positive() }))
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const event = await ctx.db.event.findUnique({
+        where: { id },
+        select: { _count: { select: { bookings: true } } },
+      });
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No event with id '${id}'`,
+        });
+      }
+      return event._count.bookings;
+    }),
 });

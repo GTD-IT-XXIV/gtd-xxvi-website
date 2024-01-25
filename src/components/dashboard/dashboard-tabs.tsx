@@ -1,5 +1,8 @@
+"use client";
+
 import { Database, Home, ScanLine } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -10,8 +13,27 @@ export type DashboardTabsProps = {
 };
 
 export default function DashboardTabs({ className }: DashboardTabsProps) {
+  const pathname = usePathname();
+
+  let tabValue = "home";
+  switch (pathname) {
+    case "/dashboard/scan": {
+      tabValue = "scan";
+      break;
+    }
+    case "/dashboard/data": {
+      tabValue = "data";
+      break;
+    }
+    case "/dashboard/home":
+    default: {
+      tabValue = "home";
+      break;
+    }
+  }
+
   return (
-    <Tabs defaultValue="home" className={cn("", className)}>
+    <Tabs value={tabValue} className={cn("", className)}>
       <TabsList className="flex h-auto">
         <TabsTrigger value="home" className="flex-1" asChild>
           <Link href="/dashboard" className="flex flex-col gap-1">
