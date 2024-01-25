@@ -1,11 +1,14 @@
-"use client";
+import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 
 import { api } from "@/lib/trpc/client";
 
-import TimeSlotButton from "./timeslot-button";
+import TimeSlotButton from "../timeslot-button";
+import TimeslotSectionLoading from "./loading";
 
 dayjs.extend(utc);
 
@@ -13,12 +16,18 @@ export type TimeSlotSectionProps = {
   eventId: number;
   bundleId: number;
   quantity: number;
+  selectedId?: number;
+  onChange: (id: number) => void;
+  handleSkip: (value: boolean) => void;
 };
 
 export default function TimeSlotSection({
   eventId,
   bundleId,
   quantity,
+  selectedId = 0,
+  onChange,
+  handleSkip,
 }: TimeSlotSectionProps) {
   const {
     data: event,
@@ -41,8 +50,31 @@ export default function TimeSlotSection({
     { refetchInterval: false },
   );
 
+  useEffect(() => {
+    function runEffect() {
+      if (!timeslots) {
+        return;
+      }
+      if (timeslots.length > 1) {
+        return handleSkip(false);
+      }
+      if (timeslots.length === 1 && timeslots[0]) {
+        onChange(timeslots[0].id);
+        return handleSkip(true);
+      }
+    }
+
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [timeslots]);
+
   if (isEventLoading || isBundleLoading) {
-    return <div>Loading...</div>;
+    return <TimeslotSectionLoading />;
   }
   if (isEventError || isBundleError) {
     return <div>Error</div>;
@@ -53,6 +85,10 @@ export default function TimeSlotSection({
   }
   if (isTimeslotsError) {
     return <div>Error</div>;
+  }
+
+  if (timeslots.length === 1 && timeslots[0]) {
+    return null;
   }
 
   return (
@@ -69,11 +105,20 @@ export default function TimeSlotSection({
           const disabled = remainingSlots < bundle.quantity * quantity;
           return (
             <TimeSlotButton
+              key={timeslot.id}
               id={timeslot.id}
               remainingSlots={timeslot.remainingSlots}
-              disabled={disabled}
               startTime={timeslot.startTime}
               endTime={timeslot.endTime}
+              onClick={onChange}
+              state={
+                disabled
+                  ? "disabled"
+                  : timeslot.id === selectedId
+                    ? "checked"
+                    : "unchecked"
+              }
+              availability={disabled ? "low" : undefined}
             />
           );
         })}

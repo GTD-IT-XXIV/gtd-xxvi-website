@@ -36,9 +36,6 @@ export default function TimeslotsPageFooter({
             pathname: "/register",
             query: pageSearchParams,
           }}
-          className={selected === 0 ? "pointer-events-none" : undefined}
-          aria-disabled={selected === 0}
-          tabIndex={selected === 0 ? -1 : undefined}
         >
           <Button
             type="button"
