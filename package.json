@@ -71,6 +71,7 @@
     "lucia": "^2.7.6",
     "lucide-react": "^0.294.0",
     "next": "14.0.4",
+    "qr-scanner": "^1.4.2",
     "react": "~18.2.0",
     "react-dom": "~18.2.0",
     "react-email": "2.0.0",

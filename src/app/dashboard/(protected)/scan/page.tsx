@@ -1,18 +1,24 @@
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/46 GitHub Issue}
- */
+import type QrScanner from "qr-scanner";
 import React from "react";
 
-// import Webcam from "react-webcam";
+import QrReader from "@/components/dashboard/qr-reader";
 
 export default function DashboardScanPage() {
-  // const WebcamComponent = () => <Webcam />;
+  function handleScan(result: QrScanner.ScanResult) {
+    console.log(result?.data);
+  }
+
+  function handleScanFail(error: string | Error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error(error);
+    }
+  }
 
   return (
     <div>
-      <div className="flex">
-        <div>WebcamComponent</div>
-      </div>
+      <QrReader onSuccess={handleScan} onFail={handleScanFail} />
     </div>
   );
 }
