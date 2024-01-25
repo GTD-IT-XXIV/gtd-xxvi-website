@@ -15,10 +15,10 @@ git commit -m "feat: add leaderboard router"
 git push
 ```
 
-3. Open a pull request (PR). Add the `DO NOT MERGE` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
+3. Open a pull request (PR). Add the `WIP` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
 
 4. See specific workflows:
-   - [Frontend workflow](#frontend-workflow-construction)
+   - [Frontend workflow](#frontend-workflow)
    - [Backend worflow](#backend-workflow)
 
 5. See [Tips](./tips.md).
@@ -60,7 +60,7 @@ Optional but recommended:
 
 ## Learn More
 
-- [Documentation](docs/README.md)
+- [Documentation](./README.md)
 - Learning resources: [github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources](https://github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources)
 - Learning articles:
   - [Making Sense of React Server Components](https://www.joshwcomeau.com/react/server-components/)
