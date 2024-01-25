@@ -27,8 +27,6 @@ export default function TimeslotsPageBody() {
     });
   }
 
-  console.log({ hasMounted, skipTimeslots, cart });
-
   if (
     hasMounted &&
     skipTimeslots.length === cart.length &&

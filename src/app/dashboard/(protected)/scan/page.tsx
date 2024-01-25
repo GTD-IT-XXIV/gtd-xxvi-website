@@ -34,7 +34,6 @@ export default function DashboardScanPage() {
     }
     console.error(error);
   }
-  console.log({ success, ticketId });
 
   return (
     <div className="relative grow flex items-stretch">
