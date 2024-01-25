@@ -26,7 +26,7 @@ export default async function DashboardContentLayout({
   return (
     <main className="flex flex-col min-h-screen">
       <DashboardNavbar className="sticky top-0" authenticated={hasAccess} />
-      <section className="flex-1">{children}</section>
+      <section className="flex-1 flex flex-col">{children}</section>
       <DashboardTabs />
     </main>
   );
