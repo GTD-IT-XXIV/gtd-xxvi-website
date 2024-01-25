@@ -1,13 +1,13 @@
 "use client";
 
-import { atom, useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import TimeSlotSection from "@/components/registration/timeslot-section";
-
 import { cartAtom } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";
+
+import TimeSlotSection from "./timeslot-section";
 
 export default function TimeslotsPageBody() {
   const router = useRouter();

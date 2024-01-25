@@ -23,7 +23,7 @@ export default function TicketPage({
     isLoading: isTicketsLoading,
     isError: isTicketsError,
   } = api.ticket.getManyByPaymentIntent.useQuery(
-    { id: String(session?.paymentIntentId) },
+    { paymentIntentId: String(session?.paymentIntentId) },
     {
       enabled: !!session?.paymentIntentId,
       refetchInterval: (data) => !data && 2000,

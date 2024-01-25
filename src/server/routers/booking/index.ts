@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -93,7 +94,10 @@ export const bookingRouter = createTRPCRouter({
         distinct: ["email"],
       });
       const emails = bookings.map((booking) => booking.email);
-      return { emails, nextCursor: input.cursor ? input.cursor + 1 : 0 };
+      return {
+        emails,
+        nextCursor: input.cursor ? input.cursor + 1 : undefined,
+      };
     }),
 
   create: publicProcedure
@@ -117,6 +121,29 @@ export const bookingRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return await handleUpdate({ ctx, input });
+    }),
+
+  getPriceByEmailAndEvents: dashboardProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        eventIds: z.number().positive().array(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { email, eventIds } = input;
+      const bookings = await ctx.db.booking.findMany({
+        where: { email, eventId: { in: eventIds } },
+        include: { bundle: true },
+      });
+      return bookings.reduce(
+        (accum, booking) =>
+          accum +
+          new Prisma.Decimal(booking.bundle.price)
+            .times(booking.quantity)
+            .toNumber(),
+        0,
+      );
     }),
 
   deleteById: dashboardProcedure
