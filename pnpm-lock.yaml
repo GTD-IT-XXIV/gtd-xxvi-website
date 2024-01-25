@@ -125,9 +125,6 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
-  webcam:
-    specifier: ^3.2.1
-    version: 3.2.1
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -5272,12 +5269,6 @@ packages:
     dependencies:
       function-bind: 1.1.2
 
-  /history@5.3.0:
-    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
-    dependencies:
-      '@babel/runtime': 7.23.8
-    dev: false
-
   /hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
 
@@ -8472,11 +8463,6 @@ packages:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
     dependencies:
       defaults: 1.0.4
-    dev: false
-
-  /webcam@3.2.1:
-    resolution: {integrity: sha512-TJ68Olwh90wxiiz7CY2fanLh584hdUJGVPPNt2RsjXtMva4Rcf2aJCVadiPWL2DSB0vYUOMorlhJsuz08/ArZQ==}
-    engines: {node: '>=0.10.0'}
     dev: false
 
   /webidl-conversions@3.0.1:
