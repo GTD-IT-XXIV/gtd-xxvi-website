@@ -68,10 +68,10 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   getManyByPaymentIntent: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ paymentIntentId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { id } = input;
-      return await ctx.db.ticket.findMany({ where: { paymentIntentId: id } });
+      const { paymentIntentId } = input;
+      return await ctx.db.ticket.findMany({ where: { paymentIntentId } });
     }),
 
   deleteById: publicProcedure

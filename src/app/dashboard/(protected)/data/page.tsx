@@ -4,10 +4,6 @@ import { getPageSession } from "@/server/auth";
 
 import DashboardDataPageBody from "./_components/body";
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/47 GitHub Issue}
- */
-
 export default async function DashboardDataPage() {
   const session = await getPageSession();
   if (!session) {

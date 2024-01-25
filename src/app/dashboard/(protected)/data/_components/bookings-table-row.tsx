@@ -4,26 +4,47 @@ import { api } from "@/lib/trpc/client";
 
 export type BookingsTableRowProps = {
   email: string;
+  eventId: number;
   checked?: boolean;
   onChange: () => void;
 };
 
 export default function BookingsTableRow({
   email,
+  eventId,
   checked = false,
   onChange,
 }: BookingsTableRowProps) {
   const {
     data: bookings,
-    error,
+    error: bookingsError,
     isLoading,
     isError,
-  } = api.booking.getManyByEmail.useQuery({ email });
+  } = api.booking.getManyByEmailAndEvents.useQuery(
+    {
+      email,
+      eventIds: [eventId],
+    },
+    { enabled: !!eventId },
+  );
+  const {
+    data: amount,
+    error: amountError,
+    isLoading: isAmountLoading,
+    isError: isAmountError,
+  } = api.booking.getPriceByEmailAndEvents.useQuery({
+    email,
+    eventIds: [eventId],
+  });
 
   if (isLoading) {
     return null;
   }
   if (isError) {
+    return null;
+  }
+
+  if (bookings.length === 0) {
     return null;
   }
 
@@ -47,7 +68,9 @@ export default function BookingsTableRow({
       <td className="w-2/12">{status}</td>
       <td className="w-4/12">{email}</td>
       <td className="w-2/12">{bookings.length}</td>
-      <td className="w-3/12">${"placeholder"}</td>
+      <td className="w-3/12">
+        ${isLoading ? "..." : isError ? "Error" : amount}
+      </td>
     </tr>
   );
 }
