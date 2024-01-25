@@ -20,6 +20,7 @@ export default function RegisterPageFooter({
 }: RegisterPageFooterProps) {
   const cart = useAtomValue(cartAtom);
   const selected = cart.reduce((accum, item) => accum + item.quantity, 0);
+
   return (
     <footer
       className={cn(

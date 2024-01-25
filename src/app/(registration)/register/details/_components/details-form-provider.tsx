@@ -12,7 +12,6 @@ import { Form } from "@/components/ui/form";
 
 import {
   allowCheckoutAtom,
-  bookingIdsAtom,
   cartAtom,
   checkoutSessionAtom,
 } from "@/lib/atoms/events-registration";

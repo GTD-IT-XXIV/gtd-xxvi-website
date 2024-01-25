@@ -36,7 +36,7 @@ export default async function TimeslotsPage({
     <CheckoutWrapper>
       <CartCleaner eventIds={eventIds}>
         <section className="grow flex flex-col">
-          <article className="flex-1 p-5 space-y-5">
+          <article className="flex-1 p-5 pt-10 space-y-5">
             <hgroup className="space-y-1">
               <h1 className="text-gtd-primary-30 font-semibold text-3xl">
                 Event Timeslots

@@ -27,15 +27,19 @@ export default function TimeslotsPageBody() {
     });
   }
 
+  console.log({ hasMounted, skipTimeslots, cart });
+
+  if (
+    hasMounted &&
+    skipTimeslots.length === cart.length &&
+    skipTimeslots.every((val) => val)
+  ) {
+    router.replace("/register/details");
+  }
+
   useEffect(() => {
     function runEffect() {
-      if (
-        hasMounted &&
-        skipTimeslots.length === cart.length &&
-        skipTimeslots.every((val) => val)
-      ) {
-        router.replace("/register/details");
-      }
+      setSkipTimeslots([]);
     }
 
     let ignored = false;
@@ -45,7 +49,7 @@ export default function TimeslotsPageBody() {
     return () => {
       ignored = true;
     };
-  }, [skipTimeslots]);
+  }, []);
 
   return (
     <>
