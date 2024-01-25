@@ -2,7 +2,6 @@ import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 
 import { api } from "@/lib/trpc/client";
