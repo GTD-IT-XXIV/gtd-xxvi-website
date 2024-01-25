@@ -45,15 +45,20 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
   }
 
   const handleDecrement = () => {
-    if (amount > 0) {
-      setCart((prev) =>
-        prev.map((item) =>
-          item.bundleId !== bundleId
-            ? item
-            : { ...item, quantity: item.quantity - 1 },
-        ),
-      );
+    if (amount === 0) {
+      return;
     }
+    if (amount === 1) {
+      setCart((prev) => prev.filter((item) => item.bundleId !== bundleId));
+      return;
+    }
+    setCart((prev) =>
+      prev.map((item) =>
+        item.bundleId !== bundleId
+          ? item
+          : { ...item, quantity: item.quantity - 1 },
+      ),
+    );
   };
   const handleIncrement = () => {
     setCart((prev) => {
