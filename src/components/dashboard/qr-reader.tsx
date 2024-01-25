@@ -4,29 +4,25 @@ import Image from "next/image";
 import QrScanner from "qr-scanner";
 import { useEffect, useRef, useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 // https://medium.com/readytowork-org/implementing-a-qr-code-scanner-in-react-4c8f4e3c6f2e
 
 export type QrReaderProps = {
+  className?: string;
   onSuccess: (result: QrScanner.ScanResult) => void;
   onFail: (error: string | Error) => void;
 };
 
-export default function QrReader({ onSuccess, onFail }: QrReaderProps) {
+export default function QrReader({
+  className = "",
+  onSuccess,
+  onFail,
+}: QrReaderProps) {
   const scanner = useRef<QrScanner>();
   const video = useRef<HTMLVideoElement>(null);
   const qrBox = useRef<HTMLDivElement>(null);
   const [qrOn, setQrOn] = useState(true);
-
-  // const [scannedResult, setScannedResult] = useState<string | undefined>("");
-  //
-  // function onScanSuccess(result: QrScanner.ScanResult) {
-  //   console.log(result);
-  //   setScannedResult(result?.data);
-  // }
-  //
-  // function onScanFail(err: string | Error) {
-  //   console.log(err);
-  // }
 
   useEffect(() => {
     if (video?.current && !scanner.current) {
@@ -65,16 +61,17 @@ export default function QrReader({ onSuccess, onFail }: QrReaderProps) {
   }, [qrOn]);
 
   return (
-    <div className="relative w-full h-full">
+    <div
+      className={cn(
+        "bg-black relative flex justify-center items-center",
+        className,
+      )}
+    >
       <video ref={video} />
-      <div ref={qrBox} className="">
-        <Image
-          src="/qr-frame.svg"
-          width={256}
-          height={256}
-          alt="QR Code Frame"
-        />
-      </div>
+      <div
+        ref={qrBox}
+        className="absolute inset-0 border-4 border-white rounded-2xl"
+      />
     </div>
   );
 }
