@@ -46,6 +46,7 @@ export const paymentRouter = createTRPCRouter({
         const session = await stripe.checkout.sessions.retrieve(sessionId!);
         return {
           clientSecret: session.client_secret,
+          sessionId: session.id,
         };
       }
 
@@ -82,6 +83,7 @@ export const paymentRouter = createTRPCRouter({
 
       return {
         clientSecret: session.client_secret,
+        sessionId: session.id,
       };
     }),
 
@@ -100,5 +102,34 @@ export const paymentRouter = createTRPCRouter({
         paymentIntentId: session.payment_intent,
         clientSecret: session.client_secret,
       };
+    }),
+
+  cancelCheckoutSession: publicProcedure
+    .input(z.object({ sessionId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { sessionId } = input;
+      const bookings = await ctx.db.booking.findMany({
+        where: { sessionId },
+        include: { bundle: true },
+      });
+
+      await ctx.db.$transaction(async (tx) => {
+        for (const booking of bookings) {
+          const partySize = booking.quantity * booking.bundle.quantity;
+
+          await tx.bundle.update({
+            where: { id: Number(booking.bundleId) },
+            data: {
+              remainingAmount: { increment: Number(booking.quantity) },
+            },
+          });
+
+          await tx.timeslot.update({
+            where: { id: Number(booking.timeslotId) },
+            data: { remainingSlots: { increment: Number(partySize) } },
+          });
+        }
+        await tx.booking.deleteMany({ where: { sessionId } });
+      });
     }),
 });

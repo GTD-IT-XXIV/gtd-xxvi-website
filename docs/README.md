@@ -11,6 +11,7 @@
 5. Diagrams:
    1. [Entity-Relationship Diagrams](./er-diagrams.md)
    2. [Sequence Diagram](./sequence-diagrams.md)
+6. [Tips](./tips.md)
 
 ## Tech Stack
 
@@ -18,7 +19,7 @@
 - Frontend:
   - UI library: **React v18.2**
   - Styling: **Tailwind CSS v3** & shadcn/ui
-  - State management: zustand v4, Jotai v2
+  - State management: Jotai v2
   - Asynchronous state management: TanStack Query v4
 - Backend:
   - Route Handling: **Next.js v14**
@@ -58,6 +59,7 @@ gtd-xxvi-website/
     │   ├── hooks.ts              # Custom hooks
     │   └── utils.ts              # Utilities & helpers
     ├── server/                   # Backend code; put all backend code here
+    │   ├── actions/              # Server actions
     │   ├── routers/              # Routers
     │   ├── middlewares/          # Route middlewares
     │   ├── db.ts                 # Database/PrismaClient configuration
