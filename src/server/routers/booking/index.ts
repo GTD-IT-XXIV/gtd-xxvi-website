@@ -83,7 +83,6 @@ export const bookingRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      console.log({ input });
       const take = input.limit ?? 10;
       const skip = take * (input.cursor ?? 0);
       const bookings = await ctx.db.booking.findMany({
