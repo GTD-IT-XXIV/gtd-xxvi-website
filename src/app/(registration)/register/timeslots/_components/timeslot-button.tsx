@@ -45,13 +45,10 @@ export default function TimeSlotButton({
   } = api.timeslot.getTotalSlotsById.useQuery({ id });
 
   if (!isLoading && !isError) {
-    const empty = remainingSlots / totalSlots;
-    if (empty >= 0.75) {
-      availability = "high";
-    } else if (empty >= 0.5) {
-      availability = "medium";
-    } else {
+    if (remainingSlots === 0) {
       availability = "low";
+    } else {
+      availability = "high";
     }
   }
 
@@ -76,7 +73,7 @@ export default function TimeSlotButton({
         <span>Selected</span>
       ) : (
         <span className={timeslotButtonVariants({ availability })}>
-          {remainingSlots} slots left
+          {availability === "low" ? "Booked" : "Available"}
         </span>
       )}
     </button>
