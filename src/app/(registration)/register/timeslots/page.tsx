@@ -1,9 +1,10 @@
 import { type Metadata } from "next";
-import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import CartCleaner from "@/components/registration/cart-cleaner";
 import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+
+import { api } from "@/server/trpc";
 
 import TimeslotsPageBody from "./_components/timeslots-page-body";
 import TimeslotsPageFooter from "./_components/timeslots-page-footer";
@@ -17,21 +18,21 @@ export default async function TimeslotsPage({
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  if (!searchParams.event) {
-    notFound();
-  }
   const eventParams = z.coerce
     .number()
-    .array()
-    .or(z.coerce.number())
-    .parse(searchParams.event);
-  let eventIds: number[] = [];
-  if (Array.isArray(eventParams)) {
-    eventIds = eventParams;
+    .or(z.coerce.number().array())
+    .safeParse(searchParams.event);
+  let eventIds: number[];
+  if (eventParams.success) {
+    if (Array.isArray(eventParams.data)) {
+      eventIds = eventParams.data;
+    } else {
+      eventIds = [eventParams.data];
+    }
   } else {
-    eventIds = [eventParams];
+    const events = await api.event.getAll.query();
+    eventIds = events.map((event) => event.id);
   }
-
   return (
     <CheckoutWrapper>
       <CartCleaner eventIds={eventIds}>

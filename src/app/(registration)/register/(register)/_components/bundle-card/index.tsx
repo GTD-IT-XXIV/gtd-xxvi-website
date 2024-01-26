@@ -114,7 +114,7 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       </div>
 
       <div className="flex flex-col w-[30%]">
-        {bundle.name.toLowerCase() === "individual" ? (
+        {bundle.quantity === 1 ? (
           <div className="flex justify-end">
             <p className="text-sm self-baseline">$</p>
             <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">

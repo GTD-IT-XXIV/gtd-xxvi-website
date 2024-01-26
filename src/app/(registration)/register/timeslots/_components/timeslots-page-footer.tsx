@@ -60,7 +60,7 @@ export default function TimeslotsPageFooter({
             className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
             disabled={disabled}
           >
-            Next Page
+            Checkout
           </Button>
         </Link>
       </div>
