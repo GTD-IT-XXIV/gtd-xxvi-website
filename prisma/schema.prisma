@@ -35,6 +35,9 @@ model Bundle {
   quantity        Int
   /// Number of bundles available; bundles are not limited if this is null (might still be limited by timeslots remaining slots)
   remainingAmount Int?
+  maxPurchases    Int
+  open            DateTime
+  close           DateTime
   eventId         Int
   event           Event     @relation(fields: [eventId], references: [id])
   bookings        Booking[]

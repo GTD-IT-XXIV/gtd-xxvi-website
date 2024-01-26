@@ -6,7 +6,7 @@ import { dashboardProcedure } from "@/server/procedures/dashboard-procedure";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
-import { handleCreate, handleUpdate } from "./handlers";
+import { handleCreate, handleCreateMany } from "./handlers";
 import { bookingSchema } from "./schemas";
 import { checkEventConsistency } from "./utils";
 
@@ -120,21 +120,10 @@ export const bookingRouter = createTRPCRouter({
       return await handleCreate({ ctx, input });
     }),
 
-  updateById: dashboardProcedure
-    .input(
-      z.object({
-        id: z.number().positive(),
-        name: z.string().optional(),
-        telegramHandle: z.string().optional(),
-        phoneNumber: z.string().optional(),
-        quantity: z.number().nonnegative().optional(),
-        bundleId: z.number().positive().optional(),
-        timeslotId: z.number().positive().optional(),
-        sessionId: z.string().optional(),
-      }),
-    )
+  createMany: publicProcedure
+    .input(z.object({ bookings: bookingSchema.array() }))
     .mutation(async ({ ctx, input }) => {
-      return await handleUpdate({ ctx, input });
+      return await handleCreateMany({ ctx, input });
     }),
 
   getPriceByEmailAndEvents: dashboardProcedure

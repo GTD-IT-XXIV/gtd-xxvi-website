@@ -2,8 +2,10 @@ import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useAtomValue } from "jotai";
 import { useEffect } from "react";
 
+import { cartAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 
 import TimeSlotButton from "../timeslot-button";
@@ -28,6 +30,8 @@ export default function TimeSlotSection({
   onChange,
   handleSkip,
 }: TimeSlotSectionProps) {
+  const cart = useAtomValue(cartAtom);
+
   const {
     data: event,
     isLoading: isEventLoading,
@@ -94,7 +98,11 @@ export default function TimeSlotSection({
       <div>
         {timeslots.map((timeslot) => {
           const remainingSlots = timeslot.remainingSlots;
-          const disabled = remainingSlots < bundle.quantity * quantity;
+          // timeslot already selected by some other item
+          const selected = cart.some((item) => item.timeslotId === timeslot.id);
+          const disabled =
+            remainingSlots < bundle.quantity * quantity ||
+            (selected && timeslot.id !== selectedId);
           return (
             <TimeSlotButton
               key={timeslot.id}

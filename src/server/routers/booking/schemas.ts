@@ -12,10 +12,6 @@ export const bookingSchema = z.object({
   sessionId: z.string().optional(),
 });
 
-export const updateHandlerInputSchema = bookingSchema
-  .partial()
-  .merge(z.object({ id: z.number().positive() }));
-
 export const bookingEventConsistencySchema = bookingSchema.pick({
   eventId: true,
   bundleId: true,

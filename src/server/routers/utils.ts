@@ -1,3 +1,4 @@
+import { type Prisma, type PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 
@@ -30,4 +31,16 @@ export async function retryPrismaTransaction<T>(
     code: "INTERNAL_SERVER_ERROR",
     message: "Interactive transaction reached maximum retries",
   });
+}
+
+export function extendPrismaTransaction(tx: Prisma.TransactionClient) {
+  return new Proxy(tx, {
+    get: (target, property) => {
+      if (property === "$transaction") {
+        type Transaction = InstanceType<typeof PrismaClient>["$transaction"];
+        return (func: Parameters<Transaction>[0]) => func(tx);
+      }
+      return Reflect.get(target, property) as unknown;
+    },
+  }) as Prisma.TransactionClient & Pick<PrismaClient, "$transaction">;
 }

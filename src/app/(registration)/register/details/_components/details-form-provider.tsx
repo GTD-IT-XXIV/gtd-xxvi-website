@@ -59,41 +59,50 @@ export default function DetailsFormProvider({
     },
   });
 
-  const { mutateAsync: createBooking } = api.booking.create.useMutation();
+  const { mutateAsync: createBookings } = api.booking.createMany.useMutation();
   const { mutateAsync: createSession } =
     api.payment.createCheckoutSession.useMutation();
 
   async function placeOrder(values: z.infer<typeof formSchema>) {
-    const bookingIds = [];
-    for (const item of cart) {
-      const booking = await createBooking({ ...values, ...item });
-      bookingIds.push(booking.id);
-    }
     try {
-      const { sessionId } = await createSession({ bookingIds });
-      setSession(sessionId);
-      setCart([]);
-      setAllowCheckout(false);
-      router.push("/register/checkout");
-    } catch (error) {
-      if (
-        error instanceof TRPCClientError &&
-        error.message === "No items to checkout."
-      ) {
+      const bookings = await createBookings({
+        bookings: cart.map((item) => ({ ...values, ...item })),
+      });
+      const bookingIds = bookings.map((booking) => booking.id);
+      try {
+        const { sessionId } = await createSession({ bookingIds });
+        setSession(sessionId);
+        setCart([]);
+        setAllowCheckout(false);
+        router.push("/register/checkout");
+      } catch (error) {
+        if (
+          error instanceof TRPCClientError &&
+          error.message === "No items to checkout."
+        ) {
+          toast({
+            variant: "destructive",
+            title: "Failed to Place Order",
+            description: error.message,
+          });
+          router.back();
+        }
         toast({
           variant: "destructive",
           title: "Failed to Place Order",
-          description: error.message,
+          description:
+            "An error occurred while placing order. Please go back and try again.",
         });
         router.back();
       }
-      toast({
-        variant: "destructive",
-        title: "Failed to Place Order",
-        description:
-          "An error occurred while placing order. Please go back and try again.",
-      });
-      router.back();
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        toast({
+          variant: "default",
+          title: "One or more of the items are sold out",
+          description: `${error.message}. Please go back and select another timeslot or bundle.`,
+        });
+      }
     }
   }
 

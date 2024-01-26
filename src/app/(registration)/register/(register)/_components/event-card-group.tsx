@@ -8,7 +8,10 @@ import BundleCard from "./bundle-card";
 export default async function EventCardGroup({ eventId }: { eventId: number }) {
   try {
     const event = await api.event.getById.query({ id: eventId });
-    const bundles = await api.bundle.getManyByEvent.query({ eventId });
+    const bundles = await api.bundle.getManyByEvent.query({
+      eventId,
+      open: true,
+    });
 
     const bundleIds = bundles.map((bundle) => bundle.id);
 
