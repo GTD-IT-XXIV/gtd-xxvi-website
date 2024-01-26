@@ -47,7 +47,7 @@ export default function DetailsPageFooter({
           {formState.isSubmitting && (
             <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />
           )}
-          Checkout
+          Place Order
         </Button>
       </div>
     </footer>

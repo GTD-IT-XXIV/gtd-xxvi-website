@@ -10,6 +10,7 @@ import { useState } from "react";
 
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 import { checkoutSessionAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
@@ -19,11 +20,13 @@ const stripePromise = getStripe();
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [sessionId, setSessionId] = useAtom(checkoutSessionAtom);
   const [cancelling, setCancelling] = useState(false);
   const {
     data: session,
     isLoading,
+    isFetching,
     isError,
   } = api.payment.retrieveCheckoutSession.useQuery(
     { sessionId },
@@ -59,19 +62,23 @@ export default function CheckoutPage() {
           </Button>
         )}
       </hgroup>
-      {!isLoading && !isError && session.clientSecret ? (
+      {!isLoading && !isError && session.clientSecret && (
         <EmbeddedCheckoutProvider
           stripe={stripePromise}
           options={{ clientSecret: session.clientSecret }}
         >
           <EmbeddedCheckout />
         </EmbeddedCheckoutProvider>
-      ) : isLoading ? (
+      )}
+      {isFetching && (
         <div className="absolute inset-0 flex justify-center items-center">
           <LoadingSpinner className="fill-gtd-primary-30 size-48" />
         </div>
-      ) : (
-        <p>Error</p>
+      )}
+      {!sessionId && (
+        <p className="text-center text-sm text-gtd-secondary-10">
+          No items to checkout
+        </p>
       )}
     </section>
   );

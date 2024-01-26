@@ -1,9 +1,13 @@
+import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
-import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import CartCleaner from "@/components/registration/cart-cleaner";
 import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+
+import { api } from "@/server/trpc";
+
+import { type RouterOutputs } from "@/lib/trpc/utils";
 
 import EventCardGroup from "./_components/event-card-group";
 import RegisterPageFooter from "./_components/register-page-footer";
@@ -12,23 +16,33 @@ export const metadata: Metadata = {
   title: "Register",
 };
 
-export default function RegisterPage({
+export default async function RegisterPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  if (!searchParams.event) {
-    notFound();
-  }
   const eventParams = z.coerce
     .number()
     .or(z.coerce.number().array())
-    .parse(searchParams.event);
+    .safeParse(searchParams.event);
   let eventIds: number[];
-  if (Array.isArray(eventParams)) {
-    eventIds = eventParams;
+  if (eventParams.success) {
+    if (Array.isArray(eventParams.data)) {
+      eventIds = eventParams.data;
+    } else {
+      eventIds = [eventParams.data];
+    }
   } else {
-    eventIds = [eventParams];
+    let events: RouterOutputs["event"]["getAll"] = [];
+    try {
+      events = await api.event.getAll.query();
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        throw new Error("EventGetAllError");
+      }
+      throw error;
+    }
+    eventIds = events.map((event) => event.id);
   }
 
   return (

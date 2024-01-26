@@ -9,6 +9,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 
 import {
   allowCheckoutAtom,
@@ -43,6 +44,7 @@ export default function DetailsFormProvider({
   children,
 }: DetailsFormProviderProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [cart, setCart] = useAtom(cartAtom);
   const setSession = useSetAtom(checkoutSessionAtom);
   const setAllowCheckout = useSetAtom(allowCheckoutAtom);
@@ -61,7 +63,7 @@ export default function DetailsFormProvider({
   const { mutateAsync: createSession } =
     api.payment.createCheckoutSession.useMutation();
 
-  async function handleSubmit(values: z.infer<typeof formSchema>) {
+  async function placeOrder(values: z.infer<typeof formSchema>) {
     const bookingIds = [];
     for (const item of cart) {
       const booking = await createBooking({ ...values, ...item });
@@ -76,17 +78,29 @@ export default function DetailsFormProvider({
     } catch (error) {
       if (
         error instanceof TRPCClientError &&
-        error.message === "No bookings to checkout for"
+        error.message === "No items to checkout."
       ) {
+        toast({
+          variant: "destructive",
+          title: "Failed to Place Order",
+          description: error.message,
+        });
         router.back();
       }
+      toast({
+        variant: "destructive",
+        title: "Failed to Place Order",
+        description:
+          "An error occurred while placing order. Please go back and try again.",
+      });
+      router.back();
     }
   }
 
   return (
     <FormProvider {...form}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className={className}>
+        <form onSubmit={form.handleSubmit(placeOrder)} className={className}>
           {children}
         </form>
       </Form>
