@@ -10,6 +10,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
+import { cn } from "@/lib/utils";
 
 import BundleCardPopup from "../bundle-card-popup";
 import BundleCardLoading from "./loading";
@@ -61,6 +62,9 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
     );
   };
   const handleIncrement = () => {
+    if (amount === bundle.maxPurchases) {
+      return;
+    }
     setCart((prev) => {
       if (prev.find((item) => item.bundleId === bundleId)) {
         return prev.map((item) =>
@@ -134,7 +138,10 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
         <div className="flex justify-end mt-auto">
           <button
             onClick={handleDecrement}
-            className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5"
+            className={cn(
+              "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+              amount === 0 ? "opacity-60 pointer-events-none" : "",
+            )}
           >
             -
           </button>
@@ -143,7 +150,12 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           &nbsp;&nbsp;
           <button
             onClick={handleIncrement}
-            className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5"
+            className={cn(
+              "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+              amount === bundle.maxPurchases
+                ? "opacity-60 pointer-events-none"
+                : "",
+            )}
           >
             +
           </button>

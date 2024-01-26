@@ -54,6 +54,9 @@ const testBundle: Omit<Prisma.BundleCreateInput, "event"> = {
   quantity: 1,
   price: 5,
   remainingAmount: null,
+  maxPurchases: 100,
+  open: new Date(2024, 0),
+  close: new Date(2024, 0, 1, 23, 59, 59),
 };
 
 const testTimeslot: Omit<Prisma.TimeslotCreateInput, "event"> = {

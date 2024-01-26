@@ -1,3 +1,4 @@
+import { type Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -8,11 +9,19 @@ export const bundleRouter = createTRPCRouter({
     .input(
       z.object({
         eventId: z.number().positive(),
+        open: z.boolean().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { eventId } = input;
-      const bundles = await ctx.db.bundle.findMany({ where: { eventId } });
+      const { eventId, open } = input;
+      const where: Prisma.BundleFindManyArgs["where"] = {
+        eventId,
+        ...(open === true && {
+          open: { lte: new Date() },
+          close: { gt: new Date() },
+        }),
+      };
+      const bundles = await ctx.db.bundle.findMany({ where });
       return bundles;
     }),
 
