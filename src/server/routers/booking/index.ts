@@ -35,7 +35,7 @@ export const bookingRouter = createTRPCRouter({
       return { bookings, nextCursor };
     }),
 
-  getById: publicProcedure
+  getById: dashboardProcedure
     .input(
       z.object({
         id: z.number().positive(),
