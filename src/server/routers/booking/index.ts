@@ -8,6 +8,7 @@ import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 import { handleCreate, handleUpdate } from "./handlers";
 import { bookingSchema } from "./schemas";
+import { checkEventConsistency } from "./utils";
 
 export const bookingRouter = createTRPCRouter({
   getAll: dashboardProcedure
@@ -98,6 +99,19 @@ export const bookingRouter = createTRPCRouter({
         emails,
         nextCursor: input.cursor ? input.cursor + 1 : undefined,
       };
+    }),
+
+  checkIdConsistency: publicProcedure
+    .input(
+      z.object({
+        eventId: z.number().positive(),
+        bundleId: z.number().positive(),
+        timeslotId: z.number().positive(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const isConsistent = await checkEventConsistency(ctx.db, input);
+      return isConsistent;
     }),
 
   create: publicProcedure
