@@ -8,6 +8,7 @@ import {
 } from "@/tests/lib/utils";
 import type { Booking, Bundle, Event, Prisma, Timeslot } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { type Session } from "lucia";
 import type React from "react";
 import {
   afterAll,
@@ -34,6 +35,25 @@ vi.mock("react", async (importOriginal) => {
     ...originalModule,
     cache: testCache,
   };
+});
+
+vi.mock("@/server/auth", async () => {
+  const getPageSession = (): Session => ({
+    user: {
+      role: "ADMIN",
+      userId: "test_user",
+      username: "test_user",
+      name: "Test User",
+      email: "test_user@fakemail.com",
+    },
+    sessionId: "test_session",
+    fresh: true,
+    state: "active",
+    idlePeriodExpiresAt: new Date(),
+    activePeriodExpiresAt: new Date(),
+  });
+
+  return { getPageSession };
 });
 
 vi.mock("@/server/db", async () => {

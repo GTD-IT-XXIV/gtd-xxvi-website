@@ -3,8 +3,10 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
+import { dashboardProcedure } from "../procedures/dashboard-procedure";
+
 export const ticketRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAll: dashboardProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
@@ -42,7 +44,7 @@ export const ticketRouter = createTRPCRouter({
       return ticket;
     }),
 
-  getManyByEvent: publicProcedure
+  getManyByEvent: dashboardProcedure
     .input(
       z.object({
         eventId: z.number().positive(),
@@ -82,7 +84,7 @@ export const ticketRouter = createTRPCRouter({
       return !!ticket;
     }),
 
-  deleteById: publicProcedure
+  deleteById: dashboardProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;

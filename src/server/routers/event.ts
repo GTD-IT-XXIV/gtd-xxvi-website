@@ -3,6 +3,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
+import { dashboardProcedure } from "../procedures/dashboard-procedure";
+
 export const eventRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.event.findMany();
@@ -44,7 +46,7 @@ export const eventRouter = createTRPCRouter({
       return event;
     }),
 
-  countBookingsById: publicProcedure
+  countBookingsById: dashboardProcedure
     .input(z.object({ id: z.number().positive() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;
