@@ -49,19 +49,15 @@ export default function TimeslotsPageBody() {
     };
   }, []);
 
-  return (
-    <>
-      {cart.map((item, idx) => (
-        <TimeSlotSection
-          key={idx}
-          eventId={item.eventId}
-          bundleId={item.bundleId}
-          quantity={item.quantity}
-          selectedId={item.timeslotId}
-          onChange={(timeslotId) => handleSelectTimeslot(idx, timeslotId)}
-          handleSkip={(value) => setSkipTimeslots((prev) => prev.concat(value))}
-        />
-      ))}
-    </>
-  );
+  return cart.map((item, idx) => (
+    <TimeSlotSection
+      key={idx}
+      eventId={item.eventId}
+      bundleId={item.bundleId}
+      quantity={item.quantity}
+      selectedId={item.timeslotId}
+      onChange={(timeslotId) => handleSelectTimeslot(idx, timeslotId)}
+      handleSkip={(value) => setSkipTimeslots((prev) => prev.concat(value))}
+    />
+  ));
 }

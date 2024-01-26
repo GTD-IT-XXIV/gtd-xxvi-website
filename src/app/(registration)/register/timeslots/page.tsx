@@ -1,3 +1,4 @@
+import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
 import { z } from "zod";
 
@@ -5,6 +6,8 @@ import CartCleaner from "@/components/registration/cart-cleaner";
 import CheckoutWrapper from "@/components/registration/checkout-wrapper";
 
 import { api } from "@/server/trpc";
+
+import { type RouterOutputs } from "@/lib/trpc/utils";
 
 import TimeslotsPageBody from "./_components/timeslots-page-body";
 import TimeslotsPageFooter from "./_components/timeslots-page-footer";
@@ -30,7 +33,15 @@ export default async function TimeslotsPage({
       eventIds = [eventParams.data];
     }
   } else {
-    const events = await api.event.getAll.query();
+    let events: RouterOutputs["event"]["getAll"] = [];
+    try {
+      events = await api.event.getAll.query();
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        throw new Error("EventGetAllError");
+      }
+      throw error;
+    }
     eventIds = events.map((event) => event.id);
   }
   return (
