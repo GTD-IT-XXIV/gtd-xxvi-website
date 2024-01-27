@@ -1,28 +1,60 @@
 version: "3.8"
 
+networks:
+  caddy:
+
 services:
   web:
     image: gtd-xxvi/website-dev
     build:
       context: ../..
-      dockerfile: docker/development/Dockerfile
+      dockerfile: docker/development/web.Dockerfile
     depends_on:
       - db
+      - stripe
     ports:
       - 3000:3000
     environment:
-      DATABASE_URL: postgresql://postgres:gtd-xxvi-website-dev-postgres@db:5432/postgres
+      DATABASE_URL: postgresql://postgres:gtd-xxvi-postgres-dev@db:5432/postgres
+    networks:
+      - caddy
 
   db:
-    image: postgres:15.1
+    image: gtd-xxvi/db-dev
     restart: always
+    build:
+      context: ../..
+      dockerfile: docker/development/db.Dockerfile
     environment:
-      POSTGRES_PASSWORD: gtd-xxvi-website-dev-postgres
+      POSTGRES_PASSWORD: gtd-xxvi-postgres-dev
     ports:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - caddy
+
+  stripe:
+    image: gtd-xxvi/stripe-cli
+    build:
+      context: ../..
+      dockerfile: docker/development/stripe.Dockerfile
+    env_file: 
+      - ../../.env.development.local
+    networks:
+      - caddy
+
+  caddy:
+    image: caddy:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - caddy
+
 
 volumes:
   pgdata:
-    name: gtd-xxvi-website-dev-pgdata
+    name: gtd-xxvi-db-pgdata-dev

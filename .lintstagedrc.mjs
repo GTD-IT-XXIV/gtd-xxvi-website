@@ -7,6 +7,6 @@ export default {
   "**/*.(ts|tsx|cts|mts)": [
     "eslint --cache --fix",
     "prettier --write --list-different",
-    () => "tsc --noEmit",
+    () => "tsc --pretty --noEmit",
   ],
 };

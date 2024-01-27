@@ -1,0 +1,7 @@
+{
+	email devpintugtd@gmail.com
+}
+
+localhost {
+	reverse_proxy web:3000
+}
