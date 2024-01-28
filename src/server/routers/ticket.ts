@@ -68,7 +68,7 @@ export const ticketRouter = createTRPCRouter({
       }
       return { tickets, nextCursor };
     }),
-  getManyByEventCount: dashboardProcedure
+  getCountByEvent: dashboardProcedure
     .input(
       z.object({
         eventId: z.number().positive(),

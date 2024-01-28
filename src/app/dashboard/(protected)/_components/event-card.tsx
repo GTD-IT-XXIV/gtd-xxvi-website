@@ -12,7 +12,7 @@ import {
 import { api } from "@/lib/trpc/client";
 
 export function EventCard({ event }: EventCardProps) {
-  const { data: count } = api.ticket.getManyByEventCount.useQuery({
+  const { data: count } = api.ticket.getCountByEvent.useQuery({
     eventId: event.id,
   });
 
