@@ -1,8 +1,5 @@
 version: "3.8"
 
-networks:
-  caddy:
-
 services:
   web:
     image: gtd-xxvi/website-dev
@@ -16,8 +13,6 @@ services:
       - 3000:3000
     environment:
       DATABASE_URL: postgresql://postgres:gtd-xxvi-postgres-dev@db:5432/postgres
-    networks:
-      - caddy
 
   db:
     image: gtd-xxvi/db-dev
@@ -31,8 +26,6 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - caddy
 
   stripe:
     image: gtd-xxvi/stripe-cli
@@ -41,19 +34,14 @@ services:
       dockerfile: docker/development/stripe.Dockerfile
     env_file: 
       - ../../.env.development.local
-    networks:
-      - caddy
 
-  caddy:
-    image: caddy:latest
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    networks:
-      - caddy
-
+  # caddy:
+  #   image: caddy:latest
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
 
 volumes:
   pgdata:
