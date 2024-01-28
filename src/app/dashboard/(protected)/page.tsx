@@ -34,7 +34,7 @@ export default function DashboardHomePage() {
       <div className="flex flex-col gap-6">
         <div className="flex gap-4">
           <EventSelect
-            events={events ?? []}
+            events={data ?? []}
             onValueChange={(eventName) => handleFilter(eventName, null)}
           />
           <DatePickerWithRange />
