@@ -68,6 +68,20 @@ export const ticketRouter = createTRPCRouter({
       }
       return { tickets, nextCursor };
     }),
+  getManyByEventCount: dashboardProcedure
+    .input(
+      z.object({
+        eventId: z.number().positive(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { eventId } = input;
+      const count = await ctx.db.ticket.count({
+        where: { timeslot: { eventId } },
+      });
+
+      return count;
+    }),
 
   getManyByPaymentIntent: publicProcedure
     .input(z.object({ paymentIntentId: z.string() }))
