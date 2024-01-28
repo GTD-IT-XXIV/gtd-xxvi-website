@@ -1,13 +1,6 @@
 "use client";
 
 import { DatePickerWithRange } from "@/components/date-range-picker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { api } from "@/lib/trpc/client";
 
