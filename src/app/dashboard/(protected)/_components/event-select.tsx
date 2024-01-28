@@ -6,6 +6,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import type { Event } from "@/lib/types";
+
 export function EventSelect({ events, onValueChange }: EventSelectProps) {
   return (
     <Select onValueChange={onValueChange}>
@@ -24,13 +26,6 @@ export function EventSelect({ events, onValueChange }: EventSelectProps) {
 }
 
 type EventSelectProps = {
-  events: {
-    id: number;
-    name: string;
-    description: string;
-    location: string;
-    startDate: Date;
-    endDate: Date;
-  }[];
+  events: Event[];
   onValueChange: (eventName: string) => void;
 };
