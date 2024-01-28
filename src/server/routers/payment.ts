@@ -72,7 +72,7 @@ export const paymentRouter = createTRPCRouter({
         } as OrderMetadata,
         return_url: `${ctx.headers.get(
           "origin",
-        )}/ticket?session_id={CHECKOUT_SESSION_ID}`, // TODO: update
+        )}/register/complete?session_id={CHECKOUT_SESSION_ID}`,
         expires_at: Math.floor(expiresAt / 1000), // since stripe time in seconds
       });
 

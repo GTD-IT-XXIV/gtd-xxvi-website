@@ -7,7 +7,7 @@ import DetailsFormProvider from "./_components/details-form-provider";
 import DetailsPageFooter from "./_components/details-page-footer";
 
 export const metadata: Metadata = {
-  title: "Details",
+  title: "Checkout",
 };
 
 export default function DetailsPage() {
