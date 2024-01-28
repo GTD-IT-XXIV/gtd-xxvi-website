@@ -7,13 +7,10 @@ import { DatePickerWithRange } from "@/components/date-range-picker";
 import { api } from "@/lib/trpc/client";
 import type { Event } from "@/lib/types";
 
-import { EventCard } from "./_components/event-card";
-import { EventSelect } from "./_components/event-select";
+import { EventCard } from "./event-card";
+import { EventSelect } from "./event-select";
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/52 GitHub Issue}
- */
-export default function DashboardHomePage() {
+export default function DashboardHomeBody() {
   const { data } = api.event.getAll.useQuery(undefined, {
     onSuccess: (data) => {
       setEvents(data);
