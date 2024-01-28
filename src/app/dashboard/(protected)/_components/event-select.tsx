@@ -6,9 +6,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function EventSelect({ events }: EventSelectProps) {
+export function EventSelect({ events, onValueChange }: EventSelectProps) {
   return (
-    <Select>
+    <Select onValueChange={onValueChange}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select an event" />
       </SelectTrigger>
@@ -32,4 +32,5 @@ type EventSelectProps = {
     startDate: Date;
     endDate: Date;
   }[];
+  onValueChange: (eventName: string) => void;
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { DatePickerWithRange } from "@/components/date-range-picker";
 
 import { api } from "@/lib/trpc/client";
@@ -11,12 +13,22 @@ import { EventSelect } from "./_components/event-select";
  * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/52 GitHub Issue}
  */
 export default function DashboardHomePage() {
-  const { data: events } = api.event.getAll.useQuery();
+  const { data } = api.event.getAll.useQuery();
+  const [events, setEvents] = useState(data ?? []);
+
+  const handleFilter = (eventName: string, dateRange: unknown) => {
+    // for now, we don't really have a way to filter based on dateRange. So it will not be used as of now
+    setEvents(data?.filter((event) => event.name === eventName) ?? []);
+  };
+
   return (
     <div className="pt-5 px-4">
       <div className="flex flex-col gap-6">
         <div className="flex gap-4">
-          <EventSelect events={events ?? []} />
+          <EventSelect
+            events={events ?? []}
+            onValueChange={(eventName) => handleFilter(eventName, null)}
+          />
           <DatePickerWithRange />
         </div>
         <div className="flex flex-col gap-4">
