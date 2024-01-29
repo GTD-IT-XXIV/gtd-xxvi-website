@@ -1,12 +1,12 @@
 "use client";
 
 import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
-import logoGTDTopi from "@/assets/images/logo-gtd-topi.png";
+import logoGTDTopi from "@/assets/images/logo-gtd-white-transparent-topi.png";
 import { type VariantProps, cva } from "class-variance-authority";
 import { Home, Menu, ShoppingCart, Ticket, X, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -51,21 +51,23 @@ export default function Navbar({ className, variant }: NavbarProps) {
 
   return (
     <nav className={cn(navbarVariants({ variant }), className)}>
-      <Link href="/" className="h-16 w-16 mx-6">
-        {variant === "gtdfest" ? (
+      {variant === "gtdfest" ? (
+        <Link href="/">
           <Image
             src={logoGTDTopi}
             alt="Logo PINTU Get Together Day"
-            className="h-full w-full object-cover"
+            className="h-8 w-12 mx-[1.9rem] mb-[1.4rem] mt-3 object-cover"
           />
-        ) : (
+        </Link>
+      ) : (
+        <Link href="/">
           <Image
             src={logoGTD}
             alt="Logo PINTU Get Together Day"
-            className="h-full w-full object-cover"
+            className="h-16 w-16 mx-6 object-cover"
           />
-        )}
-      </Link>
+        </Link>
+      )}
       <div className="hidden md:flex gap-1">
         <NavbarButton
           variant={variant}
