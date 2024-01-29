@@ -2,9 +2,8 @@ import { redirect } from "next/navigation";
 
 import { getPageSession } from "@/server/auth";
 
-/**
- * See {@link https://github.com/GTD-IT-XXIV/gtd-xxvi-website/issues/52 GitHub Issue}
- */
+import DashboardHomeBody from "./_components/dashboard-home-body";
+
 export default async function DashboardHomePage() {
   const session = await getPageSession();
   if (!session) {
@@ -16,5 +15,5 @@ export default async function DashboardHomePage() {
   if (!hasAccess) {
     redirect("/dashboard/scan");
   }
-  return <div>Dashboard Page</div>;
+  return <DashboardHomeBody />;
 }
