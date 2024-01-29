@@ -4,13 +4,12 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 import { checkoutSessionAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
@@ -20,8 +19,7 @@ const stripePromise = getStripe();
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { toast } = useToast();
-  const [sessionId, setSessionId] = useAtom(checkoutSessionAtom);
+  const sessionId = useAtomValue(checkoutSessionAtom);
   const [cancelling, setCancelling] = useState(false);
   const {
     data: session,
@@ -38,7 +36,6 @@ export default function CheckoutPage() {
   async function cancelCheckout() {
     setCancelling(true);
     await cancelCheckoutSession.mutateAsync({ sessionId });
-    setSessionId("");
     setCancelling(false);
     router.back();
   }
