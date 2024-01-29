@@ -13,9 +13,9 @@ import { Input } from "@/components/ui/input";
 export default function BookingInfo() {
   const form = useFormContext();
   return (
-    <div>
+    <div className="md:flex-grow md:mr-12">
       <div className="mb-6">
-        <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2">
+        <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2 md:mt-12">
           Enter Booking Info
         </h2>
         <div className="space-y-2">
