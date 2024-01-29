@@ -14,7 +14,7 @@ export default function BookingReview() {
   const filteredCart = cart.filter((item) => item.quantity !== 0);
 
   return (
-    <div className="text-gtd-secondary-20 md:w-1/3 md:ml-12">
+    <div className="text-gtd-secondary-20 md:w-96 md:mx-12">
       <h1 className="text-3xl font-semibold mb-4 text-gtd-primary-30">
         Booking Details
       </h1>
