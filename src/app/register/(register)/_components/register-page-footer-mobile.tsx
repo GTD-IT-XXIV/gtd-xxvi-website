@@ -14,7 +14,7 @@ export type RegisterPageFooterProps = {
   pageSearchParams: Record<string, string | string[] | undefined>;
 };
 
-export default function RegisterPageFooter({
+export default function RegisterPageFooterMobile({
   className = "",
   pageSearchParams = {},
 }: RegisterPageFooterProps) {
