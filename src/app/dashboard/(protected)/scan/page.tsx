@@ -1,11 +1,10 @@
 "use client";
 
-import { CheckCircle2, Loader, Loader2, XCircle } from "lucide-react";
+import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import type QrScanner from "qr-scanner";
 import React, { useState } from "react";
 
 import QrReader from "@/components/dashboard/qr-reader";
-import LoadingSpinner from "@/components/loading-spinner";
 
 import { api } from "@/lib/trpc/client";
 
@@ -45,11 +44,20 @@ export default function DashboardScanPage() {
       {(isFetching || isError || success !== undefined) && (
         <div className="absolute z-10 inset-0 bg-black/65 flex items-center justify-center">
           {isFetching ? (
-            <Loader2 className="size-48 text-gtd-primary-30 animate-spin" />
+            <Loader2
+              strokeWidth={1}
+              className="size-48 text-gtd-primary-30 animate-spin"
+            />
           ) : success ? (
-            <CheckCircle2 className="size-48 text-white fill-green-500" />
+            <CheckCircle2
+              strokeWidth={1}
+              className="size-48 text-white fill-green-500"
+            />
           ) : (
-            <XCircle className="size-48 text-white fill-red-500" />
+            <XCircle
+              strokeWidth={1}
+              className="size-48 text-white fill-red-500"
+            />
           )}
         </div>
       )}
