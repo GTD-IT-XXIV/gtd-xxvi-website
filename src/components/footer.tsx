@@ -40,14 +40,14 @@ export default function Footer({ className }: FooterProps) {
           className="h-14 w-28 object-cover"
         />
         <div className="space-y-2">
-          <p className="text-[1.65rem] md:text-[2.05rem] font-semibold flex gap-2 items-center">
+          <div className="text-[1.65rem] md:text-[2.05rem] font-semibold flex gap-2 items-center">
             <Image
               src={logoPINTU}
               alt="Logo PINTU"
               className="h-[1.3rem] md:h-6 w-[5.1rem] md:w-[6rem] object-cover"
             />
             <p>GTD</p>
-          </p>
+          </div>
           <div className="flex gap-3">
             <Link
               href="https://www.facebook.com/PINTUGTD/"
