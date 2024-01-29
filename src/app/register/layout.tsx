@@ -9,8 +9,8 @@ export default function RegistrationLaout({
   children: ReactNode;
 }) {
   return (
-    <main className="flex flex-col min-h-screen">
-      <Navbar className="sticky top-0" />
+    <main className="relative flex flex-col min-h-screen">
+      <Navbar className="sticky top-0 z-10" />
       <section className="flex-1 flex flex-col">{children}</section>
       <Toaster />
     </main>
