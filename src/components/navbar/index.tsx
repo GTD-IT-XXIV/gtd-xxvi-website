@@ -52,17 +52,21 @@ export default function Navbar({ className, variant }: NavbarProps) {
   return (
     <nav className={cn(navbarVariants({ variant }), className)}>
       {variant === "gtdfest" ? (
-        <Image
-          src={logoGTDTopi}
-          alt="Logo PINTU Get Together Day"
-          className="h-8 w-12 mx-[1.9rem] mb-[1.4rem] mt-3 object-cover"
-        />
+        <Link href="/">
+          <Image
+            src={logoGTDTopi}
+            alt="Logo PINTU Get Together Day"
+            className="h-8 w-12 mx-[1.9rem] mb-[1.4rem] mt-3 object-cover"
+          />
+        </Link>
       ) : (
-        <Image
-          src={logoGTD}
-          alt="Logo PINTU Get Together Day"
-          className="h-16 w-16 mx-6 object-cover"
-        />
+        <Link href="/">
+          <Image
+            src={logoGTD}
+            alt="Logo PINTU Get Together Day"
+            className="h-16 w-16 mx-6 object-cover"
+          />
+        </Link>
       )}
       <div className="hidden md:flex gap-1">
         <NavbarButton
