@@ -18,7 +18,9 @@ export default function BookingInfo() {
         <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2 md:mt-12">
           Enter Booking Info
         </h2>
-        <div className="space-y-2 md:grid grid-rows-2 grid-cols-2 gap-x-12 gap-y-1 items-end">
+        <div className="space-y-2 md:grid grid-rows-[0px_1fr_1fr] grid-cols-2 gap-x-12 gap-y-1 items-start">
+          {/* Preventing first item to lose their top-padding */}
+          <div></div><div></div> 
           <FormField
             control={form.control}
             name="name"
