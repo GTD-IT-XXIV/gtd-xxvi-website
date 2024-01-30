@@ -55,7 +55,7 @@ export default function TimeSlotButton({
   return (
     <button
       className={cn(
-        "w-full flex justify-between my-2 p-3 border border-slate-300 rounded-lg",
+        "w-full flex justify-between my-2 p-3 border border-slate-300 rounded-lg max-w-md md:w-80",
         state === "disabled" ? "bg-slate-100" : "bg-white",
         state === "checked"
           ? "bg-gtd-primary-30 text-white"

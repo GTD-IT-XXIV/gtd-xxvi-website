@@ -17,6 +17,7 @@ export type TimeSlotSectionProps = {
   eventId: number;
   bundleId: number;
   quantity: number;
+  media?: string;
   selectedId?: number;
   onChange: (id: number) => void;
   handleSkip: (value: boolean) => void;
@@ -26,6 +27,7 @@ export default function TimeSlotSection({
   eventId,
   bundleId,
   quantity,
+  media,
   selectedId = 0,
   onChange,
   handleSkip,
@@ -95,7 +97,7 @@ export default function TimeSlotSection({
       <div className="font-medium my-3 text-lg text-gtd-secondary-30">
         {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")}
       </div>
-      <div>
+      <div className="flex flex-wrap w-full gap-x-3">
         {timeslots.map((timeslot) => {
           const remainingSlots = timeslot.remainingSlots;
           // timeslot already selected by some other item
