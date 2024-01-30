@@ -75,7 +75,7 @@ export default function TimeslotsPageFooter({
       {/* Desktop footer */}
       <footer
         className={cn(
-          "bg-white hidden md:flex flex-col justify-end items-end py-4 px-[60px] lg:px-28 space-y-4 mb-32",
+          "bg-white hidden md:flex flex-col justify-end items-end py-4 px-[3.75rem] lg:px-28 space-y-4 mb-32",
           className,
         )}
       >

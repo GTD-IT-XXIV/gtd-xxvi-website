@@ -4,7 +4,7 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ const stripePromise = getStripe();
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const sessionId = useAtomValue(checkoutSessionAtom);
+  const [sessionId, setSessionId] = useAtom(checkoutSessionAtom);
   const [cancelling, setCancelling] = useState(false);
   const {
     data: session,
@@ -33,16 +33,23 @@ export default function CheckoutPage() {
 
   const cancelCheckoutSession = api.payment.cancelCheckoutSession.useMutation();
 
-  async function cancelCheckout() {
+  function cancelCheckout() {
     setCancelling(true);
-    await cancelCheckoutSession.mutateAsync({ sessionId });
-    setCancelling(false);
-    router.back();
+    cancelCheckoutSession.mutate(
+      { sessionId },
+      {
+        onSuccess: () => {
+          setSessionId("");
+          setCancelling(false);
+          router.push("/");
+        },
+      },
+    );
   }
 
   return (
     <section className="px-5 pt-10">
-      <hgroup className="flex items-center justify-between mb-4">
+      <hgroup className="flex items-center justify-between md:px-10 lg:px-[5.75rem] mb-4">
         <h1 className="text-gtd-primary-30 font-semibold text-3xl">Checkout</h1>
         {!isLoading && !isError && (
           <Button

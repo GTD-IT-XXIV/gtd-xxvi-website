@@ -24,7 +24,7 @@ export default function DetailsPageFooter({
   return (
     <footer
       className={cn(
-        "bg-white flex justify-between items-center py-2 md:py-4 px-5 md:px-[60px] lg:px-28 drop-shadow md:drop-shadow-none md:flex-col md:items-end md:mb-32 md:space-y-4",
+        "bg-white flex justify-between items-center py-2 md:py-4 px-5 md:px-[3.75rem] lg:px-28 drop-shadow md:drop-shadow-none md:flex-col md:items-end md:mb-32 md:space-y-4",
         className,
       )}
     >
