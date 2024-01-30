@@ -83,84 +83,167 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
   };
 
   return (
-    <section className="flex border text-gtd-secondary-30 border-zinc-300 w-full h-1/5 p-3 rounded-lg">
-      <div className="grow">
-        <h2 className="text-gtd-secondary-20 font-medium text-xl">
-          {event.name}{" "}
-          <span className="whitespace-nowrap">({bundle.name})</span>
-        </h2>
+    <>
+      {/* Mobile */}
+      <section className="flex border text-gtd-secondary-30 border-zinc-300 w-full h-1/5 p-3 rounded-lg md:hidden">
+        <div className="grow">
+          <h2 className="text-gtd-secondary-20 font-medium text-xl">
+            {event.name}{" "}
+            <span className="whitespace-nowrap">({bundle.name})</span>
+          </h2>
 
-        <div className="my-1.5 space-y-0.5">
-          <p className="text-gtd-secondary-10 text-sm">
-            {" "}
-            <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
-            {dayjs.utc(event.startDate).format("D MMMM")}{" "}
-          </p>
-
-          <p className="text-gtd-secondary-10 text-sm">
-            {" "}
-            <MdOutlineLocationOn className="inline scale-[130%] text-black text-base" />{" "}
-            &nbsp; {event.location}{" "}
-          </p>
-        </div>
-
-        <BundleCardPopup
-          event={{
-            id: event.id,
-            name: event.name,
-          }}
-          bundle={{
-            name: bundle.name,
-            price: bundle.price,
-            details: bundle.details,
-          }}
-        />
-      </div>
-
-      <div className="flex flex-col w-[30%]">
-        {bundle.quantity === 1 ? (
-          <div className="flex justify-end">
-            <p className="text-sm self-baseline">$</p>
-            <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
-              {new Prisma.Decimal(bundle.price).toDP(0).toString()}/
+          <div className="my-1.5 space-y-0.5">
+            <p className="text-gtd-secondary-10 text-sm">
+              {" "}
+              <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
+              {dayjs.utc(event.startDate).format("D MMMM")}{" "}
             </p>
-            <p className="text-gtd-secondary-10 text-sm self-baseline">pax</p>
-          </div>
-        ) : (
-          <div className="flex justify-end">
-            <p className="text-sm self-baseline">$</p>
-            <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
-              {new Prisma.Decimal(bundle.price).toDP(0).toString()}
+
+            <p className="text-gtd-secondary-10 text-sm">
+              {" "}
+              <MdOutlineLocationOn className="inline scale-[130%] text-black text-base" />{" "}
+              &nbsp; {event.location}{" "}
             </p>
           </div>
-        )}
 
-        <div className="flex justify-end mt-auto">
-          <button
-            onClick={handleDecrement}
-            className={cn(
-              "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
-              amount === 0 ? "opacity-60 pointer-events-none" : "",
-            )}
-          >
-            -
-          </button>
-          &nbsp;&nbsp;
-          <p>{amount}</p>
-          &nbsp;&nbsp;
-          <button
-            onClick={handleIncrement}
-            className={cn(
-              "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
-              amount === bundle.maxPurchases
-                ? "opacity-60 pointer-events-none"
-                : "",
-            )}
-          >
-            +
-          </button>
+          <BundleCardPopup
+            event={{
+              id: event.id,
+              name: event.name,
+            }}
+            bundle={{
+              name: bundle.name,
+              price: bundle.price,
+              details: bundle.details,
+            }}
+          />
         </div>
-      </div>
-    </section>
+
+        <div className="flex flex-col w-[30%]">
+          {bundle.quantity === 1 ? (
+            <div className="flex justify-end">
+              <p className="text-sm self-baseline">$</p>
+              <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
+                {new Prisma.Decimal(bundle.price).toDP(0).toString()}/
+              </p>
+              <p className="text-gtd-secondary-10 text-sm self-baseline">pax</p>
+            </div>
+          ) : (
+            <div className="flex justify-end">
+              <p className="text-sm self-baseline">$</p>
+              <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
+                {new Prisma.Decimal(bundle.price).toDP(0).toString()}
+              </p>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-auto">
+            <button
+              onClick={handleDecrement}
+              className={cn(
+                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                amount === 0 ? "opacity-60 pointer-events-none" : "",
+              )}
+            >
+              -
+            </button>
+            &nbsp;&nbsp;
+            <p>{amount}</p>
+            &nbsp;&nbsp;
+            <button
+              onClick={handleIncrement}
+              className={cn(
+                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                amount === bundle.maxPurchases
+                  ? "opacity-60 pointer-events-none"
+                  : "",
+              )}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Desktop */}
+      <section className="hidden md:flex border text-gtd-secondary-30 border-zinc-300 w-full h-1/5 p-3 rounded-lg">
+        <div className="grow">
+          <h2 className="text-gtd-secondary-20 font-medium text-xl">
+            {event.name}{" "}
+            <span className="whitespace-nowrap">({bundle.name})</span>
+          </h2>
+
+          <div className="my-1.5 space-y-0.5">
+            <p className="text-gtd-secondary-10 text-md">
+              {" "}
+              <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
+              {dayjs.utc(event.startDate).format("D MMMM")}{" "}
+            </p>
+
+            <p className="text-gtd-secondary-10 text-md">
+              {" "}
+              <MdOutlineLocationOn className="inline scale-[130%] text-black text-base" />{" "}
+              &nbsp; {event.location}{" "}
+            </p>
+          </div>
+          <BundleCardPopup
+            event={{
+              id: event.id,
+              name: event.name,
+            }}
+            bundle={{
+              name: bundle.name,
+              price: bundle.price,
+              details: bundle.details,
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col w-[30%]">
+          {bundle.quantity === 1 ? (
+            <div className="flex justify-end">
+              <p className="text-sm self-baseline">$</p>
+              <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
+                {new Prisma.Decimal(bundle.price).toDP(0).toString()}/
+              </p>
+              <p className="text-gtd-secondary-10 text-sm self-baseline">pax</p>
+            </div>
+          ) : (
+            <div className="flex justify-end">
+              <p className="text-sm self-baseline">$</p>
+              <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
+                {new Prisma.Decimal(bundle.price).toDP(0).toString()}
+              </p>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-auto">
+            <button
+              onClick={handleDecrement}
+              className={cn(
+                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                amount === 0 ? "opacity-60 pointer-events-none" : "",
+              )}
+            >
+              -
+            </button>
+            &nbsp;&nbsp;
+            <p>{amount}</p>
+            &nbsp;&nbsp;
+            <button
+              onClick={handleIncrement}
+              className={cn(
+                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                amount === bundle.maxPurchases
+                  ? "opacity-60 pointer-events-none"
+                  : "",
+              )}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

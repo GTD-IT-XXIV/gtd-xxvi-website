@@ -34,7 +34,7 @@ export default function BundleCardPopup({
 }: BundleCardPopupProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="text-gtd-primary-30 text-xs hover:underline underline-offset-2">
+      <AlertDialogTrigger className="text-gtd-primary-30 text-xs hover:underline underline-offset-2 md:text-sm">
         Learn more
       </AlertDialogTrigger>
       <AlertDialogContent className="text-gtd-secondary-30">
