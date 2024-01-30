@@ -16,7 +16,7 @@ export default async function EventCardGroup({ eventId }: { eventId: number }) {
     const bundleIds = bundles.map((bundle) => bundle.id);
 
     return (
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center space-y-4 md:grow">
         {bundleIds.map((bundleId) => (
           <BundleCard
             key={bundleId}

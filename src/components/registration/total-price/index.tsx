@@ -41,9 +41,9 @@ export default function TotalPrice() {
   return (
     <div className="space-y-0.5">
       <p className="text-gtd-secondary-10 text-sm">{selected} Selected</p>
-      <div className="text-gtd-secondary-20 text-sm">
+      <div className="text-gtd-secondary-20 text-sm md:text-right">
         $
-        <p className="text-2xl font-medium inline">
+        <p className="text-2xl font-medium inline md:text-right">
           {totalPrice.toDP(2).toString()}
         </p>
       </div>

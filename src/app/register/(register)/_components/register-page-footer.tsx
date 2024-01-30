@@ -22,30 +22,57 @@ export default function RegisterPageFooter({
   const selected = cart.reduce((accum, item) => accum + item.quantity, 0);
 
   return (
-    <footer
-      className={cn(
-        "bg-white flex justify-between items-center py-2 px-5 drop-shadow",
-        className,
-      )}
-    >
-      <TotalPrice />
-      <Link
-        href={{
-          pathname: "/register/timeslots",
-          query: pageSearchParams,
-        }}
-        className={selected === 0 ? "pointer-events-none" : undefined}
-        aria-disabled={selected === 0}
-        tabIndex={selected === 0 ? -1 : undefined}
+    <>
+      <footer
+        className={cn(
+          "bg-white flex justify-between items-center py-2 px-5 drop-shadow md:hidden",
+          className,
+        )}
       >
-        <Button
-          type="button"
-          className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
-          disabled={selected === 0}
+        <TotalPrice />
+        <Link
+          href={{
+            pathname: "/register/timeslots",
+            query: pageSearchParams,
+          }}
+          className={selected === 0 ? "pointer-events-none" : undefined}
+          aria-disabled={selected === 0}
+          tabIndex={selected === 0 ? -1 : undefined}
         >
-          Next Page
-        </Button>
-      </Link>
-    </footer>
+          <Button
+            type="button"
+            className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
+            disabled={selected === 0}
+          >
+            Next Page
+          </Button>
+        </Link>
+      </footer>
+      <footer
+        className={cn(
+          "bg-white hidden md:flex flex-col justify-end items-end py-2 px-5 space-y-4 mb-32",
+          className,
+        )}
+      >
+        <TotalPrice />
+        <Link
+          href={{
+            pathname: "/register/timeslots",
+            query: pageSearchParams,
+          }}
+          className={selected === 0 ? "pointer-events-none" : undefined}
+          aria-disabled={selected === 0}
+          tabIndex={selected === 0 ? -1 : undefined}
+        >
+          <Button
+            type="button"
+            className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
+            disabled={selected === 0}
+          >
+            Next Page
+          </Button>
+        </Link>
+      </footer>
+    </>
   );
 }
