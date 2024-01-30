@@ -1,3 +1,4 @@
+import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import { type z } from "zod";
 
 import { type cartSchema } from "./schemas";
@@ -23,4 +24,10 @@ export type CartItem = ArrElement<Cart>;
 
 export type OrderMetadata = {
   bookingIds: string; // JSON.stringify(number[])
+};
+
+export type Merch = {
+  name: string;
+  description: string;
+  image: string | StaticImport;
 };
