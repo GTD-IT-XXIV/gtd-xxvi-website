@@ -97,7 +97,7 @@ export default function TimeSlotSection({
       <div className="font-medium my-3 text-lg text-gtd-secondary-30">
         {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")}
       </div>
-      <div className="flex flex-wrap w-full gap-x-3">
+      <div className="flex flex-wrap w-full gap-x-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {timeslots.map((timeslot) => {
           const remainingSlots = timeslot.remainingSlots;
           // timeslot already selected by some other item
