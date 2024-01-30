@@ -13,14 +13,15 @@ import { Input } from "@/components/ui/input";
 export default function BookingInfo() {
   const form = useFormContext();
   return (
-    <div className="md:flex-grow md:mx-12">
+    <div className="md:flex-grow md:mx-10 lg:mr-[5.75rem]">
       <div className="mb-6">
         <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2 md:mt-12">
           Enter Booking Info
         </h2>
-        <div className="space-y-2 md:grid grid-rows-[0px_1fr_1fr] grid-cols-2 gap-x-12 gap-y-1 items-start">
+        <div className="md:grid grid-rows-[0px_1fr_1fr] grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3 items-start">
           {/* Preventing first item to lose their top-padding */}
-          <div></div><div></div> 
+          <div />
+          <div className="hidden lg:block" />
           <FormField
             control={form.control}
             name="name"

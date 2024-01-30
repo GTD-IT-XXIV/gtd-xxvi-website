@@ -54,7 +54,7 @@ export default function TimeslotsPageFooter({
           </Link>
           <Link
             href={{
-              pathname: "/register/timeslots",
+              pathname: "/register/details",
               query: pageSearchParams,
             }}
             className={selected === 0 ? "pointer-events-none" : undefined}
