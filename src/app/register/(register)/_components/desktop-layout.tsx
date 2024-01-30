@@ -51,7 +51,9 @@ export default async function DesktopLayout({
   return (
     <CheckoutWrapper>
       <CartCleaner eventIds={eventIds}>
-        <section className={cn("grow flex flex-col px-10", className)}>
+        <section
+          className={cn("grow flex flex-col px-10 lg:px-[5.75rem]", className)}
+        >
           <article className="flex-1 p-5 pt-10 space-y-5">
             <hgroup className="space-y-1">
               <h1 className="text-gtd-primary-30 font-semibold text-3xl">
