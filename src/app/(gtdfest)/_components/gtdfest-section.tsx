@@ -38,7 +38,7 @@ export default function GTDFestSection({
       <Image
         src={image.src}
         alt={image.alt}
-        className="aspect-[3/4] object-cover"
+        className="h-auto w-full aspect-[3/4] md:aspect-video object-cover"
       />
       <div className={sectionVariants({ variant })}>
         <h2 className="font-serif text-4xl">{title}</h2>

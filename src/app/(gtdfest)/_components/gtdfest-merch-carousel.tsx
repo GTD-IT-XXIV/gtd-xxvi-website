@@ -51,7 +51,7 @@ export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
   return (
     <section className="px-12 py-6 space-y-4 bg-repeat bg-[url('/merch-background.png')] bg-[length:200px_200px]">
       {/* Button Groups */}
-      <div className="w-full flex justify-center gap-4 h-28 overflow-scroll">
+      <div className="w-full flex justify-center gap-4 h-28">
         {merchs.map((merch, idx) => (
           <motion.button
             layout
@@ -88,7 +88,7 @@ export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
                 <Image
                   src={merch.image}
                   alt="Merch 1"
-                  className="aspect-[1/1.2] object-cover"
+                  className="h-auto w-full aspect-[1/1.2] md:aspect-video object-cover"
                 />
                 <hgroup className="absolute inset-0 p-12 flex flex-col justify-end gap-2">
                   <h2 className="font-serif text-4xl">{merch.name}</h2>
