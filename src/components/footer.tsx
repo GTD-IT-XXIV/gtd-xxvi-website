@@ -16,7 +16,7 @@ export default function Footer({ className }: FooterProps) {
       <div className="flex items-start">
         <p className="w-1/3 max-w-32 md:text-2xl font-medium">Events</p>
         <div className="flex flex-col py-0.5">
-          <Link href="/" className="text-sm md:text-xl">
+          <Link href="/" className="text-sm md:text-lg">
             GTD Fest x Escape Room
           </Link>
         </div>
@@ -24,10 +24,10 @@ export default function Footer({ className }: FooterProps) {
       <div className="flex items-start">
         <p className="w-1/3 max-w-32 md:text-2xl font-medium">General</p>
         <div className="flex flex-col py-0.5">
-          <Link href="/" className="text-sm">
+          <Link href="/" className="text-sm md:text-lg">
             Committee
           </Link>
-          <Link href="/" className="text-sm">
+          <Link href="/" className="text-sm md:text-lg">
             About Us
           </Link>
         </div>
