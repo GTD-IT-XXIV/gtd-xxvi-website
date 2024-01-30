@@ -1,9 +1,19 @@
+import GTDFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
+import logoGTDFest from "@/assets/images/logo-gtdfest.png";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { ChevronDown } from "lucide-react";
 import { type Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 
 import { api } from "@/server/trpc";
 
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
+
+dayjs.extend(utc);
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
@@ -24,29 +34,47 @@ export default async function GTDFestPage() {
     );
   }
 
+  const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
+  const endDateLabel = dayjs.utc(gtdFest.endDate).format("D MMM YYYY");
+
   return (
     <main>
-      <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
-      <Link
-        href={{
-          pathname: "/register",
-          query: {
-            event: [GTD_FEST_EVENT_ID, ESCAPE_ROOM_EVENT_ID],
-          },
-        }}
-      >
-        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
-          Register
-        </button>
-      </Link>
-      <h2 className="text-xl font-medium">Custom Colors</h2>
-      <ul>
-        <li>
-          gtd-primary: <div className="inline-block size-5 bg-gtd-primary-" />
-          <div className="inline-block size-5 bg-gtd-primary-20" />
-          <div className="inline-block size-5 bg-gtd-primary-30" />
-        </li>
-      </ul>
+      <section className="relative text-white">
+        <Image src={GTDFestBg1} alt="Background 1" />
+        <div className="absolute inset-0 flex flex-col items-center">
+          <hgroup className="w-full py-8 text-center space-y-2 bg-[radial-gradient(circle_at_center_40%,_var(--tw-gradient-stops))] from-slate-900 from-25%">
+            <Image
+              src={logoGTDFest}
+              alt="Logo GTD Fest"
+              className="h-[400px] w-full object-cover"
+            />
+            <h1 className="text-4xl font-serif text-shadow shadow-slate-900">
+              GTD Fest - Enchantium
+            </h1>
+            <p className="text-shadow shadow-slate-900">
+              {startDateLabel} - {endDateLabel}
+            </p>
+          </hgroup>
+          <div className="flex gap-4">
+            <Button
+              type="button"
+              className="bg-gtd-primary-30 hover:bg-gtd-primary-20 font-semibold"
+            >
+              Register
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              className="hover:bg-slate-200"
+              asChild
+            >
+              <Link href="#learn-more">Learn More</Link>
+            </Button>
+          </div>
+          <div className="flex-1" />
+          <ChevronDown className="size-8 animate-pulse" />
+        </div>
+      </section>
     </main>
   );
 }
