@@ -45,13 +45,6 @@ const merchs: (Merch & { icon: string | StaticImport })[] = [
     image: merchPhoto,
     icon: topi,
   },
-  {
-    name: "Merch 4",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
 ];
 
 export const metadata: Metadata = {
