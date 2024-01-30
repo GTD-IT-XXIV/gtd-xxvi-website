@@ -25,6 +25,7 @@ export default function TimeslotsPageFooter({
 
   return (
     <>
+      {/* Mobile footer */}
       <footer
         className={cn(
           "bg-white flex justify-between items-center py-2 px-5 drop-shadow md:hidden",
@@ -70,9 +71,11 @@ export default function TimeslotsPageFooter({
           </Link>
         </div>
       </footer>
+
+      {/* Desktop footer */}
       <footer
         className={cn(
-          "bg-white hidden md:flex flex-col justify-end items-end py-2 px-5 space-y-4 mb-32",
+          "bg-white hidden md:flex flex-col justify-end items-end py-4 px-[60px] lg:px-28 space-y-4 mb-32",
           className,
         )}
       >
@@ -98,7 +101,7 @@ export default function TimeslotsPageFooter({
           </Link>
           <Link
             href={{
-              pathname: "/register/timeslots",
+              pathname: "/register/details",
               query: pageSearchParams,
             }}
             className={selected === 0 ? "pointer-events-none" : undefined}

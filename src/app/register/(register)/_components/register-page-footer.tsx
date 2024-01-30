@@ -50,7 +50,7 @@ export default function RegisterPageFooter({
       </footer>
       <footer
         className={cn(
-          "bg-white hidden md:flex flex-col justify-end items-end py-2 px-5 space-y-4 mb-32",
+          "bg-white hidden md:flex flex-col justify-end items-end py-4 px-5 space-y-4 mb-32",
           className,
         )}
       >
