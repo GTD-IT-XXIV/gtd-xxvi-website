@@ -11,7 +11,7 @@ import { type RouterOutputs } from "@/lib/trpc/utils";
 import { cn } from "@/lib/utils";
 
 import EventCardGroup from "./event-card-group";
-import RegisterPageFooterDesktop from "./register-page-footer-desktop";
+import RegisterPageFooter from "./register-page-footer";
 
 export const metadata: Metadata = {
   title: "Register",
@@ -69,7 +69,7 @@ export default async function DesktopLayout({
               ))}
             </div>
           </article>
-          <RegisterPageFooterDesktop
+          <RegisterPageFooter
             className="sticky bottom-0"
             pageSearchParams={searchParams}
           />
