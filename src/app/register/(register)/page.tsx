@@ -14,7 +14,8 @@ export default async function RegisterPage({
 }) {
   return (
     <>
-      <DesktopLayout searchParams={searchParams} />
+      <DesktopLayout className="hidden md:flex" searchParams={searchParams} />
+      <MobileLayout className="md:hidden" searchParams={searchParams} />
     </>
   );
 }

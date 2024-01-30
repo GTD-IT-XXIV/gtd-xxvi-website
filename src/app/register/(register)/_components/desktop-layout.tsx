@@ -8,6 +8,7 @@ import CheckoutWrapper from "@/components/registration/checkout-wrapper";
 import { api } from "@/server/trpc";
 
 import { type RouterOutputs } from "@/lib/trpc/utils";
+import { cn } from "@/lib/utils";
 
 import EventCardGroup from "./event-card-group";
 import RegisterPageFooterDesktop from "./register-page-footer-desktop";
@@ -17,8 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default async function DesktopLayout({
+  className,
   searchParams,
 }: {
+  className: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const eventParams = z.coerce
@@ -48,7 +51,7 @@ export default async function DesktopLayout({
   return (
     <CheckoutWrapper>
       <CartCleaner eventIds={eventIds}>
-        <section className="grow flex flex-col px-10">
+        <section className={cn("grow flex flex-col px-10", className)}>
           <article className="flex-1 p-5 pt-10 space-y-5">
             <hgroup className="space-y-1">
               <h1 className="text-gtd-primary-30 font-semibold text-3xl">
