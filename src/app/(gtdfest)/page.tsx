@@ -1,4 +1,6 @@
-import GTDFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
+import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
+import gtdFestBg2 from "@/assets/images/gtdfest-background-2.jpeg";
+import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
 import merchPhoto from "@/assets/images/sample-merch-1.jpeg";
 import topiSvg from "@/assets/images/topi.svg";
@@ -17,7 +19,8 @@ import { api } from "@/server/trpc";
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
 import { type Merch } from "@/lib/types";
 
-import GTDFestMerchCarousel from "./_components/merch-carousel";
+import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
+import GTDFestSection from "./_components/gtdfest-section";
 
 dayjs.extend(utc);
 
@@ -73,7 +76,7 @@ export default async function GTDFestPage() {
     <main className="bg-slate-900 text-white">
       {/* Top Section */}
       <section className="relative">
-        <Image src={GTDFestBg1} alt="Background 1" />
+        <Image src={gtdFestBg1} alt="Background 1" />
         <div className="absolute inset-0 flex flex-col gap-4 items-center">
           <hgroup className="w-full pt-8 text-center bg-[radial-gradient(circle_at_center_35%,_var(--tw-gradient-stops))] from-slate-900 from-25%">
             <Image
@@ -100,8 +103,9 @@ export default async function GTDFestPage() {
             <Button
               type="button"
               className="bg-gtd-primary-30 hover:bg-gtd-primary-20 font-semibold"
+              asChild
             >
-              Register
+              <Link href="/register">Register</Link>
             </Button>
             <Button
               type="button"
@@ -112,13 +116,50 @@ export default async function GTDFestPage() {
               <Link href="#learn-more">Learn More</Link>
             </Button>
           </div>
-          <div className="flex-1" />
+          {/* biar gk ketutupan navbar */}
+          <div id="learn-more" className="flex-1" />
           <ChevronDown className="size-8 animate-pulse" />
         </div>
       </section>
 
       {/* Merch Section */}
       <GTDFestMerchCarousel merchs={merchs} />
+
+      {/* Other Sections */}
+      <GTDFestSection
+        title="Escape Room"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg2,
+          alt: "Background 2",
+        }}
+      />
+      <GTDFestSection
+        title="Photobooth"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg3,
+          alt: "Background 3",
+        }}
+        variant="right"
+      />
+      <GTDFestSection
+        title="Arcade"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg2,
+          alt: "Background 2",
+        }}
+      />
+      <GTDFestSection
+        title="Performances"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg3,
+          alt: "Background 3",
+        }}
+        variant="right"
+      />
     </main>
   );
 }
