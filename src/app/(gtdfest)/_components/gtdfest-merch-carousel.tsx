@@ -1,9 +1,8 @@
 "use client";
 
 import { type Variants, motion } from "framer-motion";
-import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { type ReactElement, useEffect, useState } from "react";
 
 import {
   Carousel,
@@ -17,13 +16,13 @@ import {
 import { type Merch } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const buttonVariants: Variants = {
+const iconVariants: Variants = {
   open: { opacity: 1 },
   close: { opacity: 0, height: 0 },
 };
 
 export type MerchCarouselProps = {
-  merchs: (Merch & { icon: string | StaticImport })[];
+  merchs: (Merch & { icon: string })[];
 };
 
 export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
@@ -42,7 +41,6 @@ export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
     if (!api) {
       return;
     }
-
     api.on("select", (api) => {
       setSelected(api.selectedScrollSnap());
     });
@@ -51,27 +49,30 @@ export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
   return (
     <section className="px-12 py-6 space-y-4 bg-repeat bg-[url('/merch-background.png')] bg-[length:200px_200px]">
       {/* Button Groups */}
-      <div className="w-full flex justify-center gap-4 h-28">
+      <div className="w-full flex justify-center gap-4 md:gap-16 h-28 md:h-56">
         {merchs.map((merch, idx) => (
           <motion.button
-            layout
             key={merch.name}
             type="button"
             onClick={() => handleClick(idx)}
-            className="block h-fit bg-slate-800 py-3 px-4 rounded-lg"
+            className="block h-fit bg-slate-800 py-3 md:py-8 px-4 md:px-10 rounded-lg"
           >
             <motion.div
               animate={idx === selected ? "open" : "close"}
-              variants={buttonVariants}
+              variants={iconVariants}
             >
-              <Image src={merch.icon} alt={`${merch.name} Icon`} />
+              <Image
+                src={merch.icon}
+                alt="Merch Logo"
+                className="w-full object-cover"
+              />
             </motion.div>
             <motion.p
               layout
               transition={{ delay: 0.2 }}
               className={cn(
-                "font-serif text-nowrap",
-                idx === selected ? "mt-2" : "",
+                "font-serif text-nowrap md:text-3xl",
+                idx === selected ? "mt-2 md:mt-6" : "",
               )}
             >
               {merch.name}
@@ -88,7 +89,7 @@ export default function GTDFestMerchCarousel({ merchs }: MerchCarouselProps) {
                 <Image
                   src={merch.image}
                   alt="Merch 1"
-                  className="h-auto w-full aspect-[1/1.2] md:aspect-video object-cover"
+                  className="h-auto w-full aspect-[1/1.2] md:aspect-[2/1] object-cover"
                 />
                 <hgroup className="absolute inset-0 p-12 flex flex-col justify-end gap-2">
                   <h2 className="font-serif text-4xl">{merch.name}</h2>
