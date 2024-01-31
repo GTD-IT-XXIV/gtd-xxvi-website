@@ -86,19 +86,19 @@ export default function Navbar({ className, variant }: NavbarProps) {
           icon={Zap}
           className="w-auto justify-center"
         />
-        <NavbarButton
+        {/* <NavbarButton
           variant={variant}
           size="sm"
           href="/register/timeslots"
           label="Booking"
           icon={Ticket}
           className="w-auto justify-center"
-        />
+        /> */}
         <NavbarButton
           variant={variant}
           size="sm"
           href="/register/details"
-          label="Payment"
+          label="Cart"
           icon={ShoppingCart}
           className="w-auto justify-center"
         />
@@ -121,16 +121,16 @@ export default function Navbar({ className, variant }: NavbarProps) {
               label="GTD Fest"
               icon={Zap}
             />
-            <NavbarButton
+            {/* <NavbarButton
               variant={variant}
               href="/register/timeslots"
               label="Booking"
               icon={Ticket}
-            />
+            /> */}
             <NavbarButton
               variant={variant}
               href="/register/details"
-              label="Payment"
+              label="Cart"
               icon={ShoppingCart}
             />
           </div>

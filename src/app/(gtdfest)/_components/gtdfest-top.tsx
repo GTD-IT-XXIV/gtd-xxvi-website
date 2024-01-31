@@ -54,7 +54,7 @@ export default function GTDFestTop({
     return () => {
       window.removeEventListener("resize", updateCenter);
     };
-  }, [logoRef]);
+  }, []);
 
   const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
   const endDateLabel = dayjs.utc(escapeRoom.endDate).format("D MMM YYYY");
@@ -72,23 +72,23 @@ export default function GTDFestTop({
           background: `radial-gradient(circle at ${center.x} ${center.y}, var(--tw-gradient-stops))`,
         }}
       >
-        <div className="min-h-0 grow flex flex-col md:flex-row justify-center md:justify-evenly items-center gap-2">
+        <div className="min-h-0 grow flex flex-col md:flex-row justify-center md:justify-evenly items-center gap-2 md:gap-8">
           <Image
             ref={logoRef}
             src={logo}
             alt="Logo GTD Fest"
-            className="shrink md:self-stretch min-h-0 h-auto min-w-0 w-auto aspect-[0.87/1] object-cover"
+            className="shrink min-h-0 h-auto min-w-0 w-auto aspect-[0.87/1] object-cover"
           />
           <div className="grow md:grow-0 text-center space-y-4">
             <hgroup className="space-y-3">
-              <h1 className="text-xl md:text-2xl font-serif">
+              <h1 className="text-lg md:text-2xl font-serif">
                 <div>{gtdFest.name}</div>
-                <div className="text-4xl md:text-6xl text-gtd-primary-20 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-gtd-primary-30">
+                <div className="text-4xl md:text-6xl lg:text-7xl text-gtd-primary-20 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-gtd-primary-30 italic tracking-wider">
                   Enchantium
                 </div>
                 <p className="text-lg md:text-xl opacity-65">X</p>
                 <div>{escapeRoom.name}</div>
-                <div className="text-4xl md:text-6xl text-red-600 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-500">
+                <div className="text-4xl md:text-6xl lg:text-7xl text-red-600 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-500 italic tracking-wider">
                   Nyctophobia
                 </div>
               </h1>
@@ -102,7 +102,7 @@ export default function GTDFestTop({
                 className="bg-gtd-primary-30 hover:bg-gtd-primary-20 md:px-8 md:h-12 md:text-xl font-semibold"
                 asChild
               >
-                <Link href="/register">Register</Link>
+                <Link href="/register">Register for Events</Link>
               </Button>
               <Button
                 type="button"
@@ -110,7 +110,7 @@ export default function GTDFestTop({
                 className="hover:bg-slate-200 md:px-6"
                 asChild
               >
-                <Link href="#learn-more">Learn More</Link>
+                <Link href="#learn-more">Buy Merch</Link>
               </Button>
             </div>
           </div>
