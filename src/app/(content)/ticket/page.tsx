@@ -12,11 +12,10 @@ export default function TicketPage({
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const sessionId = z.string().safeParse(searchParams.session_id);
-  const { data: session, isLoading } =
-    api.payment.retrieveCheckoutSession.useQuery(
-      { sessionId: sessionId.success ? sessionId.data : "" },
-      { enabled: sessionId.success },
-    );
+  const { data: session } = api.payment.retrieveCheckoutSession.useQuery(
+    { sessionId: sessionId.success ? sessionId.data : "" },
+    { enabled: sessionId.success },
+  );
 
   const {
     data: tickets,
@@ -31,17 +30,10 @@ export default function TicketPage({
   );
 
   return (
-    <main>
-      <h1 className="text-2xl font-semibold">Ticket Page</h1>
-      {!isLoading && !!session ? (
-        <>
-          <p>Payment Status: {session.status}</p>
-          <p>Customer Email {session.customerEmail}</p>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
-      {isTicketsLoading && <p>Tickets Loading...</p>}
+    <main className="py-10 px-5 md:px-[3.75rem] lg:px-28 min-h-screen">
+      <h1 className="text-gtd-primary-30 text-3xl font-semibold mb-4 md:mb-6">
+        Your Tickets
+      </h1>
       {!isTicketsLoading && !isTicketsError && (
         <Tickets ticketIds={tickets.map((ticket) => ticket.id)} />
       )}

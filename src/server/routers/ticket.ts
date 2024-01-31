@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
+import { Prettify } from "@/lib/utils";
 
 import { dashboardProcedure } from "../procedures/dashboard-procedure";
 
@@ -35,6 +36,23 @@ export const ticketRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { id } = input;
       const ticket = await ctx.db.ticket.findUnique({ where: { id } });
+      if (!ticket) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No ticket with id '${id}'`,
+        });
+      }
+      return ticket;
+    }),
+
+  getDetailsById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const ticket = await ctx.db.ticket.findUnique({
+        where: { id },
+        include: { bundle: { include: { event: true } }, timeslot: true },
+      });
       if (!ticket) {
         throw new TRPCError({
           code: "NOT_FOUND",

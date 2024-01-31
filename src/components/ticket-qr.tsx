@@ -3,10 +3,13 @@
 import QRCode from "qrcode";
 import { useEffect, useRef } from "react";
 
-export type TicketProps = {
+export type TicketQrProps = {
   id: string;
+  width: number;
+  margin: number;
 };
-export default function Ticket({ id }: TicketProps) {
+
+export default function TicketQr({ id, width, margin }: TicketQrProps) {
   const qrCode = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -18,6 +21,8 @@ export default function Ticket({ id }: TicketProps) {
           {
             errorCorrectionLevel: "H",
             version: 6,
+            width,
+            margin,
           },
           (error) => {
             if (error) {
@@ -37,10 +42,5 @@ export default function Ticket({ id }: TicketProps) {
     };
   }, []);
 
-  return (
-    <div>
-      <span>{id}</span>
-      <canvas ref={qrCode} />
-    </div>
-  );
+  return <canvas ref={qrCode} />;
 }

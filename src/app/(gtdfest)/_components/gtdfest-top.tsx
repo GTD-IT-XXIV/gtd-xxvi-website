@@ -99,7 +99,7 @@ export default function GTDFestTop({
             <div className="flex md:flex-col justify-center items-center gap-4">
               <Button
                 type="button"
-                className="bg-gtd-primary-30 hover:bg-gtd-primary-20 md:px-8 md:h-12 md:text-xl font-semibold"
+                className="bg-gtd-primary-30 hover:bg-gtd-primary-20 hover:scale-105 hover:shadow md:px-8 md:h-12 md:text-xl font-semibold transition"
                 asChild
               >
                 <Link href="/register">Register for Events</Link>

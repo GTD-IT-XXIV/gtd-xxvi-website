@@ -6,7 +6,7 @@ export type TicketsProps = {
 
 export default function Tickets({ ticketIds }: TicketsProps) {
   return (
-    <section>
+    <section className="flex flex-wrap gap-4">
       {ticketIds.map((id) => (
         <Ticket key={id} id={id} />
       ))}

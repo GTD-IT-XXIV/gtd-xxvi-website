@@ -20,6 +20,8 @@ import GTDFestTop from "./_components/gtdfest-top";
 
 dayjs.extend(utc);
 
+export const dynamic = "force-static";
+
 const topi = topiSvg as string;
 
 const merchs: (Merch & { icon: string })[] = [
