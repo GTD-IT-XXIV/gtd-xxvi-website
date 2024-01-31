@@ -18,6 +18,7 @@ git push
 3. Open a pull request (PR). Add the `WIP` tag for work in progress PRs. Add `Resolves #<issue-number>` to the PR body ([learn more](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)). Add other tags as necessary.
 
 4. See specific workflows:
+
    - [Frontend workflow](#frontend-workflow)
    - [Backend worflow](#backend-workflow)
 

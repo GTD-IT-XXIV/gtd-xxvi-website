@@ -1,7 +1,5 @@
 "use client";
 
-import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
-import logoGTDTopi from "@/assets/images/logo-gtd-white-transparent-topi.png";
 import { type VariantProps, cva } from "class-variance-authority";
 import { Home, Menu, ShoppingCart, Ticket, X, Zap } from "lucide-react";
 import Image from "next/image";
@@ -9,6 +7,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+
+import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
+import logoGTDTopi from "@/assets/images/logo-gtd-white-transparent-topi.png";
 
 import NavbarButton from "./navbar-button";
 

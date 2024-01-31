@@ -2,7 +2,7 @@
 
 import { type Variants, motion } from "framer-motion";
 import Image from "next/image";
-import React, { type ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Carousel,
