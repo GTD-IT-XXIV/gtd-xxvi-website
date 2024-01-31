@@ -4,7 +4,7 @@ import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

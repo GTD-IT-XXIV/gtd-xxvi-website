@@ -32,7 +32,7 @@ services:
     build:
       context: ../..
       dockerfile: docker/development/stripe.Dockerfile
-    env_file: 
+    env_file:
       - ../../.env.development.local
 
   # caddy:

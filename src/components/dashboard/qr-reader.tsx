@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import QrScanner from "qr-scanner";
 import { useEffect, useRef, useState } from "react";
 

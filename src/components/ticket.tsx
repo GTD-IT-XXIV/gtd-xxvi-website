@@ -3,8 +3,6 @@
 import QRCode from "qrcode";
 import { useEffect, useRef } from "react";
 
-import { api } from "@/lib/trpc/client";
-
 export type TicketProps = {
   id: string;
 };

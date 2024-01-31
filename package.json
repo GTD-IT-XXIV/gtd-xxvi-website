@@ -70,6 +70,8 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "dayjs": "^1.11.10",
+    "embla-carousel-react": "8.0.0-rc21",
+    "framer-motion": "^11.0.3",
     "fuse.js": "^7.0.0",
     "jotai": "^2.6.1",
     "lucia": "^2.7.6",

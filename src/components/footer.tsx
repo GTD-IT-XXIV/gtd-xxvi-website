@@ -1,10 +1,11 @@
-import logoGTD from "@/assets/images/logo-gtd-white-transparent.png";
-import logoPINTU from "@/assets/images/logo-pintu-white.png";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+
+import logoGTD from "@/assets/images/logo-gtd-white-transparent.png";
+import logoPINTU from "@/assets/images/logo-pintu-white.png";
 
 export type FooterProps = {
   className?: string;

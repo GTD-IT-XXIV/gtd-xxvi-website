@@ -1,9 +1,50 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { type Metadata } from "next";
-import Link from "next/link";
 
 import { api } from "@/server/trpc";
 
 import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
+import { type Merch } from "@/lib/types";
+
+import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
+import gtdFestBg2 from "@/assets/images/gtdfest-background-2.jpeg";
+import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
+import logoGTDFest from "@/assets/images/logo-gtdfest.png";
+import merchPhoto from "@/assets/images/sample-merch-1.jpeg";
+import topiSvg from "@/assets/images/topi.svg";
+
+import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
+import GTDFestSection from "./_components/gtdfest-section";
+import GTDFestTop from "./_components/gtdfest-top";
+
+dayjs.extend(utc);
+
+const topi = topiSvg as string;
+
+const merchs: (Merch & { icon: string })[] = [
+  {
+    name: "Merch 1",
+    description:
+      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
+    image: merchPhoto,
+    icon: topi,
+  },
+  {
+    name: "Merch 2",
+    description:
+      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
+    image: merchPhoto,
+    icon: topi,
+  },
+  {
+    name: "Merch 3",
+    description:
+      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
+    image: merchPhoto,
+    icon: topi,
+  },
+];
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
@@ -25,28 +66,49 @@ export default async function GTDFestPage() {
   }
 
   return (
-    <main>
-      <h1 className="text-2xl font-semibold">GTD Fest x Escape Room Page</h1>
-      <Link
-        href={{
-          pathname: "/register",
-          query: {
-            event: [GTD_FEST_EVENT_ID, ESCAPE_ROOM_EVENT_ID],
-          },
+    <main className="bg-slate-900 text-white">
+      <GTDFestTop
+        backgroundImage={gtdFestBg1}
+        logo={logoGTDFest}
+        gtdFest={gtdFest}
+        escapeRoom={escapeRoom}
+      />
+      <GTDFestMerchCarousel merchs={merchs} />
+      {/* Other Sections */}
+      <GTDFestSection
+        title="Escape Room"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg2,
+          alt: "Background 2",
         }}
-      >
-        <button type="button" className="p-2 bg-slate-200 hover:bg-slate-100">
-          Register
-        </button>
-      </Link>
-      <h2 className="text-xl font-medium">Custom Colors</h2>
-      <ul>
-        <li>
-          gtd-primary: <div className="inline-block size-5 bg-gtd-primary-" />
-          <div className="inline-block size-5 bg-gtd-primary-20" />
-          <div className="inline-block size-5 bg-gtd-primary-30" />
-        </li>
-      </ul>
+      />
+      <GTDFestSection
+        title="Photobooth"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg3,
+          alt: "Background 3",
+        }}
+        variant="right"
+      />
+      <GTDFestSection
+        title="Arcade"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg2,
+          alt: "Background 2",
+        }}
+      />
+      <GTDFestSection
+        title="Performances"
+        description="Event description lorem ipsum dolor sit Nam sagittis luctus tristique. Morbi luctus, nisi id blandit nunc."
+        image={{
+          src: gtdFestBg3,
+          alt: "Background 3",
+        }}
+        variant="right"
+      />
     </main>
   );
 }
