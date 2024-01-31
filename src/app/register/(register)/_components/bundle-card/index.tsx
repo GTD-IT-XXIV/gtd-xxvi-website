@@ -166,14 +166,14 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       </section>
 
       {/* Desktop */}
-      <section className="hidden md:flex border text-gtd-secondary-30 border-zinc-300 w-full h-1/5 p-3 rounded-lg">
-        <div className="grow">
+      <section className="hidden md:flex min-h-[12rem] border text-gtd-secondary-30 border-zinc-300 w-full p-3 rounded-lg">
+        <div className="flex flex-col grow">
           <h2 className="text-gtd-secondary-20 font-medium text-xl">
             {event.name}{" "}
             <span className="whitespace-nowrap">({bundle.name})</span>
           </h2>
 
-          <div className="my-1.5 space-y-0.5">
+          <div className="my-1.5 space-y-0.5 grow">
             <p className="text-gtd-secondary-10 text-md">
               {" "}
               <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
@@ -186,17 +186,19 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
               &nbsp; {event.location}{" "}
             </p>
           </div>
-          <BundleCardPopup
-            event={{
-              id: event.id,
-              name: event.name,
-            }}
-            bundle={{
-              name: bundle.name,
-              price: bundle.price,
-              details: bundle.details,
-            }}
-          />
+          <div className="">
+            <BundleCardPopup
+              event={{
+                id: event.id,
+                name: event.name,
+              }}
+              bundle={{
+                name: bundle.name,
+                price: bundle.price,
+                details: bundle.details,
+              }}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col w-[30%]">
