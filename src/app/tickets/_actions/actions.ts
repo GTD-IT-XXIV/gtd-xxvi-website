@@ -36,5 +36,4 @@ export async function synchronizeToGoogleSheets() {
   const sheet = doc.sheetsByIndex[0];
   await sheet?.setHeaderRow(columns);
   await sheet?.addRows(tickets);
-  console.log(sheet);
 }

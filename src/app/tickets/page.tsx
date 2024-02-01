@@ -13,22 +13,28 @@ export default function TicketsPage() {
   };
   return (
     <>
-      {data?.tickets?.map((ticket) => (
-        <div key={ticket.id}>
-          {/* can create other field! */}
-          {ticket.id}
-          <br />
-          {ticket.name}
-          <br />
-          {ticket.bundleId}
-          <br />
-          {ticket.email}
-          <br />
-          <br />
-        </div>
-      ))}
-
-      <Button onClick={onClick}>Synchronize to google sheets</Button>
+      {isLoading ? (
+        <p>Loading bro...</p>
+      ) : (
+        <>
+          {" "}
+          {data?.tickets?.map((ticket) => (
+            <div key={ticket.id}>
+              {/* can create other field! */}
+              {ticket.id}
+              <br />
+              {ticket.name}
+              <br />
+              {ticket.bundleId}
+              <br />
+              {ticket.email}
+              <br />
+              <br />
+            </div>
+          ))}
+          <Button onClick={onClick}>Synchronize to google sheets</Button>
+        </>
+      )}
     </>
   );
 }
