@@ -13,16 +13,19 @@ import BookingReviewBundleLoading from "./loading";
 dayjs.extend(utc);
 
 export type BookingReviewBundleProps = {
-  eventId: number;
-  bundleId: number;
-  timeslotId: number;
+  eventName: string;
+  bundleName: string;
+  timeslot?: {
+    start: Date;
+    end: Date;
+  };
   quantity: number;
 };
 
 export default function BookingReviewBundle({
-  eventId,
-  bundleId,
-  timeslotId,
+  eventName,
+  bundleName,
+  timeslot,
   quantity,
 }: BookingReviewBundleProps) {
   const {
@@ -30,23 +33,34 @@ export default function BookingReviewBundle({
     error: eventError,
     isLoading: isEventLoading,
     isError: isEventError,
-  } = api.event.getById.useQuery({ id: eventId });
+  } = api.event.getByName.useQuery({ name: eventName });
   const {
     data: bundle,
     error: bundleError,
     isLoading: isBundleLoading,
     isError: isBundleError,
-  } = api.bundle.getById.useQuery({ id: bundleId });
+  } = api.bundle.getByNameAndEvent.useQuery({
+    name: bundleName,
+    event: eventName,
+  });
   const {
-    data: timeslot,
+    data: timeslotData,
     error: timeslotError,
+    isFetching: isTimeslotFetching,
     isLoading: isTimeslotLoading,
     isError: isTimeslotError,
-  } = api.timeslot.getById.useQuery({ id: timeslotId });
+  } = api.timeslot.getByTimeAndEvent.useQuery(
+    {
+      event: eventName,
+      startTime: timeslot!.start,
+      endTime: timeslot!.end,
+    },
+    { enabled: !!timeslot },
+  );
 
   const setAllowCheckout = useSetAtom(allowCheckoutAtom);
 
-  if (isEventLoading || isBundleLoading || isTimeslotLoading) {
+  if (isEventLoading || isBundleLoading || isTimeslotFetching) {
     setAllowCheckout(false);
     return <BookingReviewBundleLoading />;
   }
@@ -72,11 +86,11 @@ export default function BookingReviewBundle({
         </div>
         <div className="bundle-description text-sm my-1 text-gtd-secondary-10 font-light">
           {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")},{" "}
-          {isTimeslotError ? (
+          {!timeslot ? (
             <span className="text-red-600">no timeslot chosen</span>
-          ) : (
-            `${dayjs.utc(timeslot.startTime).format("h.mm")} -
-              ${dayjs.utc(timeslot.endTime).format("h.mm A")}`
+          ) : !isTimeslotLoading && !isTimeslotError && (
+            `${dayjs.utc(timeslotData.startTime).format("h.mm")} -
+              ${dayjs.utc(timeslotData.endTime).format("h.mm A")}`
           )}
         </div>
       </div>

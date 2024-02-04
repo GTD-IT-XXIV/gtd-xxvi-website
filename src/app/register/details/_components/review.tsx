@@ -22,12 +22,12 @@ export default function BookingReview() {
         {!hasMounted ? (
           <BookingReviewBundleLoading />
         ) : filteredCart.length !== 0 ? (
-          filteredCart.map(({ eventId, bundleId, timeslotId, quantity }) => (
+          filteredCart.map(({ event, timeslot, quantity }) => (
             <BookingReviewBundle
-              key={`${eventId}-${bundleId}-${timeslotId}`}
-              eventId={eventId}
-              bundleId={bundleId}
-              timeslotId={timeslotId}
+              key={`${event.name}-${event.bundle}-${timeslot?.start.toString()}-${timeslot?.end.toString()}`}
+              eventName={event.name}
+              bundleName={event.bundle}
+              timeslot={timeslot}
               quantity={quantity}
             />
           ))

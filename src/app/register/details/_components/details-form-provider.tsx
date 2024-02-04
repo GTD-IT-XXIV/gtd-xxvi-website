@@ -66,7 +66,21 @@ export default function DetailsFormProvider({
   async function placeOrder(values: z.infer<typeof formSchema>) {
     try {
       const bookings = await createBookings({
-        bookings: cart.map((item) => ({ ...values, ...item })),
+        bookings: cart.map((item) => {
+          if (!item.timeslot) {
+            throw new Error(
+              `No timeslot selected for event with name '${item.event.name}'`,
+            );
+          }
+          return {
+            ...values,
+            eventName: item.event.name,
+            bundleName: item.event.bundle,
+            startTime: item.timeslot.start,
+            endTime: item.timeslot.end,
+            names: item.participants,
+          };
+        }),
       });
       const bookingIds = bookings.map((booking) => booking.id);
       try {

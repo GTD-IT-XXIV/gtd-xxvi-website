@@ -82,6 +82,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
           bundle: bundleName,
         },
         quantity: 1,
+        participants: [],
       });
     });
   };

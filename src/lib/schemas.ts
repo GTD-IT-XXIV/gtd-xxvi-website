@@ -33,6 +33,7 @@ export const cartSchema = z
       })
       .optional(),
     quantity: z.number().nonnegative(),
+    participants: z.string().trim().min(1).array(),
   })
   .array();
 
