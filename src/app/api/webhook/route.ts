@@ -87,7 +87,7 @@ export async function POST(req: Request) {
             throw new Error("Payment intent ID is null");
           }
 
-          const tickets = await db.$transaction(async (tx) => {
+          const { order, tickets } = await db.$transaction(async (tx) => {
             // Unreachable code but necessary for type safety
             if (!bookings[0]) {
               throw new Error("An error occurred");
@@ -123,10 +123,10 @@ export async function POST(req: Request) {
             const tickets = await tx.ticket.findMany({
               where: { orderId: order.id },
             });
-            return tickets;
+            return { order, tickets };
           });
 
-          const ticketIds = tickets.map((ticket) => ticket.id);
+          // const ticketIds = tickets.map((ticket) => ticket.id);
           console.log("✅ Ticket details: ");
           console.log(tickets);
 
@@ -144,17 +144,14 @@ export async function POST(req: Request) {
             email: bookings[0].email,
           };
 
-          const ticketsUrl = `${req.headers.get("origin")}/ticket/${btoa(
-            SuperJSON.stringify(ticketIds),
-          )}`;
-
           let orderPrice = 0;
           const emailHtml = render(
             GTDEmail({
+              orderId: order.id,
               name: recipient.name,
-              orders: bookings.map((booking) => {
+              bookings: bookings.map((booking) => {
                 const totalPrice = new Prisma.Decimal(booking.bundle.price)
-                  .times(booking.quantity)
+                  .times(booking.names.length)
                   .toNumber();
                 orderPrice += totalPrice;
 
@@ -169,12 +166,20 @@ export async function POST(req: Request) {
                       .utc(booking.timeslot.endTime)
                       .format("h.mm A"),
                   },
-                  quantity: booking.quantity,
+                  quantity: booking.names.length,
                   totalPrice,
+                  tickets: tickets
+                    .filter(
+                      (ticket) =>
+                        ticket.eventName === booking.eventName &&
+                        ticket.bundleName === booking.bundleName &&
+                        ticket.startTime === booking.startTime &&
+                        ticket.endTime === booking.endTime,
+                    )
+                    .map((ticket) => ({ id: ticket.id, name: ticket.name })),
                 };
               }),
               orderPrice,
-              url: ticketsUrl,
               eventTitle,
             }),
           );
