@@ -14,7 +14,7 @@ export default function DashboardScanPage() {
     data: success,
     isFetching,
     isError,
-  } = api.ticket.checkId.useQuery({ id: ticketId }, { enabled: !!ticketId });
+  } = api.order.checkId.useQuery({ id: ticketId }, { enabled: !!ticketId });
 
   async function handleScan(result: QrScanner.ScanResult) {
     if (isFetching) {
@@ -36,11 +36,11 @@ export default function DashboardScanPage() {
 
   return (
     <div className="relative grow flex items-stretch">
-      <QrReader
+      {/* <QrReader
         className="grow"
         onSuccess={handleScan}
         onFail={handleScanFail}
-      />
+      /> */}
       {(isFetching || isError || success !== undefined) && (
         <div className="absolute z-10 inset-0 bg-black/65 flex items-center justify-center">
           {isFetching ? (
