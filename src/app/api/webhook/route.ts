@@ -87,27 +87,45 @@ export async function POST(req: Request) {
             throw new Error("Payment intent ID is null");
           }
 
-          // use email as the owner of a ticket in the future after the schema changed
-          const tickets = await db.$transaction(
-            bookings.flatMap((booking) =>
-              Array(booking.quantity)
-                .fill(0)
-                .map(() =>
-                  db.ticket.create({
-                    data: {
-                      name: booking.name,
-                      email: booking.email,
-                      telegramHandle: booking.telegramHandle,
-                      phoneNumber: booking.phoneNumber,
-                      bundleId: Number(booking.bundleId),
-                      timeslotId: Number(booking.timeslotId),
-                      paymentIntentId: String(data.payment_intent),
-                    },
-                    select: { id: true },
-                  }),
+          const tickets = await db.$transaction(async (tx) => {
+            // Unreachable code but necessary for type safety
+            if (!bookings[0]) {
+              throw new Error("An error occurred");
+            }
+
+            const booking = bookings[0];
+            const order = await tx.order.create({
+              data: {
+                name: booking.name,
+                email: booking.email,
+                telegramHandle: booking.telegramHandle,
+                phoneNumber: booking.phoneNumber,
+                paymentIntentId: String(data.payment_intent),
+              },
+            });
+
+            await tx.ticket.createMany({
+              data: bookings.flatMap((booking) =>
+                booking.names.flatMap(
+                  (name) =>
+                    ({
+                      name,
+                      orderId: order.id,
+                      eventName: booking.eventName,
+                      bundleName: booking.bundleName,
+                      startTime: booking.startTime,
+                      endTime: booking.endTime,
+                    }) satisfies Prisma.TicketCreateManyInput,
                 ),
-            ),
-          );
+              ),
+            });
+
+            const tickets = await tx.ticket.findMany({
+              where: { orderId: order.id },
+            });
+            return tickets;
+          });
+
           const ticketIds = tickets.map((ticket) => ticket.id);
           console.log("✅ Ticket details: ");
           console.log(tickets);
@@ -197,17 +215,28 @@ export async function POST(req: Request) {
 
           await db.$transaction(async (tx) => {
             for (const booking of bookings) {
-              const partySize = booking.quantity * booking.bundle.quantity;
+              const partySize = booking.names.length * booking.bundle.quantity;
 
               await tx.bundle.update({
-                where: { id: Number(booking.bundleId) },
+                where: {
+                  name_eventName: {
+                    name: booking.bundleName,
+                    eventName: booking.eventName,
+                  },
+                },
                 data: {
-                  remainingAmount: { increment: Number(booking.quantity) },
+                  remainingAmount: { increment: booking.names.length },
                 },
               });
 
               await tx.timeslot.update({
-                where: { id: Number(booking.timeslotId) },
+                where: {
+                  startTime_endTime_eventName: {
+                    startTime: booking.startTime,
+                    endTime: booking.endTime,
+                    eventName: booking.eventName,
+                  },
+                },
                 data: { remainingSlots: { increment: Number(partySize) } },
               });
             }

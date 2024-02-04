@@ -22,7 +22,7 @@ model Event {
   bundles     Bundle[]
   timeslots   Timeslot[]
   bookings    Booking[]
-  orders      Order[]
+  tickets     Ticket[]
 }
 
 model Bundle {
@@ -39,8 +39,8 @@ model Bundle {
   close           DateTime
   eventName       String
   bookings        Booking[]
-  orders          Order[]
   event           Event     @relation(fields: [eventName], references: [name])
+  tickets         Ticket[]
 
   @@id([name, eventName])
 }
@@ -51,8 +51,8 @@ model Timeslot {
   remainingSlots Int
   eventName      String
   bookings       Booking[]
-  orders         Order[]
   event          Event     @relation(fields: [eventName], references: [name])
+  tickets        Ticket[]
 
   @@id([startTime, endTime, eventName])
 }
@@ -85,23 +85,23 @@ model Order {
   email           String
   telegramHandle  String
   phoneNumber     String
-  eventName       String
-  bundleName      String
-  startTime       DateTime
-  endTime         DateTime
   created         DateTime @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
   paymentIntentId String
   tickets         Ticket[]
-  event           Event    @relation(fields: [eventName], references: [name])
-  bundle          Bundle   @relation(fields: [eventName, bundleName], references: [eventName, name])
-  timeslot        Timeslot @relation(fields: [startTime, endTime, eventName], references: [startTime, endTime, eventName])
 }
 
 model Ticket {
-  id      Int    @id @default(autoincrement())
-  name    String
-  orderId String
+  id         Int      @id @default(autoincrement())
+  name       String
+  orderId    String
+  eventName  String
+  bundleName String
+  startTime  DateTime
+  endTime    DateTime
+  event      Event    @relation(fields: [eventName], references: [name])
+  bundle     Bundle   @relation(fields: [eventName, bundleName], references: [eventName, name])
+  timeslot   Timeslot @relation(fields: [startTime, endTime, eventName], references: [startTime, endTime, eventName])
 
   order Order @relation(fields: [orderId], references: [id])
 }

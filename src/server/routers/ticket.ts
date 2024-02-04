@@ -50,11 +50,9 @@ export const ticketRouter = createTRPCRouter({
     .input(z.object({ event: nameKeySchema }))
     .query(async ({ ctx, input }) => {
       const { event } = input;
-      const orders = await ctx.db.order.findMany({
+      const tickets = await ctx.db.ticket.findMany({
         where: { eventName: event },
-        select: { tickets: true },
       });
-      const tickets = orders.flatMap((order) => order.tickets);
       return tickets;
     }),
 
@@ -62,11 +60,10 @@ export const ticketRouter = createTRPCRouter({
     .input(z.object({ event: nameKeySchema }))
     .query(async ({ ctx, input }) => {
       const { event } = input;
-      const orders = await ctx.db.order.findMany({
+      const tickets = await ctx.db.ticket.findMany({
         where: { eventName: event },
-        select: { _count: { select: { tickets: true } } },
       });
-      return orders.reduce((accum, order) => accum + order._count.tickets, 0);
+      return tickets;
     }),
 
   getManyByPaymentIntent: publicProcedure
