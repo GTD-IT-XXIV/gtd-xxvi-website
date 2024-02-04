@@ -4,7 +4,6 @@ import { type Metadata } from "next";
 
 import { api } from "@/server/trpc";
 
-import { ESCAPE_ROOM_EVENT_ID, GTD_FEST_EVENT_ID } from "@/lib/constants";
 import { type Merch } from "@/lib/types";
 
 import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
@@ -51,17 +50,15 @@ export const metadata: Metadata = {
 };
 
 export default async function GTDFestPage() {
-  const gtdFest = await api.event.getById.query({ id: GTD_FEST_EVENT_ID });
-  const escapeRoom = await api.event.getById.query({
-    id: ESCAPE_ROOM_EVENT_ID,
-  });
+  const gtdFest = await api.event.getByName.query({ name: "GTD Fest" });
+  const escapeRoom = await api.event.getByName.query({name: "Escape Room"});
 
   if (!gtdFest) {
-    throw new Error(`GTD Fest event (id: ${GTD_FEST_EVENT_ID}) not found`);
+    throw new Error(`GTD Fest event not found`);
   }
   if (!escapeRoom) {
     throw new Error(
-      `Escape Room event (id: ${ESCAPE_ROOM_EVENT_ID}) not found`,
+      `Escape Room event not found`,
     );
   }
 
