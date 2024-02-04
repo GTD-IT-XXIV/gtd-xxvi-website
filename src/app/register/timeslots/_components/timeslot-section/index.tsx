@@ -109,25 +109,27 @@ export default function TimeSlotSection({
         {timeslots.map((timeslot, idx) => {
           const remainingSlots = timeslot.remainingSlots;
           // timeslot already selected by some other item
-          const selected = cart.some(
+          const alreadySelected = cart.some(
             (item) =>
               item.timeslot?.start.getTime() === timeslot.startTime.getTime() &&
               item.timeslot?.end.getTime() === timeslot.endTime.getTime(),
           );
           const disabled =
-            remainingSlots < bundle.quantity * quantity ||
-            (selected &&
-              Object.is(selected, {
-                start: timeslot.startTime,
-                end: timeslot.endTime,
-              }));
+            remainingSlots < bundle.quantity * quantity || alreadySelected;
+          const isSelected =
+            selected?.start.getTime() === timeslot.startTime.getTime() &&
+            selected?.end.getTime() === timeslot.endTime.getTime();
+          console.log({ alreadySelected, disabled });
+
           return (
             <TimeSlotButton
               key={idx}
               timeslot={timeslot}
               remainingSlots={timeslot.remainingSlots}
               onClick={onChange}
-              state={disabled ? "disabled" : selected ? "checked" : "unchecked"}
+              state={
+                isSelected ? "checked" : disabled ? "disabled" : "unchecked"
+              }
               availability={disabled ? "low" : undefined}
             />
           );

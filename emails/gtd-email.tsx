@@ -124,7 +124,12 @@ export default function GTDEmail(props: GTDEmailProps) {
               </Text>
             </Button> */}
           </Section>
-          <Section style={{ padding: "0.75rem 1rem" }}>
+          <Section
+            style={{
+              padding: "0.75rem 1rem",
+              borderBottom: "1px solid #cbd5e1",
+            }}
+          >
             <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
               Order Details
             </Heading>
@@ -176,12 +181,7 @@ export default function GTDEmail(props: GTDEmailProps) {
               </tfoot>
             </table>
           </Section>
-          <Section
-            style={{
-              padding: "0.75rem 1rem",
-              borderBottom: "1px solid #cbd5e1",
-            }}
-          >
+          <Section style={{ padding: "0.75rem 1rem" }}>
             <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
               Ticket Details
             </Heading>

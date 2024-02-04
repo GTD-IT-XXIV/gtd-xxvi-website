@@ -53,14 +53,23 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
       return;
     }
     if (amount === 1) {
-      setCart((prev) => prev.filter((item) => item.event.bundle !== bundleName && item.event.name !== event.name));
+      setCart((prev) =>
+        prev.filter(
+          (item) =>
+            item.event.bundle !== bundleName && item.event.name !== event.name,
+        ),
+      );
       return;
     }
     setCart((prev) =>
       prev.map((item) =>
         item.event.bundle !== bundleName
           ? item
-          : { ...item, quantity: item.quantity - 1 },
+          : {
+              ...item,
+              quantity: item.quantity - 1,
+              participants: item.participants.slice(0, -bundle.quantity),
+            },
       ),
     );
   };
@@ -73,7 +82,15 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
         return prev.map((item) =>
           item.event.bundle !== bundleName
             ? item
-            : { ...item, quantity: item.quantity + 1 },
+            : {
+                ...item,
+                quantity: item.quantity + 1,
+                participants: item.participants.concat(
+                  Array(bundle.quantity)
+                    .fill(0)
+                    .map((_) => ""),
+                ),
+              },
         );
       }
       return prev.concat({
@@ -82,7 +99,9 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
           bundle: bundleName,
         },
         quantity: 1,
-        participants: [],
+        participants: Array(bundle.quantity)
+          .fill(0)
+          .map((_) => ""),
       });
     });
   };

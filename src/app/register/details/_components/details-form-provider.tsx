@@ -72,6 +72,9 @@ export default function DetailsFormProvider({
               `No timeslot selected for event with name '${item.event.name}'`,
             );
           }
+          if (item.participants.some((participant) => !participant.trim())) {
+            throw new Error("EmptyParticipant");
+          }
           return {
             ...values,
             eventName: item.event.name,
@@ -90,6 +93,7 @@ export default function DetailsFormProvider({
         setAllowCheckout(false);
         router.push("/register/checkout");
       } catch (error) {
+        console.error({ error });
         if (
           error instanceof TRPCClientError &&
           error.message === "No items to checkout."
@@ -110,6 +114,12 @@ export default function DetailsFormProvider({
         router.back();
       }
     } catch (error) {
+      if (error instanceof Error && error.message === "EmptyParticipant") {
+        toast({
+          variant: "destructive",
+          title: "Please fill in the partcipants' details",
+        });
+      }
       if (error instanceof TRPCClientError) {
         toast({
           variant: "default",

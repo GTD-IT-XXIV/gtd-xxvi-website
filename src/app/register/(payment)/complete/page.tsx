@@ -40,10 +40,10 @@ export default function CompletePage({
 
   if (sessionId.success && session.status === "complete") {
     setSessionId("");
-    setTimeout(
-      () => router.replace(`/ticket?session_id=${sessionId.data}`),
-      3000,
-    );
+    // setTimeout(
+    //   () => router.replace(`/ticket?session_id=${sessionId.data}`),
+    //   3000,
+    // );
   }
 
   return (

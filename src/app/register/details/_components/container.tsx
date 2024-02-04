@@ -1,6 +1,7 @@
 "use client";
 
 import BookingInfo from "./info";
+import ParticipantDetailsGroup from "./participant-details-group";
 import BookingReview from "./review";
 
 export default function BookingContainer() {
@@ -10,12 +11,14 @@ export default function BookingContainer() {
       <div className="hidden md:flex">
         <BookingReview />
         <BookingInfo />
+        <ParticipantDetailsGroup />
       </div>
 
       {/* Mobile View */}
       <div className="md:hidden">
         <BookingReview />
         <BookingInfo />
+        <ParticipantDetailsGroup />
       </div>
     </div>
   );
