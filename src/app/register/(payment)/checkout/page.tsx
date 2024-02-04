@@ -51,7 +51,7 @@ export default function CheckoutPage() {
     <section className="px-5 pt-10">
       <hgroup className="flex items-center justify-between md:px-10 lg:px-[5.75rem] mb-4">
         <h1 className="text-gtd-primary-30 font-semibold text-3xl">Checkout</h1>
-        {!isLoading && !isError && (
+        {/* !isLoading && !isError && (
           <Button
             type="button"
             disabled={cancelling}
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
             )}
             Cancel
           </Button>
-        )}
+        ) */}
       </hgroup>
       {!isLoading && !isError && session.clientSecret && (
         <EmbeddedCheckoutProvider

@@ -151,7 +151,7 @@ export async function POST(req: Request) {
               name: recipient.name,
               bookings: bookings.map((booking) => {
                 const totalPrice = new Prisma.Decimal(booking.bundle.price)
-                  .times(booking.names.length)
+                  .times(booking.names.length / booking.bundle.quantity)
                   .toNumber();
                 orderPrice += totalPrice;
 
@@ -166,15 +166,13 @@ export async function POST(req: Request) {
                       .utc(booking.timeslot.endTime)
                       .format("h.mm A"),
                   },
-                  quantity: booking.names.length,
+                  quantity: booking.names.length / booking.bundle.quantity,
                   totalPrice,
                   tickets: tickets
                     .filter(
                       (ticket) =>
                         ticket.eventName === booking.eventName &&
-                        ticket.bundleName === booking.bundleName &&
-                        ticket.startTime === booking.startTime &&
-                        ticket.endTime === booking.endTime,
+                        ticket.bundleName === booking.bundleName,
                     )
                     .map((ticket) => ({ id: ticket.id, name: ticket.name })),
                 };
@@ -220,7 +218,7 @@ export async function POST(req: Request) {
 
           await db.$transaction(async (tx) => {
             for (const booking of bookings) {
-              const partySize = booking.names.length * booking.bundle.quantity;
+              const partySize = booking.names.length;
 
               await tx.bundle.update({
                 where: {
@@ -230,7 +228,9 @@ export async function POST(req: Request) {
                   },
                 },
                 data: {
-                  remainingAmount: { increment: booking.names.length },
+                  remainingAmount: {
+                    increment: booking.names.length / booking.bundle.quantity,
+                  },
                 },
               });
 

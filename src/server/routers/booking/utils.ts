@@ -36,7 +36,8 @@ export async function createBooking(
     });
   }
 
-  const partySize = quantity * bundle.quantity;
+  const partySize = quantity;
+  const bundleQuantity = bundle.quantity;
 
   async function transaction() {
     // Unreachable code but necessary for type safety
@@ -51,7 +52,7 @@ export async function createBooking(
         if (bundle.remainingAmount !== null) {
           const bundle = await tx.bundle.update({
             where: { name_eventName: { name: bundleName, eventName } },
-            data: { remainingAmount: { decrement: quantity } },
+            data: { remainingAmount: { decrement: bundleQuantity } },
           });
           if (bundle.remainingAmount! < 0) {
             throw new TRPCError({

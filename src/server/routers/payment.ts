@@ -63,7 +63,7 @@ export const paymentRouter = createTRPCRouter({
               .times(100)
               .toNumber(), // Stripe charges in cents
           },
-          quantity: booking.names.length,
+          quantity: booking.names.length / booking.bundle.quantity,
         })),
         mode: "payment",
         payment_method_types: ["paynow"],

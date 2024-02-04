@@ -47,7 +47,7 @@ export default function CompletePage({
   }
 
   return (
-    <main className="grow flex flex-col p-5 pt-10">
+    <main className="grow flex flex-col p-5 md:px-[3.75rem] lg:px-[7rem] pt-10">
       <h1 className="text-gtd-primary-30 font-semibold text-3xl">
         Payment {session.status}
       </h1>

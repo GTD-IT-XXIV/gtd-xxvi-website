@@ -210,8 +210,8 @@ export default function GTDEmail(props: GTDEmailProps) {
                     </tr>
                   </thead>
                   <tbody style={{ width: "100%" }}>
-                    {item.tickets.map((ticket) => (
-                      <tr key={ticket.id}>
+                    {item.tickets.map((ticket, idx) => (
+                      <tr key={idx}>
                         <Column>{ticket.id}</Column>
                         <Column>{ticket.name}</Column>
                       </tr>
