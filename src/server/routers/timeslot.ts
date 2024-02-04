@@ -71,7 +71,7 @@ export const timeslotRouter = createTRPCRouter({
         },
         select: {
           remainingSlots: true,
-          orders: { select: { tickets: { select: { id: true } } } },
+          tickets: { select: { id: true } },
         },
       });
       if (!timeslot) {
@@ -84,10 +84,6 @@ export const timeslotRouter = createTRPCRouter({
           ).format()}' from event with name '${event}'`,
         });
       }
-      const purchasedSlots = timeslot.orders.reduce(
-        (accum, order) => accum + order.tickets.length,
-        0,
-      );
-      return timeslot.remainingSlots + purchasedSlots;
+      return timeslot.remainingSlots + timeslot.tickets.length;
     }),
 });

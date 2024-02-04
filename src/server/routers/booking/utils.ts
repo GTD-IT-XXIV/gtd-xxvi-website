@@ -3,33 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { type z } from "zod";
 
 import { retryPrismaTransaction } from "../utils";
-import {
-  type bookingEventConsistencySchema,
-  type bookingSchema,
-} from "./schemas";
-
-/**
- * Checks whether the event ID of the booking, bundle, and timeslot match.
- *
- * @param db the Prisma client to access the database
- * @param booking booking data to check the event IDs from
- * @returns a promise to whether they match
- */
-export async function checkEventConsistency(
-  db: PrismaClient,
-  booking: z.infer<typeof bookingEventConsistencySchema>,
-) {
-  const id = booking.eventId; // source of truth
-  const bundle = await db.bundle.findUnique({
-    where: { id: booking.bundleId },
-    select: { eventId: true },
-  });
-  const timeslot = await db.timeslot.findUnique({
-    where: { id: booking.timeslotId },
-    select: { eventId: true },
-  });
-  return id === bundle?.eventId && id === timeslot?.eventId;
-}
+import { type bookingSchema } from "./schemas";
 
 /**
  * Creates a new booking in the database, guaranteeing the bundle amount
@@ -45,12 +19,13 @@ export async function createBooking(
   db: PrismaClient,
   booking: z.infer<typeof bookingSchema>,
 ) {
-  const { bundleId, timeslotId, quantity } = booking;
+  const { eventName, bundleName, startTime, endTime, names } = booking;
+  const quantity = names.length;
   const bundle = await db.bundle.findUnique({
-    where: { id: bundleId },
+    where: { name_eventName: { name: bundleName, eventName } },
   });
   const timeslot = await db.timeslot.findUnique({
-    where: { id: timeslotId },
+    where: { startTime_endTime_eventName: { startTime, endTime, eventName } },
   });
 
   // Unreachable code but necessary for type safety
@@ -75,7 +50,7 @@ export async function createBooking(
       async (tx) => {
         if (bundle.remainingAmount !== null) {
           const bundle = await tx.bundle.update({
-            where: { id: bundleId },
+            where: { name_eventName: { name: bundleName, eventName } },
             data: { remainingAmount: { decrement: quantity } },
           });
           if (bundle.remainingAmount! < 0) {
@@ -87,7 +62,9 @@ export async function createBooking(
         }
 
         const timeslot = await tx.timeslot.update({
-          where: { id: timeslotId },
+          where: {
+            startTime_endTime_eventName: { startTime, endTime, eventName },
+          },
           data: { remainingSlots: { decrement: partySize } },
         });
         if (timeslot.remainingSlots < 0) {
