@@ -1,11 +1,11 @@
 "use client";
 
+import { type Event } from "@prisma/client";
 import { useState } from "react";
 
 import { DatePickerWithRange } from "@/components/date-range-picker";
 
 import { api } from "@/lib/trpc/client";
-import type { Event } from "@/lib/types";
 
 import { EventCard } from "./event-card";
 import { EventSelect } from "./event-select";
@@ -37,7 +37,7 @@ export default function DashboardHomeBody() {
           <DatePickerWithRange />
         </div>
         <div className="flex flex-col gap-4">
-          {events?.map((event) => <EventCard event={event} key={event.id} />)}
+          {events?.map((event) => <EventCard event={event} key={event.name} />)}
         </div>
       </div>
     </div>

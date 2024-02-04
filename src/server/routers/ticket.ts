@@ -63,7 +63,7 @@ export const ticketRouter = createTRPCRouter({
       const tickets = await ctx.db.ticket.findMany({
         where: { eventName: event },
       });
-      return tickets;
+      return tickets.length;
     }),
 
   getManyByPaymentIntent: publicProcedure

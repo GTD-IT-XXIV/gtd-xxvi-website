@@ -1,3 +1,5 @@
+import { type Event } from "@prisma/client";
+
 import {
   Select,
   SelectContent,
@@ -5,8 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import type { Event } from "@/lib/types";
 
 export function EventSelect({ events, onValueChange }: EventSelectProps) {
   return (
@@ -16,7 +16,7 @@ export function EventSelect({ events, onValueChange }: EventSelectProps) {
       </SelectTrigger>
       <SelectContent>
         {events.map((event) => (
-          <SelectItem key={event.id} value={event.name}>
+          <SelectItem key={event.name} value={event.name}>
             {event.name}
           </SelectItem>
         ))}
