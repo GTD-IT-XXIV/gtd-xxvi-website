@@ -58,7 +58,7 @@ export default function TimeSlotSection({
     isError: isTimeslotsError,
   } = api.timeslot.getManyByEvent.useQuery(
     { event: eventName },
-    { refetchInterval: false },
+    { refetchInterval: 3000 },
   );
 
   useEffect(() => {
@@ -70,7 +70,9 @@ export default function TimeSlotSection({
         return handleSkip(false);
       }
       if (timeslots.length === 1 && timeslots[0]) {
-        onChange(timeslots[0].startTime, timeslots[0].endTime);
+        if (timeslots[0].remainingSlots > 0) {
+          onChange(timeslots[0].startTime, timeslots[0].endTime);
+        }
         return handleSkip(true);
       }
     }
