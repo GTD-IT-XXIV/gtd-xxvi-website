@@ -73,6 +73,8 @@
     "embla-carousel-react": "8.0.0-rc21",
     "framer-motion": "^11.0.3",
     "fuse.js": "^7.0.0",
+    "google-auth-library": "^9.6.1",
+    "google-spreadsheet": "^4.1.1",
     "jotai": "^2.6.1",
     "lodash": "^4.17.21",
     "lucia": "^2.7.6",
