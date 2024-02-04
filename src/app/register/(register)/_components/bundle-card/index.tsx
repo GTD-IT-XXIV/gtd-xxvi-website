@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useAtom } from "jotai";
+import { Info } from "lucide-react";
 import React from "react";
 import { FaRegClock } from "react-icons/fa";
 import { MdOutlineLocationOn } from "react-icons/md";
@@ -117,6 +118,13 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
           </h2>
 
           <div className="my-1.5 space-y-0.5">
+            {event.name === "Escape Room" && (
+              <p className="text-gtd-secondary-10 text-sm italic">
+                {" "}
+                <Info className="inline text-black size-4 mr-3" />
+                Only team leader that need to register
+              </p>
+            )}
             <p className="text-gtd-secondary-10 text-sm">
               {" "}
               <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
@@ -143,7 +151,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
         </div>
 
         <div className="flex flex-col w-[30%]">
-          {bundle.quantity === 1 ? (
+          {bundle.name === "Individual" ? (
             <div className="flex justify-end">
               <p className="text-sm self-baseline">$</p>
               <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">

@@ -64,7 +64,7 @@ export default function GTDFestTop({
       <Image
         src={backgroundImage}
         alt="Background 1"
-        className="h-[91vh] md:h-[92.5vh] object-cover"
+        className="h-screen object-cover"
       />
       <div
         className="absolute inset-0 from-slate-900 from-25% pt-3 px-6 flex flex-col gap-2"

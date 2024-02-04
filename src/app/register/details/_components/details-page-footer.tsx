@@ -6,6 +6,17 @@ import { useFormContext } from "react-hook-form";
 
 import LoadingSpinner from "@/components/loading-spinner";
 import TotalPrice from "@/components/registration/total-price";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
 import { allowCheckoutAtom } from "@/lib/atoms/events-registration";
@@ -38,6 +49,34 @@ export default function DetailsPageFooter({
         >
           Back
         </Button>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              type="button"
+              disabled={!allowCheckout || formState.isSubmitting}
+              className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
+            >
+              {formState.isSubmitting && (
+                <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />
+              )}
+              Place Order
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Place Your Order(s)?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Please make sure your booking is correct. After placing order,
+                you will not be able to make changes or cancel your bookings.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Place Order</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Button
           type="submit"
