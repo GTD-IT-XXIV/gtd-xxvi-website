@@ -10,6 +10,7 @@ import SuperJSON from "superjson";
 import { z } from "zod";
 
 import { db } from "@/server/db";
+import { synchronizeToGoogleSheets } from "@/server/routers/utils";
 
 import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
@@ -199,6 +200,8 @@ export async function POST(req: Request) {
           await db.booking.deleteMany({
             where: { id: { in: bookingIds } },
           });
+
+          await synchronizeToGoogleSheets();
           break;
         }
         case "checkout.session.expired": {
