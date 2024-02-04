@@ -63,7 +63,7 @@ export const paymentRouter = createTRPCRouter({
               .times(100)
               .toNumber(), // Stripe charges in cents
           },
-          quantity: Number(booking.quantity),
+          quantity: booking.names.length,
         })),
         mode: "payment",
         payment_method_types: ["paynow"],
@@ -115,17 +115,28 @@ export const paymentRouter = createTRPCRouter({
 
       await ctx.db.$transaction(async (tx) => {
         for (const booking of bookings) {
-          const partySize = booking.quantity * booking.bundle.quantity;
+          const partySize = booking.names.length * booking.bundle.quantity;
 
           await tx.bundle.update({
-            where: { id: Number(booking.bundleId) },
+            where: {
+              name_eventName: {
+                name: booking.bundleName,
+                eventName: booking.eventName,
+              },
+            },
             data: {
-              remainingAmount: { increment: Number(booking.quantity) },
+              remainingAmount: { increment: booking.names.length },
             },
           });
 
           await tx.timeslot.update({
-            where: { id: Number(booking.timeslotId) },
+            where: {
+              startTime_endTime_eventName: {
+                startTime: booking.startTime,
+                endTime: booking.endTime,
+                eventName: booking.eventName,
+              },
+            },
             data: { remainingSlots: { increment: Number(partySize) } },
           });
         }
