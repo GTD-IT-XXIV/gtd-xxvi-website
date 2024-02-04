@@ -15,14 +15,21 @@ export default function TimeslotsPageBody() {
   const [cart, setCart] = useAtom(cartAtom);
   const [skipTimeslots, setSkipTimeslots] = useState<boolean[]>([]);
 
-  function handleSelectTimeslot(itemId: number, timeslotId: number) {
+  function handleSelectTimeslot(
+    itemId: number,
+    startTime: Date,
+    endTime: Date,
+  ) {
     setCart((prev) => {
       const updated = [...prev];
       const old = prev[itemId];
       if (!old) {
         throw new Error("Item does not exist in cart");
       }
-      updated[itemId] = { ...old, timeslotId };
+      updated[itemId] = {
+        ...old,
+        timeslot: { start: startTime, end: endTime },
+      };
       return updated;
     });
   }
@@ -52,11 +59,13 @@ export default function TimeslotsPageBody() {
   return cart.map((item, idx) => (
     <TimeSlotSection
       key={idx}
-      eventId={item.eventId}
-      bundleId={item.bundleId}
+      eventName={item.event.name}
+      bundleName={item.event.bundle}
       quantity={item.quantity}
-      selectedId={item.timeslotId}
-      onChange={(timeslotId) => handleSelectTimeslot(idx, timeslotId)}
+      selected={item.timeslot}
+      onChange={(start, end) =>
+        handleSelectTimeslot(idx, start, end)
+      }
       handleSkip={(value) => setSkipTimeslots((prev) => prev.concat(value))}
     />
   ));

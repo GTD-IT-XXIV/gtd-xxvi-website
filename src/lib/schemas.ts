@@ -17,15 +17,21 @@ export const signupSchema = loginSchema.extend({
 });
 
 /**
- * Schema for cart used to synchornize registration process. If ID is 0, then
- * user has not selected that item, e.g., bundleId equals 0 means that user has
- * not selected a bundle for the event in eventId.
- */
+ * Schema for cart used to synchornize registration process. Null means not
+ * selected yet.
+ **/
 export const cartSchema = z
   .object({
-    eventId: z.number().nonnegative(),
-    bundleId: z.number().nonnegative(),
-    timeslotId: z.number().nonnegative(),
+    event: z.object({
+      name: z.string(),
+      bundle: z.string(),
+    }),
+    timeslot: z
+      .object({
+        start: z.date(),
+        end: z.date(),
+      })
+      .optional(),
     quantity: z.number().nonnegative(),
   })
   .array();
@@ -45,3 +51,5 @@ export const emailSchema = z.object({
   textContent: z.string().optional(),
   subject: z.string(),
 });
+
+export const eventParamSchema = z.string().or(z.string().array());

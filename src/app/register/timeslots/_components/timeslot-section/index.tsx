@@ -14,21 +14,24 @@ import TimeslotSectionLoading from "./loading";
 dayjs.extend(utc);
 
 export type TimeSlotSectionProps = {
-  eventId: number;
-  bundleId: number;
+  eventName: string;
+  bundleName: string;
   quantity: number;
   media?: string;
-  selectedId?: number;
-  onChange: (id: number) => void;
+  selected?: {
+    start: Date;
+    end: Date;
+  };
+  onChange: (start: Date, end: Date) => void;
   handleSkip: (value: boolean) => void;
 };
 
 export default function TimeSlotSection({
-  eventId,
-  bundleId,
+  eventName,
+  bundleName,
   quantity,
   media,
-  selectedId = 0,
+  selected,
   onChange,
   handleSkip,
 }: TimeSlotSectionProps) {
@@ -38,20 +41,23 @@ export default function TimeSlotSection({
     data: event,
     isLoading: isEventLoading,
     isError: isEventError,
-  } = api.event.getById.useQuery({ id: eventId });
+  } = api.event.getByName.useQuery({ name: eventName });
 
   const {
     data: bundle,
     isLoading: isBundleLoading,
     isError: isBundleError,
-  } = api.bundle.getById.useQuery({ id: bundleId });
+  } = api.bundle.getByNameAndEvent.useQuery({
+    name: bundleName,
+    event: eventName,
+  });
 
   const {
     data: timeslots,
     isLoading: isTimeslotsLoading,
     isError: isTimeslotsError,
   } = api.timeslot.getManyByEvent.useQuery(
-    { eventId },
+    { event: eventName },
     { refetchInterval: false },
   );
 
@@ -64,7 +70,7 @@ export default function TimeSlotSection({
         return handleSkip(false);
       }
       if (timeslots.length === 1 && timeslots[0]) {
-        onChange(timeslots[0].id);
+        onChange(timeslots[0].startTime, timeslots[0].endTime);
         return handleSkip(true);
       }
     }
@@ -98,28 +104,28 @@ export default function TimeSlotSection({
         {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")}
       </div>
       <div className="flex flex-wrap w-full gap-x-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {timeslots.map((timeslot) => {
+        {timeslots.map((timeslot, idx) => {
           const remainingSlots = timeslot.remainingSlots;
           // timeslot already selected by some other item
-          const selected = cart.some((item) => item.timeslotId === timeslot.id);
+          const selected = cart.some(
+            (item) =>
+              item.timeslot?.start.getTime() === timeslot.startTime.getTime() &&
+              item.timeslot?.end.getTime() === timeslot.endTime.getTime(),
+          );
           const disabled =
             remainingSlots < bundle.quantity * quantity ||
-            (selected && timeslot.id !== selectedId);
+            (selected &&
+              Object.is(selected, {
+                start: timeslot.startTime,
+                end: timeslot.endTime,
+              }));
           return (
             <TimeSlotButton
-              key={timeslot.id}
-              id={timeslot.id}
+              key={idx}
+              timeslot={timeslot}
               remainingSlots={timeslot.remainingSlots}
-              startTime={timeslot.startTime}
-              endTime={timeslot.endTime}
               onClick={onChange}
-              state={
-                disabled
-                  ? "disabled"
-                  : timeslot.id === selectedId
-                    ? "checked"
-                    : "unchecked"
-              }
+              state={disabled ? "disabled" : selected ? "checked" : "unchecked"}
               availability={disabled ? "low" : undefined}
             />
           );

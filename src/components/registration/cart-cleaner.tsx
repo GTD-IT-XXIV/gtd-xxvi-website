@@ -4,16 +4,14 @@ import { useSetAtom } from "jotai";
 import { type ReactNode, useEffect } from "react";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
-import { api } from "@/lib/trpc/client";
 
 export type CartCleanerProps = {
-  eventIds: number[];
+  eventNames: string[];
   children: ReactNode;
 };
 
-export default function CartCleaner({ eventIds, children }: CartCleanerProps) {
+export default function CartCleaner({ eventNames, children }: CartCleanerProps) {
   const setCart = useSetAtom(cartAtom);
-  const checkIds = api.booking.checkIdConsistency.useMutation();
 
   useEffect(() => {
     function runEffect() {
@@ -22,10 +20,9 @@ export default function CartCleaner({ eventIds, children }: CartCleanerProps) {
           if (item.quantity === 0) {
             return false;
           }
-          if (item.bundleId === 0 || item.timeslotId === 0) {
-            return eventIds.includes(item.eventId);
+          if (!item.timeslot) {
+            return eventNames.includes(item.event.name);
           }
-          return await checkIds.mutateAsync(item);
         }),
       );
     }

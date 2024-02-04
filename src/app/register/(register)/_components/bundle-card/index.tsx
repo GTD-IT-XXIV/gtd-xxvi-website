@@ -19,23 +19,26 @@ dayjs.extend(utc);
 
 export type BundleCardProps = {
   event: {
-    id: number;
     name: string;
     startDate: Date;
     location: string;
   };
-  bundleId: number;
+  bundleName: string;
 };
 
-export default function BundleCard({ event, bundleId }: BundleCardProps) {
+export default function BundleCard({ event, bundleName }: BundleCardProps) {
   const {
     data: bundle,
     isLoading,
     isError,
-  } = api.bundle.getById.useQuery({ id: bundleId });
+  } = api.bundle.getByNameAndEvent.useQuery({
+    name: bundleName,
+    event: event.name,
+  });
 
   const [cart, setCart] = useAtom(cartAtom);
-  const amount = cart.find((item) => item.bundleId === bundleId)?.quantity ?? 0;
+  const amount =
+    cart.find((item) => item.event.bundle === bundleName)?.quantity ?? 0;
 
   if (isLoading) {
     return <BundleCardLoading />;
@@ -50,12 +53,12 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       return;
     }
     if (amount === 1) {
-      setCart((prev) => prev.filter((item) => item.bundleId !== bundleId));
+      setCart((prev) => prev.filter((item) => item.event.bundle !== bundleName && item.event.name !== event.name));
       return;
     }
     setCart((prev) =>
       prev.map((item) =>
-        item.bundleId !== bundleId
+        item.event.bundle !== bundleName
           ? item
           : { ...item, quantity: item.quantity - 1 },
       ),
@@ -66,17 +69,18 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       return;
     }
     setCart((prev) => {
-      if (prev.find((item) => item.bundleId === bundleId)) {
+      if (prev.find((item) => item.event.bundle === bundleName)) {
         return prev.map((item) =>
-          item.bundleId !== bundleId
+          item.event.bundle !== bundleName
             ? item
             : { ...item, quantity: item.quantity + 1 },
         );
       }
       return prev.concat({
-        bundleId,
-        eventId: event.id,
-        timeslotId: 0,
+        event: {
+          name: event.name,
+          bundle: bundleName,
+        },
         quantity: 1,
       });
     });
@@ -108,7 +112,6 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
 
           <BundleCardPopup
             event={{
-              id: event.id,
               name: event.name,
             }}
             bundle={{
@@ -188,7 +191,6 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           </div>
           <BundleCardPopup
             event={{
-              id: event.id,
               name: event.name,
             }}
             bundle={{

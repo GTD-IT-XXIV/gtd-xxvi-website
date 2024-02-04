@@ -5,28 +5,31 @@ import { api } from "@/server/trpc";
 
 import BundleCard from "./bundle-card";
 
-export default async function EventCardGroup({ eventId }: { eventId: number }) {
+export default async function EventCardGroup({
+  eventName,
+}: {
+  eventName: string;
+}) {
   try {
-    const event = await api.event.getById.query({ id: eventId });
+    const event = await api.event.getByName.query({ name: eventName });
     const bundles = await api.bundle.getManyByEvent.query({
-      eventId,
+      event: eventName,
       open: true,
     });
 
-    const bundleIds = bundles.map((bundle) => bundle.id);
+    const bundleNames = bundles.map((bundle) => bundle.name);
 
     return (
       <div className="flex flex-col items-center space-y-4 md:grow">
-        {bundleIds.map((bundleId) => (
+        {bundleNames.map((bundleName) => (
           <BundleCard
-            key={bundleId}
+            key={bundleName}
             event={{
-              id: event.id,
               name: event.name,
               startDate: event.startDate,
               location: event.location,
             }}
-            bundleId={bundleId}
+            bundleName={bundleName}
           />
         ))}
       </div>

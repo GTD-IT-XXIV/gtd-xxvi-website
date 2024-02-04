@@ -7,6 +7,7 @@ import CheckoutWrapper from "@/components/registration/checkout-wrapper";
 
 import { api } from "@/server/trpc";
 
+import { eventParamSchema } from "@/lib/schemas";
 import { type RouterOutputs } from "@/lib/trpc/utils";
 import { cn } from "@/lib/utils";
 
@@ -24,16 +25,13 @@ export default async function DesktopLayout({
   className: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const eventParams = z.coerce
-    .number()
-    .or(z.coerce.number().array())
-    .safeParse(searchParams.event);
-  let eventIds: number[];
+  const eventParams = eventParamSchema.safeParse(searchParams.event);
+  let eventNames: string[];
   if (eventParams.success) {
     if (Array.isArray(eventParams.data)) {
-      eventIds = eventParams.data;
+      eventNames = eventParams.data;
     } else {
-      eventIds = [eventParams.data];
+      eventNames = [eventParams.data];
     }
   } else {
     let events: RouterOutputs["event"]["getAll"] = [];
@@ -45,12 +43,12 @@ export default async function DesktopLayout({
       }
       throw error;
     }
-    eventIds = events.map((event) => event.id);
+    eventNames = events.map((event) => event.name);
   }
 
   return (
     <CheckoutWrapper>
-      <CartCleaner eventIds={eventIds}>
+      <CartCleaner eventNames={eventNames}>
         <section
           className={cn("grow flex flex-col px-10 lg:px-[5.75rem]", className)}
         >
@@ -64,9 +62,9 @@ export default async function DesktopLayout({
               </p>
             </hgroup>
             <div className="flex w-[100%] space-x-4">
-              {eventIds.map((eventId) => (
+              {eventNames.map((eventName) => (
                 <div className="flex w-[100%] items-center justify-center">
-                  <EventCardGroup key={eventId} eventId={eventId} />
+                  <EventCardGroup key={eventName} eventName={eventName} />
                 </div>
               ))}
             </div>
