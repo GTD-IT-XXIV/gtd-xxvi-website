@@ -36,9 +36,6 @@ export type GTDEmailProps = {
   eventTitle: string;
 };
 
-const baseUrl =
-  process.env.NODE_ENV === "production" ? "https://www.pintugtd.com" : "";
-
 export default function GTDEmail(props: GTDEmailProps) {
   return (
     <Html>
@@ -63,7 +60,7 @@ export default function GTDEmail(props: GTDEmailProps) {
                 }}
               >
                 <Img
-                  src={`${baseUrl}/static/logo-gtd-normal.png`}
+                  src="https://utfs.io/f/9611670a-f83f-4396-978c-b60167c134ab-tvogcf.png"
                   width="300"
                   height="75"
                   alt="PINTU Get Together Day Logo"
