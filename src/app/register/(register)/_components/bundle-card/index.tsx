@@ -89,7 +89,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
       setCart((prev) =>
         prev.filter(
           (item) =>
-            item.event.bundle !== bundleName && item.event.name !== event.name,
+            item.event.bundle !== bundleName || item.event.name !== event.name,
         ),
       );
       return;

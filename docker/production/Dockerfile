@@ -21,8 +21,8 @@ COPY . .
 
 
 RUN rm -rfv .env .env*.local 
-COPY .env.productio[n] .env.production
 COPY .env.production.loca[l] .env.production.local
+COPY .env.production.loca[l] .env
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
