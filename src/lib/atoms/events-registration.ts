@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import SuperJSON from "superjson";
+import { type z } from "zod";
 
 import { type Cart } from "@/lib/types";
 
@@ -14,7 +15,7 @@ export const cartAtom = atomWithStorage<Cart>(`${BASE_KEY}-cart`, [], {
     if (res === null) {
       return initialValue;
     }
-    return cartSchema.parse(SuperJSON.parse(res));
+    return cartSchema.parse(SuperJSON.parse<z.infer<typeof cartSchema>>(res));
   },
   setItem: (key, value) => {
     return localStorage.setItem(key, SuperJSON.stringify(value));
@@ -32,3 +33,5 @@ export const checkoutSessionAtom = atomWithStorage(
 export const bookingIdsAtom = atom<number[]>([]);
 
 export const allowCheckoutAtom = atom(false);
+
+export const showDialogAtom = atom(false);

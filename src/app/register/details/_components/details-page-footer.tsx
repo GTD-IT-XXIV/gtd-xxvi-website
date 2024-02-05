@@ -2,6 +2,7 @@
 
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import LoadingSpinner from "@/components/loading-spinner";
@@ -15,7 +16,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
@@ -24,14 +24,17 @@ import { cn } from "@/lib/utils";
 
 export type DetailsPageFooterProps = {
   className?: string;
+  formEl: HTMLFormElement;
 };
 
 export default function DetailsPageFooter({
   className = "",
+  formEl,
 }: DetailsPageFooterProps) {
   const router = useRouter();
-  const { formState } = useFormContext();
+  const { trigger, formState } = useFormContext();
   const allowCheckout = useAtomValue(allowCheckoutAtom);
+  const [open, setOpen] = useState(false);
   return (
     <footer
       className={cn(
@@ -50,38 +53,49 @@ export default function DetailsPageFooter({
           Back
         </Button>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              type="button"
-              disabled={!allowCheckout || formState.isSubmitting}
-              className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
-            >
-              {formState.isSubmitting && (
-                <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />
-              )}
-              Place Order
-            </Button>
-          </AlertDialogTrigger>
+        <AlertDialog open={open}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Place Your Order(s)?</AlertDialogTitle>
               <AlertDialogDescription>
                 Please make sure your booking is correct. After placing order,
-                you will not be able to make changes or cancel your bookings.
+                you will not be able to make changes or cancel your bookings for
+                <strong className="font-bold"> 30 minutes</strong>.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Place Order</AlertDialogAction>
+              <AlertDialogCancel onClick={() => setOpen(false)}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction asChild>
+                <Button
+                  type="submit"
+                  disabled={!allowCheckout || formState.isSubmitting}
+                  className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
+                  onClick={() => {
+                    formEl?.requestSubmit();
+                    setOpen(false);
+                  }}
+                >
+                  {formState.isSubmitting && (
+                    <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />
+                  )}
+                  Place Order
+                </Button>
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
 
         <Button
-          type="submit"
+          type="button"
           disabled={!allowCheckout || formState.isSubmitting}
           className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
+          onClick={async () => {
+            if (await trigger()) {
+              setOpen(true);
+            }
+          }}
         >
           {formState.isSubmitting && (
             <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />

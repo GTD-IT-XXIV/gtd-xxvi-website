@@ -48,7 +48,11 @@ export default function ParticipantDetails({
         ?.participants.map((participant, idx) => (
           <Input
             type="name"
-            placeholder={`Participant ${idx + 1}`}
+            placeholder={
+              cartItem.event.name === "Escape Room"
+                ? "Leader"
+                : `Participant ${idx + 1}`
+            }
             value={participant}
             onChange={({ target }) => handleChange(idx, target.value)}
           />

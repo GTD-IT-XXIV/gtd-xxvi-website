@@ -46,15 +46,27 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
 
   const [cart, setCart] = useAtom(cartAtom);
   const amount =
-    cart.find((item) => item.event.bundle === bundleName)?.quantity ?? 0;
+    cart.find(
+      (item) =>
+        item.event.name === event.name && item.event.bundle === bundleName,
+    )?.quantity ?? 0;
 
   useEffect(() => {
     function runEffect() {
+      console.log({ bundleName, eventName: event.name, cart, available });
       if (available === false) {
+        console.log({
+          cart,
+          newCart: cart.filter(
+            (item) =>
+              item.event.name !== event.name ||
+              item.event.bundle !== bundleName,
+          ),
+        });
         setCart((prev) =>
           prev.filter(
             (item) =>
-              item.event.name !== event.name &&
+              item.event.name !== event.name ||
               item.event.bundle !== bundleName,
           ),
         );
@@ -93,7 +105,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
     }
     setCart((prev) =>
       prev.map((item) =>
-        item.event.bundle !== bundleName
+        item.event.bundle !== bundleName || item.event.name !== event.name
           ? item
           : {
               ...item,
@@ -108,9 +120,14 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
       return;
     }
     setCart((prev) => {
-      if (prev.find((item) => item.event.bundle === bundleName)) {
+      if (
+        prev.find(
+          (item) =>
+            item.event.name === event.name && item.event.bundle === bundleName,
+        )
+      ) {
         return prev.map((item) =>
-          item.event.bundle !== bundleName
+          item.event.name !== event.name || item.event.bundle !== bundleName
             ? item
             : {
                 ...item,

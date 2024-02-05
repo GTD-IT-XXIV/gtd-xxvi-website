@@ -52,10 +52,10 @@ export default function BookingReviewBundle({
   } = api.timeslot.getByTimeAndEvent.useQuery(
     {
       event: eventName,
-      startTime: timeslot!.start,
-      endTime: timeslot!.end,
+      startTime: timeslot?.start ?? new Date(),
+      endTime: timeslot?.end ?? new Date(),
     },
-    { enabled: !!timeslot },
+    { enabled: !!timeslot && !!timeslot.start && !!timeslot.end },
   );
 
   const setAllowCheckout = useSetAtom(allowCheckoutAtom);
@@ -88,7 +88,9 @@ export default function BookingReviewBundle({
           {dayjs.utc(event.startDate).format("dddd, D MMMM YYYY")},{" "}
           {!timeslot ? (
             <span className="text-red-600">no timeslot chosen</span>
-          ) : !isTimeslotLoading && !isTimeslotError && (
+          ) : (
+            !isTimeslotLoading &&
+            !isTimeslotError &&
             `${dayjs.utc(timeslotData.startTime).format("h.mm")} -
               ${dayjs.utc(timeslotData.endTime).format("h.mm A")}`
           )}

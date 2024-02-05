@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TRPCClientError } from "@trpc/client";
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { type ReactNode } from "react";
+import { type ReactNode, RefObject, forwardRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,6 +15,7 @@ import {
   allowCheckoutAtom,
   cartAtom,
   checkoutSessionAtom,
+  showDialogAtom,
 } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 
@@ -39,10 +40,10 @@ export type DetailsFormProviderProps = {
   children: ReactNode;
 };
 
-export default function DetailsFormProvider({
-  className = "",
-  children,
-}: DetailsFormProviderProps) {
+const DetailsFormProvider = forwardRef<
+  HTMLFormElement,
+  DetailsFormProviderProps
+>(function DetailsFormProvider({ className = "", children }, ref) {
   const router = useRouter();
   const { toast } = useToast();
   const [cart, setCart] = useAtom(cartAtom);
@@ -133,10 +134,16 @@ export default function DetailsFormProvider({
   return (
     <FormProvider {...form}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(placeOrder)} className={className}>
+        <form
+          ref={ref}
+          onSubmit={form.handleSubmit(placeOrder)}
+          className={className}
+        >
           {children}
         </form>
       </Form>
     </FormProvider>
   );
-}
+});
+
+export default DetailsFormProvider;
