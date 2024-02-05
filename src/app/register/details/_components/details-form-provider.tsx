@@ -70,7 +70,7 @@ const DetailsFormProvider = forwardRef<
         bookings: cart.map((item) => {
           if (!item.timeslot) {
             throw new Error(
-              `No timeslot selected for event with name '${item.event.name}'`,
+              `No timeslot selected for '${item.event.name}' event item.`,
             );
           }
           if (item.participants.some((participant) => !participant.trim())) {
@@ -115,11 +115,19 @@ const DetailsFormProvider = forwardRef<
         router.back();
       }
     } catch (error) {
-      if (error instanceof Error && error.message === "EmptyParticipant") {
-        toast({
-          variant: "destructive",
-          title: "Please fill in the partcipants' details",
-        });
+      if (error instanceof Error) {
+        if (error.message === "EmptyParticipant") {
+          toast({
+            variant: "destructive",
+            title: "Please fill in the partcipants' details",
+          });
+        } else if (error.message.startsWith("No timeslot selected")) {
+          toast({
+            variant: "destructive",
+            title: "Please select an available timeslot for all items",
+            description: error.message,
+          });
+        }
       }
       if (error instanceof TRPCClientError) {
         toast({

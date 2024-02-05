@@ -2,7 +2,7 @@ import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
@@ -35,7 +35,7 @@ export default function TimeSlotSection({
   onChange,
   handleSkip,
 }: TimeSlotSectionProps) {
-  const cart = useAtomValue(cartAtom);
+  const [cart, setCart] = useAtom(cartAtom);
 
   const {
     data: event,
@@ -86,6 +86,37 @@ export default function TimeSlotSection({
     };
   }, [timeslots]);
 
+  useEffect(() => {
+    function runEffect() {
+      if (!timeslots) {
+        return;
+      }
+      const selectedTimeslot = timeslots.find(
+        (slot) =>
+          slot.eventName === eventName &&
+          slot.startTime.getTime() === selected?.start.getTime() &&
+          slot.endTime.getTime() === selected?.end.getTime(),
+      );
+      if (!selectedTimeslot || selectedTimeslot.remainingSlots < 1) {
+        return;
+      }
+      setCart((prev) =>
+        prev.map((item) =>
+          item.event.name === eventName && item.event.bundle === bundleName
+            ? { ...item, event: { ...item.event }, timeslot: undefined }
+            : item,
+        ),
+      );
+    }
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [timeslots]);
+
   if (isEventLoading || isBundleLoading || isTimeslotsLoading) {
     return <TimeslotSectionLoading />;
   }
@@ -114,8 +145,7 @@ export default function TimeSlotSection({
               item.timeslot?.start.getTime() === timeslot.startTime.getTime() &&
               item.timeslot?.end.getTime() === timeslot.endTime.getTime(),
           );
-          const disabled =
-            remainingSlots < bundle.quantity * quantity || alreadySelected;
+          const disabled = remainingSlots < bundle.quantity * quantity;
           const isSelected =
             selected?.start.getTime() === timeslot.startTime.getTime() &&
             selected?.end.getTime() === timeslot.endTime.getTime();
@@ -128,7 +158,13 @@ export default function TimeSlotSection({
               remainingSlots={timeslot.remainingSlots}
               onClick={onChange}
               state={
-                isSelected ? "checked" : disabled ? "disabled" : "unchecked"
+                disabled
+                  ? "disabled"
+                  : isSelected
+                    ? "checked"
+                    : alreadySelected
+                      ? "disabled"
+                      : "unchecked"
               }
               availability={disabled ? "low" : undefined}
             />
