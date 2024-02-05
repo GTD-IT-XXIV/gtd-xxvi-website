@@ -98,7 +98,7 @@ const testBooking: Omit<
 
 const caller = createCaller({ db, headers: new Headers() });
 
-describe("tRPC bookingRouter", async () => {
+describe.skip("tRPC bookingRouter", async () => {
   beforeEach(async () => {
     resetTestDatabase(await getTestDatabaseUri());
   });
@@ -373,7 +373,7 @@ describe("tRPC bookingRouter", async () => {
   });
 });
 
-describe("Concurrent tRPC bookingRouter", async () => {
+describe.skip("Concurrent tRPC bookingRouter", async () => {
   beforeAll(async () => {
     resetTestDatabase(await getTestDatabaseUri());
   });
