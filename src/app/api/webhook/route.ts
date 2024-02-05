@@ -48,6 +48,7 @@ export async function POST(req: Request) {
     "checkout.session.completed",
     "checkout.session.async_payment_succeeded",
     "checkout.session.expired",
+    "payment_intent.payment_failed",
   ];
   console.log(event.type);
 
@@ -206,12 +207,13 @@ export async function POST(req: Request) {
         }
         case "checkout.session.expired": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
+          console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(JSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`❌ Payment failed with session: ${data.id}`);
 
           const bookings = await db.booking.findMany({
@@ -248,9 +250,58 @@ export async function POST(req: Request) {
                 data: { remainingSlots: { increment: Number(partySize) } },
               });
             }
+            await db.booking.deleteMany({
+              where: { id: { in: bookings.map((booking) => booking.id) } },
+            });
           });
           break;
         }
+        // case "payment_intent.payment_failed": {
+        //   const paymentData = event.data
+        //     .object as unknown as Stripe.PaymentIntent;
+        //   console.log({ data: paymentData });
+        //   const paymentIntentId = String(paymentData.id);
+        //
+        //   console.log(
+        //     `❌ Payment failed with payment_intent: ${paymentIntentId}`,
+        //   );
+        //
+        //   const bookings = await db.booking.findMany({
+        //     where: { sessionId: paymentIntentId },
+        //     include: { bundle: true, timeslot: true },
+        //   });
+        //   await db.$transaction(async (tx) => {
+        //     for (const booking of bookings) {
+        //       const partySize = booking.names.length;
+        //
+        //       await tx.bundle.update({
+        //         where: {
+        //           name_eventName: {
+        //             name: booking.bundleName,
+        //             eventName: booking.eventName,
+        //           },
+        //         },
+        //         data: {
+        //           remainingAmount: {
+        //             increment: booking.names.length / booking.bundle.quantity,
+        //           },
+        //         },
+        //       });
+        //
+        //       await tx.timeslot.update({
+        //         where: {
+        //           startTime_endTime_eventName: {
+        //             startTime: booking.startTime,
+        //             endTime: booking.endTime,
+        //             eventName: booking.eventName,
+        //           },
+        //         },
+        //         data: { remainingSlots: { increment: Number(partySize) } },
+        //       });
+        //     }
+        //   });
+        //   break;
+        // }
         default: {
           throw new Error(`Unhandled event: ${event.type}`);
         }
