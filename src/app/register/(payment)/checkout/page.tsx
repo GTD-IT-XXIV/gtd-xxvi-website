@@ -6,7 +6,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,21 @@ export default function CheckoutPage() {
   );
 
   const cancelCheckoutSession = api.payment.cancelCheckoutSession.useMutation();
+
+  useEffect(() => {
+    function runEffect() {
+      if (session?.status === "expired") {
+        setSessionId("");
+      }
+    }
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [session]);
 
   function cancelCheckout() {
     setCancelling(true);

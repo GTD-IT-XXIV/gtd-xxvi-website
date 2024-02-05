@@ -97,7 +97,7 @@ export default function TimeSlotSection({
           slot.startTime.getTime() === selected?.start.getTime() &&
           slot.endTime.getTime() === selected?.end.getTime(),
       );
-      if (!selectedTimeslot || selectedTimeslot.remainingSlots < 1) {
+      if (!selectedTimeslot || selectedTimeslot.remainingSlots > 0) {
         return;
       }
       setCart((prev) =>
