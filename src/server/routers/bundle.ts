@@ -63,4 +63,44 @@ export const bundleRouter = createTRPCRouter({
       });
       return Math.min(...bundles.map((bundle) => bundle.quantity));
     }),
+
+  getAvailabilityByNameAndEvent: publicProcedure
+    .input(
+      z.object({
+        name: nameKeySchema,
+        event: nameKeySchema,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { name, event } = input;
+      const bundle = await ctx.db.bundle.findUnique({
+        where: {
+          name_eventName: {
+            name,
+            eventName: event,
+          },
+        },
+      });
+      if (!bundle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No bundle with name '${name}' from event with name '${event}'`,
+        });
+      }
+
+      if (bundle.remainingAmount !== null && bundle.remainingAmount < 1) {
+        return false;
+      }
+
+      const timeslots = await ctx.db.timeslot.findMany({
+        where: {
+          eventName: event,
+          remainingSlots: {
+            gte: bundle.quantity,
+          },
+        },
+      });
+
+      return timeslots.length !== 0;
+    }),
 });

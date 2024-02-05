@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useAtom } from "jotai";
 import { Info } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { MdOutlineLocationOn } from "react-icons/md";
 
@@ -37,9 +37,38 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
     event: event.name,
   });
 
+  const { data: available } = api.bundle.getAvailabilityByNameAndEvent.useQuery(
+    {
+      name: bundleName,
+      event: event.name,
+    },
+  );
+
   const [cart, setCart] = useAtom(cartAtom);
   const amount =
     cart.find((item) => item.event.bundle === bundleName)?.quantity ?? 0;
+
+  useEffect(() => {
+    function runEffect() {
+      if (available === false) {
+        setCart((prev) =>
+          prev.filter(
+            (item) =>
+              item.event.name !== event.name &&
+              item.event.bundle !== bundleName,
+          ),
+        );
+      }
+    }
+
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [available]);
 
   if (isLoading) {
     return <BundleCardLoading />;
@@ -230,7 +259,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
         </div>
 
         <div className="flex flex-col w-[30%]">
-          {bundle.quantity === 1 ? (
+          {bundle.name === "Individual" ? (
             <div className="flex justify-end">
               <p className="text-sm self-baseline">$</p>
               <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
@@ -248,29 +277,35 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
           )}
 
           <div className="flex justify-end mt-auto">
-            <button
-              onClick={handleDecrement}
-              className={cn(
-                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
-                amount === 0 ? "opacity-60 pointer-events-none" : "",
-              )}
-            >
-              -
-            </button>
-            &nbsp;&nbsp;
-            <p>{amount}</p>
-            &nbsp;&nbsp;
-            <button
-              onClick={handleIncrement}
-              className={cn(
-                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
-                amount === bundle.maxPurchases
-                  ? "opacity-60 pointer-events-none"
-                  : "",
-              )}
-            >
-              +
-            </button>
+            {available ? (
+              <>
+                <button
+                  onClick={handleDecrement}
+                  className={cn(
+                    "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                    amount === 0 ? "opacity-60 pointer-events-none" : "",
+                  )}
+                >
+                  -
+                </button>
+                &nbsp;&nbsp;
+                <p>{amount}</p>
+                &nbsp;&nbsp;
+                <button
+                  onClick={handleIncrement}
+                  className={cn(
+                    "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                    amount === bundle.maxPurchases
+                      ? "opacity-60 pointer-events-none"
+                      : "",
+                  )}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <p className="text-red-800 text-sm">Sold Out</p>
+            )}
           </div>
         </div>
       </section>
