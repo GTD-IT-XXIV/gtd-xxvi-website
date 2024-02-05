@@ -12,8 +12,7 @@ datasource db {
 }
 
 model Event {
-  id          Int        @id @default(autoincrement())
-  name        String     @unique
+  name        String     @id
   description String
   location    String
   /// Event starting date
@@ -23,10 +22,10 @@ model Event {
   bundles     Bundle[]
   timeslots   Timeslot[]
   bookings    Booking[]
+  tickets     Ticket[]
 }
 
 model Bundle {
-  id              Int       @id @default(autoincrement())
   name            String
   /// Bundle terms and conditions
   details         String[]
@@ -38,40 +37,24 @@ model Bundle {
   maxPurchases    Int
   open            DateTime
   close           DateTime
-  eventId         Int
-  event           Event     @relation(fields: [eventId], references: [id])
+  eventName       String
   bookings        Booking[]
+  event           Event     @relation(fields: [eventName], references: [name])
   tickets         Ticket[]
 
-  @@unique([name, eventId])
+  @@id([name, eventName])
 }
 
 model Timeslot {
-  id             Int       @id @default(autoincrement())
   startTime      DateTime
   endTime        DateTime
   remainingSlots Int
-  eventId        Int
-  event          Event     @relation(fields: [eventId], references: [id])
+  eventName      String
   bookings       Booking[]
+  event          Event     @relation(fields: [eventName], references: [name])
   tickets        Ticket[]
 
-  @@unique([startTime, endTime, eventId])
-}
-
-model Ticket {
-  id              String   @id @default(cuid())
-  name            String
-  email           String
-  telegramHandle  String
-  phoneNumber     String
-  bundleId        Int
-  bundle          Bundle   @relation(fields: [bundleId], references: [id])
-  timeslotId      Int
-  timeslot        Timeslot @relation(fields: [timeslotId], references: [id])
-  created         DateTime @default(now())
-  /// Reference for Stripe PaymentIntent ID; not a foreign key
-  paymentIntentId String
+  @@id([startTime, endTime, eventName])
 }
 
 model Booking {
@@ -80,19 +63,47 @@ model Booking {
   email          String
   telegramHandle String
   phoneNumber    String
-  eventId        Int
-  event          Event    @relation(fields: [eventId], references: [id])
-  bundleId       Int
-  bundle         Bundle   @relation(fields: [bundleId], references: [id])
-  timeslotId     Int
-  timeslot       Timeslot @relation(fields: [timeslotId], references: [id])
-  /// Number of bundles to book
-  quantity       Int
+  eventName      String
+  bundleName     String
+  startTime      DateTime
+  endTime        DateTime
+  /// Names of people to be associated with each ticket. Length of this is the quantity of tickets.
+  names          String[]
   created        DateTime @default(now())
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
   valid          Boolean  @default(true)
   /// Reference for Stripe Session ID; not a foreign key
   sessionId      String?
+  event          Event    @relation(fields: [eventName], references: [name])
+  bundle         Bundle   @relation(fields: [eventName, bundleName], references: [eventName, name])
+  timeslot       Timeslot @relation(fields: [startTime, endTime, eventName], references: [startTime, endTime, eventName])
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  name            String
+  email           String
+  telegramHandle  String
+  phoneNumber     String
+  created         DateTime @default(now())
+  /// Reference for Stripe PaymentIntent ID; not a foreign key
+  paymentIntentId String
+  tickets         Ticket[]
+}
+
+model Ticket {
+  id         Int      @id @default(autoincrement())
+  name       String
+  orderId    String
+  eventName  String
+  bundleName String
+  startTime  DateTime
+  endTime    DateTime
+  event      Event    @relation(fields: [eventName], references: [name])
+  bundle     Bundle   @relation(fields: [eventName, bundleName], references: [eventName, name])
+  timeslot   Timeslot @relation(fields: [startTime, endTime, eventName], references: [startTime, endTime, eventName])
+
+  order Order @relation(fields: [orderId], references: [id])
 }
 
 // Lucia

@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 
 export type BundleCardPopupProps = {
   event: {
-    id: number;
     name: string;
   };
   bundle: {

@@ -6,9 +6,10 @@ import { dashboardProcedure } from "@/server/procedures/dashboard-procedure";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
+import { nameKeySchema } from "../schemas";
 import { handleCreate, handleCreateMany } from "./handlers";
 import { bookingSchema } from "./schemas";
-import { checkEventConsistency } from "./utils";
+// import { checkEventConsistency } from "./utils";
 
 export const bookingRouter = createTRPCRouter({
   getAll: dashboardProcedure
@@ -36,11 +37,7 @@ export const bookingRouter = createTRPCRouter({
     }),
 
   getById: dashboardProcedure
-    .input(
-      z.object({
-        id: z.number().positive(),
-      }),
-    )
+    .input(z.object({ id: z.number().positive() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;
       const booking = await ctx.db.booking.findUnique({ where: { id } });
@@ -65,13 +62,13 @@ export const bookingRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-        eventIds: z.number().positive().array(),
+        events: nameKeySchema.array(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { email, eventIds } = input;
+      const { email, events } = input;
       const bookings = await ctx.db.booking.findMany({
-        where: { email, eventId: { in: eventIds } },
+        where: { email, eventName: { in: events } },
       });
       return bookings;
     }),
@@ -101,18 +98,18 @@ export const bookingRouter = createTRPCRouter({
       };
     }),
 
-  checkIdConsistency: publicProcedure
-    .input(
-      z.object({
-        eventId: z.number().positive(),
-        bundleId: z.number().positive(),
-        timeslotId: z.number().positive(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const isConsistent = await checkEventConsistency(ctx.db, input);
-      return isConsistent;
-    }),
+  // checkIdConsistency: publicProcedure
+  //   .input(
+  //     z.object({
+  //       eventId: z.number().positive(),
+  //       bundleId: z.number().positive(),
+  //       timeslotId: z.number().positive(),
+  //     }),
+  //   )
+  //   .mutation(async ({ ctx, input }) => {
+  //     const isConsistent = await checkEventConsistency(ctx.db, input);
+  //     return isConsistent;
+  //   }),
 
   create: publicProcedure
     .input(bookingSchema)
@@ -130,84 +127,22 @@ export const bookingRouter = createTRPCRouter({
     .input(
       z.object({
         email: z.string().email(),
-        eventIds: z.number().positive().array(),
+        events: nameKeySchema.array(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { email, eventIds } = input;
+      const { email, events } = input;
       const bookings = await ctx.db.booking.findMany({
-        where: { email, eventId: { in: eventIds } },
+        where: { email, eventName: { in: events } },
         include: { bundle: true },
       });
       return bookings.reduce(
         (accum, booking) =>
           accum +
           new Prisma.Decimal(booking.bundle.price)
-            .times(booking.quantity)
+            .times(booking.names.length)
             .toNumber(),
         0,
       );
     }),
-
-  deleteById: dashboardProcedure
-    .input(z.number().positive())
-    .mutation(async ({ ctx, input }) => {
-      const booking = await ctx.db.booking.findUnique({
-        where: { id: input },
-        include: { bundle: true },
-      });
-
-      if (!booking) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Booking not found",
-        });
-      }
-
-      const partySize = booking.quantity * booking.bundle.quantity;
-      // free up bundles
-      await ctx.db.bundle.update({
-        where: { id: booking.bundleId },
-        data: { remainingAmount: { increment: booking.quantity } },
-      });
-      // free up timeslots
-      await ctx.db.timeslot.update({
-        where: { id: booking.timeslotId },
-        data: { remainingSlots: { increment: partySize } },
-      });
-
-      return await ctx.db.booking.delete({ where: { id: input } });
-    }),
-
-  deleteManyByEmail: dashboardProcedure
-    .input(z.string().email())
-    .mutation(async ({ ctx, input }) => {
-      const bookings = await ctx.db.booking.findMany({
-        where: { email: input },
-        include: { bundle: true },
-      });
-
-      if (bookings.length === 0) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Bookings not found",
-        });
-      }
-
-      for (const booking of bookings) {
-        const partySize = booking.quantity * booking.bundle.quantity;
-        // free up bundles
-        await ctx.db.bundle.update({
-          where: { id: booking.bundleId },
-          data: { remainingAmount: { increment: booking.quantity } },
-        });
-        // free up timeslots
-        await ctx.db.timeslot.update({
-          where: { id: booking.timeslotId },
-          data: { remainingSlots: { increment: partySize } },
-        });
-      }
-
-      return await ctx.db.booking.deleteMany({ where: { email: input } });
-    }),
-});
+  });

@@ -6,12 +6,12 @@ import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 export type DashboardDataSelectProps = {
-  selectedEvent?: number;
-  onChange: (id: number) => void;
+  selectedEvent?: string;
+  onChange: (name: string) => void;
 };
 
 export default function DashboardDataSelect({
-  selectedEvent = 0,
+  selectedEvent = "",
   onChange,
 }: DashboardDataSelectProps) {
   const { data: events, isLoading, isError } = api.event.getAll.useQuery();
@@ -19,8 +19,8 @@ export default function DashboardDataSelect({
     data: bookingsCount,
     isLoading: isCountLoading,
     isError: isCountError,
-  } = api.event.countBookingsById.useQuery(
-    { id: selectedEvent },
+  } = api.event.countBookingsByName.useQuery(
+    { name: selectedEvent },
     { enabled: !!selectedEvent },
   );
 
@@ -32,7 +32,7 @@ export default function DashboardDataSelect({
           selectedEvent ? "" : "rounded-r-md",
         )}
         value={selectedEvent}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => onChange(e.target.value)}
       >
         <option disabled value={0}>
           Select an Event
@@ -43,7 +43,7 @@ export default function DashboardDataSelect({
           <option disabled>An error occurred</option>
         ) : (
           events.map((event) => (
-            <option key={event.id} value={event.id}>
+            <option key={event.name} value={event.name}>
               {event.name}
             </option>
           ))

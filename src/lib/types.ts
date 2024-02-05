@@ -11,15 +11,6 @@ import { type ArrElement } from "./utils";
  */
 export type Cart = z.infer<typeof cartSchema>;
 
-export type Event = {
-  id: number;
-  name: string;
-  description: string;
-  location: string;
-  startDate: Date;
-  endDate: Date;
-};
-
 export type CartItem = ArrElement<Cart>;
 
 export type OrderMetadata = {

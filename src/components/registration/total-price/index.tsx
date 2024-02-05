@@ -15,7 +15,12 @@ export default function TotalPrice() {
   const selected = cart.reduce((accum, item) => accum + item.quantity, 0);
 
   const bundleQueries = api.useQueries((api) =>
-    cart.map((item) => api.bundle.getById({ id: item.bundleId })),
+    cart.map((item) =>
+      api.bundle.getByNameAndEvent({
+        name: item.event.bundle,
+        event: item.event.name,
+      }),
+    ),
   );
   const isLoading = bundleQueries.some((query) => query.isLoading);
   const isError = bundleQueries.some((query) => query.isError);

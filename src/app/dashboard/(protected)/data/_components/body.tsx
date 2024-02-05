@@ -12,7 +12,7 @@ import DashboardDataSelect from "./select";
 
 export default function DashboardDataPageBody() {
   const [emailInput, setEmailInput] = useState("");
-  const [eventInput, setEventInput] = useState(0);
+  const [eventInput, setEventInput] = useState("");
   const [showPopUp, setShowPopUp] = useState(false);
   const [selectedEmails, setSelectedEmails] = useState<Record<string, boolean>>(
     {},
@@ -43,7 +43,7 @@ export default function DashboardDataPageBody() {
       <h1 className="text-4xl font-extrabold">Bookings Data</h1>
       <DashboardDataSelect
         selectedEvent={eventInput}
-        onChange={(id) => setEventInput(id)}
+        onChange={(name) => setEventInput(name)}
       />
 
       <SearchBar
@@ -75,7 +75,7 @@ export default function DashboardDataPageBody() {
                 filteredEmails.map((email, idx) => (
                   <BookingsTableRow
                     key={`${idx}-${email}`}
-                    eventId={eventInput}
+                    eventName={eventInput}
                     email={email}
                     checked={!!selectedEmails[email]}
                     onChange={() =>

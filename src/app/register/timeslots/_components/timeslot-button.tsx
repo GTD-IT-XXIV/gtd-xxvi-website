@@ -4,7 +4,6 @@ import { cva } from "class-variance-authority";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
 dayjs.extend(utc);
@@ -20,36 +19,28 @@ const timeslotButtonVariants = cva("", {
 });
 
 export type TimeSlotButtonProps = {
-  id: number;
-  startTime: Date;
-  endTime: Date;
+  timeslot: {
+    eventName: string;
+    startTime: Date;
+    endTime: Date;
+  };
   state?: "disabled" | "unchecked" | "checked";
   availability?: "low" | "medium" | "high";
   remainingSlots: number;
-  onClick: (id: number) => void;
+  onClick: (start: Date, end: Date) => void;
 };
 
 export default function TimeSlotButton({
-  id,
-  startTime,
-  endTime,
+  timeslot: timeslot,
   state = "unchecked",
   remainingSlots,
   availability = "high",
   onClick,
 }: TimeSlotButtonProps) {
-  const {
-    data: totalSlots,
-    isLoading,
-    isError,
-  } = api.timeslot.getTotalSlotsById.useQuery({ id });
-
-  if (!isLoading && !isError) {
-    if (remainingSlots === 0) {
-      availability = "low";
-    } else {
-      availability = "high";
-    }
+  if (remainingSlots === 0) {
+    availability = "low";
+  } else {
+    availability = "high";
   }
 
   return (
@@ -61,13 +52,12 @@ export default function TimeSlotButton({
           ? "bg-gtd-primary-30 text-white"
           : "text-gtd-secondary-20",
       )}
-      id={String(id)}
       disabled={state === "disabled"}
-      onClick={() => onClick(id)}
+      onClick={() => onClick(timeslot.startTime, timeslot.endTime)}
     >
       <span>
-        {dayjs.utc(startTime).format("h.mm")} -{" "}
-        {dayjs.utc(endTime).format("h.mm A")}
+        {dayjs.utc(timeslot.startTime).format("h.mm")} -{" "}
+        {dayjs.utc(timeslot.endTime).format("h.mm A")}
       </span>
       {state === "checked" ? (
         <span>Selected</span>

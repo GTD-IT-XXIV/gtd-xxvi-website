@@ -10,6 +10,7 @@ import SuperJSON from "superjson";
 import { z } from "zod";
 
 import { db } from "@/server/db";
+import { synchronizeToGoogleSheets } from "@/server/routers/utils";
 
 import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
     "checkout.session.completed",
     "checkout.session.async_payment_succeeded",
     "checkout.session.expired",
+    "payment_intent.payment_failed",
   ];
   console.log(event.type);
 
@@ -87,28 +89,46 @@ export async function POST(req: Request) {
             throw new Error("Payment intent ID is null");
           }
 
-          // use email as the owner of a ticket in the future after the schema changed
-          const tickets = await db.$transaction(
-            bookings.flatMap((booking) =>
-              Array(booking.quantity)
-                .fill(0)
-                .map(() =>
-                  db.ticket.create({
-                    data: {
-                      name: booking.name,
-                      email: booking.email,
-                      telegramHandle: booking.telegramHandle,
-                      phoneNumber: booking.phoneNumber,
-                      bundleId: Number(booking.bundleId),
-                      timeslotId: Number(booking.timeslotId),
-                      paymentIntentId: String(data.payment_intent),
-                    },
-                    select: { id: true },
-                  }),
+          const { order, tickets } = await db.$transaction(async (tx) => {
+            // Unreachable code but necessary for type safety
+            if (!bookings[0]) {
+              throw new Error("An error occurred");
+            }
+
+            const booking = bookings[0];
+            const order = await tx.order.create({
+              data: {
+                name: booking.name,
+                email: booking.email,
+                telegramHandle: booking.telegramHandle,
+                phoneNumber: booking.phoneNumber,
+                paymentIntentId: String(data.payment_intent),
+              },
+            });
+
+            await tx.ticket.createMany({
+              data: bookings.flatMap((booking) =>
+                booking.names.flatMap(
+                  (name) =>
+                    ({
+                      name,
+                      orderId: order.id,
+                      eventName: booking.eventName,
+                      bundleName: booking.bundleName,
+                      startTime: booking.startTime,
+                      endTime: booking.endTime,
+                    }) satisfies Prisma.TicketCreateManyInput,
                 ),
-            ),
-          );
-          const ticketIds = tickets.map((ticket) => ticket.id);
+              ),
+            });
+
+            const tickets = await tx.ticket.findMany({
+              where: { orderId: order.id },
+            });
+            return { order, tickets };
+          });
+
+          // const ticketIds = tickets.map((ticket) => ticket.id);
           console.log("✅ Ticket details: ");
           console.log(tickets);
 
@@ -126,17 +146,14 @@ export async function POST(req: Request) {
             email: bookings[0].email,
           };
 
-          const ticketsUrl = `${req.headers.get("origin")}/ticket/${btoa(
-            SuperJSON.stringify(ticketIds),
-          )}`;
-
           let orderPrice = 0;
           const emailHtml = render(
             GTDEmail({
+              orderId: order.id,
               name: recipient.name,
-              orders: bookings.map((booking) => {
+              bookings: bookings.map((booking) => {
                 const totalPrice = new Prisma.Decimal(booking.bundle.price)
-                  .times(booking.quantity)
+                  .times(booking.names.length / booking.bundle.quantity)
                   .toNumber();
                 orderPrice += totalPrice;
 
@@ -151,12 +168,18 @@ export async function POST(req: Request) {
                       .utc(booking.timeslot.endTime)
                       .format("h.mm A"),
                   },
-                  quantity: booking.quantity,
+                  quantity: booking.names.length / booking.bundle.quantity,
                   totalPrice,
+                  tickets: tickets
+                    .filter(
+                      (ticket) =>
+                        ticket.eventName === booking.eventName &&
+                        ticket.bundleName === booking.bundleName,
+                    )
+                    .map((ticket) => ({ id: ticket.id, name: ticket.name })),
                 };
               }),
               orderPrice,
-              url: ticketsUrl,
               eventTitle,
             }),
           );
@@ -178,16 +201,19 @@ export async function POST(req: Request) {
           await db.booking.deleteMany({
             where: { id: { in: bookingIds } },
           });
+
+          await synchronizeToGoogleSheets();
           break;
         }
         case "checkout.session.expired": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
+          console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(JSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(metadata.bookingIds));
           console.log(`❌ Payment failed with session: ${data.id}`);
 
           const bookings = await db.booking.findMany({
@@ -197,23 +223,85 @@ export async function POST(req: Request) {
 
           await db.$transaction(async (tx) => {
             for (const booking of bookings) {
-              const partySize = booking.quantity * booking.bundle.quantity;
+              const partySize = booking.names.length;
 
               await tx.bundle.update({
-                where: { id: Number(booking.bundleId) },
+                where: {
+                  name_eventName: {
+                    name: booking.bundleName,
+                    eventName: booking.eventName,
+                  },
+                },
                 data: {
-                  remainingAmount: { increment: Number(booking.quantity) },
+                  remainingAmount: {
+                    increment: booking.names.length / booking.bundle.quantity,
+                  },
                 },
               });
 
               await tx.timeslot.update({
-                where: { id: Number(booking.timeslotId) },
+                where: {
+                  startTime_endTime_eventName: {
+                    startTime: booking.startTime,
+                    endTime: booking.endTime,
+                    eventName: booking.eventName,
+                  },
+                },
                 data: { remainingSlots: { increment: Number(partySize) } },
               });
             }
+            await db.booking.deleteMany({
+              where: { id: { in: bookings.map((booking) => booking.id) } },
+            });
           });
           break;
         }
+        // case "payment_intent.payment_failed": {
+        //   const paymentData = event.data
+        //     .object as unknown as Stripe.PaymentIntent;
+        //   console.log({ data: paymentData });
+        //   const paymentIntentId = String(paymentData.id);
+        //
+        //   console.log(
+        //     `❌ Payment failed with payment_intent: ${paymentIntentId}`,
+        //   );
+        //
+        //   const bookings = await db.booking.findMany({
+        //     where: { sessionId: paymentIntentId },
+        //     include: { bundle: true, timeslot: true },
+        //   });
+        //   await db.$transaction(async (tx) => {
+        //     for (const booking of bookings) {
+        //       const partySize = booking.names.length;
+        //
+        //       await tx.bundle.update({
+        //         where: {
+        //           name_eventName: {
+        //             name: booking.bundleName,
+        //             eventName: booking.eventName,
+        //           },
+        //         },
+        //         data: {
+        //           remainingAmount: {
+        //             increment: booking.names.length / booking.bundle.quantity,
+        //           },
+        //         },
+        //       });
+        //
+        //       await tx.timeslot.update({
+        //         where: {
+        //           startTime_endTime_eventName: {
+        //             startTime: booking.startTime,
+        //             endTime: booking.endTime,
+        //             eventName: booking.eventName,
+        //           },
+        //         },
+        //         data: { remainingSlots: { increment: Number(partySize) } },
+        //       });
+        //     }
+        //   });
+        //   break;
+        // }
         default: {
           throw new Error(`Unhandled event: ${event.type}`);
         }
