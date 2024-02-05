@@ -53,16 +53,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
 
   useEffect(() => {
     function runEffect() {
-      console.log({ bundleName, eventName: event.name, cart, available });
       if (available === false) {
-        console.log({
-          cart,
-          newCart: cart.filter(
-            (item) =>
-              item.event.name !== event.name ||
-              item.event.bundle !== bundleName,
-          ),
-        });
         setCart((prev) =>
           prev.filter(
             (item) =>

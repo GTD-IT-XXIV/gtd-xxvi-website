@@ -149,7 +149,6 @@ export default function TimeSlotSection({
           const isSelected =
             selected?.start.getTime() === timeslot.startTime.getTime() &&
             selected?.end.getTime() === timeslot.endTime.getTime();
-          console.log({ alreadySelected, disabled });
 
           return (
             <TimeSlotButton
