@@ -42,6 +42,7 @@ jobs:
           envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
           envkey_AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
           envkey_BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          file_name: .env.production.local
           fail_on_empty: true
       - run: flyctl deploy --remote-only
         env:
