@@ -34,7 +34,7 @@
     "\n========== Building ==========": "",
     "build": "next build",
     "build:docker": "docker build -t gtd-xxvi/website -f docker/production/Dockerfile .",
-    "start:docker": "docker run --name gtd-xxvi-website -p 3000:3000 --rm gtd-xxvi/website",
+    "start:docker": "docker run --name gtd-xxvi-website -p 3000:3000 --mount type=bind,source=\"$(pwd)\"/.env.production.local,target=/app/.env.production.local --rm gtd-xxvi/website",
     "\n========== Linting ==========": "",
     "lint": "next lint",
     "lint:prettier:check": "prettier . --check",

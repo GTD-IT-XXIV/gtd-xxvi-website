@@ -21,14 +21,14 @@ COPY . .
 
 
 RUN rm -rfv .env .env*.local 
-COPY .env.production.loca[l] .env.production.local
-COPY .env.production.loca[l] .env
+COPY .env.production .env.production
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+ENV SKIP_ENV_VALIDATION=TRUE
 RUN pnpm build
 
 # Production image, copy all the files and run next

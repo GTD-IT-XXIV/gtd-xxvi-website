@@ -20,6 +20,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Use development environment variables as production for this development build
+# CAUTION: environment variables are included inside the final Docker image
 RUN rm -rfv .env .env*.local 
 COPY .env.developmen[t] .env.production
 COPY .env.development.loca[l] .env.production.local
