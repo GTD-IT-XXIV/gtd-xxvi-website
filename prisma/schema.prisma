@@ -121,7 +121,7 @@ model MerchBundle {
   name            String
   images          String[]
   stock           Int
-  BundleItems     BundleItem[]
+  bundleItems     BundleItem[]
   merchBookings   MerchBooking[]
   merchOrderItems MerchOrderItem[]
 }
