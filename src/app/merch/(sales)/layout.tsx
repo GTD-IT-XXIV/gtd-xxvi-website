@@ -3,11 +3,7 @@ import { type ReactNode } from "react";
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
 
-export default function MerchPaymentLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function MerchLayout({ children }: { children: ReactNode }) {
   return (
     <main className="relative flex flex-col min-h-screen">
       <Navbar className="sticky top-0 z-10" />
