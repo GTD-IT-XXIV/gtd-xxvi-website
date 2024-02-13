@@ -19,6 +19,8 @@ import { type OrderMetadata } from "@/lib/types";
 
 dayjs.extend(utc);
 
+// TODO: modify webhook to support merch sales
+
 export async function POST(req: Request) {
   let event: Stripe.Event;
 
