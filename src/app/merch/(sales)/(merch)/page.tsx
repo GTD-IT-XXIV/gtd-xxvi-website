@@ -1,6 +1,7 @@
 import { api } from "@/server/trpc";
 
 import MerchBundleCard from "./_components/merch-bundle-card";
+import MerchPageFooter from "./_components/merch-page-footer";
 
 export default async function MerchPage() {
   const merchBundles = await api.merchBundle.getAll.query();
@@ -27,6 +28,7 @@ export default async function MerchPage() {
           ))}
         </div>
       </article>
+      <MerchPageFooter className="sticky bottom-0" />
     </section>
   );
 }
