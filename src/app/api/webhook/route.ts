@@ -1,7 +1,4 @@
 import { env } from "@/env";
-import GTDEmail from "@emails/gtd-email";
-import { Prisma } from "@prisma/client";
-import { render } from "@react-email/components";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { NextResponse } from "next/server";
@@ -9,17 +6,17 @@ import type { Stripe } from "stripe";
 import SuperJSON from "superjson";
 import { z } from "zod";
 
-import { db } from "@/server/db";
-import { synchronizeTicketsToGoogleSheets } from "@/server/routers/utils";
-
-import { BREVO_EMAIL } from "@/lib/constants";
-import { sendEmail } from "@/lib/email";
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types";
 
-dayjs.extend(utc);
+import {
+  handleEventPaymentExpired,
+  handleEventPaymentSuccess,
+  handleMerchPaymentExpired,
+  handleMerchPaymentSuccess,
+} from "./_utils/handlers";
 
-// TODO: modify webhook to support merch sales
+dayjs.extend(utc);
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
@@ -58,252 +55,67 @@ export async function POST(req: Request) {
     try {
       let data: Stripe.Checkout.Session;
       let metadata: OrderMetadata;
+
       switch (event.type) {
         case "checkout.session.async_payment_succeeded":
         case "checkout.session.completed": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
           console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
+          const { type: rawType, bookingIds: rawBookingIds } = metadata;
+
+          const type = z.enum(["event", "merch"]).parse(rawType);
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(SuperJSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(rawBookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
           if (bookingIds.length === 0) {
             throw new Error("No bookings attached to this CheckoutSession");
           }
 
-          const bookings = await db.booking.findMany({
-            where: { id: { in: bookingIds } },
-            include: { event: true, bundle: true, timeslot: true },
-          });
-          if (bookings.length !== bookingIds.length) {
-            throw new Error("Not all bookings were found in database");
-          }
-          const isAllBookingsValid = bookings.every((booking) => booking.valid);
-          if (!isAllBookingsValid) {
-            throw new Error("Bookings invalid");
-          }
-
-          if (!data.payment_intent) {
-            throw new Error("Payment intent ID is null");
-          }
-
-          const { order, tickets } = await db.$transaction(async (tx) => {
-            // Unreachable code but necessary for type safety
-            if (!bookings[0]) {
-              throw new Error("An error occurred");
+          switch (type) {
+            case "event": {
+              await handleEventPaymentSuccess(data, bookingIds);
+              break;
             }
-
-            const booking = bookings[0];
-            const order = await tx.order.create({
-              data: {
-                name: booking.name,
-                email: booking.email,
-                telegramHandle: booking.telegramHandle,
-                phoneNumber: booking.phoneNumber,
-                paymentIntentId: String(data.payment_intent),
-              },
-            });
-
-            await tx.ticket.createMany({
-              data: bookings.flatMap((booking) =>
-                booking.names.flatMap(
-                  (name) =>
-                    ({
-                      name,
-                      orderId: order.id,
-                      eventName: booking.eventName,
-                      bundleName: booking.bundleName,
-                      startTime: booking.startTime,
-                      endTime: booking.endTime,
-                    }) satisfies Prisma.TicketCreateManyInput,
-                ),
-              ),
-            });
-
-            const tickets = await tx.ticket.findMany({
-              where: { orderId: order.id },
-            });
-            return { order, tickets };
-          });
-
-          // const ticketIds = tickets.map((ticket) => ticket.id);
-          console.log("✅ Ticket details: ");
-          console.log(tickets);
-
-          const eventTitle = [
-            ...new Set(bookings.map((booking) => booking.event.name)),
-          ].join(", ");
-
-          // Unreachable code but necessary for type safety
-          if (!bookings[0]) {
-            throw new Error("An error occurred");
+            case "merch": {
+              await handleMerchPaymentSuccess(data, bookingIds);
+              break;
+            }
           }
 
-          const recipient = {
-            name: bookings[0].name,
-            email: bookings[0].email,
-          };
-
-          let orderPrice = 0;
-          const emailHtml = render(
-            GTDEmail({
-              orderId: order.id,
-              name: recipient.name,
-              bookings: bookings.map((booking) => {
-                const totalPrice = new Prisma.Decimal(booking.bundle.price)
-                  .times(booking.names.length / booking.bundle.quantity)
-                  .toNumber();
-                orderPrice += totalPrice;
-
-                return {
-                  eventName: booking.event.name,
-                  bundleName: booking.bundle.name,
-                  timeslot: {
-                    startLabel: dayjs
-                      .utc(booking.timeslot.startTime)
-                      .format("h.mm A"),
-                    endLabel: dayjs
-                      .utc(booking.timeslot.endTime)
-                      .format("h.mm A"),
-                  },
-                  quantity: booking.names.length / booking.bundle.quantity,
-                  totalPrice,
-                  tickets: tickets
-                    .filter(
-                      (ticket) =>
-                        ticket.eventName === booking.eventName &&
-                        ticket.bundleName === booking.bundleName,
-                    )
-                    .map((ticket) => ({ id: ticket.id, name: ticket.name })),
-                };
-              }),
-              orderPrice,
-              eventTitle,
-            }),
-          );
-
-          await sendEmail({
-            sender: {
-              name: "PINTU Get Together Day XXVI",
-              email: BREVO_EMAIL,
-            },
-            replyTo: {
-              name: "PINTU Get Together Day XXVI",
-              email: BREVO_EMAIL,
-            },
-            to: [recipient],
-            subject: `Your ${eventTitle} Tickets`,
-            htmlContent: emailHtml,
-          });
-
-          await db.booking.deleteMany({
-            where: { id: { in: bookingIds } },
-          });
-
-          await synchronizeTicketsToGoogleSheets();
           break;
         }
         case "checkout.session.expired": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
           console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
+          const { type: rawType, bookingIds: rawBookingIds } = metadata;
+
+          const type = z.enum(["event", "merch"]).parse(rawType);
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(SuperJSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(rawBookingIds));
           console.log(`❌ Payment failed with session: ${data.id}`);
 
-          const bookings = await db.booking.findMany({
-            where: { id: { in: bookingIds } },
-            include: { bundle: true, timeslot: true },
-          });
-
-          await db.$transaction(async (tx) => {
-            for (const booking of bookings) {
-              const partySize = booking.names.length;
-
-              await tx.bundle.update({
-                where: {
-                  name_eventName: {
-                    name: booking.bundleName,
-                    eventName: booking.eventName,
-                  },
-                },
-                data: {
-                  remainingAmount: {
-                    increment: booking.names.length / booking.bundle.quantity,
-                  },
-                },
-              });
-
-              await tx.timeslot.update({
-                where: {
-                  startTime_endTime_eventName: {
-                    startTime: booking.startTime,
-                    endTime: booking.endTime,
-                    eventName: booking.eventName,
-                  },
-                },
-                data: { remainingSlots: { increment: Number(partySize) } },
-              });
+          switch (type) {
+            case "event": {
+              await handleEventPaymentExpired(bookingIds);
+              break;
             }
-            await db.booking.deleteMany({
-              where: { id: { in: bookings.map((booking) => booking.id) } },
-            });
-          });
+            case "merch": {
+              await handleMerchPaymentExpired(bookingIds);
+              break;
+            }
+          }
+
           break;
         }
-        // case "payment_intent.payment_failed": {
-        //   const paymentData = event.data
-        //     .object as unknown as Stripe.PaymentIntent;
-        //   console.log({ data: paymentData });
-        //   const paymentIntentId = String(paymentData.id);
-        //
-        //   console.log(
-        //     `❌ Payment failed with payment_intent: ${paymentIntentId}`,
-        //   );
-        //
-        //   const bookings = await db.booking.findMany({
-        //     where: { sessionId: paymentIntentId },
-        //     include: { bundle: true, timeslot: true },
-        //   });
-        //   await db.$transaction(async (tx) => {
-        //     for (const booking of bookings) {
-        //       const partySize = booking.names.length;
-        //
-        //       await tx.bundle.update({
-        //         where: {
-        //           name_eventName: {
-        //             name: booking.bundleName,
-        //             eventName: booking.eventName,
-        //           },
-        //         },
-        //         data: {
-        //           remainingAmount: {
-        //             increment: booking.names.length / booking.bundle.quantity,
-        //           },
-        //         },
-        //       });
-        //
-        //       await tx.timeslot.update({
-        //         where: {
-        //           startTime_endTime_eventName: {
-        //             startTime: booking.startTime,
-        //             endTime: booking.endTime,
-        //             eventName: booking.eventName,
-        //           },
-        //         },
-        //         data: { remainingSlots: { increment: Number(partySize) } },
-        //       });
-        //     }
-        //   });
-        //   break;
-        // }
         default: {
           throw new Error(`Unhandled event: ${event.type}`);
         }

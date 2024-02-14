@@ -13,32 +13,26 @@ import {
 } from "@react-email/components";
 import { type CSSProperties } from "react";
 
-export type GTDEmailProps = {
+export type GTDMerchEmailProps = {
   orderId: string;
   name: string;
-  bookings: {
-    eventName: string;
-    bundleName: string;
-    timeslot: {
-      startLabel: string;
-      endLabel: string;
-    };
+  bundles: {
+    name: string;
     quantity: number;
     totalPrice: number;
-    tickets: {
-      id: number;
+    items: {
       name: string;
+      variation: string;
     }[];
   }[];
   orderPrice: number;
-  eventTitle: string;
 };
 
-export default function GTDEmail(props: GTDEmailProps) {
+export default function GTDMerchEmail(props: GTDMerchEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Your tickets for {props.eventTitle}</Preview>
+      <Preview>Your Order for Merchandise Sale</Preview>
 
       <Body
         style={{
@@ -83,7 +77,7 @@ export default function GTDEmail(props: GTDEmailProps) {
                 marginBottom: "0.5rem",
               }}
             >
-              Hi {props.name}! Here are your tickets for
+              Hi {props.name}! Here is your order for
             </Text>
             <Heading
               as="h2"
@@ -94,39 +88,12 @@ export default function GTDEmail(props: GTDEmailProps) {
                 marginBottom: "2rem",
               }}
             >
-              {props.eventTitle}
+              Merchandise Sale
             </Heading>
-            {/* <Button
-              href={props.url}
-              style={{
-                whiteSpace: "nowrap",
-                borderRadius: "0.375rem",
-                backgroundColor: "#BE760F",
-                padding: "1.25rem 2rem",
-                filter:
-                  "drop-shadow(0 20px 13px rgb(0 0 0 / 0.03)) drop-shadow(0 8px 5px rgb(0 0 0 / 0.08))",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: "1.75rem",
-                  fontWeight: 800,
-                  color: "white",
-                  margin: 0,
-                }}
-              >
-                View Tickets
-              </Text>
-            </Button> */}
           </Section>
-          <Section
-            style={{
-              padding: "0.75rem 1rem",
-              borderBottom: "1px solid #cbd5e1",
-            }}
-          >
+          <Section style={{ padding: "0.75rem 1rem" }}>
             <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
-              Order Details
+              Order Details (ID: {props.orderId})
             </Heading>
             <table
               align="center"
@@ -140,20 +107,27 @@ export default function GTDEmail(props: GTDEmailProps) {
               <thead style={{ width: "100%", fontWeight: 600 }}>
                 <tr>
                   <Column style={tableHeader}>No.</Column>
-                  <Column style={tableHeader}>Event</Column>
                   <Column style={tableHeader}>Bundle</Column>
+                  <Column style={tableHeader}>Item</Column>
                   <Column style={tableHeader}>Quantity</Column>
                   <Column style={tableHeader}>Total Price</Column>
                 </tr>
               </thead>
               <tbody style={{ width: "100%" }}>
-                {props.bookings.map((order, idx) => (
+                {props.bundles.map((item, idx) => (
                   <tr key={idx}>
                     <Column>{idx + 1}</Column>
-                    <Column>{order.eventName}</Column>
-                    <Column>{order.bundleName}</Column>
-                    <Column>{order.quantity}</Column>
-                    <Column>${order.totalPrice.toFixed(2)}</Column>
+                    <Column>{item.name}</Column>
+                    <Column>
+                      {item.items.map((merch) => (
+                        <>
+                          {merch.name}: {merch.variation}
+                          <br />
+                        </>
+                      ))}
+                    </Column>
+                    <Column>{item.quantity}</Column>
+                    <Column>${item.totalPrice.toFixed(2)}</Column>
                   </tr>
                 ))}
               </tbody>
@@ -175,46 +149,6 @@ export default function GTDEmail(props: GTDEmailProps) {
                 </tr>
               </tfoot>
             </table>
-          </Section>
-          <Section style={{ padding: "0.75rem 1rem" }}>
-            <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
-              Ticket Details
-            </Heading>
-            {props.bookings.map((item) => (
-              <Section>
-                <Heading
-                  as="h3"
-                  style={{ fontSize: "1.25rem", fontWeight: 600 }}
-                >
-                  {item.eventName} ({item.bundleName}),{" "}
-                  {item.timeslot.startLabel} - {item.timeslot.endLabel}
-                </Heading>
-                <table
-                  align="center"
-                  width="100%"
-                  border={0}
-                  cellPadding={0}
-                  cellSpacing={10}
-                  role="presentation"
-                  style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}
-                >
-                  <thead style={{ width: "100%", fontWeight: 600 }}>
-                    <tr>
-                      <Column style={tableHeader}>ID</Column>
-                      <Column style={tableHeader}>Name</Column>
-                    </tr>
-                  </thead>
-                  <tbody style={{ width: "100%" }}>
-                    {item.tickets.map((ticket, idx) => (
-                      <tr key={idx}>
-                        <Column>{ticket.id}</Column>
-                        <Column>{ticket.name}</Column>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </Section>
-            ))}
           </Section>
         </Container>
       </Body>
