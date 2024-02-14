@@ -88,7 +88,7 @@ const MerchDetailsFormProvider = forwardRef<
         });
         setMerchCart([]);
         setAllowCheckout(false);
-        router.push(`/register/checkout/${sessionId}`);
+        router.push(`/merch/checkout/${sessionId}`);
       } catch (error) {
         console.error({ error });
         if (
