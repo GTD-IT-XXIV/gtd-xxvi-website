@@ -1,3 +1,5 @@
+import MerchGenericLayout from "@/app/merch/_components/merch-generic-layout";
+
 import { api } from "@/server/trpc";
 
 import MerchBundleCard from "./_components/merch-bundle-card";
@@ -6,17 +8,11 @@ import MerchPageFooter from "./_components/merch-page-footer";
 export default async function MerchPage() {
   const merchBundles = await api.merchBundle.getAll.query();
   return (
-    <section className="grow flex flex-col md:px-10 lg:px-24">
-      <article className="flex-1 p-5 pt-10 space-y-10">
-        <hgroup className="space-y-1">
-          <h1 className="text-gtd-primary-30 font-semibold text-3xl">
-            Merchandise Sales
-          </h1>
-          <p className="text-sm font-light">
-            Choose merchandise you wish to purchase
-          </p>
-        </hgroup>
-        <div className="flex gap-4 flex-wrap justify-center sm:justify-start">
+    <MerchGenericLayout
+      title="Merchandise Sales"
+      subtitle="Choose merchandise you wish to purchase"
+      body={
+        <div className="flex gap-4 flex-wrap justify-center sm:justify-start mt-6">
           {merchBundles.map((merchBundle) => (
             <MerchBundleCard
               key={merchBundle.id}
@@ -27,8 +23,8 @@ export default async function MerchPage() {
             />
           ))}
         </div>
-      </article>
-      <MerchPageFooter className="sticky bottom-0" />
-    </section>
+      }
+      footer={<MerchPageFooter className="sticky bottom-0" />}
+    />
   );
 }
