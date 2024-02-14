@@ -21,7 +21,7 @@ export default function MerchDetailsPage() {
         title="Merchandise Cart"
         body={
           <div className="flex flex-col md:flex-row">
-            <MerchItemReview />
+            <MerchItemReview className="md:basis-1/3" />
             <MerchBuyerInfo />
           </div>
         }

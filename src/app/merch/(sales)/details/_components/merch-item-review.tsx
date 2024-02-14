@@ -4,11 +4,16 @@ import { useAtomValue, useSetAtom } from "jotai";
 
 import { allowMerchCheckoutAtom, merchCartAtom } from "@/lib/atoms/merch";
 import { useHasMounted } from "@/lib/hooks";
+import { cn } from "@/lib/utils";
 
 import MerchItem from "./merch-item";
 import MerchItemLoading from "./merch-item/loading";
 
-export default function MerchItemReview() {
+export default function MerchItemReview({
+  className = "",
+}: {
+  className?: string;
+}) {
   const hasMounted = useHasMounted();
   const merchCart = useAtomValue(merchCartAtom);
   const setAllowMerchCheckout = useSetAtom(allowMerchCheckoutAtom);
@@ -27,7 +32,7 @@ export default function MerchItemReview() {
   }
 
   return (
-    <div className="space-y-3">
+    <div className={cn("space-y-3", className)}>
       <h2 className="text-gtd-secondary-20 text-xl font-medium">Item Review</h2>
       <div className="flex flex-col">
         {!hasMounted ? (
