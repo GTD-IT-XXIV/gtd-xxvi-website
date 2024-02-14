@@ -16,7 +16,7 @@ export default function MerchDetailsPage() {
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
-    <MerchDetailsFormProvider ref={formRef}>
+    <MerchDetailsFormProvider className="grow flex flex-col" ref={formRef}>
       <MerchGenericLayout
         title="Merchandise Cart"
         body={

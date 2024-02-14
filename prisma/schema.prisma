@@ -109,22 +109,24 @@ model Ticket {
 
 // Merch-related schemas
 model Merch {
-  id          Int          @id @default(autoincrement())
-  name        String
-  variations  String[]
-  stock       Int
-  bundleItems BundleItem[]
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  variations           String[]
+  stock                Int
+  bundleItems          BundleItem[]
+  merchBookingItem     MerchBookingItem[]
+  merchOrderBundleItem MerchOrderBundleItem[]
 }
 
 model MerchBundle {
-  id              Int              @id @default(autoincrement())
-  name            String
-  images          String[]
-  stock           Int
-  price           Decimal
-  bundleItems     BundleItem[]
-  merchBookings   MerchBooking[]
-  merchOrderItems MerchOrderItem[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  images            String[]
+  stock             Int
+  price             Decimal
+  bundleItems       BundleItem[]
+  merchBookings     MerchBooking[]
+  merchOrderBundles MerchOrderBundle[]
 }
 
 model BundleItem {
@@ -137,39 +139,59 @@ model BundleItem {
 }
 
 model MerchBooking {
-  id             Int         @id @default(autoincrement())
-  name           String
-  email          String
-  telegramHandle String
-  phoneNumber    String
-  merchBundleId  Int
-  quantity       Int
-  created        DateTime    @default(now())
+  id               Int                @id @default(autoincrement())
+  name             String
+  email            String
+  telegramHandle   String
+  phoneNumber      String
+  merchBundleId    Int
+  quantity         Int
+  created          DateTime           @default(now())
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
-  valid          Boolean     @default(true)
+  valid            Boolean            @default(true)
   /// Reference for Stripe Session ID; not a foreign key
-  sessionId      String?
-  merchBundle    MerchBundle @relation(fields: [merchBundleId], references: [id])
+  sessionId        String?
+  merchBundle      MerchBundle        @relation(fields: [merchBundleId], references: [id])
+  merchBookingItem MerchBookingItem[]
+}
+
+model MerchBookingItem {
+  id             Int          @id @default(autoincrement())
+  merchBookingId Int
+  merchId        Int
+  variation      String
+  merchBooking   MerchBooking @relation(fields: [merchBookingId], references: [id])
+  merch          Merch        @relation(fields: [merchId], references: [id])
 }
 
 model MerchOrder {
-  id              String           @id @default(cuid())
-  name            String
-  email           String
-  telegramHandle  String
-  phoneNumber     String
-  created         DateTime         @default(now())
+  id                String             @id @default(cuid())
+  name              String
+  email             String
+  telegramHandle    String
+  phoneNumber       String
+  created           DateTime           @default(now())
   /// Reference for Stripe PaymentIntent ID; not a foreign key
-  paymentIntentId String
-  merchOrderItems MerchOrderItem[]
+  paymentIntentId   String
+  merchOrderBundles MerchOrderBundle[]
 }
 
-model MerchOrderItem {
-  id            Int         @id @default(autoincrement())
-  merchBundleId Int
-  merchOrderId  String
-  merchBundle   MerchBundle @relation(fields: [merchBundleId], references: [id])
-  merchOrder    MerchOrder  @relation(fields: [merchOrderId], references: [id])
+model MerchOrderBundle {
+  id                   Int                    @id @default(autoincrement())
+  merchBundleId        Int
+  merchOrderId         String
+  merchBundle          MerchBundle            @relation(fields: [merchBundleId], references: [id])
+  merchOrder           MerchOrder             @relation(fields: [merchOrderId], references: [id])
+  merchOrderBundleItem MerchOrderBundleItem[]
+}
+
+model MerchOrderBundleItem {
+  id                 Int              @id @default(autoincrement())
+  merchOrderBundleId Int
+  merchId            Int
+  variation          String
+  merchOrderBundle   MerchOrderBundle @relation(fields: [merchOrderBundleId], references: [id])
+  merch              Merch            @relation(fields: [merchId], references: [id])
 }
 
 // Lucia-related schemas

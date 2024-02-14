@@ -9,9 +9,14 @@ import { type OrderMetadata } from "@/lib/types";
 
 export const paymentRouter = createTRPCRouter({
   createCheckoutSession: publicProcedure
-    .input(z.object({ bookingIds: z.number().positive().array() }))
+    .input(
+      z.object({
+        type: z.enum(["event", "merch"]).default("event"),
+        bookingIds: z.number().positive().array(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
-      const { bookingIds } = input;
+      const { bookingIds, type } = input;
 
       if (bookingIds.length === 0) {
         throw new TRPCError({
@@ -68,6 +73,7 @@ export const paymentRouter = createTRPCRouter({
         mode: "payment",
         payment_method_types: ["paynow"],
         metadata: {
+          type,
           bookingIds: SuperJSON.stringify(bookingIds),
         } as OrderMetadata,
         return_url: `${ctx.headers.get(

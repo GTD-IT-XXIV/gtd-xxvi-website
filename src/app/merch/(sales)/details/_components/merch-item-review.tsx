@@ -1,8 +1,8 @@
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 
-import { merchCartAtom } from "@/lib/atoms/merch";
+import { allowMerchCheckoutAtom, merchCartAtom } from "@/lib/atoms/merch";
 import { useHasMounted } from "@/lib/hooks";
 
 import MerchItem from "./merch-item";
@@ -11,7 +11,20 @@ import MerchItemLoading from "./merch-item/loading";
 export default function MerchItemReview() {
   const hasMounted = useHasMounted();
   const merchCart = useAtomValue(merchCartAtom);
+  const setAllowMerchCheckout = useSetAtom(allowMerchCheckoutAtom);
   const selected = merchCart.reduce((accum, item) => accum + item.quantity, 0);
+
+  if (selected === 0) {
+    setAllowMerchCheckout(false);
+  }
+
+  if (
+    merchCart.every((item) =>
+      item.merch.every((merchItem) => !!merchItem.variation),
+    )
+  ) {
+    setAllowMerchCheckout(true);
+  }
 
   return (
     <div className="space-y-3">

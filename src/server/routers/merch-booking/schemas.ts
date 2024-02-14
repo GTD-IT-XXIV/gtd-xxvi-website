@@ -8,4 +8,10 @@ export const merchBookingSchema = z.object({
   merchBundleId: z.number().positive(),
   quantity: z.number().positive(),
   sessionId: z.string().optional(),
+  merch: z
+    .object({
+      id: z.number().positive(),
+      variation: z.string(),
+    })
+    .array(),
 });

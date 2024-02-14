@@ -9,7 +9,7 @@ export async function createBooking(
   db: PrismaClient,
   booking: z.infer<typeof merchBookingSchema>,
 ) {
-  const { merchBundleId, quantity } = booking;
+  const { merchBundleId, quantity, merch } = booking;
   const bundle = await db.merchBundle.findUnique({
     where: { id: merchBundleId },
   });
@@ -62,7 +62,20 @@ export async function createBooking(
           }
         }
 
-        return await tx.merchBooking.create({ data: booking });
+        const { merch: _, ...merchBookingData } = booking;
+        const merchBooking = await tx.merchBooking.create({
+          data: merchBookingData,
+        });
+
+        await tx.merchBookingItem.createMany({
+          data: merch.map((item) => ({
+            merchId: item.id,
+            merchBookingId: merchBooking.id,
+            variation: item.variation,
+          })),
+        });
+
+        return merchBooking;
       },
       {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,

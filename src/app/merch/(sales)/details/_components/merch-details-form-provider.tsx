@@ -11,6 +11,7 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 
+import { allowMerchCheckoutAtom, merchCartAtom } from "@/lib/atoms/merch";
 import { api } from "@/lib/trpc/client";
 
 const formSchema = z.object({
@@ -40,6 +41,8 @@ const MerchDetailsFormProvider = forwardRef<
 >(function DetailsFormProvider({ className = "", children }, ref) {
   const router = useRouter();
   const { toast } = useToast();
+  const [merchCart, setMerchCart] = useAtom(merchCartAtom);
+  const setAllowCheckout = useSetAtom(allowMerchCheckoutAtom);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,79 +54,71 @@ const MerchDetailsFormProvider = forwardRef<
     },
   });
 
+  const { mutateAsync: createBookings } =
+    api.merchBooking.createMany.useMutation();
+  const { mutateAsync: createSession } =
+    api.payment.createCheckoutSession.useMutation();
+
   async function placeOrder(values: z.infer<typeof formSchema>) {
-    // try {
-    //   const bookings = await createBookings({
-    //     bookings: cart.map((item) => {
-    //       if (!item.timeslot) {
-    //         throw new Error(
-    //           `No timeslot selected for '${item.event.name}' event item.`,
-    //         );
-    //       }
-    //       if (item.participants.some((participant) => !participant.trim())) {
-    //         throw new Error("EmptyParticipant");
-    //       }
-    //       return {
-    //         ...values,
-    //         eventName: item.event.name,
-    //         bundleName: item.event.bundle,
-    //         startTime: item.timeslot.start,
-    //         endTime: item.timeslot.end,
-    //         names: item.participants,
-    //       };
-    //     }),
-    //   });
-    //   const bookingIds = bookings.map((booking) => booking.id);
-    //   try {
-    //     const { sessionId } = await createSession({ bookingIds });
-    //     setSession(sessionId);
-    //     setCart([]);
-    //     setAllowCheckout(false);
-    //     router.push("/register/checkout");
-    //   } catch (error) {
-    //     console.error({ error });
-    //     if (
-    //       error instanceof TRPCClientError &&
-    //       error.message === "No items to checkout."
-    //     ) {
-    //       toast({
-    //         variant: "destructive",
-    //         title: "Failed to Place Order",
-    //         description: error.message,
-    //       });
-    //       router.back();
-    //     }
-    //     toast({
-    //       variant: "destructive",
-    //       title: "Failed to Place Order",
-    //       description:
-    //         "An error occurred while placing order. Please go back and try again.",
-    //     });
-    //     router.back();
-    //   }
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     if (error.message === "EmptyParticipant") {
-    //       toast({
-    //         variant: "destructive",
-    //         title: "Please fill in the partcipants' details",
-    //       });
-    //     } else if (error.message.startsWith("No timeslot selected")) {
-    //       toast({
-    //         variant: "destructive",
-    //         title: "Please select an available timeslot for all items",
-    //         description: error.message,
-    //       });
-    //     }
-    //   }
-    //   if (error instanceof TRPCClientError) {
-    //     toast({
-    //       variant: "default",
-    //       title: "One or more of the items are sold out",
-    //       description: `${error.message}. Please go back and select another timeslot or bundle.`,
-    //     });
-    //   }
-    // }
+    try {
+      const bookings = await createBookings({
+        bookings: merchCart.map((item) => {
+          const merchToInsert = item.merch.map((merchItem) => {
+            if (merchItem.variation === undefined) {
+              throw new Error("No variation selected for one or more items.");
+            }
+            return {
+              id: merchItem.id,
+              variation: merchItem.variation,
+            };
+          });
+          return {
+            ...values,
+            merchBundleId: item.merchBundleId,
+            quantity: item.quantity,
+            merch: merchToInsert,
+          };
+        }),
+      });
+      const bookingIds = bookings.map((booking) => booking.id);
+      try {
+        const { sessionId } = await createSession({
+          type: "merch",
+          bookingIds,
+        });
+        setMerchCart([]);
+        setAllowCheckout(false);
+        router.push(`/register/checkout/${sessionId}`);
+      } catch (error) {
+        console.error({ error });
+        if (
+          error instanceof TRPCClientError &&
+          error.message === "No items to checkout."
+        ) {
+          toast({
+            variant: "destructive",
+            title: "Failed to Place Order",
+            description: error.message,
+          });
+          router.back();
+        }
+        toast({
+          variant: "destructive",
+          title: "Failed to Place Order",
+          description:
+            "An error occurred while placing order. Please go back and try again.",
+        });
+        router.back();
+      }
+    } catch (error) {
+      if (error instanceof TRPCClientError) {
+        toast({
+          variant: "default",
+          title: "One or more of the items are sold out",
+          description: `${error.message}. Please go back and select another item.`,
+        });
+      }
+    }
   }
 
   return (

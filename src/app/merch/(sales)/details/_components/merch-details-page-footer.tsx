@@ -9,7 +9,7 @@ import MerchFooterLayout from "@/app/merch/(sales)/_components/merch-footer-layo
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 
-import { allowMerchCheckout } from "@/lib/atoms/merch";
+import { allowMerchCheckoutAtom } from "@/lib/atoms/merch";
 
 export default function MerchDetailsPageFooter({
   className = "",
@@ -17,8 +17,8 @@ export default function MerchDetailsPageFooter({
   className?: string;
 }) {
   const router = useRouter();
-  const { trigger, formState } = useFormContext();
-  const allowCheckout = useAtomValue(allowMerchCheckout);
+  const { formState } = useFormContext();
+  const allowCheckout = useAtomValue(allowMerchCheckoutAtom);
 
   return (
     <MerchFooterLayout
@@ -35,14 +35,9 @@ export default function MerchDetailsPageFooter({
       }
       nextButton={
         <Button
-          type="button"
+          type="submit"
           disabled={!allowCheckout || formState.isSubmitting}
           className="bg-gtd-primary-30 hover:bg-gtd-primary-30/85"
-          onClick={async () => {
-            if (await trigger()) {
-              // setOpen(true);
-            }
-          }}
         >
           {formState.isSubmitting && (
             <LoadingSpinner className="size-4 text-white/25 fill-white mr-2" />

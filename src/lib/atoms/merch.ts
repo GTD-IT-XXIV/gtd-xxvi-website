@@ -30,4 +30,4 @@ export const merchCartAtom = atomWithStorage<MerchCart>(
   },
 );
 
-export const allowMerchCheckout = atom(false);
+export const allowMerchCheckoutAtom = atom(false);
