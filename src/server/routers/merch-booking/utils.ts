@@ -51,7 +51,7 @@ export async function createBooking(
         for (const merchId of merchIds) {
           const updatedMerch = await tx.merch.update({
             where: { id: merchId },
-            data: { stock: { decrement: 1 } },
+            data: { stock: { decrement: quantity } },
             select: { stock: true },
           });
           if (updatedMerch.stock < 0) {
