@@ -1,3 +1,4 @@
+import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import SuperJSON from "superjson";
 import { type z } from "zod";
@@ -28,3 +29,5 @@ export const merchCartAtom = atomWithStorage<MerchCart>(
     },
   },
 );
+
+export const allowMerchCheckout = atom(false);
