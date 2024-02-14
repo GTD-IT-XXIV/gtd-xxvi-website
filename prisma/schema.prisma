@@ -143,6 +143,7 @@ model MerchBooking {
   telegramHandle String
   phoneNumber    String
   merchBundleId  Int
+  quantity       Int
   created        DateTime    @default(now())
   /// Validity of the booking; Stripe webhook will check this; can be manually set to invalidate the booking
   valid          Boolean     @default(true)
