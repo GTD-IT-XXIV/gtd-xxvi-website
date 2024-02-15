@@ -78,20 +78,12 @@ export default function Navbar({ className, variant }: NavbarProps) {
           icon={Home}
           className="w-auto justify-center"
         />
-        <NavbarButton
+        {/* <NavbarButton
           variant={variant}
           size="sm"
           href="/register"
           label="GTD Fest"
           icon={Zap}
-          className="w-auto justify-center"
-        />
-        {/* <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/register/timeslots"
-          label="Booking"
-          icon={Ticket}
           className="w-auto justify-center"
         /> */}
         <NavbarButton
@@ -100,6 +92,14 @@ export default function Navbar({ className, variant }: NavbarProps) {
           href="/merch"
           label="Merchandise"
           icon={Shirt}
+          className="w-auto justify-center"
+        />
+        <NavbarButton
+          variant={variant}
+          size="sm"
+          href="/merch/details"
+          label="Cart"
+          icon={ShoppingCart}
           className="w-auto justify-center"
         />
       </div>
@@ -115,23 +115,23 @@ export default function Navbar({ className, variant }: NavbarProps) {
         <div className="relative md:hidden">
           <div className={cn(sidebarVariants({ variant }))}>
             <NavbarButton variant={variant} href="/" label="Home" icon={Home} />
-            <NavbarButton
+            {/* <NavbarButton
               variant={variant}
               href="/register"
               label="GTD Fest"
               icon={Zap}
-            />
-            {/* <NavbarButton
-              variant={variant}
-              href="/register/timeslots"
-              label="Booking"
-              icon={Ticket}
             /> */}
             <NavbarButton
               variant={variant}
               href="/merch"
               label="Merchandise"
               icon={Shirt}
+            />
+            <NavbarButton
+              variant={variant}
+              href="/merch/details"
+              label="Cart"
+              icon={ShoppingCart}
             />
           </div>
         </div>

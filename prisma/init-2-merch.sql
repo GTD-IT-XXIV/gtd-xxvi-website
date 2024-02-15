@@ -4,8 +4,13 @@ INSERT INTO
   "Merch" (id, name, variations, stock)
 VALUES
   (1, 'Shirt', ARRAY['S', 'M', 'L', 'XL'], 999),
-  (2, 'Lanyard', ARRAY['Yellow', 'Black'], 999),
-  (3, 'Playing Cards', ARRAY['Standard'], 50);
+  (
+    2,
+    'Reversible Lanyard',
+    ARRAY['Yellow/Black'],
+    999
+  ),
+  (3, 'Playing Cards', ARRAY['Standard'], 40);
 
 INSERT INTO
   "MerchBundle" (id, name, images, stock, price)
@@ -19,17 +24,17 @@ VALUES
       'https://utfs.io/f/94f9356b-e18f-48b0-81f2-8086b5c7c2d8-xcsb7e.png'
     ],
     999,
-    10.00
+    12.50
   ),
   (
     2,
-    'Lanyard',
+    'Reversible Lanyard',
     ARRAY[
       'https://utfs.io/f/8757c225-27eb-45a7-8911-b3e08cf8cc78-880brd.png',
       'https://utfs.io/f/8e95fe67-65f5-49cb-b6b2-88d0e22ef08b-v0k004.png'
     ],
     999,
-    8.00
+    3.00
   ),
   (
     3,
@@ -38,7 +43,7 @@ VALUES
       'https://utfs.io/f/1ad1bc5b-f8be-4941-a9f6-6d271980c1b3-fau8ff.png'
     ],
     999,
-    15.00
+    8.00
   );
 
 INSERT INTO

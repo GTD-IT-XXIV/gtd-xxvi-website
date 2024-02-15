@@ -61,7 +61,7 @@ export default function GTDFestMerchCarousel() {
   return (
     <section className="px-12 py-6 space-y-4 bg-repeat bg-[url('/merch-background.png')] bg-[length:200px_200px]">
       {/* Button Groups */}
-      <div className="w-full flex justify-center gap-4 md:gap-16 h-36 md:h-52 lg:h-[16rem]">
+      <div className="w-full flex justify-center gap-4 md:gap-16 h-36 md:h-60 lg:h-[16rem]">
         {merchs.map((merch, idx) => (
           <motion.button
             key={merch.name}
@@ -78,7 +78,10 @@ export default function GTDFestMerchCarousel() {
                 width={1080}
                 height={1080}
                 alt={merch.name}
-                className="w-32 aspect-square object-contain"
+                className={cn(
+                  "w-32 aspect-square object-contain",
+                  merch.name === "Shirt" ? "bg-white rounded-lg" : "",
+                )}
               />
             </motion.div>
             <motion.p
@@ -100,15 +103,28 @@ export default function GTDFestMerchCarousel() {
           {merchs.map((merch) => (
             <CarouselItem key={merch.name}>
               <section className="relative">
-                <div className="flex h-auto aspect-[1/1.2] md:aspect-[2/1] object-contain bg-slate-900/65 backdrop-blur">
-                  {merch.images.map((img) => (
+                <div
+                  className={cn(
+                    "flex h-auto aspect-[1/1.2] md:aspect-[2/1] object-contain bg-slate-900/65 backdrop-blur overflow-hidden",
+                    merch.name === "Reversible Lanyard" ? "py-20" : "",
+                  )}
+                >
+                  {(merch.name === "Shirt"
+                    ? merch.images.slice(0, -1)
+                    : merch.images
+                  ).map((img) => (
                     <Image
                       key={img}
                       src={img}
                       width={1080}
                       height={1080}
                       alt={merch.name}
-                      className="object-contain grow"
+                      className={cn(
+                        "object-contain grow shrink",
+                        merch.name === "Reversible Lanyard"
+                          ? "-translate-y-10"
+                          : "",
+                      )}
                     />
                   ))}
                 </div>

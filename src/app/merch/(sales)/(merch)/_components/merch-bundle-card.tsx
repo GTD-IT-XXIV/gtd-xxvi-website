@@ -1,6 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
+import { Info } from "lucide-react";
 
 import QuantitySelect from "@/components/quantity-select";
 import {
@@ -58,6 +59,10 @@ export default function MerchBundleCard({
             quantity: amount,
             merch: merchBundle.bundleItems.map((item) => ({
               id: item.merchId,
+              variation:
+                item.merch.variations.length === 1
+                  ? item.merch.variations[0]
+                  : undefined,
             })),
           },
         ]);
@@ -116,25 +121,34 @@ export default function MerchBundleCard({
   return (
     <section
       className={cn(
-        "w-full flex flex-col basis-72 gap-4 border text-gtd-secondary-30 border-zinc-300 rounded-lg py-3",
+        "w-full flex flex-col justify-end basis-72 gap-4 border text-gtd-secondary-30 border-zinc-300 rounded-lg py-3",
         className,
       )}
     >
       <MerchBundleCardCarousel images={images} />
-      <hgroup className="flex justify-between gap-4 text-gtd-secondary-20 font-medium text-xl px-3">
-        <h2>
-          {name}{" "}
-          {merchNames !== name && (
-            <span className="whitespace-nowrap">({merchNames})</span>
-          )}
-        </h2>
-        <p>
-          <span className="text-sm font-normal">$</span>
-          {price}
-        </p>
-      </hgroup>
+      <div className="grow px-3 space-y-1">
+        <hgroup className="flex justify-between gap-4 text-gtd-secondary-20 font-medium text-xl">
+          <h2>
+            {name}{" "}
+            {merchNames !== name && (
+              <span className="whitespace-nowrap">({merchNames})</span>
+            )}
+          </h2>
+          <p>
+            <span className="text-sm font-normal">$</span>
+            {price}
+          </p>
+        </hgroup>
+        {name === "Shirt" && (
+          <p className="text-gtd-secondary-10 text-sm italic">
+            {" "}
+            <Info className="inline text-black size-4 mr-3" />
+            Slide to see size chart
+          </p>
+        )}
+      </div>
       <div className="flex justify-between gap-4 px-3">
-        <div className="space-y-4">
+        <div className="flex items-center space-y-4">
           {merchBundle.bundleItems.map((item) => (
             <div key={`${item.merchId}-${item.merchBundleId}`}>
               {merchBundle.bundleItems.length > 1 && (
@@ -142,6 +156,8 @@ export default function MerchBundleCard({
               )}
               {!hasMounted ? (
                 <Skeleton className="h-10 w-24" />
+              ) : item.merch.variations.length === 1 ? (
+                <p className="text-sm">{item.merch.variations[0]}</p>
               ) : (
                 <Select
                   onValueChange={(value) =>
