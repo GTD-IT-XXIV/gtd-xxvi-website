@@ -1,8 +1,16 @@
 "use client";
 
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Carousel,
   type CarouselApi,
@@ -30,13 +38,37 @@ export default function MerchBundleCardCarousel({
       <CarouselContent>
         {images.map((image, idx) => (
           <CarouselItem key={idx}>
-            <Image
-              src={image}
-              alt="Merchandise preview photo"
-              width={1080}
-              height={1080}
-              className="w-full object-contain aspect-[4/3]"
-            />
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Image
+                  src={image}
+                  alt="Merchandise preview photo"
+                  width={1080}
+                  height={1080}
+                  className="w-full object-contain aspect-[4/3] hover:cursor-pointer"
+                />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <Image
+                  src={image}
+                  alt="Merchandise preview photo"
+                  width={1080}
+                  height={1080}
+                  className="aspect-square object-contain"
+                />
+                <AlertDialogCancel asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="absolute top-4 right-4 p-0"
+                  >
+                    <X className="size-5" />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </AlertDialogCancel>
+              </AlertDialogContent>
+            </AlertDialog>
           </CarouselItem>
         ))}
       </CarouselContent>
