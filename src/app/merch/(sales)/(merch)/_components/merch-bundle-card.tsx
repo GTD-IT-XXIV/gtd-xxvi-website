@@ -42,6 +42,11 @@ export default function MerchBundleCard({
 
   function handleChangeAmount(amount: number) {
     setMerchCart((prev) => {
+      if (amount === 0) {
+        return structuredClone(
+          prev.filter((item) => item.merchBundleId !== merchBundle.id),
+        );
+      }
       const clone = structuredClone(prev);
       const updateIdx = prev.findIndex(
         (item) => item.merchBundleId === merchBundle.id,
@@ -77,7 +82,7 @@ export default function MerchBundleCard({
         return clone.concat([
           {
             merchBundleId: merchBundle.id,
-            quantity: 0,
+            quantity: 1,
             merch: merchBundle.bundleItems.map((item) =>
               item.merchId !== merchId
                 ? {
