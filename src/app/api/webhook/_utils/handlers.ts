@@ -179,7 +179,7 @@ export async function handleEventPaymentExpired(bookingIds: number[]) {
         data: { remainingSlots: { increment: Number(partySize) } },
       });
     }
-    await db.booking.deleteMany({
+    await tx.booking.deleteMany({
       where: { id: { in: bookings.map((booking) => booking.id) } },
     });
   });
@@ -365,6 +365,38 @@ export async function handleMerchPaymentSuccess(
 }
 
 export async function handleMerchPaymentExpired(bookingIds: number[]) {
-  // TODO: implement
-  console.log("handleMerchPaymentExpired");
+  const bookings = await db.merchBooking.findMany({
+    where: { id: { in: bookingIds } },
+    include: { merchBookingItem: true, merchBundle: true },
+  });
+
+  await db.$transaction(async (tx) => {
+    for (const booking of bookings) {
+      const merchBundle = await tx.merchBundle.update({
+        where: { id: booking.merchBundleId },
+        data: { stock: { increment: booking.quantity } },
+        select: {
+          stock: true,
+          bundleItems: { select: { merch: { select: { id: true } } } },
+        },
+      });
+
+      const merchIds = merchBundle.bundleItems.map((item) => item.merch.id);
+      for (const merchId of merchIds) {
+        await tx.merch.update({
+          where: { id: merchId },
+          data: { stock: { increment: booking.quantity } },
+          select: { stock: true },
+        });
+      }
+    }
+
+    const bookingIds = bookings.map((booking) => booking.id);
+    await tx.merchBookingItem.deleteMany({
+      where: { merchBookingId: { in: bookingIds } },
+    });
+    await tx.merchBooking.deleteMany({
+      where: { id: { in: bookingIds } },
+    });
+  });
 }
