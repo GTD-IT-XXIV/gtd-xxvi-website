@@ -1,9 +1,15 @@
+import { type Metadata } from "next";
+
 import MerchGenericLayout from "@/app/merch/_components/merch-generic-layout";
 
 import { api } from "@/server/trpc";
 
 import MerchBundleCard from "./_components/merch-bundle-card";
 import MerchPageFooter from "./_components/merch-page-footer";
+
+export const metadata: Metadata = {
+  title: "Merchandise Sales",
+};
 
 export default async function MerchPage() {
   const merchBundles = await api.merchBundle.getAll.query();

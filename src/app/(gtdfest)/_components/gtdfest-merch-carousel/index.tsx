@@ -108,7 +108,7 @@ export default function GTDFestMerchCarousel() {
                       width={1080}
                       height={1080}
                       alt={merch.name}
-                      className="object-contain"
+                      className="object-contain grow"
                     />
                   ))}
                 </div>

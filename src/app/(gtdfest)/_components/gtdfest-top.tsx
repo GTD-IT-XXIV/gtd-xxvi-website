@@ -110,7 +110,7 @@ export default function GTDFestTop({
                 className="hover:bg-slate-200 md:px-6"
                 asChild
               >
-                <Link href="#learn-more">Learn More</Link>
+                <Link href="/merch">Buy Merch</Link>
               </Button>
             </div>
           </div>

@@ -15,7 +15,7 @@ export default function MerchBuyerInfo() {
   return (
     <div className="md:flex-grow md:mx-10 lg:mr-[5.75rem]">
       <div className="mb-6">
-        <h2 className="text-xl text-gtd-secondary-20 font-medium mt-3 mb-2 md:mt-12">
+        <h2 className="text-xl text-gtd-secondary-20 font-medium mb-2">
           Enter Buyer Info
         </h2>
         <div className="md:grid grid-rows-[0px_1fr_1fr] grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3 items-start space-y-4">

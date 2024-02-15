@@ -20,7 +20,7 @@ export default function MerchDetailsPage() {
       <MerchGenericLayout
         title="Merchandise Cart"
         body={
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row gap-4">
             <MerchItemReview className="md:basis-1/3" />
             <MerchBuyerInfo />
           </div>

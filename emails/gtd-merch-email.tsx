@@ -32,7 +32,7 @@ export default function GTDMerchEmail(props: GTDMerchEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Your Order for Merchandise Sale</Preview>
+      <Preview>Your Order for Merchandise Sales</Preview>
 
       <Body
         style={{
@@ -88,7 +88,7 @@ export default function GTDMerchEmail(props: GTDMerchEmailProps) {
                 marginBottom: "2rem",
               }}
             >
-              Merchandise Sale
+              Merchandise Sales
             </Heading>
           </Section>
           <Section style={{ padding: "0.75rem 1rem" }}>

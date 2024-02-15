@@ -1,7 +1,12 @@
+import { type Metadata } from "next";
 import { type ReactNode } from "react";
 
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
+
+export const metadata: Metadata = {
+  title: "Payment",
+};
 
 export default function MerchPaymentLayout({
   children,

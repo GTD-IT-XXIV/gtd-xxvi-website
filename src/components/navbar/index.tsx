@@ -1,7 +1,7 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Menu, ShoppingCart, Ticket, X, Zap } from "lucide-react";
+import { Home, Menu, Shirt, ShoppingCart, Ticket, X, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -97,9 +97,9 @@ export default function Navbar({ className, variant }: NavbarProps) {
         <NavbarButton
           variant={variant}
           size="sm"
-          href="/register/details"
-          label="Cart"
-          icon={ShoppingCart}
+          href="/merch"
+          label="Merchandise"
+          icon={Shirt}
           className="w-auto justify-center"
         />
       </div>
@@ -129,9 +129,9 @@ export default function Navbar({ className, variant }: NavbarProps) {
             /> */}
             <NavbarButton
               variant={variant}
-              href="/register/details"
-              label="Cart"
-              icon={ShoppingCart}
+              href="/merch"
+              label="Merchandise"
+              icon={Shirt}
             />
           </div>
         </div>
