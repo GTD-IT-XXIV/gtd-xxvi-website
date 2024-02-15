@@ -24,6 +24,7 @@ export default function MerchItemReview({
   }
 
   if (
+    selected > 0 &&
     merchCart.every((item) =>
       item.merch.every((merchItem) => !!merchItem.variation),
     )

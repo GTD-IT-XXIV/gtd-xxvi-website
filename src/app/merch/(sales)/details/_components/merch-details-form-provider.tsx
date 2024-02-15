@@ -108,7 +108,6 @@ const MerchDetailsFormProvider = forwardRef<
           description:
             "An error occurred while placing order. Please go back and try again.",
         });
-        router.back();
       }
     } catch (error) {
       if (error instanceof TRPCClientError) {

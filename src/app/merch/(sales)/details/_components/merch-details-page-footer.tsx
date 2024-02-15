@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useFormContext } from "react-hook-form";
 
 import MerchFooterLayout from "@/app/merch/(sales)/_components/merch-footer-layout";
@@ -16,7 +16,6 @@ export default function MerchDetailsPageFooter({
 }: {
   className?: string;
 }) {
-  const router = useRouter();
   const { formState } = useFormContext();
   const allowCheckout = useAtomValue(allowMerchCheckoutAtom);
 
@@ -24,14 +23,15 @@ export default function MerchDetailsPageFooter({
     <MerchFooterLayout
       className={className}
       backButton={
-        <Button
-          type="button"
-          onClick={() => router.back()}
-          variant="outline"
-          className="px-7 border-gtd-primary-30 hover:bg-gtd-primary-30/10"
-        >
-          Back
-        </Button>
+        <Link href="/merch">
+          <Button
+            type="button"
+            variant="outline"
+            className="px-7 border-gtd-primary-30 hover:bg-gtd-primary-30/10"
+          >
+            Back
+          </Button>
+        </Link>
       }
       nextButton={
         <Button
