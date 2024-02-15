@@ -18,12 +18,6 @@ export type OrderMetadata = {
   bookingIds: string; // JSON.stringify(number[])
 };
 
-export type Merch = {
-  name: string;
-  description: string;
-  image: string | StaticImport;
-};
-
 export type MerchCart = z.infer<typeof merchCartSchema>;
 
 export type MerchCartItem = ArrElement<MerchCart>;

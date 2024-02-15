@@ -4,46 +4,16 @@ import { type Metadata } from "next";
 
 import { api } from "@/server/trpc";
 
-import { type Merch } from "@/lib/types";
-
 import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
 import gtdFestBg2 from "@/assets/images/gtdfest-background-2.jpeg";
 import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
-import merchPhoto from "@/assets/images/sample-merch-1.jpeg";
-import topiSvg from "@/assets/images/topi.svg";
 
 import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
 import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
 
 dayjs.extend(utc);
-
-const topi = topiSvg as string;
-
-const merchs: (Merch & { icon: string })[] = [
-  {
-    name: "Merch 1",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-  {
-    name: "Merch 2",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-  {
-    name: "Merch 3",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-];
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
@@ -68,7 +38,7 @@ export default async function GTDFestPage() {
         gtdFest={gtdFest}
         escapeRoom={escapeRoom}
       />
-      {/* <GTDFestMerchCarousel merchs={merchs} /> */}
+      <GTDFestMerchCarousel />
       {/* Other Sections */}
       <GTDFestSection
         title="Escape Room: Nyctophobia"

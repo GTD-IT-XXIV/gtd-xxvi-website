@@ -14,8 +14,9 @@ VALUES
     1,
     'Shirt',
     ARRAY[
-      'https://utfs.io/f/b1669d73-ed19-46bd-9371-48e564dfe80f-xd3cgk.png',
-      'https://utfs.io/f/197ee4e7-bef4-417a-afd1-1a8b7009b4ea-v9bdl0.png'
+      'https://utfs.io/f/b969029c-f4a0-42cd-8f7f-a52a41076585-v9bdl0.png',
+      'https://utfs.io/f/0e3be7a6-2be6-454b-ab1a-327f9faedf8d-xd3cgk.png',
+      'https://utfs.io/f/94f9356b-e18f-48b0-81f2-8086b5c7c2d8-xcsb7e.png'
     ],
     999,
     10.00

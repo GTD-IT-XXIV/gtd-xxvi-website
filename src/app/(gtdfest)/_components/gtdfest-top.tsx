@@ -83,12 +83,12 @@ export default function GTDFestTop({
             <hgroup className="space-y-3">
               <h1 className="text-lg md:text-2xl font-serif">
                 <div>{gtdFest.name}</div>
-                <div className="text-4xl md:text-6xl lg:text-7xl text-gtd-primary-20 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-gtd-primary-30 italic tracking-wider">
+                <div className="text-4xl md:text-6xl lg:text-7xl text-amber-100 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-amber-100 italic tracking-wider">
                   Enchantium
                 </div>
                 <p className="text-lg md:text-xl opacity-65">X</p>
                 <div>{escapeRoom.name}</div>
-                <div className="text-4xl md:text-6xl lg:text-7xl text-red-600 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-500 italic tracking-wider">
+                <div className="text-4xl md:text-6xl lg:text-7xl text-red-200 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-200 italic tracking-wider">
                   Nyctophobia
                 </div>
               </h1>
