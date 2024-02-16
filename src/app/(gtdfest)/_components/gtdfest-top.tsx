@@ -125,7 +125,7 @@ export default function GTDFestTop({
           </div>
         </div>
         <div id="learn-more" className="flex justify-center">
-          <ChevronDown className="size-8 animate-pulse" />
+          <ChevronDown className="size-8 animate-bounce" />
         </div>
       </div>
     </section>

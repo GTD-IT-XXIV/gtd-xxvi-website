@@ -10,6 +10,7 @@ import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
 
 import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
+import GTDFestMerchSection from "./_components/gtdfest-merch-section";
 import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
 
@@ -38,7 +39,8 @@ export default async function GTDFestPage() {
         gtdFest={gtdFest}
         escapeRoom={escapeRoom}
       />
-      <GTDFestMerchCarousel />
+      <GTDFestMerchSection />
+      {/* <GTDFestMerchCarousel /> */}
       {/* Other Sections */}
       {/* <GTDFestSection
         title="Escape Room: Nyctophobia"
