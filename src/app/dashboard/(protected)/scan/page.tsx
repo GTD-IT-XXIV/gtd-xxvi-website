@@ -5,6 +5,9 @@ import type QrScanner from "qr-scanner";
 import React, { useState } from "react";
 
 import QrReader from "@/components/dashboard/qr-reader";
+import { Button } from "@/components/ui/button";
+
+import { sync } from "@/server/actions/sync";
 
 import { api } from "@/lib/trpc/client";
 
@@ -61,6 +64,9 @@ export default function DashboardScanPage() {
           )}
         </div>
       )}
+      <Button type="button" onClick={() => sync()}>
+        Synchronize to Google Sheets
+      </Button>
     </div>
   );
 }
