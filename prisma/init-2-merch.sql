@@ -40,7 +40,7 @@ VALUES
     3,
     'Playing Cards',
     ARRAY[
-      'https://utfs.io/f/1ad1bc5b-f8be-4941-a9f6-6d271980c1b3-fau8ff.png'
+      'https://utfs.io/f/f3172f7a-6292-4dd4-8ff4-f2044eb86e76-fau8ff.png'
     ],
     999,
     8.00

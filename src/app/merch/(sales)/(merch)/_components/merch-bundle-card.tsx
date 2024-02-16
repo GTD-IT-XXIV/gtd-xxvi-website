@@ -140,10 +140,11 @@ export default function MerchBundleCard({
           </p>
         </hgroup>
         {name === "Shirt" && (
-          <p className="text-gtd-secondary-10 text-sm italic">
+          <p className="text-gtd-secondary-10 text-sm">
             {" "}
             <Info className="inline text-black size-4 mr-3" />
-            Slide to see size chart
+            Slide to see size chart. For orders of multiple sizes, kindly submit
+            another order.
           </p>
         )}
       </div>

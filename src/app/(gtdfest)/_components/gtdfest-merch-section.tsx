@@ -24,23 +24,23 @@ export default function GTDFestMerchSection() {
       <h2 className="font-serif text-center text-4xl mb-6">
         Enchantium Merchandise
       </h2>
-      <div className="flex justify-center items-center backdrop-blur flex-wrap rounded-lg">
+      <div className="flex gap-6 justify-center items-stretch backdrop-blur flex-wrap rounded-lg">
         {merchs.map((merch) => (
-          <div className="relative basis-64 shrink">
-            <Image
-              src={merch.images[0]!}
-              width={1080}
-              height={1080}
-              alt={merch.name}
+          <div className="basis-64 shrink">
+            <div
               className={cn(
-                "aspect-square object-contain",
-                merch.name === "Reversible Lanyard"
-                  ? "scale-75"
-                  : merch.name === "Shirt"
-                    ? "bg-white rounded-lg"
-                    : "",
+                "bg-white rounded-lg",
+                merch.name === "Reversible Lanyard" ? "p-6" : "",
               )}
-            />
+            >
+              <Image
+                src={merch.images[0]!}
+                width={1080}
+                height={1080}
+                alt={merch.name}
+                className="aspect-square object-contain"
+              />
+            </div>
             <h3 className="font-serif text-center text-3xl py-6 px-12">
               {merch.name}
             </h3>
