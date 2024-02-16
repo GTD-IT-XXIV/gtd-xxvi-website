@@ -18,6 +18,9 @@ env:
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
   BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+  GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+  GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+  SHEETS_ID: ${{ secrets.DEV_SHEETS_ID }}
 
 defaults:
   run:
