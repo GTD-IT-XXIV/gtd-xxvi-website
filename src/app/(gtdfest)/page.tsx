@@ -40,7 +40,7 @@ export default async function GTDFestPage() {
       />
       <GTDFestMerchCarousel />
       {/* Other Sections */}
-      <GTDFestSection
+      {/* <GTDFestSection
         title="Escape Room: Nyctophobia"
         description='Embark on a thrilling journey in "Nyctophobia," where you and your team of 5 wizards have been captured by a malevolent Death Eater. As you navigate through each challenge, race against time to escape the castle before the dark experiments unfold. Can you conquer your fears and break free from the clutches of Nyctophobia?'
         image={{
@@ -98,7 +98,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg3,
           alt: "Background 3",
         }}
-      />
+      /> */}
     </main>
   );
 }

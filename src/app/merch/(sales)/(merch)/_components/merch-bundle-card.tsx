@@ -173,7 +173,7 @@ export default function MerchBundleCard({
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a variation" />
+                    <SelectValue placeholder="Select a size" />
                   </SelectTrigger>
                   <SelectContent>
                     {item.merch.variations.map((variation) => (

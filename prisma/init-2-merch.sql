@@ -8,7 +8,7 @@ VALUES
     2,
     'Reversible Lanyard',
     ARRAY['Yellow/Black'],
-    999
+    100
   ),
   (3, 'Playing Cards', ARRAY['Standard'], 40);
 
@@ -30,8 +30,8 @@ VALUES
     2,
     'Reversible Lanyard',
     ARRAY[
-      'https://utfs.io/f/8757c225-27eb-45a7-8911-b3e08cf8cc78-880brd.png',
-      'https://utfs.io/f/8e95fe67-65f5-49cb-b6b2-88d0e22ef08b-v0k004.png'
+      'https://utfs.io/f/8e95fe67-65f5-49cb-b6b2-88d0e22ef08b-v0k004.png',
+      'https://utfs.io/f/8757c225-27eb-45a7-8911-b3e08cf8cc78-880brd.png'
     ],
     999,
     3.00
