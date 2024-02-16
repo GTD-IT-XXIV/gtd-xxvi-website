@@ -10,6 +10,7 @@ import SuperJSON from "superjson";
 import { z } from "zod";
 
 import { db } from "@/server/db";
+import { synchronizeTicketsToGoogleSheets } from "@/server/routers/utils";
 
 import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
@@ -201,6 +202,7 @@ export async function POST(req: Request) {
             where: { id: { in: bookingIds } },
           });
 
+          await synchronizeTicketsToGoogleSheets();
           break;
         }
         case "checkout.session.expired": {
