@@ -29,6 +29,24 @@ export const env = createEnv({
     BREVO_API_KEY: z
       .string()
       .refine((str) => !(str === ""), "You forgot to add your Brevo API key"),
+    GOOGLE_CLIENT_EMAIL: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Google Service Account client email",
+      ),
+    GOOGLE_PRIVATE_KEY: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Google Service Account private key",
+      ),
+    SHEETS_ID: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your Google Sheets ID",
+      ),
   },
 
   /**
@@ -57,6 +75,9 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     BREVO_API_KEY: process.env.BREVO_API_KEY,
+    GOOGLE_CLIENT_EMAIL: process.env.GOOGLE_CLIENT_EMAIL,
+    GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
+    SHEETS_ID: process.env.SHEETS_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful for Docker builds.
