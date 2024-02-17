@@ -45,7 +45,10 @@ jobs:
           envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
           envkey_AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
           envkey_BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          file_name: .env.production.local
+          envkey_GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          envkey_GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          envkey_SHEETS_ID: ${{ secrets.SHEETS_ID }}
+          file_name: .env.production
           fail_on_empty: true
       - run: flyctl deploy --remote-only
         env:
