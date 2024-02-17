@@ -8,6 +8,7 @@ import type Stripe from "stripe";
 import { z } from "zod";
 
 import { db } from "@/server/db";
+import { synchronizeTicketsToGoogleSheets } from "@/server/routers/utils";
 
 import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
@@ -142,6 +143,8 @@ export async function handleEventPaymentSuccess(
   await db.booking.deleteMany({
     where: { id: { in: bookingIds } },
   });
+
+  await synchronizeTicketsToGoogleSheets();
 }
 
 export async function handleEventPaymentExpired(bookingIds: number[]) {
