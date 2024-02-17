@@ -1,3 +1,3 @@
 export default function GTDFestLoading() {
-  return <p>Loading...</p>;
+  return <div className="bg-slate-900 size-full" />;
 }

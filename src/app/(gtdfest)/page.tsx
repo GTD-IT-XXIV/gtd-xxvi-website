@@ -4,46 +4,17 @@ import { type Metadata } from "next";
 
 import { api } from "@/server/trpc";
 
-import { type Merch } from "@/lib/types";
-
 import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
 import gtdFestBg2 from "@/assets/images/gtdfest-background-2.jpeg";
 import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
-import merchPhoto from "@/assets/images/sample-merch-1.jpeg";
-import topiSvg from "@/assets/images/topi.svg";
 
 import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
+import GTDFestMerchSection from "./_components/gtdfest-merch-section";
 import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
 
 dayjs.extend(utc);
-
-const topi = topiSvg as string;
-
-const merchs: (Merch & { icon: string })[] = [
-  {
-    name: "Merch 1",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-  {
-    name: "Merch 2",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-  {
-    name: "Merch 3",
-    description:
-      "Event description lorem ipsum dolor sit Nam sagittis luctus tristique.",
-    image: merchPhoto,
-    icon: topi,
-  },
-];
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
@@ -68,9 +39,10 @@ export default async function GTDFestPage() {
         gtdFest={gtdFest}
         escapeRoom={escapeRoom}
       />
-      {/* <GTDFestMerchCarousel merchs={merchs} /> */}
+      <GTDFestMerchSection />
+      {/* <GTDFestMerchCarousel /> */}
       {/* Other Sections */}
-      <GTDFestSection
+      {/* <GTDFestSection
         title="Escape Room: Nyctophobia"
         description='Embark on a thrilling journey in "Nyctophobia," where you and your team of 5 wizards have been captured by a malevolent Death Eater. As you navigate through each challenge, race against time to escape the castle before the dark experiments unfold. Can you conquer your fears and break free from the clutches of Nyctophobia?'
         image={{
@@ -128,7 +100,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg3,
           alt: "Background 3",
         }}
-      />
+      /> */}
     </main>
   );
 }

@@ -3,6 +3,8 @@ import { createCallerFactory, createTRPCRouter } from "@/lib/trpc/config";
 import { bookingRouter } from "./routers/booking";
 import { bundleRouter } from "./routers/bundle";
 import { eventRouter } from "./routers/event";
+import { merchBookingRouter } from "./routers/merch-booking";
+import { merchBundleRouter } from "./routers/merch-bundle";
 import { orderRouter } from "./routers/order";
 import { paymentRouter } from "./routers/payment";
 import { ticketRouter } from "./routers/ticket";
@@ -18,6 +20,8 @@ export const appRouter = createTRPCRouter({
   ticket: ticketRouter,
   payment: paymentRouter,
   booking: bookingRouter,
+  merchBundle: merchBundleRouter,
+  merchBooking: merchBookingRouter,
 });
 
 export type AppRouter = typeof appRouter;

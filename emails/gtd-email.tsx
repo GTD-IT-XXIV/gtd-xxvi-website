@@ -1,7 +1,5 @@
-import { Ticket } from "@prisma/client";
 import {
   Body,
-  Button,
   Column,
   Container,
   Head,

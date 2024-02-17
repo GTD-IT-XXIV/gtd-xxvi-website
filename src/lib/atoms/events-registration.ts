@@ -3,9 +3,8 @@ import { atomWithStorage } from "jotai/utils";
 import SuperJSON from "superjson";
 import { type z } from "zod";
 
+import { cartSchema } from "@/lib/schemas";
 import { type Cart } from "@/lib/types";
-
-import { cartSchema } from "../schemas";
 
 const BASE_KEY = "event-registration";
 

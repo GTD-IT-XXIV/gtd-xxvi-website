@@ -5,5 +5,5 @@ export default function GTDFestError({
 }: {
   error: Error & { digest?: string };
 }) {
-  return <p>Error! {error.message}</p>;
+  return <p className="text-white">Error! {error.message}</p>;
 }

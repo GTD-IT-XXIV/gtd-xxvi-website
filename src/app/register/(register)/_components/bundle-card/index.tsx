@@ -206,29 +206,35 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
           )}
 
           <div className="flex justify-end mt-auto">
-            <button
-              onClick={handleDecrement}
-              className={cn(
-                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
-                amount === 0 ? "opacity-60 pointer-events-none" : "",
-              )}
-            >
-              -
-            </button>
-            &nbsp;&nbsp;
-            <p>{amount}</p>
-            &nbsp;&nbsp;
-            <button
-              onClick={handleIncrement}
-              className={cn(
-                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
-                amount === bundle.maxPurchases
-                  ? "opacity-60 pointer-events-none"
-                  : "",
-              )}
-            >
-              +
-            </button>
+            {available ? (
+              <>
+                <button
+                  onClick={handleDecrement}
+                  className={cn(
+                    "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                    amount === 0 ? "opacity-60 pointer-events-none" : "",
+                  )}
+                >
+                  -
+                </button>
+                &nbsp;&nbsp;
+                <p>{amount}</p>
+                &nbsp;&nbsp;
+                <button
+                  onClick={handleIncrement}
+                  className={cn(
+                    "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                    amount === bundle.maxPurchases
+                      ? "opacity-60 pointer-events-none"
+                      : "",
+                  )}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <p className="text-red-800 text-sm">Sold Out</p>
+            )}
           </div>
         </div>
       </section>

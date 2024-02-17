@@ -54,3 +54,16 @@ export const emailSchema = z.object({
 });
 
 export const eventParamSchema = z.string().or(z.string().array());
+
+export const merchCartSchema = z
+  .object({
+    merchBundleId: z.number().positive(),
+    quantity: z.number().nonnegative(),
+    merch: z
+      .object({
+        id: z.number().positive(),
+        variation: z.string().optional(),
+      })
+      .array(),
+  })
+  .array();

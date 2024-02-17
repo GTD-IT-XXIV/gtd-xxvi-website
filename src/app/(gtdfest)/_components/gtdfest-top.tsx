@@ -56,8 +56,10 @@ export default function GTDFestTop({
     };
   }, []);
 
-  const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
-  const endDateLabel = dayjs.utc(escapeRoom.endDate).format("D MMM YYYY");
+  // const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
+  // const endDateLabel = dayjs.utc(escapeRoom.endDate).format("D MMM YYYY");
+  const startDateLabel = "18 Feb";
+  const endDateLabel = "3 Mar 2024";
 
   return (
     <section className="relative">
@@ -82,14 +84,21 @@ export default function GTDFestTop({
           <div className="grow md:grow-0 text-center space-y-4">
             <hgroup className="space-y-3">
               <h1 className="text-lg md:text-2xl font-serif">
-                <div>{gtdFest.name}</div>
-                <div className="text-4xl md:text-6xl lg:text-7xl text-gtd-primary-20 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-gtd-primary-30 italic tracking-wider">
+                {/* <div>{gtdFest.name}</div>
+                <div className="text-4xl md:text-6xl lg:text-7xl text-amber-100 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-amber-100 italic tracking-wider">
                   Enchantium
                 </div>
                 <p className="text-lg md:text-xl opacity-65">X</p>
                 <div>{escapeRoom.name}</div>
-                <div className="text-4xl md:text-6xl lg:text-7xl text-red-600 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-500 italic tracking-wider">
+                <div className="text-4xl md:text-6xl lg:text-7xl text-red-200 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-200 italic tracking-wider">
                   Nyctophobia
+                </div> */}
+                <div className="text-4xl md:text-5xl lg:text-6xl italic tracking-wider text-amber-100">
+                  Pre-order
+                  <br />
+                  Enchantium
+                  <br />
+                  Merchandise
                 </div>
               </h1>
               <p className="font-light md:text-2xl">
@@ -102,7 +111,7 @@ export default function GTDFestTop({
                 className="bg-gtd-primary-30 hover:bg-gtd-primary-20 md:px-8 md:h-12 md:text-xl font-semibold"
                 asChild
               >
-                <Link href="/register">Register for Events</Link>
+                <Link href="/merch">Buy Merch</Link>
               </Button>
               <Button
                 type="button"
@@ -116,7 +125,7 @@ export default function GTDFestTop({
           </div>
         </div>
         <div id="learn-more" className="flex justify-center">
-          <ChevronDown className="size-8 animate-pulse" />
+          <ChevronDown className="size-8 animate-bounce" />
         </div>
       </div>
     </section>

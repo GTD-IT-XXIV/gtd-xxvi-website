@@ -7,6 +7,16 @@ const shouldAnalyzeBundles = process.env.ANALYZE === "true";
 
 /** @type {import('next').NextConfig} */
 let nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+        pathname: "/f/*",
+      },
+    ],
+  },
   output: "standalone",
 };
 
