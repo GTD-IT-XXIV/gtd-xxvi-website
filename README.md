@@ -121,19 +121,19 @@ git push
 - Use TypeScript types instead of interfaces unless necessary ([_why?_](https://youtu.be/zM9UPcIyyhQ?si=TI7vrg4OZAOpBd1x))
 - Use [`function` declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function) for React components and event handlers
   - Learn more: [`function` declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#hoisting) vs [`function` expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function) vs [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
- 
+
 ### Project Structure
 
-| Path | Import Alias | Usage |
-| -- | -- | -- |
-| `src/app` | `@/app` | Next.js App Router |
-| `src/app/_components` | `@/components` | App-wide components |
+| Path                     | Import Alias      | Usage                                                        |
+| ------------------------ | ----------------- | ------------------------------------------------------------ |
+| `src/app`                | `@/app`           | Next.js App Router                                           |
+| `src/app/_components`    | `@/components`    | App-wide components                                          |
 | `src/app/_components/ui` | `@/components/ui` | Components scaffolded by [shadcn/ui](https://ui.shadcn.com/) |
-| `src/lib` | `@/lib` | Library/package-related files |
-| `src/server` | `@/server` | Server-related files |
-| `src/assets` | `@/assets` | App-wide assets |
-| `public` | `~/public` | Public assets |
-| `emails` | `~/emails` | [React Email](https://react.email/) templates |
+| `src/lib`                | `@/lib`           | Library/package-related files                                |
+| `src/server`             | `@/server`        | Server-related files                                         |
+| `src/assets`             | `@/assets`        | App-wide assets                                              |
+| `public`                 | `~/public`        | Public assets                                                |
+| `emails`                 | `~/emails`        | [React Email](https://react.email/) templates                |
 
 ## Troubleshooting
 
@@ -151,6 +151,71 @@ pnpm install
 git add pnpm-lock.yaml
 git commit -m "chore: resolve lockfile conflict"
 ```
+
+### Access the Dashboard
+
+1. Sign up for a user at `/dashboard/signup`.
+2. Open [Prisma Studio](https://www.prisma.io/studio):
+
+```bash
+pnpm dev:db:studio
+```
+
+3. Open the User Model:
+   ![Prisma Studio UI](assets/Screenshot%202024-01-19%20at%2000.42.28.png)
+
+4. Change the user's role to `ADMIN`:
+   ![Prisma Studio UI](assets/Screenshot%202024-01-19%20at%2000.45.53.png)
+
+5. Save changes in Prisma Studio.
+6. Log in as the user at `/dashboard/login`. You should be able to access the dashboard now.
+
+
+## Packages Usage
+
+### tRPC
+
+#### In Server Components
+
+Use the tRPC client `api` defined in `src/trpc/server`. Example:
+
+```tsx
+// example-page.tsx
+import { api } from "@/server/trpc";
+
+export default async function ExamplePage() {
+  const event = await api.event.getById.query(1);
+  return <main>{event?.name}</main>;
+}
+```
+
+#### In Client Components
+
+Use the tRPC client `api` defined in `src/trpc/client`. Example:
+
+```tsx
+// example-page.tsx
+"use client";
+
+import { api } from "@/lib/trpc/provider";
+
+// example-page.tsx
+
+export default function ExamplePage() {
+  const { data: event } = api.event.getById.useQuery(1);
+  return <main>{event?.name}</main>;
+}
+```
+
+### Day.js
+
+Do:
+
+- Use Day.js to parse, find difference, format, etc. `Date` to `String`
+
+Don't:
+
+- Use Day.js as prop/state. Use `Date` instead (`dayjs().toDate()`)
 
 ## Learn More
 

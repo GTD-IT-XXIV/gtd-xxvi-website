@@ -1,11 +1,11 @@
-import GTDEmail from "@emails/gtd-email";
-import GTDMerchEmail from "@emails/gtd-merch-email";
 import { Prisma } from "@prisma/client";
 import { render } from "@react-email/components";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import type Stripe from "stripe";
 import { z } from "zod";
+import GTDEmail from "~/emails/gtd-email";
+import GTDMerchEmail from "~/emails/gtd-merch-email";
 
 import {
   synchronizeMerchSalesToGoogleSheets,
