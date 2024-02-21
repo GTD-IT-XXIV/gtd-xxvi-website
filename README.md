@@ -1,41 +1,159 @@
 # GTD XXVI Website
 
-## Getting Started
+## Project Setup
 
-1. Install Node.js directly ([LTS](https://nodejs.org/en/download/) or [Current](https://nodejs.org/en/download/current)) or use Node version manager ([`nvm` for macOS and Linux](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating); [`nvm` for Windows](https://github.com/coreybutler/nvm-windows?tab=readme-ov-file#overview)) to install Node.js.
-2. Install [`pnpm` using Corepack](https://pnpm.io/installation#using-corepack).
-3. Install dependencies:
+### Prerequisites
+
+1. Install Node Version Manager (NVM). Installation: [macOS/Linux](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating), [Windows](https://github.com/coreybutler/nvm-windows?tab=readme-ov-file#overview).
+2. Install Node.js Iron (LTS):
+
+```bash
+# For macOS/Linux
+nvm install --lts=iron
+nvm use --lts=iron
+```
+
+```pwsh
+# For Windows
+nvm install lts
+nvm use lts
+```
+
+3. Install pnpm. Installation: [using Corepack](https://pnpm.io/installation#using-corepack) or [using npm](https://pnpm.io/installation#using-npm).
+4. Install Docker. Installation: [macOS](https://docs.docker.com/desktop/install/mac-install/), [Linux](https://docs.docker.com/desktop/install/linux-install/), [Windows](https://docs.docker.com/desktop/install/windows-install/).
+
+### Setting Up
+
+1. Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-4. Copy `.env.example` contents to `.env.development.local` and fill in the environment variables.
-5. Start the development database (requires [Docker](https://docs.docker.com/desktop/)):
+2. Copy `.env.example` contents to `.env.development.local` and fill the environment variables (instructions inside file):
+
+```bash
+# For macOS/Linux
+cp .env.example .env.development.local
+```
+
+```pwsh
+# For Windows
+copy .env.example .env.development.local
+```
+
+3. Start the development database:
 
 ```bash
 pnpm dev:db:start
 ```
 
-6. Initialize the development database with sample data:
+4. Initialize the development database with sample data:
 
 ```bash
-pnpm dev:db:init
+pnpm dev:db:reset
 ```
 
-7. Run the development server:
+5. Run the development server:
 
 ```bash
 pnpm dev
 ```
 
-8. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-9. You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-10. See [Workflow](docs/CONTRIBUTING.md) to contribute.
+6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Additional Tools
+
+#### Prisma Studio
+
+See development database contents:
+
+```bash
+pnpm dev:db:studio
+```
+
+#### Stripe CLI
+
+Listen for Stripe events and trigger webhooks in development environment:
+
+1. [Sign up](https://dashboard.stripe.com/register) for a Stripe account or [sign in](https://dashboard.stripe.com/login) to your Stripe account. No need to activate payments.
+2. Add your API secret key and publishable key to `.env.development.local`.
+3. Setup 2FA for your Stripe account and generate a restricted key.
+4. [Setup Stripe CLI](https://stripe.com/docs/stripe-cli) for development.
+5. Run the Stripe CLI:
+
+```bash
+pnpm dev:stripe
+```
+
+#### Brevo SMTP
+
+Send emails:
+
+1. [Sign up](https://onboarding.brevo.com/account/register) for a Brevo account.
+2. Go [here](https://app.brevo.com/settings/keys/api) to create an API key and add it to `.env.development.local`.
+
+## Workflow
+
+### Git & GitHub
+
+1. Create new feature branch with the following format `name/feature` and push the new branch to remote (this repository):
+
+```bash
+git checkout -b bob/leaderboard-router
+git push -u origin bob/leaderboard-router
+```
+
+2. Stage changes, commit on your feature branch, and push to remote (note: do not commit on `main` branch):
+
+```bash
+git add .
+git commit -m "feat: add leaderboard router"
+git push
+```
+
+### Style Guide
+
+- Use kebab case to name files, e.g., `leaderboard-router.ts`
+- Use kebab case + full component name for component files, e.g., `button-group-card.tsx` for `<ButtonGroupCard />`
+- Use import aliases instead of relative paths for package imports, e.g. `import { Button } from "@/components/ui/button";`
+- Git commits style guide: [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
+- Use TypeScript types instead of interfaces unless necessary ([_why?_](https://youtu.be/zM9UPcIyyhQ?si=TI7vrg4OZAOpBd1x))
+- Use [`function` declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function) for React components and event handlers
+  - Learn more: [`function` declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#hoisting) vs [`function` expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function) vs [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+ 
+### Project Structure
+
+| Path | Import Alias | Usage |
+| -- | -- | -- |
+| `src/app` | `@/app` | Next.js App Router |
+| `src/app/_components` | `@/components` | App-wide components |
+| `src/app/_components/ui` | `@/components/ui` | Components scaffolded by [shadcn/ui](https://ui.shadcn.com/) |
+| `src/lib` | `@/lib` | Library/package-related files |
+| `src/server` | `@/server` | Server-related files |
+| `src/assets` | `@/assets` | App-wide assets |
+| `public` | `~/public` | Public assets |
+| `emails` | `~/emails` | [React Email](https://react.email/) templates |
+
+## Troubleshooting
+
+### Merge conflicts in `pnpm-lock.yaml`
+
+1. pnpm can automatically resolve lockfile conflicts. Run:
+
+```bash
+pnpm install
+```
+
+2. Stage and commit the lockfile:
+
+```bash
+git add pnpm-lock.yaml
+git commit -m "chore: resolve lockfile conflict"
+```
 
 ## Learn More
 
-- [Documentation](docs/README.md)
 - Learning resources: [github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources](https://github.com/GTD-IT-XXIV/gtd-xxvi-learning-resources)
 - Learning articles:
   - [Making Sense of React Server Components](https://www.joshwcomeau.com/react/server-components/)
