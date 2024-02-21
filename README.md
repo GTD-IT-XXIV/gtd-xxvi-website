@@ -1,5 +1,28 @@
 # GTD XXVI Website
 
+## Table of Content
+
+   * [Project Setup](#project-setup)
+      + [Prerequisites](#prerequisites)
+      + [Setting Up](#setting-up)
+      + [Additional Tools](#additional-tools)
+         - [Prisma Studio](#prisma-studio)
+         - [Stripe CLI](#stripe-cli)
+         - [Brevo SMTP](#brevo-smtp)
+   * [Workflow](#workflow)
+      + [Git & GitHub](#git--github)
+      + [Style Guide](#style-guide)
+      + [Project Structure](#project-structure)
+   * [Troubleshooting](#troubleshooting)
+      + [Merge conflicts in `pnpm-lock.yaml`](#merge-conflicts-in-pnpm-lockyaml)
+      + [Access the Dashboard](#access-the-dashboard)
+   * [Packages Usage](#packages-usage)
+      + [tRPC](#trpc)
+         - [In Server Components](#in-server-components)
+         - [In Client Components](#in-client-components)
+      + [Day.js](#dayjs)
+   * [Learn More](#learn-more)
+
 ## Project Setup
 
 ### Prerequisites
