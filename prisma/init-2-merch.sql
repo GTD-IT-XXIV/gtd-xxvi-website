@@ -3,7 +3,12 @@
 INSERT INTO
   "Merch" (id, name, variations, stock)
 VALUES
-  (1, 'Shirt', ARRAY['S', 'M', 'L', 'XL'], 999),
+  (
+    1,
+    'Shirt',
+    ARRAY['XS', 'S', 'M', 'L', 'XL', '2XL'],
+    999
+  ),
   (
     2,
     'Reversible Lanyard',
