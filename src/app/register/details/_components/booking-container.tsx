@@ -1,8 +1,8 @@
 "use client";
 
-import BookingInfo from "./info";
+import BookingInfo from "./booking-info";
+import BookingReview from "./booking-review";
 import ParticipantDetailsGroup from "./participant-details-group";
-import BookingReview from "./review";
 
 export default function BookingContainer() {
   return (

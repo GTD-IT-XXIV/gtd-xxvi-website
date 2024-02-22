@@ -7,8 +7,8 @@ import { FiTrash } from "react-icons/fi";
 import { api } from "@/lib/trpc/client";
 
 import BookingsTableRow from "./bookings-table-row";
-import SearchBar from "./searchbar";
-import DashboardDataSelect from "./select";
+import DashboardDataSelect from "./dashboard-data-select";
+import SearchBar from "./search-bar";
 
 export default function DashboardDataPageBody() {
   const [emailInput, setEmailInput] = useState("");

@@ -4,7 +4,8 @@ import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import type QrScanner from "qr-scanner";
 import React, { useState } from "react";
 
-import QrReader from "@/components/dashboard/qr-reader";
+import QrReader from "@/app/dashboard/_components/qr-reader";
+
 import { Button } from "@/components/ui/button";
 
 import { syncAllToGoogleSheets as sync } from "@/server/actions/sync-google-sheets";

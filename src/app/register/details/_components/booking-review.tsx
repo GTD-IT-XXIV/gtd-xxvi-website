@@ -5,8 +5,8 @@ import { useAtomValue } from "jotai";
 import { cartAtom } from "@/lib/atoms/events-registration";
 import { useHasMounted } from "@/lib/hooks";
 
-import BookingReviewBundle from "./review-bundle";
-import BookingReviewBundleLoading from "./review-bundle/loading";
+import BookingReviewBundle from "./booking-review-bundle";
+import BookingReviewBundleLoading from "./booking-review-bundle/loading";
 
 export default function BookingReview() {
   const hasMounted = useHasMounted();

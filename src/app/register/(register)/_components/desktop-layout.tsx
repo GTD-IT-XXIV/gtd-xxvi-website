@@ -2,8 +2,8 @@ import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
 import { z } from "zod";
 
-import CartCleaner from "@/components/registration/cart-cleaner";
-import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+import CartCleaner from "@/app/register/_components/cart-cleaner";
+import CheckoutWrapper from "@/app/register/_components/checkout-wrapper";
 
 import { api } from "@/server/trpc";
 

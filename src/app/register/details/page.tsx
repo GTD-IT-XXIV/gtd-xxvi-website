@@ -2,11 +2,11 @@
 
 import { useRef } from "react";
 
-import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+import CheckoutWrapper from "@/app/register/_components/checkout-wrapper";
 
 import { useHasMounted } from "@/lib/hooks";
 
-import BookingContainer from "./_components/container";
+import BookingContainer from "./_components/booking-container";
 import DetailsFormProvider from "./_components/details-form-provider";
 import DetailsPageFooter from "./_components/details-page-footer";
 
