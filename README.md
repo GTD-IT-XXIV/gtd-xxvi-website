@@ -185,10 +185,10 @@ pnpm dev:db:studio
 ```
 
 3. Open the User Model:
-   ![Prisma Studio UI](assets/Screenshot%202024-01-19%20at%2000.42.28.png)
+   ![Prisma Studio UI](docs/assets/Screenshot%202024-01-19%20at%2000.42.28.png)
 
 4. Change the user's role to `ADMIN`:
-   ![Prisma Studio UI](assets/Screenshot%202024-01-19%20at%2000.45.53.png)
+   ![Prisma Studio UI](docs/assets/Screenshot%202024-01-19%20at%2000.45.53.png)
 
 5. Save changes in Prisma Studio.
 6. Log in as the user at `/dashboard/login`. You should be able to access the dashboard now.
