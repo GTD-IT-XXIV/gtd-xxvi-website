@@ -6,3 +6,5 @@ export const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 export const TOAST_LIMIT = 3;
 export const TOAST_REMOVE_DELAY = 5000;
+
+export const BASE_URL = "https://pintugtd.com";

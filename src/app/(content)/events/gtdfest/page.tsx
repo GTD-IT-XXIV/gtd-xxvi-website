@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { type Metadata } from "next";
 
 import { api } from "@/server/trpc";
 
@@ -15,10 +14,6 @@ import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
 
 dayjs.extend(utc);
-
-export const metadata: Metadata = {
-  title: "GTD Fest x Escape Room",
-};
 
 export default async function GTDFestPage() {
   const gtdFest = await api.event.getByName.query({ name: "GTD Fest" });
