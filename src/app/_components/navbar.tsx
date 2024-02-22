@@ -89,6 +89,14 @@ export default function Navbar({ className, variant }: NavbarProps) {
         <NavbarButton
           variant={variant}
           size="sm"
+          href="/events"
+          label="Events"
+          icon={Zap}
+          className="w-auto justify-center"
+        />
+        <NavbarButton
+          variant={variant}
+          size="sm"
           href="/merch"
           label="Merchandise"
           icon={Shirt}
@@ -121,6 +129,12 @@ export default function Navbar({ className, variant }: NavbarProps) {
               label="GTD Fest"
               icon={Zap}
             /> */}
+            <NavbarButton
+              variant={variant}
+              href="/events"
+              label="Events"
+              icon={Zap}
+            />
             <NavbarButton
               variant={variant}
               href="/merch"

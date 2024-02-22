@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { permanentRedirect } from "next/navigation";
 import type { BreadcrumbList, ListItem, WithContext } from "schema-dts";
 
 import { api } from "@/server/trpc";
@@ -10,7 +11,7 @@ export async function generateMetadata({
 }: {
   params: { name: string };
 }): Promise<Metadata> {
-  const { name } = params;
+  const name = params.name.split("_").join(" ");
   const event = await api.event.getByName.query({ name });
 
   return { title: event.name };
@@ -21,7 +22,12 @@ export default async function EventPage({
 }: {
   params: { name: string };
 }) {
-  const { name } = params;
+  const name = params.name.split("_").join(" ");
+
+  if (name === "GTD Fest" || name === "Escape Room") {
+    permanentRedirect("/events/gtdfest");
+  }
+
   const event = await api.event.getByName.query({ name });
 
   const breadcrumb: WithContext<BreadcrumbList> = {

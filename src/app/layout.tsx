@@ -51,10 +51,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn(inter.variable, bluuNext.variable)}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
-      />
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
+        />
+      </head>
       <body>
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
