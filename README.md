@@ -2,26 +2,27 @@
 
 ## Table of Content
 
-   * [Project Setup](#project-setup)
-      + [Prerequisites](#prerequisites)
-      + [Setting Up](#setting-up)
-      + [Additional Tools](#additional-tools)
-         - [Prisma Studio](#prisma-studio)
-         - [Stripe CLI](#stripe-cli)
-         - [Brevo SMTP](#brevo-smtp)
-   * [Workflow](#workflow)
-      + [Git & GitHub](#git--github)
-      + [Style Guide](#style-guide)
-      + [Project Structure](#project-structure)
-   * [Troubleshooting](#troubleshooting)
-      + [Merge conflicts in `pnpm-lock.yaml`](#merge-conflicts-in-pnpm-lockyaml)
-      + [Access the Dashboard](#access-the-dashboard)
-   * [Packages Usage](#packages-usage)
-      + [tRPC](#trpc)
-         - [In Server Components](#in-server-components)
-         - [In Client Components](#in-client-components)
-      + [Day.js](#dayjs)
-   * [Learn More](#learn-more)
+- [Project Setup](#project-setup)
+  - [Prerequisites](#prerequisites)
+  - [Setting Up](#setting-up)
+  - [Additional Tools](#additional-tools)
+    - [Prisma Studio](#prisma-studio)
+    - [Stripe CLI](#stripe-cli)
+    - [Brevo SMTP](#brevo-smtp)
+- [Workflow](#workflow)
+  - [Git & GitHub](#git--github)
+  - [Style Guide](#style-guide)
+  - [Project Structure](#project-structure)
+- [Troubleshooting](#troubleshooting)
+  - [Merge conflicts in `pnpm-lock.yaml`](#merge-conflicts-in-pnpm-lockyaml)
+  - [Access the Dashboard](#access-the-dashboard)
+  - [Error running development server or husky](#error-running-development-server-or-husky)
+- [Packages Usage](#packages-usage)
+  - [tRPC](#trpc)
+    - [In Server Components](#in-server-components)
+    - [In Client Components](#in-client-components)
+  - [Day.js](#dayjs)
+- [Learn More](#learn-more)
 
 ## Project Setup
 
@@ -193,6 +194,15 @@ pnpm dev:db:studio
 5. Save changes in Prisma Studio.
 6. Log in as the user at `/dashboard/login`. You should be able to access the dashboard now.
 
+### Error running development server or husky
+
+1. Remove the `.next` folder:
+
+```bash
+rm -rf .next
+```
+
+2. Retry.
 
 ## Packages Usage
 
@@ -221,6 +231,8 @@ Use the tRPC client `api` defined in `src/trpc/client`. Example:
 "use client";
 
 import { api } from "@/lib/trpc/provider";
+
+// example-page.tsx
 
 // example-page.tsx
 
