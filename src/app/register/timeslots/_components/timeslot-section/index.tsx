@@ -2,7 +2,7 @@ import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
