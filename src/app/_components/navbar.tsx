@@ -1,7 +1,7 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Menu, Shirt, ShoppingCart, Ticket, X, Zap } from "lucide-react";
+import { Home, Menu, Shirt, ShoppingCart, X, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -78,14 +78,6 @@ export default function Navbar({ className, variant }: NavbarProps) {
           icon={Home}
           className="w-auto justify-center"
         />
-        {/* <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/register"
-          label="GTD Fest"
-          icon={Zap}
-          className="w-auto justify-center"
-        /> */}
         <NavbarButton
           variant={variant}
           size="sm"
@@ -123,12 +115,6 @@ export default function Navbar({ className, variant }: NavbarProps) {
         <div className="relative md:hidden">
           <div className={cn(sidebarVariants({ variant }))}>
             <NavbarButton variant={variant} href="/" label="Home" icon={Home} />
-            {/* <NavbarButton
-              variant={variant}
-              href="/register"
-              label="GTD Fest"
-              icon={Zap}
-            /> */}
             <NavbarButton
               variant={variant}
               href="/events"

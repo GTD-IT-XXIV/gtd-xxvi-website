@@ -31,7 +31,7 @@ export default function MerchBundleCardCarousel({
   images,
   className = "",
 }: MerchBundleCardCarouselProps) {
-  const [api, setApi] = useState<CarouselApi>();
+  const [_, setApi] = useState<CarouselApi>();
 
   return (
     <Carousel setApi={setApi} className={cn("w-full", className)}>

@@ -1,6 +1,5 @@
 import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
-import { z } from "zod";
 
 import CartCleaner from "@/app/register/_components/cart-cleaner";
 import CheckoutWrapper from "@/app/register/_components/checkout-wrapper";

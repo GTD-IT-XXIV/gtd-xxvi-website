@@ -17,7 +17,6 @@ export type TimeSlotSectionProps = {
   eventName: string;
   bundleName: string;
   quantity: number;
-  media?: string;
   selected?: {
     start: Date;
     end: Date;
@@ -30,7 +29,6 @@ export default function TimeSlotSection({
   eventName,
   bundleName,
   quantity,
-  media,
   selected,
   onChange,
   handleSkip,
