@@ -204,6 +204,26 @@ rm -rf .next
 
 2. Retry.
 
+### Database errors
+
+1. Reset the development database by first removing the image:
+
+```bash
+docker image rm -f gtd-xxvi/db-dev
+```
+
+2. Remove the volume where the development database data is stored:
+
+```bash
+docker volume rm gtd-xxvi-db-pgdata-dev
+```
+
+3. Restart the development database:
+
+```bash
+pnpm dev:db:start
+```
+
 ## Packages Usage
 
 ### tRPC
