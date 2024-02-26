@@ -7,8 +7,11 @@ import utc from "dayjs/plugin/utc";
 import type Stripe from "stripe";
 import { z } from "zod";
 
+import {
+  synchronizeMerchSalesToGoogleSheets,
+  synchronizeTicketsToGoogleSheets,
+} from "@/server/actions/sync-google-sheets";
 import { db } from "@/server/db";
-import { synchronizeTicketsToGoogleSheets } from "@/server/routers/utils";
 
 import { BREVO_EMAIL } from "@/lib/constants";
 import { sendEmail } from "@/lib/email";
@@ -365,6 +368,8 @@ export async function handleMerchPaymentSuccess(
   await db.merchBooking.deleteMany({
     where: { id: { in: bookingIds } },
   });
+
+  await synchronizeMerchSalesToGoogleSheets();
 }
 
 export async function handleMerchPaymentExpired(bookingIds: number[]) {

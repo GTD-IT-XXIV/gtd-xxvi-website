@@ -1,5 +1,7 @@
 "use client";
 
+import { Prisma } from "@prisma/client";
+
 import { api } from "@/lib/trpc/client";
 import { type MerchCartItem } from "@/lib/types";
 
@@ -59,7 +61,7 @@ export default function MerchItem({
         </div>
       </div>
       <div className="flex items-center justify-end my-2 w-1/6">
-        ${merchBundle.price.toString()}
+        ${new Prisma.Decimal(merchBundle.price).times(quantity).toString()}
       </div>
     </div>
   );

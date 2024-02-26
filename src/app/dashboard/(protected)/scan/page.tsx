@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import QrReader from "@/components/dashboard/qr-reader";
 import { Button } from "@/components/ui/button";
 
-import { sync } from "@/server/actions/sync";
+import { syncAllToGoogleSheets as sync } from "@/server/actions/sync-google-sheets";
 
 import { api } from "@/lib/trpc/client";
 
