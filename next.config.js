@@ -19,6 +19,12 @@ let nextConfig = {
         port: "",
         pathname: "/f/*",
       },
+      {
+        protocol: "https",
+        hostname: "ddjhntpphokusdgpaxuv.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/gtd-xxvi-website/*",
+      },
     ],
   },
   output: "standalone",
