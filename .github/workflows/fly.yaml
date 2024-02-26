@@ -27,7 +27,6 @@ jobs:
     secrets: inherit
   deploy:
     needs: [build, test]
-    if: always()
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
