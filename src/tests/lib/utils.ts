@@ -5,7 +5,9 @@ import { execSync } from "child_process";
 let uri: string | undefined = undefined;
 
 export async function generateTestPrismaClient() {
-  const container = await new PostgreSqlContainer("postgres:15.1").start();
+  const container = await new PostgreSqlContainer(
+    "postgres:15.1-bullseye",
+  ).start();
   uri = container.getConnectionUri();
 
   const db = new PrismaClient({ datasourceUrl: uri });

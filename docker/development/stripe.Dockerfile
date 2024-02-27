@@ -4,8 +4,8 @@ RUN yum -y install stripe && yum clean all
 
 FROM alpine:3.19
 
-RUN addgroup --system --gid 1001 stripe
-RUN adduser --system --uid 1001 stripecli
+RUN addgroup --system --gid 1001 stripe \
+  && adduser --system --uid 1001 stripecli
 
 COPY --from=base --chown=stripecli:stripe /usr/local/bin/stripe /bin/stripe
 
