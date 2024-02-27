@@ -2,7 +2,6 @@ FROM node:20-alpine AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -11,7 +10,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml prisma ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store corepack enable pnpm \
+  && pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -28,7 +28,7 @@ COPY .env.production .env.production
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 ENV SKIP_ENV_VALIDATION=TRUE
-RUN pnpm build
+RUN corepack enable pnpm && pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
