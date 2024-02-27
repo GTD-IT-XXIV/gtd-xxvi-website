@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Column,
   Container,
   Head,
@@ -15,8 +14,9 @@ import {
 import { type CSSProperties } from "react";
 
 export type GTDEmailProps = {
+  orderId: string;
   name: string;
-  orders: {
+  bookings: {
     eventName: string;
     bundleName: string;
     timeslot: {
@@ -25,14 +25,14 @@ export type GTDEmailProps = {
     };
     quantity: number;
     totalPrice: number;
+    tickets: {
+      id: number;
+      name: string;
+    }[];
   }[];
   orderPrice: number;
-  url: string;
   eventTitle: string;
 };
-
-const baseUrl =
-  process.env.NODE_ENV === "production" ? "https://www.pintugtd.com" : "";
 
 export default function GTDEmail(props: GTDEmailProps) {
   return (
@@ -58,7 +58,7 @@ export default function GTDEmail(props: GTDEmailProps) {
                 }}
               >
                 <Img
-                  src={`${baseUrl}/static/logo-gtd-normal.png`}
+                  src="https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/logo-gtd-normal.png"
                   width="300"
                   height="75"
                   alt="PINTU Get Together Day Logo"
@@ -88,7 +88,7 @@ export default function GTDEmail(props: GTDEmailProps) {
             <Heading
               as="h2"
               style={{
-                fontSize: "1.5rem",
+                fontSize: "1.75rem",
                 fontWeight: 600,
                 marginTop: 0,
                 marginBottom: "2rem",
@@ -96,7 +96,7 @@ export default function GTDEmail(props: GTDEmailProps) {
             >
               {props.eventTitle}
             </Heading>
-            <Button
+            {/* <Button
               href={props.url}
               style={{
                 whiteSpace: "nowrap",
@@ -117,10 +117,15 @@ export default function GTDEmail(props: GTDEmailProps) {
               >
                 View Tickets
               </Text>
-            </Button>
+            </Button> */}
           </Section>
-          <Section style={{ padding: "0.75rem 1rem" }}>
-            <Heading as="h2" style={{ fontSize: "1.25rem", fontWeight: 600 }}>
+          <Section
+            style={{
+              padding: "0.75rem 1rem",
+              borderBottom: "1px solid #cbd5e1",
+            }}
+          >
+            <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
               Order Details
             </Heading>
             <table
@@ -142,7 +147,7 @@ export default function GTDEmail(props: GTDEmailProps) {
                 </tr>
               </thead>
               <tbody style={{ width: "100%" }}>
-                {props.orders.map((order, idx) => (
+                {props.bookings.map((order, idx) => (
                   <tr key={idx}>
                     <Column>{idx + 1}</Column>
                     <Column>{order.eventName}</Column>
@@ -170,6 +175,46 @@ export default function GTDEmail(props: GTDEmailProps) {
                 </tr>
               </tfoot>
             </table>
+          </Section>
+          <Section style={{ padding: "0.75rem 1rem" }}>
+            <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
+              Ticket Details
+            </Heading>
+            {props.bookings.map((item) => (
+              <Section>
+                <Heading
+                  as="h3"
+                  style={{ fontSize: "1.25rem", fontWeight: 600 }}
+                >
+                  {item.eventName} ({item.bundleName}),{" "}
+                  {item.timeslot.startLabel} - {item.timeslot.endLabel}
+                </Heading>
+                <table
+                  align="center"
+                  width="100%"
+                  border={0}
+                  cellPadding={0}
+                  cellSpacing={10}
+                  role="presentation"
+                  style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}
+                >
+                  <thead style={{ width: "100%", fontWeight: 600 }}>
+                    <tr>
+                      <Column style={tableHeader}>ID</Column>
+                      <Column style={tableHeader}>Name</Column>
+                    </tr>
+                  </thead>
+                  <tbody style={{ width: "100%" }}>
+                    {item.tickets.map((ticket, idx) => (
+                      <tr key={idx}>
+                        <Column>{ticket.id}</Column>
+                        <Column>{ticket.name}</Column>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </Section>
+            ))}
           </Section>
         </Container>
       </Body>

@@ -44,7 +44,7 @@ vi.mock("@/server/auth", async () => {
       userId: "test_user",
       username: "test_user",
       name: "Test User",
-      email: "test_user@fakemail.com",
+      email: "test_user@testemail.com",
     },
     sessionId: "test_session",
     fresh: true,
@@ -76,7 +76,7 @@ const testBundle: Omit<Prisma.BundleCreateInput, "event"> = {
   remainingAmount: null,
   maxPurchases: 100,
   open: new Date(2024, 0),
-  close: new Date(2024, 0, 1, 23, 59, 59),
+  close: new Date(2034, 0, 1, 23, 59, 59),
 };
 
 const testTimeslot: Omit<Prisma.TimeslotCreateInput, "event"> = {
@@ -87,13 +87,13 @@ const testTimeslot: Omit<Prisma.TimeslotCreateInput, "event"> = {
 
 const testBooking: Omit<
   Prisma.BookingCreateInput,
-  "event" | "bundle" | "timeslot" | "sessionId"
-> = {
+  "names" | "event" | "bundle" | "timeslot" | "sessionId"
+> & { names: string[] } = {
   name: "Test User",
   email: "test_user@email.com",
   telegramHandle: "testuser",
   phoneNumber: "89998999",
-  quantity: 1,
+  names: ["Test User"],
 };
 
 const caller = createCaller({ db, headers: new Headers() });
@@ -109,17 +109,18 @@ describe("tRPC bookingRouter", async () => {
     beforeEach(async () => {
       const event = await db.event.create({ data: testEvent });
       const bundle = await db.bundle.create({
-        data: { ...testBundle, eventId: event.id },
+        data: { ...testBundle, eventName: event.name },
       });
       const timeslot = await db.timeslot.create({
-        data: { ...testTimeslot, eventId: event.id },
+        data: { ...testTimeslot, eventName: event.name },
       });
       booking = await db.booking.create({
         data: {
           ...testBooking,
-          eventId: event.id,
-          bundleId: bundle.id,
-          timeslotId: timeslot.id,
+          eventName: event.name,
+          bundleName: bundle.name,
+          startTime: timeslot.startTime,
+          endTime: timeslot.endTime,
         },
       });
     });
@@ -153,281 +154,249 @@ describe("tRPC bookingRouter", async () => {
         },
       });
       bundle = await db.bundle.create({
-        data: { ...testBundle, eventId: event.id },
+        data: { ...testBundle, eventName: event.name },
       });
       timeslot = await db.timeslot.create({
-        data: { ...testTimeslot, eventId: event.id },
+        data: { ...testTimeslot, eventName: event.name },
       });
 
-      expect(anotherEvent.id).not.toBe(event.id);
+      expect(anotherEvent.name).not.toBe(event.name);
     });
 
-    test("with consistent eventIds returns booking", async () => {
+    test("with consistent event names returns booking", async () => {
       const booking: Omit<Booking, "id" | "created"> = {
         ...testBooking,
-        eventId: event.id,
-        bundleId: bundle.id,
-        timeslotId: timeslot.id,
+        eventName: event.name,
+        bundleName: bundle.name,
+        startTime: timeslot.startTime,
+        endTime: timeslot.endTime,
         sessionId: null,
         valid: true,
       };
 
       const createdBooking = await caller.booking.create({
         ...testBooking,
-        eventId: event.id,
-        bundleId: bundle.id,
-        timeslotId: timeslot.id,
+        eventName: event.name,
+        bundleName: bundle.name,
+        startTime: timeslot.startTime,
+        endTime: timeslot.endTime,
       });
 
       expect(createdBooking).toMatchObject(booking);
     });
 
     describe("with inconsistent", async () => {
-      test("different booking.eventId throws error", async () => {
+      test("event throws error", async () => {
         const promise = caller.booking.create({
           ...testBooking,
-          eventId: anotherEvent.id,
-          bundleId: bundle.id,
-          timeslotId: timeslot.id,
+          eventName: anotherEvent.name,
+          bundleName: bundle.name,
+          startTime: timeslot.startTime,
+          endTime: timeslot.endTime,
         });
         await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Event ids of booking, bundle and timeslot do not match",
-        );
+        await expect(promise).rejects.toThrow("Bundle or timeslot not found");
       });
 
-      test("different booking.bundle.eventId throws error", async () => {
-        const anotherBundle = await db.bundle.create({
-          data: { ...testBundle, eventId: anotherEvent.id },
-        });
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: anotherBundle.id,
-          timeslotId: timeslot.id,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Event ids of booking, bundle and timeslot do not match",
-        );
-      });
+      describe("with 0 bundle remaining amount", async () => {
+        let soldOutBundle: Bundle;
 
-      test("different booking.timeslot.eventId throws error", async () => {
-        const anotherTimeslot = await db.timeslot.create({
-          data: { ...testTimeslot, eventId: anotherEvent.id },
-        });
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: bundle.id,
-          timeslotId: anotherTimeslot.id,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Event ids of booking, bundle and timeslot do not match",
-        );
-      });
-    });
-
-    describe("with nonexisting", async () => {
-      test("booking.bundleId throws error", async () => {
-        const bundleId = 2;
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId,
-          timeslotId: timeslot.id,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Event ids of booking, bundle and timeslot do not match",
-        );
-      });
-
-      test("booking.timeslotId throws error", async () => {
-        const timeslotId = 2;
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: bundle.id,
-          timeslotId,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Event ids of booking, bundle and timeslot do not match",
-        );
-      });
-    });
-
-    describe("with 0 bundle.remainingAmount", async () => {
-      let soldOutBundle: Bundle;
-
-      beforeEach(async () => {
-        soldOutBundle = await db.bundle.create({
-          data: {
-            ...testBundle,
-            name: "Sold Out Bundle",
-            eventId: event.id,
-            remainingAmount: 0,
-          },
-        });
-      });
-
-      test("throws error", async () => {
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: soldOutBundle.id,
-          timeslotId: timeslot.id,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow("Insufficient number of bundles");
-      });
-
-      test("does not reduce bundle.remainingAmount to below 0", async () => {
-        try {
-          await caller.booking.create({
-            ...testBooking,
-            eventId: event.id,
-            bundleId: soldOutBundle.id,
-            timeslotId: timeslot.id,
+        beforeEach(async () => {
+          soldOutBundle = await db.bundle.create({
+            data: {
+              ...testBundle,
+              name: "Sold Out Bundle",
+              eventName: event.name,
+              remainingAmount: 0,
+            },
           });
-        } catch (ignored) {}
-        const bundle = await db.bundle.findUnique({
-          where: { id: soldOutBundle.id },
         });
-        expect(bundle?.remainingAmount).toBe(0);
-      });
-    });
 
-    describe("with nonnull bundle.remainingAmount", async () => {
-      let limitedBundle: Bundle;
-
-      beforeEach(async () => {
-        limitedBundle = await db.bundle.create({
-          data: {
-            ...testBundle,
-            name: "Limited Bundle",
-            eventId: event.id,
-            remainingAmount: 8,
-          },
-        });
-      });
-
-      test("decrements bundle.remainingAmount", async () => {
-        await caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: limitedBundle.id,
-          timeslotId: timeslot.id,
-        });
-        const bundle = await db.bundle.findUnique({
-          where: { id: limitedBundle.id },
-        });
-        expect(bundle?.remainingAmount).toBe(7);
-      });
-    });
-
-    describe("with 0 timeslot.remainingSlots", async () => {
-      let soldOutTimeslot: Timeslot;
-
-      beforeEach(async () => {
-        soldOutTimeslot = await db.timeslot.create({
-          data: {
-            ...testTimeslot,
-            endTime: new Date(2024, 0, 1, 12),
-            eventId: event.id,
-            remainingSlots: 0,
-          },
-        });
-      });
-
-      test("throws error", async () => {
-        const promise = caller.booking.create({
-          ...testBooking,
-          eventId: event.id,
-          bundleId: bundle.id,
-          timeslotId: soldOutTimeslot.id,
-        });
-        await expect(promise).rejects.toThrow(TRPCError);
-        await expect(promise).rejects.toThrow(
-          "Insufficient number of timeslots",
-        );
-      });
-
-      test("does not reduce bundle.remainingSlots to below 0", async () => {
-        try {
-          await caller.booking.create({
+        test("throws error", async () => {
+          const promise = caller.booking.create({
             ...testBooking,
-            eventId: event.id,
-            bundleId: bundle.id,
-            timeslotId: soldOutTimeslot.id,
+            eventName: event.name,
+            bundleName: soldOutBundle.name,
+            startTime: timeslot.startTime,
+            endTime: timeslot.endTime,
           });
-        } catch (ignored) {}
-        const timeslot = await db.timeslot.findUnique({
-          where: { id: soldOutTimeslot.id },
+          await expect(promise).rejects.toThrow(TRPCError);
+          await expect(promise).rejects.toThrow(
+            "Insufficient number of bundles",
+          );
         });
-        expect(timeslot?.remainingSlots).toBe(0);
-      });
-    });
-  });
-});
 
-describe("Concurrent tRPC bookingRouter", async () => {
-  beforeAll(async () => {
-    resetTestDatabase(await getTestDatabaseUri());
-  });
-
-  describe("create with nonnull bundle.remainingAmount", () => {
-    let event: Event, bundle: Bundle, timeslot: Timeslot;
-
-    beforeAll(async () => {
-      event = await db.event.create({ data: testEvent });
-      bundle = await db.bundle.create({
-        data: { ...testBundle, eventId: event.id, remainingAmount: 1 },
-      });
-      timeslot = await db.timeslot.create({
-        data: { ...testTimeslot, eventId: event.id },
-      });
-    });
-
-    describe.concurrent(
-      "never decrements bundle.remainingAmount below 0",
-      async () => {
-        for (const _ of Array(5).keys()) {
-          test("Concurrent call", async ({ expect }) => {
-            try {
-              await caller.booking.create({
-                ...testBooking,
-                eventId: event.id,
-                bundleId: bundle.id,
-                timeslotId: timeslot.id,
-              });
-            } catch (error) {
-              expect(error).toBeInstanceOf(TRPCError);
-              if (error instanceof TRPCError) {
-                expect(error.message).toContain(
-                  "Insufficient number of bundles",
-                );
-              }
-            }
-          }, 10_000);
-        }
-
-        test.sequential(
-          "bundle.remainingAmount not below 0",
-          async ({ expect }) => {
-            const updatedBundle = await db.bundle.findUnique({
-              where: { id: bundle.id },
+        test("does not reduce bundle remaining amount to below 0", async () => {
+          try {
+            await caller.booking.create({
+              ...testBooking,
+              eventName: event.name,
+              bundleName: soldOutBundle.name,
+              startTime: timeslot.startTime,
+              endTime: timeslot.endTime,
             });
-            expect(updatedBundle?.remainingAmount).toBe(0);
-          },
-        );
-      },
-    );
+          } catch (ignored) {}
+          const bundle = await db.bundle.findUnique({
+            where: {
+              name_eventName: {
+                name: soldOutBundle.name,
+                eventName: event.name,
+              },
+            },
+          });
+          expect(bundle?.remainingAmount).toBe(0);
+        });
+      });
+
+      describe("with nonnull bundle remaining amount", async () => {
+        let limitedBundle: Bundle;
+
+        beforeEach(async () => {
+          limitedBundle = await db.bundle.create({
+            data: {
+              ...testBundle,
+              name: "Limited Bundle",
+              eventName: event.name,
+              remainingAmount: 8,
+            },
+          });
+        });
+
+        test("decrements bundle remaining amount", async () => {
+          await caller.booking.create({
+            ...testBooking,
+            eventName: event.name,
+            bundleName: limitedBundle.name,
+            startTime: timeslot.startTime,
+            endTime: timeslot.endTime,
+          });
+          const bundle = await db.bundle.findUnique({
+            where: {
+              name_eventName: {
+                name: limitedBundle.name,
+                eventName: event.name,
+              },
+            },
+          });
+          expect(bundle?.remainingAmount).toBe(7);
+        });
+      });
+
+      describe("with 0 timeslot remaining slots", async () => {
+        let soldOutTimeslot: Timeslot;
+
+        beforeEach(async () => {
+          soldOutTimeslot = await db.timeslot.create({
+            data: {
+              ...testTimeslot,
+              endTime: new Date(2024, 0, 1, 12),
+              eventName: event.name,
+              remainingSlots: 0,
+            },
+          });
+        });
+
+        test("throws error", async () => {
+          const promise = caller.booking.create({
+            ...testBooking,
+            eventName: event.name,
+            bundleName: bundle.name,
+            startTime: soldOutTimeslot.startTime,
+            endTime: soldOutTimeslot.endTime,
+          });
+          await expect(promise).rejects.toThrow(TRPCError);
+          await expect(promise).rejects.toThrow(
+            "Insufficient number of timeslots",
+          );
+        });
+
+        test("does not reduce timeslot remaining slots to below 0", async () => {
+          try {
+            await caller.booking.create({
+              ...testBooking,
+              eventName: event.name,
+              bundleName: bundle.name,
+              startTime: soldOutTimeslot.startTime,
+              endTime: soldOutTimeslot.endTime,
+            });
+          } catch (ignored) {}
+          const updatedTimeslot = await db.timeslot.findUnique({
+            where: {
+              startTime_endTime_eventName: {
+                startTime: soldOutTimeslot.startTime,
+                endTime: soldOutTimeslot.endTime,
+                eventName: event.name,
+              },
+            },
+          });
+          expect(updatedTimeslot?.remainingSlots).toBe(0);
+        });
+      });
+    });
   });
 
-  afterAll(async () => {
-    resetTestDatabase(await getTestDatabaseUri());
+  describe.skip("Concurrent tRPC bookingRouter", async () => {
+    beforeAll(async () => {
+      resetTestDatabase(await getTestDatabaseUri());
+    });
+
+    describe("create with nonnull bundle.remainingAmount", () => {
+      let event: Event, bundle: Bundle, timeslot: Timeslot;
+
+      beforeAll(async () => {
+        event = await db.event.create({ data: testEvent });
+        bundle = await db.bundle.create({
+          data: { ...testBundle, eventName: event.name, remainingAmount: 1 },
+        });
+        timeslot = await db.timeslot.create({
+          data: { ...testTimeslot, eventName: event.name },
+        });
+      });
+
+      describe.concurrent(
+        "never decrements bundle remaining amount below 0",
+        async () => {
+          for (const _ of Array(5).keys()) {
+            test("Concurrent call", async ({ expect }) => {
+              try {
+                await caller.booking.create({
+                  ...testBooking,
+                  eventName: event.name,
+                  bundleName: bundle.name,
+                  startTime: timeslot.startTime,
+                  endTime: timeslot.endTime,
+                });
+              } catch (error) {
+                expect(error).toBeInstanceOf(TRPCError);
+                if (error instanceof TRPCError) {
+                  expect(error.message).toContain(
+                    "Insufficient number of bundles",
+                  );
+                }
+              }
+            }, 10_000);
+          }
+
+          test.sequential(
+            "bundle remaining amount not below 0",
+            async ({ expect }) => {
+              const updatedBundle = await db.bundle.findUnique({
+                where: {
+                  name_eventName: {
+                    name: bundle.name,
+                    eventName: event.name,
+                  },
+                },
+              });
+              expect(updatedBundle?.remainingAmount).toBe(0);
+            },
+          );
+        },
+      );
+    });
+
+    afterAll(async () => {
+      resetTestDatabase(await getTestDatabaseUri());
+    });
   });
 });

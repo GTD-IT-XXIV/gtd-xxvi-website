@@ -1,8 +1,14 @@
+import "server-only";
+
 import { type Prisma, type PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 import { MAX_TRANSACTION_RETRIES } from "@/lib/constants";
+
+dayjs.extend(utc);
 
 export async function retryPrismaTransaction<T>(
   transaction: () => Promise<T>,

@@ -1,16 +1,18 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { dashboardProcedure } from "@/server/procedures/dashboard-procedure";
+
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
-import { dashboardProcedure } from "../procedures/dashboard-procedure";
+import { nameKeySchema } from "./schemas";
 
 export const ticketRouter = createTRPCRouter({
   getAll: dashboardProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z.number().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -20,7 +22,7 @@ export const ticketRouter = createTRPCRouter({
         where: {},
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
-        orderBy: { created: "desc" },
+        orderBy: { id: "asc" },
       });
       let nextCursor: typeof cursor | undefined = undefined;
       if (tickets.length > limit) {
@@ -30,8 +32,8 @@ export const ticketRouter = createTRPCRouter({
       return { tickets, nextCursor };
     }),
 
-  getById: publicProcedure
-    .input(z.object({ id: z.string() }))
+  getById: dashboardProcedure
+    .input(z.object({ id: z.number().positive() }))
     .query(async ({ ctx, input }) => {
       const { id } = input;
       const ticket = await ctx.db.ticket.findUnique({ where: { id } });
@@ -45,65 +47,34 @@ export const ticketRouter = createTRPCRouter({
     }),
 
   getManyByEvent: dashboardProcedure
-    .input(
-      z.object({
-        eventId: z.number().positive(),
-        limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
-      }),
-    )
+    .input(z.object({ event: nameKeySchema }))
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 10;
-      const { eventId, cursor } = input;
+      const { event } = input;
       const tickets = await ctx.db.ticket.findMany({
-        where: { timeslot: { eventId } },
-        take: limit + 1,
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: { created: "desc" },
+        where: { eventName: event },
       });
-      let nextCursor: typeof cursor | undefined = undefined;
-      if (tickets.length > limit) {
-        const nextTicket = tickets.pop();
-        nextCursor = nextTicket?.id ?? undefined;
-      }
-      return { tickets, nextCursor };
+      return tickets;
     }),
-  getCountByEvent: dashboardProcedure
-    .input(
-      z.object({
-        eventId: z.number().positive(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { eventId } = input;
-      const count = await ctx.db.ticket.count({
-        where: { timeslot: { eventId } },
-      });
 
-      return count;
+  countByEvent: dashboardProcedure
+    .input(z.object({ event: nameKeySchema }))
+    .query(async ({ ctx, input }) => {
+      const { event } = input;
+      const tickets = await ctx.db.ticket.findMany({
+        where: { eventName: event },
+      });
+      return tickets.length;
     }),
 
   getManyByPaymentIntent: publicProcedure
     .input(z.object({ paymentIntentId: z.string() }))
     .query(async ({ ctx, input }) => {
       const { paymentIntentId } = input;
-      return await ctx.db.ticket.findMany({ where: { paymentIntentId } });
-    }),
-
-  checkId: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const ticket = await ctx.db.ticket.findUnique({ where: { id } });
-      return !!ticket;
-    }),
-
-  deleteById: dashboardProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { id } = input;
-      return await ctx.db.ticket.delete({
-        where: { id },
+      const orders = await ctx.db.order.findMany({
+        where: { paymentIntentId },
+        include: { tickets: true },
       });
+      const tickets = orders.flatMap((order) => order.tickets);
+      return tickets;
     }),
 });

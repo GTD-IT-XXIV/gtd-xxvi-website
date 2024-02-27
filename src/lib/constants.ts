@@ -1,5 +1,4 @@
-export const GTD_FEST_EVENT_ID = 1; // TODO: change
-export const ESCAPE_ROOM_EVENT_ID = 2; // TODO: change
+import { Home, Info, Shirt, ShoppingCart, Users, Zap } from "lucide-react";
 
 export const MAX_BUNDLE_PURCHASES = 99;
 export const MAX_TRANSACTION_RETRIES = 3;
@@ -9,3 +8,38 @@ export const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 export const TOAST_LIMIT = 3;
 export const TOAST_REMOVE_DELAY = 5000;
+
+export const BASE_URL = "https://pintugtd.com";
+
+export const ROUTES = [
+  {
+    name: "Home",
+    path: "/",
+    icon: Home,
+  },
+  {
+    name: "Events",
+    path: "/events",
+    icon: Zap,
+  },
+  {
+    name: "Merchandise",
+    path: "/merch",
+    icon: Shirt,
+  },
+  {
+    name: "Cart",
+    path: "/merch/details",
+    icon: ShoppingCart,
+  },
+  {
+    name: "Committee",
+    path: "/committee",
+    icon: Users,
+  },
+  {
+    name: "About Us",
+    path: "/about",
+    icon: Info,
+  },
+];

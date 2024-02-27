@@ -1,12 +1,12 @@
 import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
-import { z } from "zod";
 
-import CartCleaner from "@/components/registration/cart-cleaner";
-import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+import CartCleaner from "@/app/register/_components/cart-cleaner";
+import CheckoutWrapper from "@/app/register/_components/checkout-wrapper";
 
 import { api } from "@/server/trpc";
 
+import { eventParamSchema } from "@/lib/schemas";
 import { type RouterOutputs } from "@/lib/trpc/utils";
 import { cn } from "@/lib/utils";
 
@@ -24,16 +24,13 @@ export default async function MobileLayout({
   className: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const eventParams = z.coerce
-    .number()
-    .or(z.coerce.number().array())
-    .safeParse(searchParams.event);
-  let eventIds: number[];
+  const eventParams = eventParamSchema.safeParse(searchParams.event);
+  let eventNames: string[];
   if (eventParams.success) {
     if (Array.isArray(eventParams.data)) {
-      eventIds = eventParams.data;
+      eventNames = eventParams.data;
     } else {
-      eventIds = [eventParams.data];
+      eventNames = [eventParams.data];
     }
   } else {
     let events: RouterOutputs["event"]["getAll"] = [];
@@ -45,12 +42,12 @@ export default async function MobileLayout({
       }
       throw error;
     }
-    eventIds = events.map((event) => event.id);
+    eventNames = events.map((event) => event.name);
   }
 
   return (
     <CheckoutWrapper>
-      <CartCleaner eventIds={eventIds}>
+      <CartCleaner eventNames={eventNames}>
         <section className={cn("grow flex flex-col", className)}>
           <article className="flex-1 p-5 pt-10 space-y-5">
             <hgroup className="space-y-1">
@@ -62,8 +59,8 @@ export default async function MobileLayout({
               </p>
             </hgroup>
             <div className="space-y-4">
-              {eventIds.map((eventId) => (
-                <EventCardGroup key={eventId} eventId={eventId} />
+              {eventNames.map((eventName) => (
+                <EventCardGroup key={eventName} eventName={eventName} />
               ))}
             </div>
           </article>

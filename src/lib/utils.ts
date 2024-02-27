@@ -1,6 +1,5 @@
 import { env } from "@/env";
-import { type Stripe } from "@stripe/stripe-js/";
-import { loadStripe } from "@stripe/stripe-js/pure";
+import { type Stripe, loadStripe } from "@stripe/stripe-js";
 import { type inferRouterOutputs } from "@trpc/server";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";

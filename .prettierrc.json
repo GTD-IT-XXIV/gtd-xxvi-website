@@ -6,6 +6,7 @@
     "^@/components/(.*)$",
     "^@/server/(.*)$",
     "^@/lib/(.*)$",
+    "^@/assets/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,

@@ -9,10 +9,13 @@ env:
   DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
   STRIPE_SECRET_KEY: ${{ secrets.DEV_STRIPE_SECRET_KEY }}
   STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }} 
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
   AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
   BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-    
+  GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+  GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+  SHEETS_ID: ${{ secrets.DEV_SHEETS_ID }}
+
 jobs:
   build:
     name: Development build
@@ -24,7 +27,6 @@ jobs:
     secrets: inherit
   deploy:
     needs: [build, test]
-    if: always()
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
@@ -39,9 +41,13 @@ jobs:
           envkey_DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
           envkey_STRIPE_SECRET_KEY: ${{ secrets.DEV_STRIPE_SECRET_KEY }}
           envkey_STRIPE_WEBHOOK_SECRET: ${{ secrets.DEV_STRIPE_WEBHOOK_SECRET }}
-          envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }} 
+          envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.DEV_STRIPE_PUBLISHABLE_KEY }}
           envkey_AUTH_SECRET: ${{ secrets.DEV_AUTH_SECRET }}
           envkey_BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          envkey_GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          envkey_GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          envkey_SHEETS_ID: ${{ secrets.DEV_SHEETS_ID }}
+          file_name: .env.production
           fail_on_empty: true
       - run: flyctl deploy --remote-only
         env:

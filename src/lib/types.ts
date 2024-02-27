@@ -1,6 +1,6 @@
 import { type z } from "zod";
 
-import { type cartSchema } from "./schemas";
+import { type cartSchema, type merchCartSchema } from "./schemas";
 import { type ArrElement } from "./utils";
 
 /**
@@ -10,17 +10,13 @@ import { type ArrElement } from "./utils";
  */
 export type Cart = z.infer<typeof cartSchema>;
 
-export type Event = {
-  id: number;
-  name: string;
-  description: string;
-  location: string;
-  startDate: Date;
-  endDate: Date;
-};
-
 export type CartItem = ArrElement<Cart>;
 
 export type OrderMetadata = {
+  type: "event" | "merch";
   bookingIds: string; // JSON.stringify(number[])
 };
+
+export type MerchCart = z.infer<typeof merchCartSchema>;
+
+export type MerchCartItem = ArrElement<MerchCart>;

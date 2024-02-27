@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
 
-export default function RegistrationLaout({
+export default function RegistrationLayout({
   children,
 }: {
   children: ReactNode;

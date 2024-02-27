@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
-import DashboardNavbar from "@/components/dashboard/dashboard-navbar";
-import DashboardTabs from "@/components/dashboard/dashboard-tabs";
+import DashboardNavbar from "@/app/dashboard/_components/dashboard-navbar";
+import DashboardTabs from "@/app/dashboard/_components/dashboard-tabs";
 
 import { getPageSession } from "@/server/auth";
 

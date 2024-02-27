@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 
 export type BundleCardPopupProps = {
   event: {
-    id: number;
     name: string;
   };
   bundle: {
@@ -73,7 +72,9 @@ export default function BundleCardPopup({
                 ))}
               </ul>
               <Link
-                href={`/events/${event.id}`}
+                // href={`/events/${event.id}`}
+                href="/"
+                rel="noreferrer noopener"
                 target="_blank"
                 className="text-xs text-gtd-primary-30 hover:underline underline-offset-2 flex items-center gap-1"
               >

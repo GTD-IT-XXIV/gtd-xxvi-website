@@ -1,7 +1,4 @@
 import { env } from "@/env";
-import GTDEmail from "@emails/gtd-email";
-import { Prisma } from "@prisma/client";
-import { render } from "@react-email/components";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { NextResponse } from "next/server";
@@ -9,12 +6,15 @@ import type { Stripe } from "stripe";
 import SuperJSON from "superjson";
 import { z } from "zod";
 
-import { db } from "@/server/db";
-
-import { BREVO_EMAIL } from "@/lib/constants";
-import { sendEmail } from "@/lib/email";
 import { stripe } from "@/lib/stripe";
 import { type OrderMetadata } from "@/lib/types";
+
+import {
+  handleEventPaymentExpired,
+  handleEventPaymentSuccess,
+  handleMerchPaymentExpired,
+  handleMerchPaymentSuccess,
+} from "./_utils/handlers";
 
 dayjs.extend(utc);
 
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
     "checkout.session.completed",
     "checkout.session.async_payment_succeeded",
     "checkout.session.expired",
+    "payment_intent.payment_failed",
   ];
   console.log(event.type);
 
@@ -54,164 +55,65 @@ export async function POST(req: Request) {
     try {
       let data: Stripe.Checkout.Session;
       let metadata: OrderMetadata;
+
       switch (event.type) {
         case "checkout.session.async_payment_succeeded":
         case "checkout.session.completed": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
           console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
+          const { type: rawType, bookingIds: rawBookingIds } = metadata;
+
+          const type = z.enum(["event", "merch"]).parse(rawType);
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(SuperJSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(rawBookingIds));
           console.log(`💰 CheckoutSession status: ${data.payment_status}`);
 
           if (bookingIds.length === 0) {
             throw new Error("No bookings attached to this CheckoutSession");
           }
 
-          const bookings = await db.booking.findMany({
-            where: { id: { in: bookingIds } },
-            include: { event: true, bundle: true, timeslot: true },
-          });
-          if (bookings.length !== bookingIds.length) {
-            throw new Error("Not all bookings were found in database");
-          }
-          const isAllBookingsValid = bookings.every((booking) => booking.valid);
-          if (!isAllBookingsValid) {
-            throw new Error("Bookings invalid");
-          }
-
-          if (!data.payment_intent) {
-            throw new Error("Payment intent ID is null");
+          switch (type) {
+            case "event": {
+              await handleEventPaymentSuccess(data, bookingIds);
+              break;
+            }
+            case "merch": {
+              await handleMerchPaymentSuccess(data, bookingIds);
+              break;
+            }
           }
 
-          // use email as the owner of a ticket in the future after the schema changed
-          const tickets = await db.$transaction(
-            bookings.flatMap((booking) =>
-              Array(booking.quantity)
-                .fill(0)
-                .map(() =>
-                  db.ticket.create({
-                    data: {
-                      name: booking.name,
-                      email: booking.email,
-                      telegramHandle: booking.telegramHandle,
-                      phoneNumber: booking.phoneNumber,
-                      bundleId: Number(booking.bundleId),
-                      timeslotId: Number(booking.timeslotId),
-                      paymentIntentId: String(data.payment_intent),
-                    },
-                    select: { id: true },
-                  }),
-                ),
-            ),
-          );
-          const ticketIds = tickets.map((ticket) => ticket.id);
-          console.log("✅ Ticket details: ");
-          console.log(tickets);
-
-          const eventTitle = [
-            ...new Set(bookings.map((booking) => booking.event.name)),
-          ].join(", ");
-
-          // Unreachable code but necessary for type safety
-          if (!bookings[0]) {
-            throw new Error("An error occurred");
-          }
-
-          const recipient = {
-            name: bookings[0].name,
-            email: bookings[0].email,
-          };
-
-          const ticketsUrl = `${req.headers.get("origin")}/ticket/${btoa(
-            SuperJSON.stringify(ticketIds),
-          )}`;
-
-          let orderPrice = 0;
-          const emailHtml = render(
-            GTDEmail({
-              name: recipient.name,
-              orders: bookings.map((booking) => {
-                const totalPrice = new Prisma.Decimal(booking.bundle.price)
-                  .times(booking.quantity)
-                  .toNumber();
-                orderPrice += totalPrice;
-
-                return {
-                  eventName: booking.event.name,
-                  bundleName: booking.bundle.name,
-                  timeslot: {
-                    startLabel: dayjs
-                      .utc(booking.timeslot.startTime)
-                      .format("h.mm A"),
-                    endLabel: dayjs
-                      .utc(booking.timeslot.endTime)
-                      .format("h.mm A"),
-                  },
-                  quantity: booking.quantity,
-                  totalPrice,
-                };
-              }),
-              orderPrice,
-              url: ticketsUrl,
-              eventTitle,
-            }),
-          );
-
-          await sendEmail({
-            sender: {
-              name: "PINTU Get Together Day XXVI",
-              email: BREVO_EMAIL,
-            },
-            replyTo: {
-              name: "PINTU Get Together Day XXVI",
-              email: BREVO_EMAIL,
-            },
-            to: [recipient],
-            subject: `Your ${eventTitle} Tickets`,
-            htmlContent: emailHtml,
-          });
-
-          await db.booking.deleteMany({
-            where: { id: { in: bookingIds } },
-          });
           break;
         }
         case "checkout.session.expired": {
           data = event.data.object as unknown as Stripe.Checkout.Session;
+          console.log({ data });
           metadata = data.metadata as unknown as OrderMetadata;
+          const { type: rawType, bookingIds: rawBookingIds } = metadata;
+
+          const type = z.enum(["event", "merch"]).parse(rawType);
           const bookingIds = z
             .number()
             .positive()
             .array()
-            .parse(JSON.parse(metadata.bookingIds));
+            .parse(SuperJSON.parse(rawBookingIds));
           console.log(`❌ Payment failed with session: ${data.id}`);
 
-          const bookings = await db.booking.findMany({
-            where: { id: { in: bookingIds } },
-            include: { bundle: true, timeslot: true },
-          });
-
-          await db.$transaction(async (tx) => {
-            for (const booking of bookings) {
-              const partySize = booking.quantity * booking.bundle.quantity;
-
-              await tx.bundle.update({
-                where: { id: Number(booking.bundleId) },
-                data: {
-                  remainingAmount: { increment: Number(booking.quantity) },
-                },
-              });
-
-              await tx.timeslot.update({
-                where: { id: Number(booking.timeslotId) },
-                data: { remainingSlots: { increment: Number(partySize) } },
-              });
+          switch (type) {
+            case "event": {
+              await handleEventPaymentExpired(bookingIds);
+              break;
             }
-          });
+            case "merch": {
+              await handleMerchPaymentExpired(bookingIds);
+              break;
+            }
+          }
+
           break;
         }
         default: {

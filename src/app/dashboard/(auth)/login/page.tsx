@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import DashboardLoginForm from "@/components/dashboard/dashboard-login-form";
+import DashboardLoginForm from "@/app/dashboard/_components/dashboard-login-form";
+
 import { Separator } from "@/components/ui/separator";
 
 import { getPageSession } from "@/server/auth";

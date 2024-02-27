@@ -4,7 +4,8 @@ import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useAtom } from "jotai";
-import React from "react";
+import { Info } from "lucide-react";
+import React, { useEffect } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { MdOutlineLocationOn } from "react-icons/md";
 
@@ -19,23 +20,58 @@ dayjs.extend(utc);
 
 export type BundleCardProps = {
   event: {
-    id: number;
     name: string;
     startDate: Date;
     location: string;
   };
-  bundleId: number;
+  bundleName: string;
 };
 
-export default function BundleCard({ event, bundleId }: BundleCardProps) {
+export default function BundleCard({ event, bundleName }: BundleCardProps) {
   const {
     data: bundle,
     isLoading,
     isError,
-  } = api.bundle.getById.useQuery({ id: bundleId });
+  } = api.bundle.getByNameAndEvent.useQuery({
+    name: bundleName,
+    event: event.name,
+  });
+
+  const { data: available } = api.bundle.getAvailabilityByNameAndEvent.useQuery(
+    {
+      name: bundleName,
+      event: event.name,
+    },
+  );
 
   const [cart, setCart] = useAtom(cartAtom);
-  const amount = cart.find((item) => item.bundleId === bundleId)?.quantity ?? 0;
+  const amount =
+    cart.find(
+      (item) =>
+        item.event.name === event.name && item.event.bundle === bundleName,
+    )?.quantity ?? 0;
+
+  useEffect(() => {
+    function runEffect() {
+      if (available === false) {
+        setCart((prev) =>
+          prev.filter(
+            (item) =>
+              item.event.name !== event.name ||
+              item.event.bundle !== bundleName,
+          ),
+        );
+      }
+    }
+
+    let ignored = false;
+    if (!ignored) {
+      runEffect();
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [available]);
 
   if (isLoading) {
     return <BundleCardLoading />;
@@ -50,14 +86,23 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       return;
     }
     if (amount === 1) {
-      setCart((prev) => prev.filter((item) => item.bundleId !== bundleId));
+      setCart((prev) =>
+        prev.filter(
+          (item) =>
+            item.event.bundle !== bundleName || item.event.name !== event.name,
+        ),
+      );
       return;
     }
     setCart((prev) =>
       prev.map((item) =>
-        item.bundleId !== bundleId
+        item.event.bundle !== bundleName || item.event.name !== event.name
           ? item
-          : { ...item, quantity: item.quantity - 1 },
+          : {
+              ...item,
+              quantity: item.quantity - 1,
+              participants: item.participants.slice(0, -bundle.quantity),
+            },
       ),
     );
   };
@@ -66,18 +111,35 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
       return;
     }
     setCart((prev) => {
-      if (prev.find((item) => item.bundleId === bundleId)) {
+      if (
+        prev.find(
+          (item) =>
+            item.event.name === event.name && item.event.bundle === bundleName,
+        )
+      ) {
         return prev.map((item) =>
-          item.bundleId !== bundleId
+          item.event.name !== event.name || item.event.bundle !== bundleName
             ? item
-            : { ...item, quantity: item.quantity + 1 },
+            : {
+                ...item,
+                quantity: item.quantity + 1,
+                participants: item.participants.concat(
+                  Array(bundle.quantity)
+                    .fill(0)
+                    .map((_) => ""),
+                ),
+              },
         );
       }
       return prev.concat({
-        bundleId,
-        eventId: event.id,
-        timeslotId: 0,
+        event: {
+          name: event.name,
+          bundle: bundleName,
+        },
         quantity: 1,
+        participants: Array(bundle.quantity)
+          .fill(0)
+          .map((_) => ""),
       });
     });
   };
@@ -93,6 +155,13 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           </h2>
 
           <div className="my-1.5 space-y-0.5">
+            {event.name === "Escape Room" && (
+              <p className="text-gtd-secondary-10 text-sm italic">
+                {" "}
+                <Info className="inline text-black size-4 mr-3" />
+                Only team leader that need to register
+              </p>
+            )}
             <p className="text-gtd-secondary-10 text-sm">
               {" "}
               <FaRegClock className="inline text-black text-base" /> &nbsp;{" "}
@@ -108,7 +177,6 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
 
           <BundleCardPopup
             event={{
-              id: event.id,
               name: event.name,
             }}
             bundle={{
@@ -120,7 +188,7 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
         </div>
 
         <div className="flex flex-col w-[30%]">
-          {bundle.quantity === 1 ? (
+          {bundle.name === "Individual" ? (
             <div className="flex justify-end">
               <p className="text-sm self-baseline">$</p>
               <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
@@ -138,29 +206,35 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           )}
 
           <div className="flex justify-end mt-auto">
-            <button
-              onClick={handleDecrement}
-              className={cn(
-                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
-                amount === 0 ? "opacity-60 pointer-events-none" : "",
-              )}
-            >
-              -
-            </button>
-            &nbsp;&nbsp;
-            <p>{amount}</p>
-            &nbsp;&nbsp;
-            <button
-              onClick={handleIncrement}
-              className={cn(
-                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
-                amount === bundle.maxPurchases
-                  ? "opacity-60 pointer-events-none"
-                  : "",
-              )}
-            >
-              +
-            </button>
+            {available ? (
+              <>
+                <button
+                  onClick={handleDecrement}
+                  className={cn(
+                    "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                    amount === 0 ? "opacity-60 pointer-events-none" : "",
+                  )}
+                >
+                  -
+                </button>
+                &nbsp;&nbsp;
+                <p>{amount}</p>
+                &nbsp;&nbsp;
+                <button
+                  onClick={handleIncrement}
+                  className={cn(
+                    "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                    amount === bundle.maxPurchases
+                      ? "opacity-60 pointer-events-none"
+                      : "",
+                  )}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <p className="text-red-800 text-sm">Sold Out</p>
+            )}
           </div>
         </div>
       </section>
@@ -187,22 +261,21 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
             </p>
           </div>
           <div className="">
-            <BundleCardPopup
-              event={{
-                id: event.id,
-                name: event.name,
-              }}
-              bundle={{
-                name: bundle.name,
-                price: bundle.price,
-                details: bundle.details,
-              }}
-            />
+          <BundleCardPopup
+            event={{
+              name: event.name,
+            }}
+            bundle={{
+              name: bundle.name,
+              price: bundle.price,
+              details: bundle.details,
+            }}
+          />
           </div>
         </div>
 
         <div className="flex flex-col w-[30%]">
-          {bundle.quantity === 1 ? (
+          {bundle.name === "Individual" ? (
             <div className="flex justify-end">
               <p className="text-sm self-baseline">$</p>
               <p className="text-gtd-secondary-20 text-xl font-medium self-baseline">
@@ -220,29 +293,35 @@ export default function BundleCard({ event, bundleId }: BundleCardProps) {
           )}
 
           <div className="flex justify-end mt-auto">
-            <button
-              onClick={handleDecrement}
-              className={cn(
-                "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
-                amount === 0 ? "opacity-60 pointer-events-none" : "",
-              )}
-            >
-              -
-            </button>
-            &nbsp;&nbsp;
-            <p>{amount}</p>
-            &nbsp;&nbsp;
-            <button
-              onClick={handleIncrement}
-              className={cn(
-                "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
-                amount === bundle.maxPurchases
-                  ? "opacity-60 pointer-events-none"
-                  : "",
-              )}
-            >
-              +
-            </button>
+            {available ? (
+              <>
+                <button
+                  onClick={handleDecrement}
+                  className={cn(
+                    "text-white rounded-full text-sm w-5 h-5 bg-gtd-primary-30 hover:bg-gtd-primary-30/8",
+                    amount === 0 ? "opacity-60 pointer-events-none" : "",
+                  )}
+                >
+                  -
+                </button>
+                &nbsp;&nbsp;
+                <p>{amount}</p>
+                &nbsp;&nbsp;
+                <button
+                  onClick={handleIncrement}
+                  className={cn(
+                    "bg-gtd-primary-30 hover:bg-gtd-primary-30/85 text-white rounded-full text-sm w-5 h-5",
+                    amount === bundle.maxPurchases
+                      ? "opacity-60 pointer-events-none"
+                      : "",
+                  )}
+                >
+                  +
+                </button>
+              </>
+            ) : (
+              <p className="text-red-800 text-sm">Sold Out</p>
+            )}
           </div>
         </div>
       </section>

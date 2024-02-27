@@ -1,39 +1,19 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { dashboardProcedure } from "@/server/procedures/dashboard-procedure";
+
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
-import { dashboardProcedure } from "../procedures/dashboard-procedure";
+import { nameKeySchema } from "./schemas";
 
 export const eventRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.event.findMany();
   }),
 
-  getById: publicProcedure
-    .input(
-      z.object({
-        id: z.number().positive(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const event = await ctx.db.event.findUnique({ where: { id } });
-      if (!event) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: `No event with id '${id}'`,
-        });
-      }
-      return event;
-    }),
-
   getByName: publicProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      }),
-    )
+    .input(z.object({ name: nameKeySchema }))
     .query(async ({ ctx, input }) => {
       const { name } = input;
       const event = await ctx.db.event.findUnique({ where: { name } });
@@ -46,18 +26,18 @@ export const eventRouter = createTRPCRouter({
       return event;
     }),
 
-  countBookingsById: dashboardProcedure
-    .input(z.object({ id: z.number().positive() }))
+  countBookingsByName: dashboardProcedure
+    .input(z.object({ name: nameKeySchema }))
     .query(async ({ ctx, input }) => {
-      const { id } = input;
+      const { name } = input;
       const event = await ctx.db.event.findUnique({
-        where: { id },
+        where: { name },
         select: { _count: { select: { bookings: true } } },
       });
       if (!event) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `No event with id '${id}'`,
+          message: `No event with name '${name}'`,
         });
       }
       return event._count.bookings;

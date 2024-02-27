@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TRPCClientError } from "@trpc/client";
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { type ReactNode } from "react";
+import { type ReactNode, forwardRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,10 +39,10 @@ export type DetailsFormProviderProps = {
   children: ReactNode;
 };
 
-export default function DetailsFormProvider({
-  className = "",
-  children,
-}: DetailsFormProviderProps) {
+const DetailsFormProvider = forwardRef<
+  HTMLFormElement,
+  DetailsFormProviderProps
+>(function DetailsFormProvider({ className = "", children }, ref) {
   const router = useRouter();
   const { toast } = useToast();
   const [cart, setCart] = useAtom(cartAtom);
@@ -66,7 +66,24 @@ export default function DetailsFormProvider({
   async function placeOrder(values: z.infer<typeof formSchema>) {
     try {
       const bookings = await createBookings({
-        bookings: cart.map((item) => ({ ...values, ...item })),
+        bookings: cart.map((item) => {
+          if (!item.timeslot) {
+            throw new Error(
+              `No timeslot selected for '${item.event.name}' event item.`,
+            );
+          }
+          if (item.participants.some((participant) => !participant.trim())) {
+            throw new Error("EmptyParticipant");
+          }
+          return {
+            ...values,
+            eventName: item.event.name,
+            bundleName: item.event.bundle,
+            startTime: item.timeslot.start,
+            endTime: item.timeslot.end,
+            names: item.participants,
+          };
+        }),
       });
       const bookingIds = bookings.map((booking) => booking.id);
       try {
@@ -76,6 +93,7 @@ export default function DetailsFormProvider({
         setAllowCheckout(false);
         router.push("/register/checkout");
       } catch (error) {
+        console.error({ error });
         if (
           error instanceof TRPCClientError &&
           error.message === "No items to checkout."
@@ -96,6 +114,20 @@ export default function DetailsFormProvider({
         router.back();
       }
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "EmptyParticipant") {
+          toast({
+            variant: "destructive",
+            title: "Please fill in the partcipants' details",
+          });
+        } else if (error.message.startsWith("No timeslot selected")) {
+          toast({
+            variant: "destructive",
+            title: "Please select an available timeslot for all items",
+            description: error.message,
+          });
+        }
+      }
       if (error instanceof TRPCClientError) {
         toast({
           variant: "default",
@@ -109,10 +141,16 @@ export default function DetailsFormProvider({
   return (
     <FormProvider {...form}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(placeOrder)} className={className}>
+        <form
+          ref={ref}
+          onSubmit={form.handleSubmit(placeOrder)}
+          className={className}
+        >
           {children}
         </form>
       </Form>
     </FormProvider>
   );
-}
+});
+
+export default DetailsFormProvider;

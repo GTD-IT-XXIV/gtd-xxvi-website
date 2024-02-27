@@ -5,15 +5,10 @@ export const bookingSchema = z.object({
   email: z.string().email(),
   telegramHandle: z.string(),
   phoneNumber: z.string(),
-  quantity: z.number().nonnegative(),
-  eventId: z.number().positive(),
-  bundleId: z.number().positive(),
-  timeslotId: z.number().positive(),
+  eventName: z.string(),
+  bundleName: z.string(),
+  startTime: z.date(),
+  endTime: z.date(),
+  names: z.string().array(),
   sessionId: z.string().optional(),
-});
-
-export const bookingEventConsistencySchema = bookingSchema.pick({
-  eventId: true,
-  bundleId: true,
-  timeslotId: true,
 });

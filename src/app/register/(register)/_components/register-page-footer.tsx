@@ -3,7 +3,8 @@
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 
-import TotalPrice from "@/components/registration/total-price";
+import TotalPrice from "@/app/register/_components/total-price";
+
 import { Button } from "@/components/ui/button";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
@@ -50,7 +51,7 @@ export default function RegisterPageFooter({
       </footer>
       <footer
         className={cn(
-          "bg-white hidden md:flex flex-col justify-end items-end py-2 px-5 space-y-4 mb-32",
+          "bg-white hidden md:flex flex-col justify-end items-end py-4 px-5 space-y-4 mb-32",
           className,
         )}
       >

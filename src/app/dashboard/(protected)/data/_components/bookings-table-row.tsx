@@ -4,14 +4,14 @@ import { api } from "@/lib/trpc/client";
 
 export type BookingsTableRowProps = {
   email: string;
-  eventId: number;
+  eventName: string;
   checked?: boolean;
   onChange: () => void;
 };
 
 export default function BookingsTableRow({
   email,
-  eventId,
+  eventName,
   checked = false,
   onChange,
 }: BookingsTableRowProps) {
@@ -23,9 +23,9 @@ export default function BookingsTableRow({
   } = api.booking.getManyByEmailAndEvents.useQuery(
     {
       email,
-      eventIds: [eventId],
+      events: [eventName],
     },
-    { enabled: !!eventId },
+    { enabled: !!eventName },
   );
   const {
     data: amount,
@@ -34,7 +34,7 @@ export default function BookingsTableRow({
     isError: isAmountError,
   } = api.booking.getPriceByEmailAndEvents.useQuery({
     email,
-    eventIds: [eventId],
+    events: [eventName],
   });
 
   if (isLoading) {

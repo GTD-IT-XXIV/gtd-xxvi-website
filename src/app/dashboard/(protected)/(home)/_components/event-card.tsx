@@ -10,12 +10,12 @@ import {
 import { api } from "@/lib/trpc/client";
 
 export function EventCard({ event }: EventCardProps) {
-  const { data: count } = api.ticket.getCountByEvent.useQuery({
-    eventId: event.id,
+  const { data: count } = api.ticket.countByEvent.useQuery({
+    event: event.name,
   });
 
   return (
-    <Link href={`/dashboard/${event.id}`}>
+    <Link href={`/dashboard/${event.name}`}>
       <Card>
         <CardHeader>
           <CardTitle>{event.name}</CardTitle>
@@ -28,7 +28,6 @@ export function EventCard({ event }: EventCardProps) {
 
 type EventCardProps = {
   event: {
-    id: number;
     name: string;
     description: string;
     location: string;

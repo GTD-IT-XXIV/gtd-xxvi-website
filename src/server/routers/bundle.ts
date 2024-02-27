@@ -4,18 +4,20 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
+import { nameKeySchema } from "./schemas";
+
 export const bundleRouter = createTRPCRouter({
   getManyByEvent: publicProcedure
     .input(
       z.object({
-        eventId: z.number().positive(),
+        event: nameKeySchema,
         open: z.boolean().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { eventId, open } = input;
+      const { event, open } = input;
       const where: Prisma.BundleFindManyArgs["where"] = {
-        eventId,
+        eventName: event,
         ...(open === true && {
           open: { lte: new Date() },
           close: { gt: new Date() },
@@ -25,57 +27,80 @@ export const bundleRouter = createTRPCRouter({
       return bundles;
     }),
 
-  getById: publicProcedure
+  getByNameAndEvent: publicProcedure
     .input(
       z.object({
-        id: z.number().positive(),
+        name: nameKeySchema,
+        event: nameKeySchema,
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const bundle = await ctx.db.bundle.findUnique({ where: { id } });
-      if (!bundle) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: `No bundle with id '${id}'`,
-        });
-      }
-      return bundle;
-    }),
-
-  getByEventAndName: publicProcedure
-    .input(
-      z.object({
-        eventId: z.number().positive(),
-        name: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { eventId, name } = input;
+      const { name, event } = input;
       const bundle = await ctx.db.bundle.findUnique({
-        where: { name_eventId: { name, eventId } },
+        where: {
+          name_eventName: {
+            name,
+            eventName: event,
+          },
+        },
       });
       if (!bundle) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `No bundle with name '${name} from event with id '${eventId}'`,
+          message: `No bundle with name '${name}' from event with name '${event}'`,
         });
       }
       return bundle;
     }),
 
   getMinQuantityByEvent: publicProcedure
-    .input(
-      z.object({
-        eventId: z.number().positive(),
-      }),
-    )
+    .input(z.object({ event: nameKeySchema }))
     .query(async ({ ctx, input }) => {
-      const { eventId } = input;
+      const { event } = input;
       const bundles = await ctx.db.bundle.findMany({
-        where: { eventId },
+        where: { eventName: event },
         select: { quantity: true },
       });
       return Math.min(...bundles.map((bundle) => bundle.quantity));
+    }),
+
+  getAvailabilityByNameAndEvent: publicProcedure
+    .input(
+      z.object({
+        name: nameKeySchema,
+        event: nameKeySchema,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { name, event } = input;
+      const bundle = await ctx.db.bundle.findUnique({
+        where: {
+          name_eventName: {
+            name,
+            eventName: event,
+          },
+        },
+      });
+      if (!bundle) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No bundle with name '${name}' from event with name '${event}'`,
+        });
+      }
+
+      if (bundle.remainingAmount !== null && bundle.remainingAmount < 1) {
+        return false;
+      }
+
+      const timeslots = await ctx.db.timeslot.findMany({
+        where: {
+          eventName: event,
+          remainingSlots: {
+            gte: bundle.quantity,
+          },
+        },
+      });
+
+      return timeslots.length !== 0;
     }),
 });
