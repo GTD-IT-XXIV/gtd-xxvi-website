@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim AS base
+FROM node:20-bullseye AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -6,6 +6,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 # Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
+
+ENV HUSKY=0
 
 COPY package.json pnpm-lock.yaml prisma ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store corepack enable pnpm \
@@ -36,19 +38,21 @@ ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
-
 # Set the correct permission for prerender cache
-RUN mkdir .next && chown nextjs:nodejs .next
+RUN mkdir .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/publi[c] ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.env* ./
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/publi[c] ./public
+COPY --from=builder /app/.env* ./
 
-USER nextjs
+FROM gcr.io/distroless/nodejs20-debian11
+COPY --from=runner --chown=nonroot:nonroot /app /app
+WORKDIR /app
+
+USER nonroot
 
 EXPOSE 3000
 
