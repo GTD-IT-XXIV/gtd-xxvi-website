@@ -56,10 +56,10 @@ export default function GTDFestTop({
     };
   }, []);
 
-  // const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
-  // const endDateLabel = dayjs.utc(escapeRoom.endDate).format("D MMM YYYY");
-  const startDateLabel = "18 Feb";
-  const endDateLabel = "3 Mar 2024";
+  const startDateLabel = dayjs.utc(gtdFest.startDate).format("D MMM");
+  const endDateLabel = dayjs.utc(escapeRoom.endDate).format("D MMM YYYY");
+  // const startDateLabel = "18 Feb";
+  // const endDateLabel = "3 Mar 2024";
 
   return (
     <section className="relative">
@@ -84,7 +84,7 @@ export default function GTDFestTop({
           <div className="grow md:grow-0 text-center space-y-4">
             <hgroup className="space-y-3">
               <h1 className="text-lg md:text-2xl font-serif">
-                {/* <div>{gtdFest.name}</div>
+                <div>{gtdFest.name}</div>
                 <div className="text-4xl md:text-6xl lg:text-7xl text-amber-100 text-shadow-[0_0_4px_var(--tw-shadow-color)] shadow-amber-100 italic tracking-wider">
                   Enchantium
                 </div>
@@ -92,14 +92,14 @@ export default function GTDFestTop({
                 <div>{escapeRoom.name}</div>
                 <div className="text-4xl md:text-6xl lg:text-7xl text-red-200 text-shadow-[0px_0px_4px_var(--tw-shadow-color)] shadow-red-200 italic tracking-wider">
                   Nyctophobia
-                </div> */}
-                <div className="text-4xl md:text-5xl lg:text-6xl italic tracking-wider text-amber-100">
+                </div>
+                {/* <div className="text-4xl md:text-5xl lg:text-6xl italic tracking-wider text-amber-100">
                   Pre-order
                   <br />
                   Enchantium
                   <br />
                   Merchandise
-                </div>
+                </div> */}
               </h1>
               <p className="font-light md:text-2xl">
                 {startDateLabel} - {endDateLabel}
@@ -111,7 +111,13 @@ export default function GTDFestTop({
                 className="bg-gtd-primary-30 hover:bg-gtd-primary-20 md:px-8 md:h-12 md:text-xl font-semibold"
                 asChild
               >
-                <Link href="/merch">Buy Merch</Link>
+                <Link
+                  href="https://bit.ly/FotoGTDFest"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  See Photos
+                </Link>
               </Button>
               <Button
                 type="button"

@@ -4,13 +4,15 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
-const sectionVariants = cva(
-  "absolute inset-0 p-12 flex gap-2 flex-col justify-end",
+import GTDFestSectionCarousel from "./gtdfest-section-carousel";
+
+const containerVariants = cva(
+  "absolute inset-0 flex items-center p-12 gap-12 flex-wrap overflow-y-auto",
   {
     variants: {
       variant: {
-        left: "items-start text-left",
-        right: "items-end text-right",
+        left: "flex-row-reverse",
+        right: "flex-row",
       },
     },
     defaultVariants: {
@@ -19,18 +21,33 @@ const sectionVariants = cva(
   },
 );
 
+const sectionVariants = cva("basis-56 grow flex gap-2 flex-col justify-end", {
+  variants: {
+    variant: {
+      left: "items-start text-left",
+      right: "items-end text-right",
+    },
+  },
+  defaultVariants: {
+    variant: "left",
+  },
+});
+
 export type GTDFestSectionProps = {
   className?: string;
   title: string;
   description: string;
-  image: { src: string | StaticImport; alt: string };
-} & VariantProps<typeof sectionVariants>;
+  image: { src: StaticImport; alt: string };
+  carouselImages?: { src: StaticImport; alt: string }[];
+} & VariantProps<typeof containerVariants> &
+  VariantProps<typeof sectionVariants>;
 
 export default function GTDFestSection({
   className = "",
   title,
   description,
   image,
+  carouselImages,
   variant,
 }: GTDFestSectionProps) {
   return (
@@ -38,11 +55,19 @@ export default function GTDFestSection({
       <Image
         src={image.src}
         alt={image.alt}
-        className="h-auto w-full aspect-[3/4] md:aspect-video object-cover"
+        className="h-auto w-full aspect-[3/4] md:aspect-video object-cover opacity-35"
       />
-      <div className={sectionVariants({ variant })}>
-        <h2 className="font-serif text-4xl">{title}</h2>
-        <p>{description}</p>
+      <div className={containerVariants({ variant })}>
+        {!!carouselImages && (
+          <GTDFestSectionCarousel
+            className="basis-1/2 grow"
+            images={carouselImages}
+          />
+        )}
+        <div className={sectionVariants({ variant })}>
+          <h2 className="font-serif text-4xl">{title}</h2>
+          <p>{description}</p>
+        </div>
       </div>
     </section>
   );
