@@ -34,39 +34,9 @@ export default function GTDFestSectionCarousel({
             <Image
               src={image.src}
               alt={image.alt}
+              placeholder="blur"
               className="object-contain rounded-lg"
             />
-            {/* <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Image
-                  src={image}
-                  alt="Merchandise preview photo"
-                  width={1080}
-                  height={1080}
-                  className={merchItemCarouselImageVariants({ variant })}
-                />
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <Image
-                  src={image}
-                  alt="Merchandise preview photo"
-                  width={1080}
-                  height={1080}
-                  className="aspect-square object-contain"
-                />
-                <AlertDialogCancel asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="absolute top-4 right-4 p-0"
-                  >
-                    <X className="size-5" />
-                    <span className="sr-only">Close</span>
-                  </Button>
-                </AlertDialogCancel>
-              </AlertDialogContent>
-            </AlertDialog> */}
           </CarouselItem>
         ))}
       </CarouselContent>

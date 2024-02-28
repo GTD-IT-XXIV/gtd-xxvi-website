@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 dayjs.extend(utc);
 
 export type GTDFestTopProps = {
-  backgroundImage: string | StaticImport;
-  logo: string | StaticImport;
+  backgroundImage: StaticImport;
+  logo: StaticImport;
   gtdFest: {
     name: string;
     startDate: Date;

@@ -55,6 +55,7 @@ export default function GTDFestSection({
       <Image
         src={image.src}
         alt={image.alt}
+        placeholder="blur"
         className="h-auto w-full aspect-[3/4] md:aspect-video object-cover opacity-35"
       />
       <div className={containerVariants({ variant })}>
