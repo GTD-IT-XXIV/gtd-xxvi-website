@@ -4,16 +4,25 @@ export const loginSchema = z.object({
   username: z
     .string()
     .trim()
-    .min(5, { message: "Must be 5 or more characters long" }),
-  password: z.string().min(8, { message: "Must be 8 or more characters long" }),
+    .min(5, { message: "Must be 5 or more characters long" })
+    .max(255, { message: "Must be less than 256 characters long" }),
+  password: z
+    .string()
+    .min(8, { message: "Must be 8 or more characters long" })
+    .max(255, { message: "Must be less than 256 characters long" }),
 });
 
 export const signupSchema = loginSchema.extend({
   name: z
     .string()
     .trim()
-    .min(3, { message: "Must be 3 or more characters long" }),
-  email: z.string().trim().email(),
+    .min(3, { message: "Must be 3 or more characters long" })
+    .max(255, { message: "Must be less than 256 characters long" }),
+  email: z
+    .string()
+    .trim()
+    .email()
+    .max(255, { message: "Must be less than 256 characters long" }),
 });
 
 /**
