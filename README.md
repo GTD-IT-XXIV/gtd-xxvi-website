@@ -43,7 +43,12 @@ nvm install lts
 nvm use lts
 ```
 
-3. Install pnpm. Installation: [using Corepack](https://pnpm.io/installation#using-corepack) or [using npm](https://pnpm.io/installation#using-npm).
+3. Install pnpm using Corepack (or alternatively, [using npm](https://pnpm.io/installation#using-npm)):
+
+```bash
+corepack enable pnpm
+```
+
 4. Install Docker. Installation: [macOS](https://docs.docker.com/desktop/install/mac-install/), [Linux](https://docs.docker.com/desktop/install/linux-install/), [Windows](https://docs.docker.com/desktop/install/windows-install/).
 
 ### Setting Up
