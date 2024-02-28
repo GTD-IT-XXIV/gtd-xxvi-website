@@ -33,9 +33,9 @@ export default async function MobileLayout({
       eventNames = [eventParams.data];
     }
   } else {
-    let events: RouterOutputs["event"]["getAll"] = [];
+    let events: RouterOutputs["event"]["getAllAvailable"] = [];
     try {
-      events = await api.event.getAll.query();
+      events = await api.event.getAllAvailable.query();
     } catch (error) {
       if (error instanceof TRPCClientError) {
         throw new Error("EventGetAllError");
@@ -59,9 +59,13 @@ export default async function MobileLayout({
               </p>
             </hgroup>
             <div className="space-y-4">
-              {eventNames.map((eventName) => (
-                <EventCardGroup key={eventName} eventName={eventName} />
-              ))}
+              {eventNames.length === 0 ? (
+                <p>No events available for registration.</p>
+              ) : (
+                eventNames.map((eventName) => (
+                  <EventCardGroup key={eventName} eventName={eventName} />
+                ))
+              )}
             </div>
           </article>
           <RegisterPageFooter

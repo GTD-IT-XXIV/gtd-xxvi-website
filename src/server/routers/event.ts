@@ -12,6 +12,14 @@ export const eventRouter = createTRPCRouter({
     return ctx.db.event.findMany();
   }),
 
+  getAllAvailable: publicProcedure.query(({ ctx }) => {
+    return ctx.db.event.findMany({
+      where: {
+        endDate: { gte: new Date() },
+      },
+    });
+  }),
+
   getByName: publicProcedure
     .input(z.object({ name: nameKeySchema }))
     .query(async ({ ctx, input }) => {

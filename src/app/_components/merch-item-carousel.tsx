@@ -1,5 +1,6 @@
 "use client";
 
+import { type VariantProps, cva } from "class-variance-authority";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -22,15 +23,31 @@ import {
 
 import { cn } from "@/lib/utils";
 
-export type MerchBundleCardCarouselProps = {
+const merchItemCarouselImageVariants = cva(
+  "w-full object-contain hover:cursor-pointer",
+  {
+    variants: {
+      variant: {
+        default: "aspect-[4/3]",
+        square: "aspect-square",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+);
+
+export type MerchItemCarouselProps = {
   images: string[];
   className?: string;
-};
+} & VariantProps<typeof merchItemCarouselImageVariants>;
 
-export default function MerchBundleCardCarousel({
+export default function MerchItemCarousel({
   images,
   className = "",
-}: MerchBundleCardCarouselProps) {
+  variant,
+}: MerchItemCarouselProps) {
   const [_, setApi] = useState<CarouselApi>();
 
   return (
@@ -45,7 +62,7 @@ export default function MerchBundleCardCarousel({
                   alt="Merchandise preview photo"
                   width={1080}
                   height={1080}
-                  className="w-full object-contain aspect-[4/3] hover:cursor-pointer"
+                  className={merchItemCarouselImageVariants({ variant })}
                 />
               </AlertDialogTrigger>
               <AlertDialogContent>

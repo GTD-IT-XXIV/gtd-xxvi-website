@@ -3,6 +3,8 @@
 import { useAtom } from "jotai";
 import { Info } from "lucide-react";
 
+import MerchItemCarousel from "@/app/_components/merch-item-carousel";
+
 import QuantitySelect from "@/components/quantity-select";
 import {
   Select,
@@ -17,8 +19,6 @@ import { merchCartAtom } from "@/lib/atoms/merch";
 import { useHasMounted } from "@/lib/hooks";
 import { type RouterOutputs } from "@/lib/trpc/utils";
 import { type ArrElement, cn } from "@/lib/utils";
-
-import MerchBundleCardCarousel from "./merch-bundle-card-carousel";
 
 export type MerchBundleCardProps = {
   merchBundle: Omit<
@@ -125,7 +125,7 @@ export default function MerchBundleCard({
         className,
       )}
     >
-      <MerchBundleCardCarousel images={images} />
+      <MerchItemCarousel images={images} />
       <div className="grow px-3 space-y-1">
         <hgroup className="flex justify-between gap-4 text-gtd-secondary-20 font-medium text-xl">
           <h2>

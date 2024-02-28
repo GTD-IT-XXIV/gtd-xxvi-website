@@ -73,6 +73,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
       <div className="hidden md:flex gap-1">
         {ROUTES.map((route) => (
           <NavbarButton
+            key={route.name}
             variant={variant}
             size="sm"
             href={route.path}
@@ -95,6 +96,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
           <div className={cn(sidebarVariants({ variant }))}>
             {ROUTES.map((route) => (
               <NavbarButton
+                key={route.name}
                 variant={variant}
                 href={route.path}
                 label={route.name}
