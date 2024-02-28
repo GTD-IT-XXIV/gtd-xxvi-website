@@ -144,5 +144,6 @@
     "budgetPercentIncreaseRed": 20,
     "minimumChangeThreshold": 500,
     "showDetails": true
-  }
+  },
+  "packageManager": "pnpm@8.15.4"
 }
