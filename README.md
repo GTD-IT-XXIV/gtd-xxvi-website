@@ -22,6 +22,7 @@
     - [In Server Components](#in-server-components)
     - [In Client Components](#in-client-components)
   - [Day.js](#dayjs)
+  - [Sharp CLI](#sharp-cli)
 - [Learn More](#learn-more)
 
 ## Project Setup
@@ -276,6 +277,22 @@ Do:
 Don't:
 
 - Use Day.js as prop/state. Use `Date` instead (`dayjs().toDate()`)
+
+### Sharp CLI
+
+Compress one image into `.webp`:
+
+```bash
+pnpm dlx sharp-cli -f webp --effort 6 -q 75 -i large-image.jpg -o {dir}
+```
+
+Compress all images in the current working directory into `.webp`:
+
+```bash
+pnpm dlx sharp-cli -f webp --effort 6 -q 75 -i ./* -o {dir}
+```
+
+More info: [Sharp CLI documentation](https://github.com/vseventer/sharp-cli)
 
 ## Learn More
 
