@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
+import Script from "next/script";
 import { type WebSite, type WithContext } from "schema-dts";
 
 import "@/styles/globals.css";
@@ -56,6 +57,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
         />
+        <Script
+          defer
+          src="https://us.umami.is/script.js"
+          data-website-id="ac489a4a-0c3c-4e4b-86bd-b1ce59bc79e0"
+        ></Script>
       </head>
       <body>
         <TRPCReactProvider cookies={cookies().toString()}>

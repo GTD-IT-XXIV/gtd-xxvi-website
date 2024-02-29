@@ -17,6 +17,8 @@
   - [Merge conflicts in `pnpm-lock.yaml`](#merge-conflicts-in-pnpm-lockyaml)
   - [Access the Dashboard](#access-the-dashboard)
   - [Error running development server or husky](#error-running-development-server-or-husky)
+  - [Database errors](#database-errors)
+  - [Save storage space](#save-storage-space)
 - [Packages Usage](#packages-usage)
   - [tRPC](#trpc)
     - [In Server Components](#in-server-components)
@@ -228,6 +230,20 @@ docker volume rm gtd-xxvi-db-pgdata-dev
 
 ```bash
 pnpm dev:db:start
+```
+
+### Save storage space
+
+1. Remove unused packages:
+
+```bash
+pnpm prune
+```
+
+2. Remove unused and dangling Docker containers and images:
+
+```bash
+docker system prune
 ```
 
 ## Packages Usage
