@@ -18,7 +18,7 @@ export default function DashboardDataPageBody() {
     {},
   );
 
-  const { data, error, fetchNextPage, hasNextPage, isLoading, isError } =
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     api.booking.getAllEmails.useInfiniteQuery(
       { limit: 10 },
       {
