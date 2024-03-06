@@ -148,7 +148,7 @@ export default function MerchBundleCard({
           </p>
         )}
       </div>
-      <div className="flex justify-between gap-4 px-3">
+      <div className="flex justify-between items-center gap-4 px-3">
         <div className="flex items-center space-y-4">
           {merchBundle.bundleItems.map((item) => (
             <div key={`${item.merchId}-${item.merchBundleId}`}>
