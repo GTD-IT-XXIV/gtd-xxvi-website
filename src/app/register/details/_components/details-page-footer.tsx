@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
+import TotalPrice from "@/app/register/_components/total-price";
+
 import LoadingSpinner from "@/components/loading-spinner";
-import TotalPrice from "@/components/registration/total-price";
 import {
   AlertDialog,
   AlertDialogAction,

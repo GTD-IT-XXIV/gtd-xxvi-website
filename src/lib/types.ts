@@ -1,4 +1,3 @@
-import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import { type z } from "zod";
 
 import { type cartSchema, type merchCartSchema } from "./schemas";

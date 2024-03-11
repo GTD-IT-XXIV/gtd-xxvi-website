@@ -27,7 +27,9 @@
     // Path Aliases
     "paths": {
       "@/*": ["./src/*"],
-      "@emails/*": ["./emails/*"]
+      "@/components/*": ["./src/app/_components/*"],
+      "~/emails/*": ["./emails/*"],
+      "~/public/*": ["./public/*"]
     }
   },
   "include": [

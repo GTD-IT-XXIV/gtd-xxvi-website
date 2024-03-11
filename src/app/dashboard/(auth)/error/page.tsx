@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import DashboardLogoutButton from "@/components/dashboard/dashboard-logout-button";
+import DashboardLogoutButton from "@/app/dashboard/_components/dashboard-logout-button";
 
 import { getPageSession } from "@/server/auth";
 

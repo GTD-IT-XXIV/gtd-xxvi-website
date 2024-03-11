@@ -2,7 +2,7 @@ import "client-only";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
@@ -17,7 +17,6 @@ export type TimeSlotSectionProps = {
   eventName: string;
   bundleName: string;
   quantity: number;
-  media?: string;
   selected?: {
     start: Date;
     end: Date;
@@ -30,7 +29,6 @@ export default function TimeSlotSection({
   eventName,
   bundleName,
   quantity,
-  media,
   selected,
   onChange,
   handleSkip,

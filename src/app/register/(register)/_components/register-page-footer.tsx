@@ -3,7 +3,8 @@
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 
-import TotalPrice from "@/components/registration/total-price";
+import TotalPrice from "@/app/register/_components/total-price";
+
 import { Button } from "@/components/ui/button";
 
 import { cartAtom } from "@/lib/atoms/events-registration";

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TRPCClientError } from "@trpc/client";
 import { useAtom, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { type ReactNode, RefObject, forwardRef } from "react";
+import { type ReactNode, forwardRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,7 +15,6 @@ import {
   allowCheckoutAtom,
   cartAtom,
   checkoutSessionAtom,
-  showDialogAtom,
 } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 

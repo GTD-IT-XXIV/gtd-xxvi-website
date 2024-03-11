@@ -1,11 +1,12 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Menu, Shirt, ShoppingCart, Ticket, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
@@ -70,38 +71,17 @@ export default function Navbar({ className, variant }: NavbarProps) {
         </Link>
       )}
       <div className="hidden md:flex gap-1">
-        <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/"
-          label="Home"
-          icon={Home}
-          className="w-auto justify-center"
-        />
-        {/* <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/register"
-          label="GTD Fest"
-          icon={Zap}
-          className="w-auto justify-center"
-        /> */}
-        <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/merch"
-          label="Merchandise"
-          icon={Shirt}
-          className="w-auto justify-center"
-        />
-        <NavbarButton
-          variant={variant}
-          size="sm"
-          href="/merch/details"
-          label="Cart"
-          icon={ShoppingCart}
-          className="w-auto justify-center"
-        />
+        {ROUTES.map((route) => (
+          <NavbarButton
+            key={route.name}
+            variant={variant}
+            size="sm"
+            href={route.path}
+            label={route.name}
+            icon={route.icon}
+            className="w-auto justify-center"
+          />
+        ))}
       </div>
       <button
         type="button"
@@ -114,25 +94,15 @@ export default function Navbar({ className, variant }: NavbarProps) {
       {open && (
         <div className="relative md:hidden">
           <div className={cn(sidebarVariants({ variant }))}>
-            <NavbarButton variant={variant} href="/" label="Home" icon={Home} />
-            {/* <NavbarButton
-              variant={variant}
-              href="/register"
-              label="GTD Fest"
-              icon={Zap}
-            /> */}
-            <NavbarButton
-              variant={variant}
-              href="/merch"
-              label="Merchandise"
-              icon={Shirt}
-            />
-            <NavbarButton
-              variant={variant}
-              href="/merch/details"
-              label="Cart"
-              icon={ShoppingCart}
-            />
+            {ROUTES.map((route) => (
+              <NavbarButton
+                key={route.name}
+                variant={variant}
+                href={route.path}
+                label={route.name}
+                icon={route.icon}
+              />
+            ))}
           </div>
         </div>
       )}

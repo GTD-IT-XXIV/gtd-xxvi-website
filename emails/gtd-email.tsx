@@ -58,7 +58,7 @@ export default function GTDEmail(props: GTDEmailProps) {
                 }}
               >
                 <Img
-                  src="https://utfs.io/f/9611670a-f83f-4396-978c-b60167c134ab-tvogcf.png"
+                  src="https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/logo-gtd-normal.png"
                   width="300"
                   height="75"
                   alt="PINTU Get Together Day Logo"

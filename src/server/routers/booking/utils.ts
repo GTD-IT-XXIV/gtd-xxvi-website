@@ -28,11 +28,10 @@ export async function createBooking(
     where: { startTime_endTime_eventName: { startTime, endTime, eventName } },
   });
 
-  // Unreachable code but necessary for type safety
   if (!bundle || !timeslot) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: "An error occurred",
+      message: "Bundle or timeslot not found",
     });
   }
 

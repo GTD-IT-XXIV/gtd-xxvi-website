@@ -17,7 +17,6 @@ export default function BookingsTableRow({
 }: BookingsTableRowProps) {
   const {
     data: bookings,
-    error: bookingsError,
     isLoading,
     isError,
   } = api.booking.getManyByEmailAndEvents.useQuery(
@@ -27,12 +26,7 @@ export default function BookingsTableRow({
     },
     { enabled: !!eventName },
   );
-  const {
-    data: amount,
-    error: amountError,
-    isLoading: isAmountLoading,
-    isError: isAmountError,
-  } = api.booking.getPriceByEmailAndEvents.useQuery({
+  const { data: amount } = api.booking.getPriceByEmailAndEvents.useQuery({
     email,
     events: [eventName],
   });

@@ -1,9 +1,8 @@
 import { TRPCClientError } from "@trpc/client";
 import { type Metadata } from "next";
-import { z } from "zod";
 
-import CartCleaner from "@/components/registration/cart-cleaner";
-import CheckoutWrapper from "@/components/registration/checkout-wrapper";
+import CartCleaner from "@/app/register/_components/cart-cleaner";
+import CheckoutWrapper from "@/app/register/_components/checkout-wrapper";
 
 import { api } from "@/server/trpc";
 
@@ -34,9 +33,9 @@ export default async function DesktopLayout({
       eventNames = [eventParams.data];
     }
   } else {
-    let events: RouterOutputs["event"]["getAll"] = [];
+    let events: RouterOutputs["event"]["getAllAvailable"] = [];
     try {
-      events = await api.event.getAll.query();
+      events = await api.event.getAllAvailable.query();
     } catch (error) {
       if (error instanceof TRPCClientError) {
         throw new Error("EventGetAllError");
@@ -62,11 +61,15 @@ export default async function DesktopLayout({
               </p>
             </hgroup>
             <div className="flex w-[100%] space-x-4">
-              {eventNames.map((eventName) => (
-                <div className="flex w-[100%] items-center justify-center">
-                  <EventCardGroup key={eventName} eventName={eventName} />
-                </div>
-              ))}
+              {eventNames.length === 0 ? (
+                <p>No events available for registration.</p>
+              ) : (
+                eventNames.map((eventName) => (
+                  <div className="flex w-[100%] items-center justify-center">
+                    <EventCardGroup key={eventName} eventName={eventName} />
+                  </div>
+                ))
+              )}
             </div>
           </article>
           <RegisterPageFooter

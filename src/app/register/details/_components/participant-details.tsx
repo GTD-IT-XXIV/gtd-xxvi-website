@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import _ from "lodash";
+import isEqual from "lodash.isequal";
 
 import { Input } from "@/components/ui/input";
 
@@ -18,13 +18,13 @@ export default function ParticipantDetails({
   function handleChange(idx: number, name: string) {
     setCart((prev) => {
       const toChangeIdx = prev.findIndex((item) =>
-        _.isEqual(
+        isEqual(
           { ...item, participants: undefined },
           { ...cartItem, participants: undefined },
         ),
       );
       const change = prev.find((item) =>
-        _.isEqual(
+        isEqual(
           { ...item, participants: undefined },
           { ...cartItem, participants: undefined },
         ),
@@ -44,7 +44,7 @@ export default function ParticipantDetails({
         {cartItem.event.name} ({cartItem.event.bundle})
       </h3>
       {cart
-        .find((item) => _.isEqual(item, cartItem))
+        .find((item) => isEqual(item, cartItem))
         ?.participants.map((participant, idx) => (
           <Input
             type="name"

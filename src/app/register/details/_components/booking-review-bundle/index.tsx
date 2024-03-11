@@ -30,13 +30,11 @@ export default function BookingReviewBundle({
 }: BookingReviewBundleProps) {
   const {
     data: event,
-    error: eventError,
     isLoading: isEventLoading,
     isError: isEventError,
   } = api.event.getByName.useQuery({ name: eventName });
   const {
     data: bundle,
-    error: bundleError,
     isLoading: isBundleLoading,
     isError: isBundleError,
   } = api.bundle.getByNameAndEvent.useQuery({
@@ -45,7 +43,6 @@ export default function BookingReviewBundle({
   });
   const {
     data: timeslotData,
-    error: timeslotError,
     isFetching: isTimeslotFetching,
     isLoading: isTimeslotLoading,
     isError: isTimeslotError,

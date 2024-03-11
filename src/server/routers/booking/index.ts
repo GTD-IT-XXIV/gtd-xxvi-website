@@ -9,6 +9,7 @@ import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 import { nameKeySchema } from "../schemas";
 import { handleCreate, handleCreateMany } from "./handlers";
 import { bookingSchema } from "./schemas";
+
 // import { checkEventConsistency } from "./utils";
 
 export const bookingRouter = createTRPCRouter({
@@ -98,19 +99,6 @@ export const bookingRouter = createTRPCRouter({
       };
     }),
 
-  // checkIdConsistency: publicProcedure
-  //   .input(
-  //     z.object({
-  //       eventId: z.number().positive(),
-  //       bundleId: z.number().positive(),
-  //       timeslotId: z.number().positive(),
-  //     }),
-  //   )
-  //   .mutation(async ({ ctx, input }) => {
-  //     const isConsistent = await checkEventConsistency(ctx.db, input);
-  //     return isConsistent;
-  //   }),
-
   create: publicProcedure
     .input(bookingSchema)
     .mutation(async ({ ctx, input }) => {
@@ -145,4 +133,4 @@ export const bookingRouter = createTRPCRouter({
         0,
       );
     }),
-  });
+});
