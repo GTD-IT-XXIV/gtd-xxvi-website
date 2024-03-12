@@ -12,6 +12,7 @@ const shouldAnalyzeBundles = process.env.ANALYZE === "true";
 /** @type {import('next').NextConfig} */
 let nextConfig = {
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
