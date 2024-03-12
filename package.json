@@ -31,7 +31,7 @@
     "\n========== Building ==========": "",
     "build": "next build",
     "build:docker": "docker build -t gtd-xxvi/website -f docker/production/Dockerfile .",
-    "start:docker": "docker run --name gtd-xxvi-website -p 3000:3000 --mount type=bind,source=\"$(pwd)\"/.env.production.local,target=/app/.env.production.local --rm gtd-xxvi/website",
+    "start:docker": "docker run --name gtd-xxvi-website -p 3000:3000 --mount type=bind,source=\"/$(pwd)\"/.env.production.local,target=/app/.env.production.local --rm gtd-xxvi/website",
     "push:docker": "docker buildx build --platform linux/amd64,linux/arm64 --provenance=mode=max --sbom=true -f docker/production/Dockerfile --push -t devpintugtd/gtd-xxvi-website:latest .",
     "\n========== Linting ==========": "",
     "lint": "next lint",
