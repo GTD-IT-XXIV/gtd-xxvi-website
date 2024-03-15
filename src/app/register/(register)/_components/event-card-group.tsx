@@ -11,8 +11,8 @@ export default async function EventCardGroup({
   eventName: string;
 }) {
   try {
-    const event = await api.event.getByName.query({ name: eventName });
-    const bundles = await api.bundle.getManyByEvent.query({
+    const event = await api.event.getByName({ name: eventName });
+    const bundles = await api.bundle.getManyByEvent({
       event: eventName,
       open: true,
     });

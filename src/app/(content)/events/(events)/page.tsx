@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-  const events = await api.event.getAll.query();
+  const events = await api.event.getAll();
 
   return (
     <section>

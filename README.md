@@ -259,7 +259,7 @@ Use the tRPC client `api` defined in `src/trpc/server`. Example:
 import { api } from "@/server/trpc";
 
 export default async function ExamplePage() {
-  const event = await api.event.getById.query(1);
+  const event = await api.event.getById(1);
   return <main>{event?.name}</main>;
 }
 ```

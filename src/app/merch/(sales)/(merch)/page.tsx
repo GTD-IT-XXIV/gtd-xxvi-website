@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MerchPage() {
-  const merchBundles = await api.merchBundle.getAll.query();
+  const merchBundles = await api.merchBundle.getAll();
   return (
     <MerchGenericLayout
       title="Merchandise Sales"
