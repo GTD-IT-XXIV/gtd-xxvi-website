@@ -37,13 +37,13 @@ export default function TimeSlotSection({
 
   const {
     data: event,
-    isLoading: isEventLoading,
+    isPending: isEventPending,
     isError: isEventError,
   } = api.event.getByName.useQuery({ name: eventName });
 
   const {
     data: bundle,
-    isLoading: isBundleLoading,
+    isPending: isBundlePending,
     isError: isBundleError,
   } = api.bundle.getByNameAndEvent.useQuery({
     name: bundleName,
@@ -52,7 +52,7 @@ export default function TimeSlotSection({
 
   const {
     data: timeslots,
-    isLoading: isTimeslotsLoading,
+    isPending: isTimeslotsPending,
     isError: isTimeslotsError,
   } = api.timeslot.getManyByEvent.useQuery(
     { event: eventName },
@@ -115,7 +115,7 @@ export default function TimeSlotSection({
     };
   }, [timeslots]);
 
-  if (isEventLoading || isBundleLoading || isTimeslotsLoading) {
+  if (isEventPending || isBundlePending || isTimeslotsPending) {
     return <TimeslotSectionLoading />;
   }
   if (isEventError || isBundleError || isTimeslotsError) {

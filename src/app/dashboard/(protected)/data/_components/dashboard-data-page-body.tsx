@@ -18,7 +18,7 @@ export default function DashboardDataPageBody() {
     {},
   );
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
+  const { data, fetchNextPage, hasNextPage, isPending, isError } =
     api.booking.getAllEmails.useInfiniteQuery(
       { limit: 10 },
       {
@@ -55,7 +55,7 @@ export default function DashboardDataPageBody() {
       <div id="booking-data" className="mt-4">
         {!eventInput ? (
           <p>Select an event</p>
-        ) : isLoading ? (
+        ) : isPending ? (
           <p>Loading...</p>
         ) : isError ? (
           <p>An error occurred.</p>
@@ -97,7 +97,7 @@ export default function DashboardDataPageBody() {
           </table>
         )}
 
-        {!isLoading && !isError && hasNextPage && (
+        {!isPending && !isError && hasNextPage && (
           <div
             onClick={() => fetchNextPage()}
             className="text-sm w-full text-center mt-3 hover:bg-gray-100 py-4 font-normal"

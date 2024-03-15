@@ -20,13 +20,14 @@ export default function CompletePage({
   const setSessionId = useSetAtom(checkoutSessionAtom);
   const {
     data: session,
-    isLoading,
+    isPending,
     isError,
   } = api.payment.retrieveCheckoutSession.useQuery(
     { sessionId: sessionId.success ? sessionId.data : "" },
     {
       enabled: sessionId.success,
-      refetchInterval: (data) => (data?.status === "complete" ? false : 2000),
+      refetchInterval: (query) =>
+        query.state.data?.status === "complete" ? false : 2000,
     },
   );
 
@@ -34,7 +35,7 @@ export default function CompletePage({
     router.back();
   }
 
-  if (isLoading || isError) {
+  if (isPending || isError) {
     return null;
   }
 

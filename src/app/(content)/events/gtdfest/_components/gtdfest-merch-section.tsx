@@ -7,11 +7,11 @@ import { api } from "@/lib/trpc/client";
 export default function GTDFestMerchSection() {
   const {
     data: merchs,
-    isLoading,
+    isPending,
     isError,
   } = api.merchBundle.getAll.useQuery();
 
-  if (isLoading) {
+  if (isPending) {
     return null;
   }
   if (isError) {

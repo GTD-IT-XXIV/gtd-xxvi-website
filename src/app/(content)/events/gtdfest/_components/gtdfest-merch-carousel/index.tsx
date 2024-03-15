@@ -27,7 +27,7 @@ export default function GTDFestMerchCarousel() {
   const [selected, setSelected] = useState(0);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
 
-  const { data, isLoading, isError } = api.merchBundle.getAll.useQuery();
+  const { data, isPending, isError } = api.merchBundle.getAll.useQuery();
 
   function handleClick(index: number) {
     setSelected(index);
@@ -46,7 +46,7 @@ export default function GTDFestMerchCarousel() {
     });
   }, [carouselApi]);
 
-  if (isLoading) {
+  if (isPending) {
     return <GTDFestMerchCarouselLoading />;
   }
 

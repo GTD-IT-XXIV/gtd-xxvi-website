@@ -30,7 +30,7 @@ export type BundleCardProps = {
 export default function BundleCard({ event, bundleName }: BundleCardProps) {
   const {
     data: bundle,
-    isLoading,
+    isPending,
     isError,
   } = api.bundle.getByNameAndEvent.useQuery({
     name: bundleName,
@@ -73,7 +73,7 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
     };
   }, [available]);
 
-  if (isLoading) {
+  if (isPending) {
     return <BundleCardLoading />;
   }
 
@@ -261,16 +261,16 @@ export default function BundleCard({ event, bundleName }: BundleCardProps) {
             </p>
           </div>
           <div className="">
-          <BundleCardPopup
-            event={{
-              name: event.name,
-            }}
-            bundle={{
-              name: bundle.name,
-              price: bundle.price,
-              details: bundle.details,
-            }}
-          />
+            <BundleCardPopup
+              event={{
+                name: event.name,
+              }}
+              bundle={{
+                name: bundle.name,
+                price: bundle.price,
+                details: bundle.details,
+              }}
+            />
           </div>
         </div>
 
