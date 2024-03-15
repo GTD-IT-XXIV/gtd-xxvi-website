@@ -7,15 +7,28 @@ import { useState } from "react";
 import { api } from "@/lib/trpc/client";
 import { getUrl, transformer } from "@/lib/trpc/utils";
 
+let clientQueryClientSingleton: QueryClient | undefined = undefined;
+
+function createQueryClient() {
+  return new QueryClient();
+}
+
+function getQueryClient() {
+  if (typeof window === "undefined") {
+    // Always create a new query client in server-side
+    return createQueryClient();
+  }
+  // Always use singleton query client in client-side
+  return (clientQueryClientSingleton ??= createQueryClient());
+}
+
 export default function TRPCReactProvider(props: {
   children: React.ReactNode;
-  cookies: string;
 }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = getQueryClient();
 
   const [trpcClient] = useState(() =>
     api.createClient({
-      transformer,
       links: [
         loggerLink({
           enabled: (op) =>
@@ -23,12 +36,12 @@ export default function TRPCReactProvider(props: {
             (op.direction === "down" && op.result instanceof Error),
         }),
         unstable_httpBatchStreamLink({
+          transformer,
           url: getUrl(),
-          headers() {
-            return {
-              cookie: props.cookies,
-              "x-trpc-source": "react",
-            };
+          headers: () => {
+            const headers = new Headers();
+            headers.set("x-trpc-source", "nextjs-react");
+            return headers;
           },
         }),
       ],

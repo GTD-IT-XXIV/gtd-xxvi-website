@@ -64,9 +64,7 @@ export default function RootLayout({
         ></Script>
       </head>
       <body>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          {children}
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );

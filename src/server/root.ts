@@ -10,7 +10,9 @@ import { paymentRouter } from "./routers/payment";
 import { ticketRouter } from "./routers/ticket";
 import { timeslotRouter } from "./routers/timeslot";
 
-// Primary server router
+/**
+ * Primary server router. All routers in /routers should be manually added here.
+ */
 export const appRouter = createTRPCRouter({
   // Insert TRPC routers here
   event: eventRouter,
@@ -26,4 +28,7 @@ export const appRouter = createTRPCRouter({
 
 export type AppRouter = typeof appRouter;
 
+/**
+ * Create a server-side caller for the tRPC API.
+ */
 export const createCaller = createCallerFactory(appRouter);

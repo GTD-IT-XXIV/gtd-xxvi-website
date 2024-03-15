@@ -24,6 +24,22 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 });
 
 // Base router and procedure helpers
+
+/**
+ * This is how you create new Routers and sub-routers in your tRPC API.
+ *
+ * @see https://trpc.io/docs/router
+ */
 export const createTRPCRouter = t.router;
+
+/**
+ * Public (unauthenticated) procedure.
+ */
 export const publicProcedure = t.procedure;
+
+/**
+ * Create a server-side caller.
+ *
+ * @see https://trpc.io/docs/server/server-side-calls
+ */
 export const createCallerFactory = t.createCallerFactory;
