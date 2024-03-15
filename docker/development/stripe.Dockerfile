@@ -11,4 +11,4 @@ COPY --from=base --chown=stripecli:stripe /usr/local/bin/stripe /bin/stripe
 
 USER stripecli
 
-CMD exec /bin/stripe listen --api-key $STRIPE_SECRET_KEY --forward-to web/api/webhook
+CMD exec /bin/stripe listen --api-key $STRIPE_SECRET_KEY --forward-to web:3000/api/webhook
