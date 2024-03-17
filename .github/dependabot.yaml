@@ -1,4 +1,9 @@
-# Allow Dependabot to use all the defined registries
-
 version: 2
+
 registries: "*"
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
