@@ -48,8 +48,8 @@ dependencies:
     specifier: 0.0.15
     version: 0.0.15(@types/react@18.2.64)(react-email@2.1.0)(react@18.2.0)
   '@stripe/react-stripe-js':
-    specifier: ^2.5.1
-    version: 2.5.1(@stripe/stripe-js@3.0.7)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.6.2
+    version: 2.6.2(@stripe/stripe-js@3.0.7)(react-dom@18.2.0)(react@18.2.0)
   '@stripe/stripe-js':
     specifier: ^3.0.7
     version: 3.0.7
@@ -2852,8 +2852,8 @@ packages:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
     dev: false
 
-  /@stripe/react-stripe-js@2.5.1(@stripe/stripe-js@3.0.7)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-95BwDhOkl1TwIn5sldWW35GYt6wx+uYuwGjebaMOpOdHGyBKcDnBhTjIww+bUdmA2oCmpUqKnoB4OZJuqK8tJA==}
+  /@stripe/react-stripe-js@2.6.2(@stripe/stripe-js@3.0.7)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-FSjNg4v7BiCfojvx25PQ8DugOa09cGk1t816R/DLI/lT+1bgRAYpMvoPirLT4ZQ3ev/0VDtPdWNaabPsLDTOMA==}
     peerDependencies:
       '@stripe/stripe-js': ^1.44.1 || ^2.0.0 || ^3.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
