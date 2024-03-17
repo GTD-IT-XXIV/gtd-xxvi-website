@@ -1,0 +1,4 @@
+# Allow Dependabot to use all the defined registries
+
+version: 2
+registries: "*"
