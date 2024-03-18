@@ -90,7 +90,7 @@
     "schema-dts": "^1.1.2",
     "server-only": "0.0.1",
     "sharp": "^0.33.2",
-    "stripe": "^14.20.0",
+    "stripe": "^14.21.0",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
