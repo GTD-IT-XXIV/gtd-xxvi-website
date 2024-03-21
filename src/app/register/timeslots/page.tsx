@@ -32,7 +32,7 @@ export default async function TimeslotsPage({
   } else {
     let events: RouterOutputs["event"]["getAll"] = [];
     try {
-      events = await api.event.getAll.query();
+      events = await api.event.getAll();
     } catch (error) {
       if (error instanceof TRPCClientError) {
         throw new Error("EventGetAllError");

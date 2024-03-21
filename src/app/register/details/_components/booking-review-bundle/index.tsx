@@ -30,12 +30,12 @@ export default function BookingReviewBundle({
 }: BookingReviewBundleProps) {
   const {
     data: event,
-    isLoading: isEventLoading,
+    isPending: isEventPending,
     isError: isEventError,
   } = api.event.getByName.useQuery({ name: eventName });
   const {
     data: bundle,
-    isLoading: isBundleLoading,
+    isPending: isBundlePending,
     isError: isBundleError,
   } = api.bundle.getByNameAndEvent.useQuery({
     name: bundleName,
@@ -44,7 +44,7 @@ export default function BookingReviewBundle({
   const {
     data: timeslotData,
     isFetching: isTimeslotFetching,
-    isLoading: isTimeslotLoading,
+    isPending: isTimeslotPending,
     isError: isTimeslotError,
   } = api.timeslot.getByTimeAndEvent.useQuery(
     {
@@ -57,7 +57,7 @@ export default function BookingReviewBundle({
 
   const setAllowCheckout = useSetAtom(allowCheckoutAtom);
 
-  if (isEventLoading || isBundleLoading || isTimeslotFetching) {
+  if (isEventPending || isBundlePending || isTimeslotFetching) {
     setAllowCheckout(false);
     return <BookingReviewBundleLoading />;
   }
@@ -86,7 +86,7 @@ export default function BookingReviewBundle({
           {!timeslot ? (
             <span className="text-red-600">no timeslot chosen</span>
           ) : (
-            !isTimeslotLoading &&
+            !isTimeslotPending &&
             !isTimeslotError &&
             `${dayjs.utc(timeslotData.startTime).format("h.mm")} -
               ${dayjs.utc(timeslotData.endTime).format("h.mm A")}`

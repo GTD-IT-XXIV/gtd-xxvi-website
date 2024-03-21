@@ -14,10 +14,10 @@ export default function DashboardDataSelect({
   selectedEvent = "",
   onChange,
 }: DashboardDataSelectProps) {
-  const { data: events, isLoading, isError } = api.event.getAll.useQuery();
+  const { data: events, isPending, isError } = api.event.getAll.useQuery();
   const {
     data: bookingsCount,
-    isLoading: isCountLoading,
+    isPending: isCountPending,
     isError: isCountError,
   } = api.event.countBookingsByName.useQuery(
     { name: selectedEvent },
@@ -37,7 +37,7 @@ export default function DashboardDataSelect({
         <option disabled value={0}>
           Select an Event
         </option>
-        {isLoading ? (
+        {isPending ? (
           <option disabled>Loading events...</option>
         ) : isError ? (
           <option disabled>An error occurred</option>
@@ -51,7 +51,7 @@ export default function DashboardDataSelect({
       </select>
       {!!selectedEvent && (
         <div className="p-1 text-sm shrink flex items-center border border-l-0 border-slate-300 rounded-r-md px-4 py-2.5">
-          {isCountLoading ? (
+          {isCountPending ? (
             <Skeleton className="h-5 w-20" />
           ) : isCountError ? (
             <span>Error</span>

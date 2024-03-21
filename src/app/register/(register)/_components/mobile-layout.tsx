@@ -35,7 +35,7 @@ export default async function MobileLayout({
   } else {
     let events: RouterOutputs["event"]["getAllAvailable"] = [];
     try {
-      events = await api.event.getAllAvailable.query();
+      events = await api.event.getAllAvailable();
     } catch (error) {
       if (error instanceof TRPCClientError) {
         throw new Error("EventGetAllError");

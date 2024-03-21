@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: { name: string };
 }): Promise<Metadata> {
   const name = params.name.split("_").join(" ");
-  const event = await api.event.getByName.query({ name });
+  const event = await api.event.getByName({ name });
 
   return { title: event.name };
 }
@@ -28,7 +28,7 @@ export default async function EventPage({
     permanentRedirect("/events/gtdfest");
   }
 
-  const event = await api.event.getByName.query({ name });
+  const event = await api.event.getByName({ name });
 
   const breadcrumb: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",

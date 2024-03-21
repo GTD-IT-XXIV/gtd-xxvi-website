@@ -19,7 +19,7 @@ export default function CheckoutPage() {
   const [sessionId, setSessionId] = useAtom(checkoutSessionAtom);
   const {
     data: session,
-    isLoading,
+    isPending,
     isFetching,
     isError,
   } = api.payment.retrieveCheckoutSession.useQuery(
@@ -47,7 +47,7 @@ export default function CheckoutPage() {
       <hgroup className="flex items-center justify-between md:px-10 lg:px-[5.75rem] mb-4">
         <h1 className="text-gtd-primary-30 font-semibold text-3xl">Checkout</h1>
       </hgroup>
-      {!isLoading && !isError && session.clientSecret && (
+      {!isPending && !isError && session.clientSecret && (
         <EmbeddedCheckoutProvider
           stripe={stripePromise}
           options={{ clientSecret: session.clientSecret }}

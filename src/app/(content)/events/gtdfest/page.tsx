@@ -16,8 +16,8 @@ import GTDFestTop from "./_components/gtdfest-top";
 dayjs.extend(utc);
 
 export default async function GTDFestPage() {
-  const gtdFest = await api.event.getByName.query({ name: "GTD Fest" });
-  const escapeRoom = await api.event.getByName.query({ name: "Escape Room" });
+  const gtdFest = await api.event.getByName({ name: "GTD Fest" });
+  const escapeRoom = await api.event.getByName({ name: "Escape Room" });
 
   if (!gtdFest) {
     throw new Error(`GTD Fest event not found`);

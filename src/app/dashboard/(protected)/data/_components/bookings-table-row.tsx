@@ -17,7 +17,7 @@ export default function BookingsTableRow({
 }: BookingsTableRowProps) {
   const {
     data: bookings,
-    isLoading,
+    isPending,
     isError,
   } = api.booking.getManyByEmailAndEvents.useQuery(
     {
@@ -31,7 +31,7 @@ export default function BookingsTableRow({
     events: [eventName],
   });
 
-  if (isLoading) {
+  if (isPending) {
     return null;
   }
   if (isError) {
@@ -63,7 +63,7 @@ export default function BookingsTableRow({
       <td className="w-4/12">{email}</td>
       <td className="w-2/12">{bookings.length}</td>
       <td className="w-3/12">
-        ${isLoading ? "..." : isError ? "Error" : amount}
+        ${isPending ? "..." : isError ? "Error" : amount}
       </td>
     </tr>
   );

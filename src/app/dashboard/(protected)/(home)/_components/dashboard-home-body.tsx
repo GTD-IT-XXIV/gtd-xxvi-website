@@ -1,7 +1,7 @@
 "use client";
 
 import { type Event } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DatePickerWithRange } from "@/components/date-range-picker";
 
@@ -11,11 +11,7 @@ import { EventCard } from "./event-card";
 import { EventSelect } from "./event-select";
 
 export default function DashboardHomeBody() {
-  const { data } = api.event.getAll.useQuery(undefined, {
-    onSuccess: (data) => {
-      setEvents(data);
-    },
-  });
+  const { data, isPending, isError } = api.event.getAll.useQuery();
   const [events, setEvents] = useState<Event[]>([]);
 
   const handleFilter = (eventName: string, dateRange: unknown) => {
@@ -25,6 +21,18 @@ export default function DashboardHomeBody() {
         [],
     );
   };
+
+  useEffect(() => {
+    let ignored = false;
+    if (!ignored) {
+      if (!isPending && !isError) {
+        setEvents(data);
+      }
+    }
+    return () => {
+      ignored = true;
+    };
+  }, [isPending, isError, data]);
 
   return (
     <div className="pt-5 px-4">

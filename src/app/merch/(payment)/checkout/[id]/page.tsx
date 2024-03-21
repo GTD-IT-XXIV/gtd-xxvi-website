@@ -21,7 +21,7 @@ export default function MerchCheckoutPage({
 }) {
   const {
     data: session,
-    isLoading,
+    isPending,
     isFetching,
     isError,
   } = api.payment.retrieveCheckoutSession.useQuery({ sessionId: params.id });
@@ -31,7 +31,7 @@ export default function MerchCheckoutPage({
       title="Checkout"
       body={
         <>
-          {!isLoading && !isError && session.clientSecret && (
+          {!isPending && !isError && session.clientSecret && (
             <EmbeddedCheckoutProvider
               stripe={stripePromise}
               options={{ clientSecret: session.clientSecret }}
