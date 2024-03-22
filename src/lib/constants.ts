@@ -1,4 +1,4 @@
-import { Home, Info, Shirt, ShoppingCart, Users, Zap } from "lucide-react";
+import { Home, Info, Map, Trophy, Users } from "lucide-react";
 
 export const MAX_BUNDLE_PURCHASES = 99;
 export const MAX_TRANSACTION_RETRIES = 3;
@@ -20,17 +20,22 @@ export const ROUTES = [
   {
     name: "Events",
     path: "/events",
-    icon: Zap,
+    icon: Map,
   },
+  // {
+  //   name: "Merchandise",
+  //   path: "/merch",
+  //   icon: Shirt,
+  // },
+  // {
+  //   name: "Cart",
+  //   path: "/merch/details",
+  //   icon: ShoppingCart,
+  // },
   {
-    name: "Merchandise",
-    path: "/merch",
-    icon: Shirt,
-  },
-  {
-    name: "Cart",
-    path: "/merch/details",
-    icon: ShoppingCart,
+    name: "Leaderboards",
+    path: "/leaderboards",
+    icon: Trophy,
   },
   {
     name: "Committee",
