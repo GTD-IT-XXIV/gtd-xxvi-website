@@ -22,8 +22,8 @@ export default function ParticipantDetailsGroup() {
           {!hasMounted
             ? null
             : filteredCart.map((item) => (
-              <ParticipantDetails cartItem={item} />
-            ))}
+                <ParticipantDetails cartItem={item} />
+              ))}
         </div>
       </div>
     </div>

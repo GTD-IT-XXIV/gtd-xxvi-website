@@ -63,9 +63,7 @@ export default function TimeslotsPageBody() {
       bundleName={item.event.bundle}
       quantity={item.quantity}
       selected={item.timeslot}
-      onChange={(start, end) =>
-        handleSelectTimeslot(idx, start, end)
-      }
+      onChange={(start, end) => handleSelectTimeslot(idx, start, end)}
       handleSkip={(value) => setSkipTimeslots((prev) => prev.concat(value))}
     />
   ));
