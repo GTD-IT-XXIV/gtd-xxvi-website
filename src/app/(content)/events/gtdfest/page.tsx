@@ -8,70 +8,20 @@ import gtdFestBg2 from "@/assets/images/gtdfest-background-2.webp";
 import gtdFestBg3 from "@/assets/images/gtdfest-background-3.webp";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
 
-import arcade1 from "./_assets/arcade-1.webp";
-import arcade2 from "./_assets/arcade-2.webp";
-import arcade3 from "./_assets/arcade-3.webp";
 import escapeRoomImage from "./_assets/escape-room.webp";
-import food1 from "./_assets/food-1.webp";
-import food2 from "./_assets/food-2.webp";
-import food3 from "./_assets/food-3.webp";
-import luckyDraw1 from "./_assets/lucky-draw-1.webp";
-import luckyDraw2 from "./_assets/lucky-draw-2.webp";
-import luckyDraw3 from "./_assets/lucky-draw-3.webp";
-import luckyDraw4 from "./_assets/lucky-draw-4.webp";
-import luckyDraw5 from "./_assets/lucky-draw-5.webp";
-import performance1 from "./_assets/performance-1.webp";
-import performance2 from "./_assets/performance-2.webp";
-import performance3 from "./_assets/performance-3.webp";
-import performance4 from "./_assets/performance-4.webp";
-import photobooth1 from "./_assets/photobooth-1.webp";
-import photobooth2 from "./_assets/photobooth-2.webp";
-import photobooth3 from "./_assets/photobooth-3.webp";
-import totebag1 from "./_assets/totebag-1.webp";
-import totebag2 from "./_assets/totebag-2.webp";
 import GTDFestMerchSection from "./_components/gtdfest-merch-section";
 import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
+import {
+  arcadeImages,
+  foodImages,
+  luckyDrawImages,
+  performanceImages,
+  photoboothImages,
+  totebagImages,
+} from "./_utils/images";
 
 dayjs.extend(utc);
-
-const arcadeImages = [
-  { src: arcade1, alt: "Arcade game" },
-  { src: arcade2, alt: "Arcade game" },
-  { src: arcade3, alt: "Arcade game" },
-];
-
-const photoboothImages = [
-  { src: photobooth1, alt: "A group of people taking a picture together" },
-  { src: photobooth2, alt: "A group of people taking a picture together" },
-  { src: photobooth3, alt: "A group of people taking a picture together" },
-];
-
-const foodImages = [
-  { src: food1, alt: "Food and drinks" },
-  { src: food2, alt: "Food and drinks" },
-  { src: food3, alt: "Food and drinks" },
-];
-
-const totebagImages = [
-  { src: totebag1, alt: "A person painting on a canvas totebag" },
-  { src: totebag2, alt: "A person painting on a canvas totebag" },
-];
-
-const luckyDrawImages = [
-  { src: luckyDraw1, alt: "Lucky draw prize 1 winner" },
-  { src: luckyDraw2, alt: "Lucky draw prize 2 winner" },
-  { src: luckyDraw3, alt: "Lucky draw prize 3 winner" },
-  { src: luckyDraw4, alt: "Lucky draw prize 4 winner" },
-  { src: luckyDraw5, alt: "Lucky draw prize 5 winner" },
-];
-
-const performanceImages = [
-  { src: performance1, alt: "A performance" },
-  { src: performance2, alt: "A performance" },
-  { src: performance3, alt: "A performance" },
-  { src: performance4, alt: "A performance" },
-];
 
 export default async function GTDFestPage() {
   const gtdFest = await api.event.getByName({ name: "GTD Fest" });
