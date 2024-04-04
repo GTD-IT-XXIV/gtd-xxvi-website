@@ -1,10 +1,10 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { LuMenu as Menu, LuX as X } from "react-icons/lu";
 
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";

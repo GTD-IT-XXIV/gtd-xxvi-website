@@ -1,8 +1,12 @@
 "use client";
 
-import { Database, Home, ScanLine } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  LuDatabase as Database,
+  LuHome as Home,
+  LuScanLine as ScanLine,
+} from "react-icons/lu";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

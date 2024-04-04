@@ -1,8 +1,8 @@
 "use client";
 
 import { Prisma } from "@prisma/client";
-import { ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { LuExternalLink as ExternalLink } from "react-icons/lu";
 
 import {
   AlertDialog,

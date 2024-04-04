@@ -1,9 +1,9 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { LuX as X } from "react-icons/lu";
 
 import {
   AlertDialog,

@@ -1,7 +1,11 @@
 "use client";
 
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import React, { useState } from "react";
+import {
+  LuCheckCircle2 as CheckCircle2,
+  LuLoader2 as Loader2,
+  LuXCircle as XCircle,
+} from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
 

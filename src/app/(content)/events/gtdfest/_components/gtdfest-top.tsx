@@ -2,11 +2,11 @@
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { ChevronDown } from "lucide-react";
 import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LuChevronDown as ChevronDown } from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
 

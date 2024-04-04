@@ -1,4 +1,10 @@
-import { Home, Info, Map, Trophy, Users } from "lucide-react";
+import {
+  LuHome as Home,
+  LuInfo as Info,
+  LuMap as Map,
+  LuTrophy as Trophy,
+  LuUsers as Users,
+} from "react-icons/lu";
 
 export const MAX_BUNDLE_PURCHASES = 99;
 export const MAX_TRANSACTION_RETRIES = 3;

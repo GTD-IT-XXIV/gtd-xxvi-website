@@ -1,6 +1,10 @@
-import { Facebook, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  LuFacebook as Facebook,
+  LuInstagram as Instagram,
+  LuLinkedin as Linkedin,
+} from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
 

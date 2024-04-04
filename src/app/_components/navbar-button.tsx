@@ -1,6 +1,6 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import { type LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { type IconType } from "react-icons/lib";
 import { type Url } from "url";
 
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ const navbarButtonVariants = cva(
 export type NavbarButtonProps = {
   href: string | Url;
   label: string;
-  icon: LucideIcon;
+  icon: IconType;
   className?: string;
   size?: "icon" | "default" | "sm" | "lg";
 } & VariantProps<typeof navbarButtonVariants>;
