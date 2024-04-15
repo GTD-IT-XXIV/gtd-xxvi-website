@@ -12,8 +12,6 @@ const shouldAnalyzeBundles = process.env.ANALYZE === "true";
 /** @type {import('next').NextConfig} */
 let nextConfig = {
   images: {
-    // Image optimization causes high memory usage
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
