@@ -1,10 +1,9 @@
 import { type ReactNode } from "react";
 
 import Navbar from "@/app/_components/navbar";
+import NavbarTabs from "@/app/_components/navbar-tabs";
 
 import Footer from "@/components/footer";
-
-import NavbarTabs from "../_components/navbar-tabs";
 
 export default function ContentLayout({ children }: { children: ReactNode }) {
   return (
