@@ -25,7 +25,7 @@ export default function GTDFestMerchSection() {
       </h2>
       <div className="flex gap-6 justify-center items-stretch backdrop-blur flex-wrap rounded-lg p-6">
         {merchs.map((merch) => (
-          <div className="basis-64 shrink">
+          <div key={merch.id} className="basis-64 shrink">
             <MerchItemCarousel
               images={merch.images}
               variant={
