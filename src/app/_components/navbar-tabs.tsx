@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 
 import NavbarTabsButton from "./navbar-tabs-button";
 
-const navbarTabsVariants = cva("w-full flex divide-x overflow-x-auto", {
+const navbarTabsVariants = cva("w-full flex overflow-x-auto", {
   variants: {
     variant: {
       default: "bg-white",
-      gtdfest: "bg-slate-900 text-white divide-slate-700",
+      gtdfest: "bg-slate-900 text-white",
     },
   },
   defaultVariants: {
@@ -32,13 +32,14 @@ export default function NavbarTabs({ className, variant }: NavbarTabsProps) {
 
   return (
     <nav className={cn(navbarTabsVariants({ variant }), className)}>
-      {ROUTES.slice(1).map((route) => (
+      {ROUTES.map((route) => (
         <NavbarTabsButton
           key={route.name}
           variant={variant}
           label={route.name}
           href={route.path}
           icon={route.icon}
+          selected={pathname === route.path}
         />
       ))}
     </nav>

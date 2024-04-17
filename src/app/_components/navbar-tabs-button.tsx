@@ -13,9 +13,14 @@ const navbarTabsButtonVariants = cva(
         default: "hover:bg-accent",
         gtdfest: "hover:bg-white/25",
       },
+      selected: {
+        true: "text-gtd-primary-30 hover:text-gtd-primary-30 font-semibold",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
+      selected: false,
     },
   },
 );
@@ -33,15 +38,16 @@ export default function NavbarTabsButton({
   icon,
   className = "",
   variant,
+  selected,
 }: NavbarTabsButtonProps) {
   const Icon = icon;
   return (
     <Link
       href={href}
-      className={cn(navbarTabsButtonVariants({ variant }), className)}
+      className={cn(navbarTabsButtonVariants({ variant, selected }), className)}
     >
-      <button className="w-full flex flex-col justify-center items-center p-3.5 truncate gap-1">
-        <Icon className="size-3.5" />
+      <button className="w-full flex flex-col justify-center items-center py-2 px-2 truncate gap-1">
+        <Icon className="size-4" />
         {label}
       </button>
     </Link>

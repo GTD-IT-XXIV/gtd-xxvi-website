@@ -15,9 +15,14 @@ const navbarButtonVariants = cva(
         default: "hover:bg-accent",
         gtdfest: "hover:bg-white/25",
       },
+      selected: {
+        true: "text-gtd-primary-30 hover:text-gtd-primary-30 font-semibold",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
+      selected: false,
     },
   },
 );
@@ -37,6 +42,7 @@ export default function NavbarButton({
   className = "",
   size = "default",
   variant,
+  selected,
 }: NavbarButtonProps) {
   const Icon = icon;
   return (
@@ -44,7 +50,7 @@ export default function NavbarButton({
       <Button
         size={size}
         variant="ghost"
-        className={cn(navbarButtonVariants({ variant }), className)}
+        className={cn(navbarButtonVariants({ variant, selected }), className)}
       >
         <Icon className="mr-2 size-4" />
         {label}
