@@ -274,10 +274,6 @@ Use the tRPC client `api` defined in `src/trpc/client`. Example:
 
 import { api } from "@/lib/trpc/provider";
 
-// example-page.tsx
-
-// example-page.tsx
-
 export default function ExamplePage() {
   const { data: event } = api.event.getById.useQuery(1);
   return <main>{event?.name}</main>;
@@ -316,4 +312,4 @@ More info: [Sharp CLI documentation](https://github.com/vseventer/sharp-cli)
 - Learning articles:
   - [Making Sense of React Server Components](https://www.joshwcomeau.com/react/server-components/)
   - [Server and Client Composition Patterns](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns)
-- Official documentation: [Tailwind CSS](https://tailwindcss.com/docs/utility-first), [shadcn/ui](https://ui.shadcn.com/docs/cli), [Next.js](https://nextjs.org/docs), [tRPC](https://trpc.io/docs), [Zod](https://zod.dev/), [Prisma](https://www.prisma.io/docs/orm), [Supabase](https://supabase.com/docs)
+- Official documentation: [Tailwind CSS](https://tailwindcss.com/docs/utility-first), [shadcn/ui](https://ui.shadcn.com/docs/cli), [Next.js](https://nextjs.org/docs), [tRPC](https://trpc.io/docs), [Zod](https://zod.dev/), [Prisma](https://www.prisma.io/docs/orm)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { Info } from "lucide-react";
+import { LuInfo as Info } from "react-icons/lu";
 
 import MerchItemCarousel from "@/app/_components/merch-item-carousel";
 

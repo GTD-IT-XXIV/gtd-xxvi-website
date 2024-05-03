@@ -43,7 +43,9 @@ export default function MerchItemReview({
             No items found in cart
           </p>
         ) : (
-          merchCart.map((item) => <MerchItem {...item} />)
+          merchCart.map((item) => (
+            <MerchItem key={item.merchBundleId} {...item} />
+          ))
         )}
       </div>
     </div>

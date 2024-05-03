@@ -1,7 +1,7 @@
 import "client-only";
 
-import { Delete } from "lucide-react";
 import { IoSearch } from "react-icons/io5";
+import { LuDelete as Delete } from "react-icons/lu";
 
 export default function SearchBar({
   emailInput,

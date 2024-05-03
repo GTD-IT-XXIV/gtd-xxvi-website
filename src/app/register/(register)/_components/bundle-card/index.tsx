@@ -4,16 +4,17 @@ import { Prisma } from "@prisma/client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useAtom } from "jotai";
-import { Info } from "lucide-react";
 import React, { useEffect } from "react";
 import { FaRegClock } from "react-icons/fa";
+import { LuInfo as Info } from "react-icons/lu";
 import { MdOutlineLocationOn } from "react-icons/md";
+
+import BundleCardPopup from "@/app/register/(register)/_components/bundle-card-popup";
 
 import { cartAtom } from "@/lib/atoms/events-registration";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 
-import BundleCardPopup from "../bundle-card-popup";
 import BundleCardLoading from "./loading";
 
 dayjs.extend(utc);

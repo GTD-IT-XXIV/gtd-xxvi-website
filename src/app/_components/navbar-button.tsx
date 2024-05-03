@@ -1,6 +1,6 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import { type LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { type IconType } from "react-icons/lib";
 import { type Url } from "url";
 
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,14 @@ const navbarButtonVariants = cva(
         default: "hover:bg-accent",
         gtdfest: "hover:bg-white/25",
       },
+      selected: {
+        true: "text-gtd-primary-30 hover:text-gtd-primary-30 font-semibold",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
+      selected: false,
     },
   },
 );
@@ -25,7 +30,7 @@ const navbarButtonVariants = cva(
 export type NavbarButtonProps = {
   href: string | Url;
   label: string;
-  icon: LucideIcon;
+  icon: IconType;
   className?: string;
   size?: "icon" | "default" | "sm" | "lg";
 } & VariantProps<typeof navbarButtonVariants>;
@@ -37,6 +42,7 @@ export default function NavbarButton({
   className = "",
   size = "default",
   variant,
+  selected,
 }: NavbarButtonProps) {
   const Icon = icon;
   return (
@@ -44,7 +50,7 @@ export default function NavbarButton({
       <Button
         size={size}
         variant="ghost"
-        className={cn(navbarButtonVariants({ variant }), className)}
+        className={cn(navbarButtonVariants({ variant, selected }), className)}
       >
         <Icon className="mr-2 size-4" />
         {label}

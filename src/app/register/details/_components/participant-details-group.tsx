@@ -21,9 +21,9 @@ export default function ParticipantDetailsGroup() {
         <div className="gap-x-8 gap-y-3 items-start space-y-4">
           {!hasMounted
             ? null
-            : filteredCart.map((item) => (
-              <ParticipantDetails cartItem={item} />
-            ))}
+            : filteredCart.map((item, idx) => (
+                <ParticipantDetails key={idx} cartItem={item} />
+              ))}
         </div>
       </div>
     </div>

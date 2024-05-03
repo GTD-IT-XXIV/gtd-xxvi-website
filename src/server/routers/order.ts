@@ -1,5 +1,6 @@
-import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 import { z } from "zod";
+
+import { createTRPCRouter, publicProcedure } from "@/lib/trpc/config";
 
 export const orderRouter = createTRPCRouter({
   checkId: publicProcedure

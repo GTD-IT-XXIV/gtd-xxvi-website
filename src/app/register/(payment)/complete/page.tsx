@@ -1,8 +1,11 @@
 "use client";
 
 import { useSetAtom } from "jotai";
-import { CheckCircle2, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  LuCheckCircle2 as CheckCircle2,
+  LuXCircle as XCircle,
+} from "react-icons/lu";
 import { z } from "zod";
 
 import LoadingSpinner from "@/components/loading-spinner";

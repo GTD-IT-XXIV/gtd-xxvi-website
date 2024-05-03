@@ -1,10 +1,11 @@
 "use client";
 
 import { type VariantProps, cva } from "class-variance-authority";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { LuMenu as Menu, LuX as X } from "react-icons/lu";
 
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -49,7 +50,12 @@ export type NavbarProps = {
 } & VariantProps<typeof navbarVariants>;
 
 export default function Navbar({ className, variant }: NavbarProps) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  if (pathname.includes("gtdfest")) {
+    variant = "gtdfest";
+  }
 
   return (
     <nav className={cn(navbarVariants({ variant }), className)}>
@@ -79,6 +85,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
             href={route.path}
             label={route.name}
             icon={route.icon}
+            selected={pathname === route.path}
             className="w-auto justify-center"
           />
         ))}

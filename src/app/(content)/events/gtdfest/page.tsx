@@ -3,15 +3,23 @@ import utc from "dayjs/plugin/utc";
 
 import { api } from "@/server/trpc";
 
-import gtdFestBg1 from "@/assets/images/gtdfest-background-1.jpeg";
-import gtdFestBg2 from "@/assets/images/gtdfest-background-2.jpeg";
-import gtdFestBg3 from "@/assets/images/gtdfest-background-3.jpeg";
+import gtdFestBg1 from "@/assets/images/gtdfest-background-1.webp";
+import gtdFestBg2 from "@/assets/images/gtdfest-background-2.webp";
+import gtdFestBg3 from "@/assets/images/gtdfest-background-3.webp";
 import logoGTDFest from "@/assets/images/logo-gtdfest.png";
 
-import GTDFestMerchCarousel from "./_components/gtdfest-merch-carousel";
+import escapeRoomImage from "./_assets/escape-room.webp";
 import GTDFestMerchSection from "./_components/gtdfest-merch-section";
 import GTDFestSection from "./_components/gtdfest-section";
 import GTDFestTop from "./_components/gtdfest-top";
+import {
+  arcadeImages,
+  foodImages,
+  luckyDrawImages,
+  performanceImages,
+  photoboothImages,
+  totebagImages,
+} from "./_utils/images";
 
 dayjs.extend(utc);
 
@@ -35,15 +43,17 @@ export default async function GTDFestPage() {
         escapeRoom={escapeRoom}
       />
       <GTDFestMerchSection />
-      {/* <GTDFestMerchCarousel /> */}
       {/* Other Sections */}
-      {/* <GTDFestSection
+      <GTDFestSection
         title="Escape Room: Nyctophobia"
         description='Embark on a thrilling journey in "Nyctophobia," where you and your team of 5 wizards have been captured by a malevolent Death Eater. As you navigate through each challenge, race against time to escape the castle before the dark experiments unfold. Can you conquer your fears and break free from the clutches of Nyctophobia?'
         image={{
           src: gtdFestBg3,
           alt: "Background 3",
         }}
+        carouselImages={[
+          { src: escapeRoomImage, alt: "Playing cards laid on a table" },
+        ]}
       />
       <GTDFestSection
         title="Arcade"
@@ -52,6 +62,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg2,
           alt: "Background 2",
         }}
+        carouselImages={arcadeImages}
         variant="right"
       />
       <GTDFestSection
@@ -61,6 +72,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg3,
           alt: "Background 3",
         }}
+        carouselImages={photoboothImages}
       />
       <GTDFestSection
         title="Food and Drinks"
@@ -69,6 +81,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg2,
           alt: "Background 2",
         }}
+        carouselImages={foodImages}
         variant="right"
       />
       <GTDFestSection
@@ -78,6 +91,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg3,
           alt: "Background 3",
         }}
+        carouselImages={totebagImages}
       />
       <GTDFestSection
         title="Lucky Draw"
@@ -86,6 +100,7 @@ export default async function GTDFestPage() {
           src: gtdFestBg2,
           alt: "Background 2",
         }}
+        carouselImages={luckyDrawImages}
         variant="right"
       />
       <GTDFestSection
@@ -95,7 +110,8 @@ export default async function GTDFestPage() {
           src: gtdFestBg3,
           alt: "Background 3",
         }}
-      /> */}
+        carouselImages={performanceImages}
+      />
     </main>
   );
 }
