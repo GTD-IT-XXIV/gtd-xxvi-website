@@ -65,7 +65,10 @@ export default async function DesktopLayout({
                 <p>No events available for registration.</p>
               ) : (
                 eventNames.map((eventName) => (
-                  <div className="flex w-[100%] items-center justify-center">
+                  <div
+                    key={eventName}
+                    className="flex w-[100%] items-center justify-center"
+                  >
                     <EventCardGroup key={eventName} eventName={eventName} />
                   </div>
                 ))

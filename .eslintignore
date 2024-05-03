@@ -36,6 +36,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# shadcn/ui files
+/src/app/_components/ui
+
 # editor/IDE
 .vscode
 

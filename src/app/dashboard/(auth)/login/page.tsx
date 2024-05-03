@@ -19,7 +19,7 @@ export default async function DashboardLoginPage() {
           Login
         </h1>
         <p className="font-medium">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/dashboard/signup"
             className="hover:underline underline-offset-4 text-blue-600"

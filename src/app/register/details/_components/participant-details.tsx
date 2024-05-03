@@ -47,6 +47,7 @@ export default function ParticipantDetails({
         .find((item) => isEqual(item, cartItem))
         ?.participants.map((participant, idx) => (
           <Input
+            key={`${participant}-${idx}`}
             type="name"
             placeholder={
               cartItem.event.name === "Escape Room"
