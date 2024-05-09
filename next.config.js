@@ -1,6 +1,7 @@
 import createJiti from "jiti";
+import { fileURLToPath } from "url";
 
-const jiti = createJiti(new URL(import.meta.url).pathname);
+const jiti = createJiti(fileURLToPath(import.meta.url));
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful for Docker builds.
