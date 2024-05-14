@@ -38,6 +38,7 @@ export default async function EventsPage() {
 
         return (
           <TextParallaxContent
+            key = {event.name}
             imgUrl={foto2}
             heading={event.name}
             date={`${formatDate(event.startDate.toString())} - ${formatDate(event.endDate.toString())}`}
@@ -53,6 +54,7 @@ export default async function EventsPage() {
       })}
       {/* Example static content */}
       <TextParallaxContent
+        key = {tidak ada}
         imgUrl={foto1}
         heading="SCBD 2023"
         date="segitu - segitu"
