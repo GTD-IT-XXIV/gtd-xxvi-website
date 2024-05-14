@@ -36,7 +36,8 @@ export default function TextParallaxContent({ imgUrl, heading, date, description
           className="sticky z-0 overflow-hidden w-screen"
         />
         {/* Rendering StickyImage with provided imgUrl */}
-        <div className={`absolute inset-0 flex flex-col justify-center px-12 text-left md:text-${alignLeft ? 'left' : 'right'}`}>
+        <div className={`absolute inset-0 flex flex-col justify-center px-12 text-left md:text-${alignLeft ? 'left' : 'right'} ${alignLeft ? 'items-start' : 'items-end'}`}>
+        <div className={`w-full md:w-2/5 ${alignLeft ? '' : 'text-right'}`}>
           <h1 className="text-4xl text-white font-semibold">{heading}</h1>
           <h2 className="text-l text-white py-2 font-thin">{date}</h2>
           <p className="text-l text-white font-thin pb-2">{description}</p>
@@ -47,6 +48,7 @@ export default function TextParallaxContent({ imgUrl, heading, date, description
               </button>
             </Link>
           )}
+        </div>
         </div>
       </div>
       <div className="container mx-auto">{children}</div>
