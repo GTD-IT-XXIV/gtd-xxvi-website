@@ -16,5 +16,6 @@ FROM postgres:15.1-bullseye
 COPY --from=base /app/migration.sql /docker-entrypoint-initdb.d/init-0-migration.sql
 COPY --from=base /app/init-1-gtdfest.sql /docker-entrypoint-initdb.d/init-1.sql
 COPY --from=base /app/init-2-merch.sql /docker-entrypoint-initdb.d/init-2.sql
+COPY --from=base /app/init-3-events.sql /docker-entrypoint-initdb.d/init-3.sql
 
 USER postgres

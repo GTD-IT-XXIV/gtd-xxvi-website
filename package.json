@@ -22,7 +22,7 @@
     "dev:db:pull": "dotenv -c development -- prisma db pull",
     "dev:db:migrate": "dotenv -c development -- prisma migrate dev",
     "dev:db:clear": "dotenv -c development -- prisma migrate reset",
-    "dev:db:init": "pnpm dev:db:push && pnpm dev:prisma db execute --file prisma/init-1-gtdfest.sql && pnpm dev:prisma db execute --file prisma/init-2-merch.sql",
+    "dev:db:init": "pnpm dev:db:push && pnpm dev:prisma db execute --file prisma/init-1-gtdfest.sql && pnpm dev:prisma db execute --file prisma/init-2-merch.sql && pnpm dev:prisma db execute --file prisma/init-3-events.sql",
     "dev:db:reset": "pnpm dev:db:clear && pnpm dev:db:init",
     "\n========== Development Build ==========": "",
     "dev:build": "docker compose -p gtd-xxvi-website-dev -f docker/development/docker-compose.yaml build",
