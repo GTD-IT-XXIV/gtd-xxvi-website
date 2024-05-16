@@ -1,11 +1,11 @@
-import React from "react";
 import { type Metadata } from "next";
-import Link from "next/link";
+import React from "react";
 
 import { api } from "@/server/trpc";
-import TextParallaxContent from "./_components/TextParralaxContent";
+
 import foto1 from "./_assets/rain-1.jpg";
 import foto2 from "./_assets/rain-2.jpg";
+import TextParallaxContent from "./_components/TextParralaxContent";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -13,7 +13,11 @@ export const metadata: Metadata = {
 
 // Helper function to format the date
 function formatDate(dateString: string) {
-  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
@@ -38,7 +42,7 @@ export default async function EventsPage() {
 
         return (
           <TextParallaxContent
-            key = {event.name}
+            key={event.name}
             imgUrl={foto2}
             heading={event.name}
             date={`${formatDate(event.startDate.toString())} - ${formatDate(event.endDate.toString())}`}
@@ -54,7 +58,7 @@ export default async function EventsPage() {
       })}
       {/* Example static content */}
       <TextParallaxContent
-        key = {tidak ada}
+        // key={tidak ada}
         imgUrl={foto1}
         heading="SCBD 2023"
         date="segitu - segitu"
@@ -67,4 +71,3 @@ export default async function EventsPage() {
     </section>
   );
 }
-
