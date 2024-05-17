@@ -1,7 +1,7 @@
-import React, { use } from "react";
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 
 export type TextParallaxContentProps = {
@@ -16,8 +16,6 @@ export type TextParallaxContentProps = {
   alignLeft: boolean;
   imageOpacity?: number;
 };
-
-const IMG_PADDING = 12;
 
 export default function TextParallaxContent({
   imgUrl,
@@ -49,7 +47,9 @@ export default function TextParallaxContent({
             alignLeft ? "left" : "right"
           } md:${alignLeft ? "items-start" : "items-end"}`}
         >
-          <div className={`w-full md:w-1/2 md:${alignLeft ? "" : "text-right"}`}>
+          <div
+            className={`w-full md:w-1/2 md:${alignLeft ? "" : "text-right"}`}
+          >
             <h1 className="text-[1.875rem] px-6 text-white font-semibold md:text-[3rem] md:font-extrabold md:px-8">
               {heading}
             </h1>

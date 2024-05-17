@@ -1,12 +1,16 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { type Metadata } from "next";
 import React from "react";
+
 import { api } from "@/server/trpc";
 
-import scbd from "./_assets/scbd.webp";
 import gtdfest from "../gtdfest/_assets/arcade-3.webp";
 import escaperoom from "../gtdfest/_assets/escape-room.webp";
+import scbd from "./_assets/scbd.webp";
 import TextParallaxContent from "./_components/TextParralaxContent";
-import dayjs from "dayjs";
+
+dayjs.extend(utc);
 
 export const metadata: Metadata = {
   title: "Events",
@@ -39,12 +43,12 @@ export default async function EventsPage() {
           imgUrl = gtdfest;
         } else if (event.name === "Escape Room") {
           imgUrl = escaperoom;
-        }else if(event.name === "Subcommittee Bonding Day"){
+        } else if (event.name === "Subcommittee Bonding Day") {
           imgUrl = scbd;
         }
 
         let buttonDisabled = false;
-        if(event.name === "Subcommittee Bonding Day"){
+        if (event.name === "Subcommittee Bonding Day") {
           buttonDisabled = true;
         }
 
