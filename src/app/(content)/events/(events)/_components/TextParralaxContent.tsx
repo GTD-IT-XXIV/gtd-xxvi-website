@@ -14,7 +14,6 @@ export type TextParallaxContentProps = {
   buttonDisabled?: boolean;
   children: React.ReactNode;
   alignLeft: boolean;
-  imageOpacity?: number;
 };
 
 export default function TextParallaxContent({
@@ -27,19 +26,16 @@ export default function TextParallaxContent({
   buttonDisabled,
   children,
   alignLeft,
-  imageOpacity = 0.8,
 }: TextParallaxContentProps) {
   return (
     <div style={{ position: "relative", height: "600px" }}>
       <div className="relative h-full">
-        <div className="absolute inset-0" style={{ opacity: imageOpacity }}>
+        <div className="absolute inset-0 brightness-50">
           <Image
             src={imgUrl}
             alt="background-1"
             layout="fill"
-            objectFit="cover"
-            quality={100}
-            className="z-0"
+            className="z-0 object-cover"
           />
         </div>
         <div
@@ -61,7 +57,7 @@ export default function TextParallaxContent({
             </p>
             {!buttonDisabled && buttonLink && (
               <Link href={buttonLink} passHref>
-                <Button className="text-black mx-6 bg-white my-4 rounded-md hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out md:mx-8 md:my-4 md:pl-4 md:py-4">
+                <Button className="text-black mx-6 bg-white my-4 rounded-md hover:bg-slate-100 transition duration-300 ease-in-out md:mx-8 md:my-4 md:pl-4 md:py-4">
                   {buttonText}
                 </Button>
               </Link>
