@@ -16,9 +16,6 @@ export const metadata: Metadata = {
   title: "Events",
 };
 
-let isNextAlignLeft = true;
-
-// EventsPage component renders TextParallaxContent
 export default async function EventsPage() {
   // Fetch events from the API
   const events = await api.event.getAll();
@@ -31,13 +28,10 @@ export default async function EventsPage() {
         <hr className="flex-grow bg-white mx-4 h-0.4"></hr>
       </div>
       {/* Mapping through events and rendering TextParallaxContent components */}
-      {events.map((event) => {
-        const alignLeft = isNextAlignLeft;
-        isNextAlignLeft = !isNextAlignLeft;
+      {events.map((event, index) => {
+        const alignLeft = index % 2 === 0; //change it into the modulo 2 than confused on the global var and not
         const startDateLabel = dayjs.utc(event.startDate).format("D MMM YYYY");
-        const endDateLabel = dayjs.utc(event.endDate).format("D MMM YYYY");
 
-        // Determine the image to use based on the event name
         let imgUrl = scbd;
         if (event.name === "GTD Fest") {
           imgUrl = gtdfest;
