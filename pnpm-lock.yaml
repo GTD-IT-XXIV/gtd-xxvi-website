@@ -102,8 +102,8 @@ importers:
         specifier: ^9.9.0
         version: 9.9.0
       google-spreadsheet:
-        specifier: ^4.1.1
-        version: 4.1.1(google-auth-library@9.9.0)
+        specifier: ^4.1.2
+        version: 4.1.2(google-auth-library@9.9.0)
       jiti:
         specifier: ^1.21.0
         version: 1.21.0
@@ -3297,8 +3297,8 @@ packages:
     resolution: {integrity: sha512-9l+zO07h1tDJdIHN74SpnWIlNR+OuOemXlWJlLP9pXy6vFtizgpEzMuwJa4lqY9UAdiAv5DVd5ql0Am916I+aA==}
     engines: {node: '>=14'}
 
-  google-spreadsheet@4.1.1:
-    resolution: {integrity: sha512-Npk/xAMTgxEt/m/X9EXIqdY6CEYGiqUHrSuiLnNSKli5H+wiOQLSLsnfMxcdNPH6aSh6GttZm6QJhrnsxjwpZQ==}
+  google-spreadsheet@4.1.2:
+    resolution: {integrity: sha512-HFBweDAkOcyC2qO9kmWESKbNuOcn+R7UzZN/tj5LLNxVv8FHmg113u0Ow+yaKwwIOt/NnDtPLuptAhaxTs0FYw==}
     peerDependencies:
       google-auth-library: ^8.8.0 || ^9.0.0
     peerDependenciesMeta:
@@ -8590,7 +8590,7 @@ snapshots:
       - encoding
       - supports-color
 
-  google-spreadsheet@4.1.1(google-auth-library@9.9.0):
+  google-spreadsheet@4.1.2(google-auth-library@9.9.0):
     dependencies:
       axios: 1.6.8
       lodash: 4.17.21

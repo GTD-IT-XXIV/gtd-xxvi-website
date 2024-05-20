@@ -72,7 +72,7 @@
     "framer-motion": "^11.1.9",
     "fuse.js": "^7.0.0",
     "google-auth-library": "^9.9.0",
-    "google-spreadsheet": "^4.1.1",
+    "google-spreadsheet": "^4.1.2",
     "jiti": "^1.21.0",
     "jotai": "^2.8.0",
     "lodash.isequal": "^4.5.0",
