@@ -180,8 +180,8 @@ export default function GTDEmail(props: GTDEmailProps) {
             <Heading as="h2" style={{ fontSize: "1.5rem", fontWeight: 600 }}>
               Ticket Details
             </Heading>
-            {props.bookings.map((item) => (
-              <Section>
+            {props.bookings.map((item, idx) => (
+              <Section key={idx}>
                 <Heading
                   as="h3"
                   style={{ fontSize: "1.25rem", fontWeight: 600 }}
