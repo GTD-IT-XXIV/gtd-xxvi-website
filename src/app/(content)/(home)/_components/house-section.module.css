@@ -1,0 +1,16 @@
+.flag:hover {
+  animation: expandDownward 0.5s forwards;
+}
+@keyframes expandDownward {
+  0% {
+    transform: translateY(0%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(40%);
+    opacity: 1;
+  }
+}
+.onflag {
+  animation: expandDownward 0.5s forwards;
+}
