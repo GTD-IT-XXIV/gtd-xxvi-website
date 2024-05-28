@@ -10,7 +10,7 @@ import greenflag from "../_assets/greenflag.png";
 import redflag from "../_assets/redflag.png";
 import yellowflag from "../_assets/yellowflag.png";
 import style from "./house-section.module.css";
-import Housegl from "./housegl";
+import HouseGl from "./housegl";
 
 const HouseSection = () => {
   const [housetoggle, setHousetoggle] = useState(0);
@@ -155,7 +155,7 @@ const HouseSection = () => {
           <div
             className={`transition duration-1000 ease-in-out ${housetoggle === 1 ? "opacity-100" : "opacity-0"}`}
           >
-            <Housegl
+            <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
               house={"A"}
@@ -166,7 +166,7 @@ const HouseSection = () => {
           <div
             className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 2 ? "opacity-100" : "opacity-0"}`}
           >
-            <Housegl
+            <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
               house={"B"}
@@ -177,7 +177,7 @@ const HouseSection = () => {
           <div
             className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 3 ? "opacity-100" : "opacity-0"}`}
           >
-            <Housegl
+            <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
               house={"C"}
@@ -186,7 +186,7 @@ const HouseSection = () => {
           </div>
         ) : (
           <div>
-            <Housegl
+            <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
               house={"D"}

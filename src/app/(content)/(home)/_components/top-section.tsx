@@ -6,7 +6,7 @@ import logogtd from "@/assets/images/logo-gtd-white-transparent.png";
 
 import topbackground from "../_assets/topbackground.png";
 
-const Topsection = () => {
+const TopSection = () => {
   return (
     <div className="relative">
       <Image
@@ -41,4 +41,4 @@ const Topsection = () => {
   );
 };
 
-export default Topsection;
+export default TopSection;
