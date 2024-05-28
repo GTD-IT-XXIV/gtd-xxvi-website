@@ -1,5 +1,10 @@
 import { cn } from "@/lib/utils";
 
+import HouseSection from "./house-section";
+import Sponsors from "./sponsors";
+import Storyline from "./storyline";
+import TopSection from "./top-section";
+
 export type HomePageBodyProps = {
   className?: string;
 };
@@ -7,7 +12,10 @@ export type HomePageBodyProps = {
 export default function HomePageBody({ className = "" }: HomePageBodyProps) {
   return (
     <section className={cn("", className)}>
-      <h1>Home Page</h1>
+      <TopSection />
+      <HouseSection />
+      <Storyline />
+      <Sponsors />
     </section>
   );
 }
