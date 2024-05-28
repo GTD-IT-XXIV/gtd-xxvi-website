@@ -12,7 +12,7 @@ import topborderhouse from "../_assets/topborderhouse.png";
 import yellowflag from "../_assets/yellowflag.png";
 import style from "./house-section.module.css";
 
-const Housesection = () => {
+const HouseSection = () => {
   const [housetoggle, setHousetoggle] = useState(0);
   const [toggle, setToggle] = useState([0, 0, 0, 0]);
 
@@ -165,4 +165,4 @@ const Housesection = () => {
   );
 };
 
-export default Housesection;
+export default HouseSection;

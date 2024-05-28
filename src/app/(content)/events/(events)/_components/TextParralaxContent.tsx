@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { H2, P } from "@/app/_components/typography";
+
 import { Button } from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
@@ -50,15 +52,15 @@ export default function TextParallaxContent({
           )}
         >
           <div className="w-full md:w-1/2">
-            <h1 className="text-[1.875rem] text-white font-semibold md:text-[3rem] md:font-extrabold">
+            <H2 className="text-white md:text-5xl md:font-extrabold mb-5">
               {heading}
-            </h1>
-            <h2 className="text-[1rem] text-white py-2 font-normal md:font-semibold md:text-[1.5rem]">
+            </H2>
+            <time className="block text-base text-white mb-3 font-normal md:font-semibold md:text-2xl">
               {date}
-            </h2>
-            <p className="text-[0.8rem] text-white font-extralight py-1 pb-2 md:font-normal md:text-[1rem]">
+            </time>
+            <P className="text-white py-1 pb-2" size="sm">
               {description}
-            </p>
+            </P>
             {!buttonDisabled && buttonLink && (
               <Link href={buttonLink} passHref>
                 <Button className="text-black bg-white my-4 rounded-md hover:bg-slate-100 transition duration-300 ease-in-out md:py-4">
