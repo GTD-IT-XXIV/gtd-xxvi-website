@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import HouseSection from "./house-section";
 import Sponsors from "./sponsors";
 import Storyline from "./storyline";
-import TopSection from "./top-section";
+import TopSection from "./topsection";
 
 export type HomePageBodyProps = {
   className?: string;
