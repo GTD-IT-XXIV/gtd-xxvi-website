@@ -5,12 +5,12 @@ import React, { useState } from "react";
 
 import blueflag from "../_assets/blueflag.png";
 import glclose from "../_assets/glclose.png";
-import glopen from "../_assets/glopen.png";
+import glphoto from "../_assets/glphoto.png";
 import greenflag from "../_assets/greenflag.png";
 import redflag from "../_assets/redflag.png";
-import topborderhouse from "../_assets/topborderhouse.png";
 import yellowflag from "../_assets/yellowflag.png";
 import style from "./house-section.module.css";
+import Housegl from "./housegl";
 
 const HouseSection = () => {
   const [housetoggle, setHousetoggle] = useState(0);
@@ -36,129 +36,163 @@ const HouseSection = () => {
 
   return (
     <div className="bg-slate-900 flex flex-col">
-      <div className="justify-center self-center flex pt-10 lg:pt-20 z-20">
-        <Image
-          src={topborderhouse}
-          width={800}
-          height={200}
-          alt="top border house"
-        />
+      <div
+        className="mb-1 justify-center px-7 py-2 bg-slate-900 rounded-full 
+          border border-sky-500 font-serif text-white self-center flex mt-10 xl:mt-20
+          sm:py-2 sm:px-7 sm:text-lg 
+          md:py-3 md:px-8 md:text-xl 
+          lg:py-4 lg:px-10 lg:text-2xl 
+          xl:py-5 xl:px-12 xl:text-3xl"
+      >
+        Choose your house
       </div>
-      <div className="flex px-10 mb-1 lg:px-20 relative">
-        <Image
-          onClick={() => handleClick(1)}
-          src={redflag}
-          width={800}
-          height={200}
-          alt="redflag"
-          className={`${style.flag} pt-3 z-10 pr-1.5 cursor-pointer ${toggle[0] && style.onflag}`}
-        />
-        <Image
-          onClick={() => handleClick(2)}
-          src={greenflag}
-          width={800}
-          height={200}
-          alt="greenflag"
-          className={`${style.flag} pt-3 z-10 px-1.5 cursor-pointer ${toggle[1] && style.onflag}`}
-        />
-        <Image
-          onClick={() => handleClick(3)}
-          src={blueflag}
-          width={800}
-          height={200}
-          alt="blueflag"
-          className={`${style.flag} pt-3 z-10 px-1.5 cursor-pointer ${toggle[2] && style.onflag}`}
-        />
-        <Image
-          onClick={() => handleClick(4)}
-          src={yellowflag}
-          width={800}
-          height={200}
-          alt="yellowflag"
-          className={`${style.flag} pt-3 z-10 pl-1.5 cursor-pointer ${toggle[3] && style.onflag}`}
-        />
+      <div className="flex px-10 mb-16 sm:mb-24 md:mb-36 lg:mb-44 xl:mb-44 md:px-16 lg:px-32 xl:px-52 relative">
+        <div className="flex flex-col">
+          <div className="relative">
+            <Image
+              onClick={() => handleClick(1)}
+              src={redflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
+              ${toggle[0] ? style.onflag : style.offflag} `}
+            />
+            <Image
+              src={redflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`pt-3 px-1.5`}
+            />
+          </div>
+          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
+            House A
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <div className="relative">
+            <Image
+              onClick={() => handleClick(2)}
+              src={greenflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
+              ${toggle[1] ? style.onflag : style.offflag} `}
+            />
+            <Image
+              src={greenflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`pt-3 px-1.5`}
+            />
+          </div>
+          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
+            House B
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <div className="relative">
+            <Image
+              onClick={() => handleClick(3)}
+              src={blueflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
+              ${toggle[2] ? style.onflag : style.offflag} `}
+            />
+            <Image
+              src={blueflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`pt-3 px-1.5`}
+            />
+          </div>
+          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
+            House C
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <div className="relative">
+            <Image
+              onClick={() => handleClick(4)}
+              src={yellowflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
+              ${toggle[3] ? style.onflag : style.offflag} `}
+            />
+            <Image
+              src={yellowflag}
+              width={800}
+              height={200}
+              alt="redflag"
+              className={`pt-3 px-1.5`}
+            />
+          </div>
+          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
+            House D
+          </p>
+        </div>
       </div>
-      <div className="flex px-10 mb-1 lg:px-20 absolute">
-        <Image
-          src={redflag}
-          width={800}
-          height={200}
-          alt="redflag"
-          className={`pt-24 z-0 pr-1.5`}
-        />
-        <Image
-          src={greenflag}
-          width={800}
-          height={200}
-          alt="greenflag"
-          className={`pt-24 z-0 px-1.5`}
-        />
-        <Image
-          src={blueflag}
-          width={800}
-          height={200}
-          alt="blueflag"
-          className={`pt-24 z-0 px-1.5`}
-        />
-        <Image
-          src={yellowflag}
-          width={800}
-          height={200}
-          alt="yellowflag"
-          className={`pt-24 z-0 pl-1.5`}
-        />
-      </div>
-      <div className="flex text-white justify-between mb-10 px-10">
-        <p>House A</p>
-        <p>House B</p>
-        <p>House C</p>
-        <p>House D</p>
-      </div>
-      <div className="justify-center self-center pb-10 lg:pb-20">
-        {housetoggle === 0 && (
-          <Image
-            className=""
-            src={glclose}
-            width={800}
-            height={200}
-            alt="paper frame"
-          />
-        )}
-        {housetoggle === 1 && (
-          <Image
-            className=""
-            src={glopen}
-            width={800}
-            height={200}
-            alt="paper frame"
-          />
-        )}
-        {housetoggle === 2 && (
-          <Image
-            className=""
-            src={glopen}
-            width={800}
-            height={200}
-            alt="paper frame"
-          />
-        )}
-        {housetoggle === 3 && (
-          <Image
-            className=""
-            src={glopen}
-            width={800}
-            height={200}
-            alt="paper frame"
-          />
-        )}
-        {housetoggle === 4 && (
-          <Image
-            className=""
-            src={glopen}
-            width={800}
-            height={200}
-            alt="paper frame"
-          />
+      <div className="justify-center self-center pb-10 lg:pb-20 transition-opacity duration-1000 ease-in-out">
+        {housetoggle === 0 ? (
+          <div>
+            <Image
+              className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 0 ? "opacity-100" : "opacity-0"}`}
+              src={glclose}
+              width={800}
+              height={200}
+              alt="paper frame"
+            />
+          </div>
+        ) : housetoggle === 1 ? (
+          <div
+            className={`transition duration-1000 ease-in-out ${housetoggle === 1 ? "opacity-100" : "opacity-0"}`}
+          >
+            <Housegl
+              glphoto1={glphoto}
+              glphoto2={glphoto}
+              house={"A"}
+              og={[1, 2]}
+            />
+          </div>
+        ) : housetoggle === 2 ? (
+          <div
+            className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 2 ? "opacity-100" : "opacity-0"}`}
+          >
+            <Housegl
+              glphoto1={glphoto}
+              glphoto2={glphoto}
+              house={"B"}
+              og={[3, 4]}
+            />
+          </div>
+        ) : housetoggle === 3 ? (
+          <div
+            className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 3 ? "opacity-100" : "opacity-0"}`}
+          >
+            <Housegl
+              glphoto1={glphoto}
+              glphoto2={glphoto}
+              house={"C"}
+              og={[5, 6]}
+            />
+          </div>
+        ) : (
+          <div>
+            <Housegl
+              glphoto1={glphoto}
+              glphoto2={glphoto}
+              house={"D"}
+              og={[7, 8]}
+            />
+          </div>
         )}
       </div>
     </div>

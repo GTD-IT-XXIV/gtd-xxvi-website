@@ -4,7 +4,6 @@ import React from "react";
 
 import logogtd from "@/assets/images/logo-gtd-white-transparent.png";
 
-import registerbtn from "../_assets/registerbtn.png";
 import topbackground from "../_assets/topbackground.png";
 
 const Topsection = () => {
@@ -26,13 +25,16 @@ const Topsection = () => {
           className="justify-center self-center md:w-[450px] xl:w-[600px] 2xl:w-[800px]"
         />
         <Link href="/" className="">
-          <Image
-            src={registerbtn}
-            width={150}
-            height={100}
-            alt="register button"
-            className="justify-center transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg md:w-[200px] xl:w-[300px] 2xl:w-[400px]"
-          />
+          <button
+            className="bg-yellow-700 font-serif py-2 px-7 rounded-full justify-center transform transition-transform 
+          duration-300 ease-in-out hover:scale-110 hover:shadow-lg hover:bg-yellow-800
+          sm:py-2 sm:px-7 sm:text-lg 
+          md:py-3 md:px-8 md:text-xl 
+          lg:py-4 lg:px-10 lg:text-2xl 
+          xl:py-5 xl:px-12 xl:text-3xl"
+          >
+            Register
+          </button>
         </Link>
       </div>
     </div>
