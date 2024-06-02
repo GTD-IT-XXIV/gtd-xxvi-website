@@ -20,3 +20,15 @@ export type OrderMetadata = {
 export type MerchCart = z.infer<typeof merchCartSchema>;
 
 export type MerchCartItem = ArrElement<MerchCart>;
+
+/**
+ * Fields are commented for now for simplicity of the template
+ */
+export type Committee = {
+  name: string;
+  portfolio: string;
+  // position: string;
+  // major: string;
+  // year: 1 | 2 | 3 | 4;
+  // image: string;
+};
