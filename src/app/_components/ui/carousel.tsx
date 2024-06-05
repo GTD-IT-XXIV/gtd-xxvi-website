@@ -5,8 +5,8 @@ import useEmblaCarousel, {
 } from "embla-carousel-react";
 import * as React from "react";
 import {
-  LuChevronLeft as ChevronLeft,
-  LuChevronRight as ChevronRight,
+  LuArrowLeft as ArrowLeft,
+  LuArrowRight as ArrowRight,
 } from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
@@ -214,14 +214,13 @@ const CarouselPrevious = React.forwardRef<
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        canScrollPrev ? "" : "hidden",
         className,
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ChevronLeft className="h-4 w-4" />
+      <ArrowLeft className="h-4 w-4" />
       <span className="sr-only">Previous slide</span>
     </Button>
   );
@@ -244,14 +243,13 @@ const CarouselNext = React.forwardRef<
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        canScrollNext ? "" : "hidden",
         className,
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ChevronRight className="h-4 w-4" />
+      <ArrowRight className="h-4 w-4" />
       <span className="sr-only">Next slide</span>
     </Button>
   );
