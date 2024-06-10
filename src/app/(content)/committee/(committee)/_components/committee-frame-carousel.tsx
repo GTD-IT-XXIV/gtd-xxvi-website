@@ -1,7 +1,7 @@
 "use client";
 
-import { LuX as X } from "react-icons/lu";
 import Image from "next/image";
+import { LuX as X } from "react-icons/lu";
 
 import {
   AlertDialog,
@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { cn } from "@/lib/utils";
+
 import { data } from "../const";
 import FrameImage from "./FrameImage";
+
 // The real component function
 export default function CommFrameImage() {
   return (
@@ -28,25 +30,24 @@ export default function CommFrameImage() {
                 year={item.year}
                 portfolio={item.portfolio}
                 OG={item.OG}
-                size = 'small'
+                size="small"
                 className=""
               />
             </div>
           </AlertDialogTrigger>
-          <AlertDialogContent
-            className="flex items-center justify-center h-[450px] w-[364px]"
-          >
-              <FrameImage
-                src={item.src}
-                name={item.name}
-                major={item.major}
-                year={item.year}
-                portfolio={item.portfolio}
-                OG={item.OG}
-                size='large'
-                className="absolute inset-0 z-10"
-              />
-            <div className="absolute inset-0 bg-black opacity-80"></div> {/* Overlay div */}
+          <AlertDialogContent className="flex items-center justify-center h-[450px] w-[364px]">
+            <FrameImage
+              src={item.src}
+              name={item.name}
+              major={item.major}
+              year={item.year}
+              portfolio={item.portfolio}
+              OG={item.OG}
+              size="large"
+              className="inset-0 z-10"
+            />
+            <div className="absolute inset-0 bg-black opacity-80"></div>{" "}
+            {/* Overlay div */}
             <div className="absolute flex flex-col items-center justify-center text-center text-white p-6 rounded-lg h-full w-full z-20">
               <div className="pb-5 mb-5">
                 <p className="font-serif text-[24px] mb-0">
@@ -74,7 +75,7 @@ export default function CommFrameImage() {
                 type="button"
                 className="absolute top-0 right-2 p-2 rounded-full bg-transparent text-brown-700 hover:bg-transparent border-none z-40"
               >
-                <X className="w-8 h-8" color="#D2B48C"/>
+                <X className="w-8 h-8" color="#D2B48C" />
                 <span className="sr-only">Close</span>
               </button>
             </AlertDialogCancel>

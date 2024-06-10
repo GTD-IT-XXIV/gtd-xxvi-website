@@ -1,11 +1,13 @@
+import { DividerHorizontalIcon } from "@radix-ui/react-icons";
 import Image from "next/legacy/image";
 import React from "react";
 import { LuX as X } from "react-icons/lu";
 
+import { cn } from "@/lib/utils";
+
 import nameframe from "../_assets/NameFrame.webp";
 import photoframe from "../_assets/PhotoFrame.webp";
-import './index.css';
-import { DividerHorizontalIcon } from "@radix-ui/react-icons";
+import "./index.css";
 
 export type Imageprops = {
   name: string;
@@ -15,7 +17,7 @@ export type Imageprops = {
   portfolio: string;
   OG: string;
   className: string;
-  size: 'small' | 'large';
+  size: "small" | "large";
 };
 
 export default function FrameImage({
@@ -28,25 +30,48 @@ export default function FrameImage({
   className,
   size,
 }: Imageprops) {
-  const scale = size === 'large' ? 3 : 1;
-  
+  const large = size === "large";
+
   return (
-    <div className={`relative w-[${140*scale}px] h-[${180*scale}px] ${className} hover:cursor-pointer`}>
+    <div
+      className={cn(
+        "relative hover:cursor-pointer",
+        className,
+        large ? "w-[414px] h-[552px]" : "w-[138px] h-[184px]",
+      )}
+    >
       {/* Photo Frame */}
-      <div className={`relative w-[${138*scale}px] h-[${180*scale}px]`}>
+      <div
+        className={cn(
+          "relative",
+          large ? "w-[414px] h-[540px]" : "w-[138px] h-[180px]",
+        )}
+      >
         <Image
           src={photoframe}
           alt="Photo Frame"
           layout="fill"
-          className={`object-cover shadow-lg rounded-md`}
+          className="object-cover shadow-lg rounded-md"
         />
         {/* Photo */}
-        <div className={`absolute w-[${114*scale}px] h-[${152*scale}px] ml-[${12*scale}px] mt-[${11*scale}px]`}>
+        <div
+          className={cn(
+            "absolute",
+            large
+              ? "w-[342px] h-[456px] ml-[36px] mt-[33px]"
+              : "w-[114px] h-[152px] ml-[12px] mt-[11px]",
+          )}
+        >
           <Image src={src} alt={name} layout="fill" className="object-cover" />
-          {size === 'large'  && <div className="absolute inset-0 bg-black opacity-80"/>}
+          {large && <div className="absolute inset-0 bg-black opacity-80" />}
         </div>
       </div>
-      <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-[${3*scale}px] w-[${90*scale}px] h-[${25*scale}px] z-30`}>
+      <div
+        className={cn(
+          "absolute bottom-0 left-1/2 transform -translate-x-1/2 z-30",
+          large ? "mb-[9px] w-[270px] h-[75px]" : "mb-[3px] w-[90px] h-[25px]",
+        )}
+      >
         <Image
           src={nameframe}
           alt="Name Frame"
@@ -54,8 +79,19 @@ export default function FrameImage({
           className="object-cover"
         />
         {/* Name */}
-        <div className="absolute w-full h-full bottom-0 transform pt-[${20*scale}px] left-0 flex items-center justify-center">
-          <p className={`antialiased text-[${12*scale}px] text-[rgba(107,56,18,0.66)] font-serif text-center name-shadow`}>
+        <div
+          className={cn(
+            "absolute w-full h-full transform left-0 flex items-center justify-center",
+            large ? "pt-[60px] bottom-9" : "pt-[20px] bottom-0",
+          )}
+        >
+          <p
+            className={cn(
+              "antialiased font-serif text-center name-shadow",
+              large ? "text-[36px]" : "text-[12px] bottom-3",
+              "text-[rgba(107,56,18,0.66)]",
+            )}
+          >
             {name}
           </p>
         </div>
