@@ -62,16 +62,7 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
           {logos.map((logo, index) => {
             return (
               <Link key={index} href={logo.url} className=" p-1">
-                <div className="relative aspect-square">
-                  <Image
-                    src={logo.src}
-                    alt={`logo ${index + 1}`}
-                    height={100}
-                    width={100}
-                    className="object-contain"
-                    fill
-                  />
-                </div>
+                <Image src={logo.src} alt={`logo ${index + 1}`} height={100} />
               </Link>
             );
           })}
