@@ -58,11 +58,21 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
         <h2 className="text-2xl font-serif">Sponsored by:</h2>
       </div>
       <div ref={scrollerRef} className="scroller">
-        <div className="scroll_inner flex flex-wrap gap-3 sm:gap-5 md:gap-10 animate-infinite_scroll">
+        <div className="scroll_inner flex flex-wrap gap-5 sm:gap-8 md:gap-12 animate-infinite_scroll ">
           {logos.map((logo, index) => {
             return (
               <Link key={index} href={logo.url} className=" p-1">
-                <Image src={logo.src} alt={`logo ${index + 1}`} height={100} />
+                <Image
+                  src={logo.src}
+                  alt={`logo ${index + 1}`}
+                  height={100}
+                  width={100}
+                  sizes="(max-width: 640px) 100px, (max-width: 768px) 125px, 150px"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
               </Link>
             );
           })}
