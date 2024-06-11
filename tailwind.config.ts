@@ -1,4 +1,3 @@
-import aspectRatio from "@tailwindcss/aspect-ratio";
 import { type Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
@@ -130,7 +129,7 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        infinite_scroll: {
+        "infinite-scroll": {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
@@ -138,7 +137,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        infinite_scroll: "infinite_scroll 10s linear infinite",
+        "infinite-scroll": "infinite-scroll 10s linear infinite",
       },
     },
   },
