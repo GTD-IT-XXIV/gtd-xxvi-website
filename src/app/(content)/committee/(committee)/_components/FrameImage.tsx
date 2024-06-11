@@ -5,8 +5,8 @@ import { LuX as X } from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
 
-import nameframe from "../_assets/NameFrame.webp";
-import photoframe from "../_assets/PhotoFrame.webp";
+import nameframe from "../_assets/name-frame.svg?url";
+import photoframe from "../_assets/photo-frame.svg?url";
 import "./index.css";
 
 export type Imageprops = {
@@ -37,7 +37,7 @@ export default function FrameImage({
       className={cn(
         "relative hover:cursor-pointer",
         className,
-        large ? "w-[414px] h-[552px]" : "w-[138px] h-[184px]",
+        large ? "w-[414px] h-[570px]" : "w-[138px] h-[190px]",
       )}
     >
       {/* Photo Frame */}
@@ -58,12 +58,14 @@ export default function FrameImage({
           className={cn(
             "absolute",
             large
-              ? "w-[342px] h-[456px] ml-[36px] mt-[33px]"
-              : "w-[114px] h-[152px] ml-[12px] mt-[11px]",
+              ? "w-[366px] h-[480px] ml-[24px] mt-[33px]"
+              : "w-[122px] h-[160px] ml-[8px] mt-[11px]",
           )}
         >
           <Image src={src} alt={name} layout="fill" className="object-cover" />
-          {large && <div className="absolute inset-0 bg-black opacity-80" />}
+          {large && (
+            <div className="w-full absolute inset-0 bg-black opacity-80" />
+          )}
         </div>
       </div>
       <div
@@ -88,7 +90,7 @@ export default function FrameImage({
           <p
             className={cn(
               "antialiased font-serif text-center name-shadow",
-              large ? "text-[36px]" : "text-[12px] bottom-3",
+              large ? "text-[36px] bottom-0" : "text-[12px] bottom-2",
               "text-[rgba(107,56,18,0.66)]",
             )}
           >
