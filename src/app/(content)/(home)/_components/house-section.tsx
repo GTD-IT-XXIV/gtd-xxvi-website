@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 import blueflag from "../_assets/blueflag.png";
+import chooseyourhouse from "../_assets/chooseyourhouse.png";
 import glclose from "../_assets/glclose.png";
 import glphoto from "../_assets/glphoto.png";
 import greenflag from "../_assets/greenflag.png";
@@ -36,7 +37,22 @@ const HouseSection = () => {
 
   return (
     <div className="bg-slate-900 flex flex-col">
-      <div
+      <div className="relative mt-20">
+        <Image
+          className="w-full"
+          src={chooseyourhouse}
+          alt="choose your house"
+          width={400}
+          height={100}
+        />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <p className="text-white font-serif sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
+            Choose your house
+          </p>
+        </div>
+      </div>
+
+      {/* <div
         className="mb-1 justify-center px-7 py-2 bg-slate-900 rounded-full 
           border border-sky-500 font-serif text-white self-center flex mt-10 xl:mt-20
           sm:py-2 sm:px-7 sm:text-lg 
@@ -45,7 +61,7 @@ const HouseSection = () => {
           xl:py-5 xl:px-12 xl:text-3xl"
       >
         Choose your house
-      </div>
+      </div> */}
       <div className="flex px-10 mb-16 sm:mb-24 md:mb-36 lg:mb-44 xl:mb-44 md:px-16 lg:px-32 xl:px-52 relative">
         <div className="flex flex-col">
           <div className="relative">
