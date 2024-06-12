@@ -7,7 +7,7 @@ import Footer from "@/components/footer";
 
 export default function ContentLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="relative flex flex-col min-h-screen">
+    <main className="relative flex flex-col min-h-screen bg-slate-900">
       <Navbar className="z-10 sticky top-0 hidden md:flex" />
       {children}
       <Footer />
