@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { LuX as X } from "react-icons/lu";
 
 import {
@@ -13,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { data } from "../const";
-import FrameImage from "./FrameImage";
+import FrameImage from "./frame-image";
 
 // The real component function
 export default function CommFrameImage() {
@@ -26,10 +25,6 @@ export default function CommFrameImage() {
               <FrameImage
                 src={item.src}
                 name={item.name}
-                major={item.major}
-                year={item.year}
-                portfolio={item.portfolio}
-                OG={item.OG}
                 size="small"
                 className=""
               />
@@ -39,10 +34,6 @@ export default function CommFrameImage() {
             <FrameImage
               src={item.src}
               name={item.name}
-              major={item.major}
-              year={item.year}
-              portfolio={item.portfolio}
-              OG={item.OG}
               size="large"
               className="inset-0 z-10"
             />

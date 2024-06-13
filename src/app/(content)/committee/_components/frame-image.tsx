@@ -1,35 +1,19 @@
-import { DividerHorizontalIcon } from "@radix-ui/react-icons";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import React from "react";
-import { LuX as X } from "react-icons/lu";
 
 import { cn } from "@/lib/utils";
 
 import nameframe from "../_assets/name-frame.svg?url";
 import photoframe from "../_assets/photo-frame.svg?url";
-import "./index.css";
 
 export type Imageprops = {
   name: string;
   src: string;
-  major: string;
-  year: string;
-  portfolio: string;
-  OG: string;
   className: string;
   size: "small" | "large";
 };
 
-export default function FrameImage({
-  name,
-  src,
-  major,
-  year,
-  portfolio,
-  OG,
-  className,
-  size,
-}: Imageprops) {
+export default function FrameImage({ name, src, className, size }: Imageprops) {
   const large = size === "large";
 
   return (
@@ -50,8 +34,8 @@ export default function FrameImage({
         <Image
           src={photoframe}
           alt="Photo Frame"
-          layout="fill"
-          className="object-cover shadow-lg rounded-md"
+          className="object-cover shadow-lg"
+          fill
         />
         {/* Photo */}
         <div
@@ -62,7 +46,7 @@ export default function FrameImage({
               : "w-[122px] h-[160px] ml-[8px] mt-[11px]",
           )}
         >
-          <Image src={src} alt={name} layout="fill" className="object-cover" />
+          <Image src={src} alt={name} className="object-cover" fill />
           {large && (
             <div className="w-full absolute inset-0 bg-black opacity-80" />
           )}
@@ -70,32 +54,27 @@ export default function FrameImage({
       </div>
       <div
         className={cn(
-          "absolute bottom-0 left-1/2 transform -translate-x-1/2 z-30",
+          "absolute bottom-0 left-1/2 transform -translate-x-1/2",
           large ? "mb-[9px] w-[270px] h-[75px]" : "mb-[3px] w-[90px] h-[25px]",
         )}
       >
         <Image
           src={nameframe}
           alt="Name Frame"
-          layout="fill"
-          className="object-cover"
+          className="object-cover -z-10"
+          fill
         />
         {/* Name */}
-        <div
-          className={cn(
-            "absolute w-full h-full transform left-0 flex items-center justify-center",
-            large ? "pt-[60px] bottom-9" : "pt-[20px] bottom-0",
+        <div className="size-full flex justify-center items-center">
+          {large ? (
+            <p className="text-3xl font-serif text-center bg-black/80 text-transparent text-shadow-[1px_2px_3px_#9C7A61] bg-clip-text">
+              {name.split(" ")[0]}
+            </p>
+          ) : (
+            <p className="text-xs font-serif text-center bg-black/80 text-transparent text-shadow-[0.5px_1px_2px_#9C7A61] bg-clip-text">
+              {name.split(" ")[0]}
+            </p>
           )}
-        >
-          <p
-            className={cn(
-              "antialiased font-serif text-center name-shadow",
-              large ? "text-[36px] bottom-0" : "text-[12px] bottom-2",
-              "text-[rgba(107,56,18,0.66)]",
-            )}
-          >
-            {name}
-          </p>
         </div>
       </div>
     </div>
