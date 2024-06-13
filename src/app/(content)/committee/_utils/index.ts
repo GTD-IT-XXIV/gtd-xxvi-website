@@ -1,7 +1,10 @@
-import { PORTFOLIOS, ROW_LENGTH } from "../../../../lib/constants";
-import { type Committee } from "../../../../lib/types";
+import { DEFAULT_COMMITTEE_COLS, PORTFOLIOS } from "@/lib/constants";
+import { type Committee } from "@/lib/types";
 
-export const getCommitteesGrid = (committees: Committee[][]) => {
+export const getCommitteesGrid = (
+  committees: Committee[][],
+  cols: number = DEFAULT_COMMITTEE_COLS,
+) => {
   const rows =
     Math.floor(
       (committees.reduce(
@@ -9,7 +12,7 @@ export const getCommitteesGrid = (committees: Committee[][]) => {
         0,
       ) -
         1) /
-        ROW_LENGTH,
+        cols,
     ) + 1;
   const committeesGrid: Committee[][][] = [];
 
@@ -22,7 +25,7 @@ export const getCommitteesGrid = (committees: Committee[][]) => {
 
   for (let i = 0; i < committees.length; i++) {
     for (let j = 0; j < committees[i]!.length; j++) {
-      const row = Math.floor(j / ROW_LENGTH);
+      const row = Math.floor(j / cols);
       committeesGrid[row]![i]!.push(committees[i]![j]!);
     }
   }

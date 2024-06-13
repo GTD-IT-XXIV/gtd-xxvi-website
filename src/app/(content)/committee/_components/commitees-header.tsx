@@ -38,20 +38,17 @@ export default function CommiteesHeader() {
         opts={{
           align: "start",
           loop: true,
+          watchDrag: false,
         }}
         setApi={setApi}
       >
-        {/* Explore here https://www.embla-carousel.com/ for more */}
-        {/* Note that loop = true can be used too to cater towards ƒigma design, yet IMO for now, this is better 
-      as it does not show other portfolios when it is not relevant
-       */}
         <CarouselContent>
           {PORTFOLIOS.map((portfolio) => (
             // we want to for full + 2 halves in a row
             <CarouselItem className="basis" key={portfolio}>
               <div className="p-1">
                 <Card>
-                  <CardContent className="flex aspect-square items-center justify-center p-6">
+                  <CardContent className="flex h-[200px] items-center justify-center p-6">
                     <span className="text-3xl font-semibold">{portfolio}</span>
                   </CardContent>
                 </Card>
@@ -59,8 +56,8 @@ export default function CommiteesHeader() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious onClick={handlePrevious} />
-        <CarouselNext onClick={handleNext} />
+        <CarouselPrevious className="translate-x-14" onClick={handlePrevious} />
+        <CarouselNext className="-translate-x-14" onClick={handleNext} />
       </Carousel>
     </>
   );
