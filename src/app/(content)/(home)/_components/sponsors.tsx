@@ -55,7 +55,7 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
       }}
     >
       <div className="text-center text-white mb-6">
-        <h2 className="text-2xl font-serif">Sponsored by:</h2>
+        <h2 className="text-2xl font-serif">Sponsored by</h2>
       </div>
       <div ref={scrollerRef} className="scroller">
         <div className="w-max flex flex-nowrap gap-3 sm:gap-5 md:gap-10 animate-infinite-scroll hover:animation-pause">

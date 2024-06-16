@@ -1,8 +1,8 @@
-import logo from "@/app/opengraph-image.png";
-import bg from "@/app/sponsors-bg.png";
-
 import { cn } from "@/lib/utils";
 
+import logo from "@/assets/images/sponsors/sample.png";
+
+import bg from "../_assets/sponsors-bg.webp";
 import HouseSection from "./house-section";
 import Sponsors from "./sponsors";
 import Storyline from "./storyline";
