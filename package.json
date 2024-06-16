@@ -78,7 +78,6 @@
     "jotai": "^2.8.2",
     "lodash.isequal": "^4.5.0",
     "lucia": "^2.7.7",
-    "lucide-react": "0.263.1",
     "next": "14.2.3",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
