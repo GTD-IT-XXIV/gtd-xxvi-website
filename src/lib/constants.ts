@@ -6,8 +6,7 @@ import {
   LuUsers as Users,
 } from "react-icons/lu";
 
-import committees from "@/assets/committee.json";
-import SampleCommitteeImage from "@/assets/images/gtdfest-background-3.webp";
+import committees from "@/assets/committee";
 
 import type { Committee } from "./types";
 
@@ -75,12 +74,4 @@ export const PORTFOLIOS = [
   "Welfare",
 ] as const;
 
-export const COMMITTEES = committees.map((portfolio) =>
-  portfolio.map(
-    (committee) =>
-      ({
-        ...committee,
-        image: SampleCommitteeImage,
-      }) satisfies Committee,
-  ),
-);
+export const COMMITTEES = committees as Committee[][];

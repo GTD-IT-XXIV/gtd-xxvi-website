@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Card, CardContent } from "@/app/_components/ui/card";
 
@@ -14,24 +14,29 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { actionAtom, indexAtom } from "@/lib/atoms/committee";
+import { indexAtom } from "@/lib/atoms/committee";
 import { PORTFOLIOS } from "@/lib/constants";
 
 export default function CommiteesHeader() {
   const [index, setIndex] = useAtom(indexAtom);
   const [api, setApi] = useState<CarouselApi>();
 
-  const [_, setAction] = useAtom(actionAtom);
   const handleNext = () => {
-    setAction("NEXT");
     setIndex((index + 1) % PORTFOLIOS.length);
     api?.scrollNext();
   };
   const handlePrevious = () => {
     setIndex((index - 1 + PORTFOLIOS.length) % PORTFOLIOS.length);
-    setAction("PREV");
     api?.scrollPrev();
   };
+
+  useEffect(() => {
+    if (!api || index === api.selectedScrollSnap()) {
+      return;
+    }
+    setIndex(api.selectedScrollSnap());
+  }, [api, index, setIndex]);
+
   return (
     <>
       <Carousel
@@ -39,6 +44,7 @@ export default function CommiteesHeader() {
           align: "start",
           loop: true,
           watchDrag: false,
+          duration: 40,
         }}
         setApi={setApi}
       >

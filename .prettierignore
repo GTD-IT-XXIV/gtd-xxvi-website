@@ -44,4 +44,4 @@ next-env.d.ts
 prisma/migrations
 prisma/generated
 pnpm-lock.yaml
-src/assets/script.js
+src/assets/helper.js

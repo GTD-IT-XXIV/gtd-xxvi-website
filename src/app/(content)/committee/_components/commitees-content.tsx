@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { COMMITTEES } from "@/lib/constants";
 import { useHasMounted, useScreenSize } from "@/lib/hooks";
 
@@ -12,18 +14,9 @@ export default function CommiteesContent() {
 
   let cols: number;
   switch (screenSize) {
-    case "2xl": {
-      cols = 7;
-      break;
-    }
-    case "xl": {
-      cols = 6;
-      break;
-    }
-    case "lg": {
-      cols = 5;
-      break;
-    }
+    case "2xl":
+    case "xl":
+    case "lg":
     case "md": {
       cols = 4;
       break;
@@ -38,18 +31,24 @@ export default function CommiteesContent() {
     }
   }
 
+  const committeesGrid = useMemo(
+    () => getCommitteesGrid(COMMITTEES, cols),
+    [cols],
+  );
+
   if (!hasMounted) {
     return null;
   }
   return (
-    <>
-      {getCommitteesGrid(COMMITTEES, cols).map((committeesRow, index) => (
+    <div className="bg-repeat bg-[url('/committee-background.webp')] bg-contain pt-12 space-y-4">
+      {committeesGrid.map((committeesRow, index) => (
         <CommitteesCarousel
           key={index}
           committees={committeesRow}
           row={index}
+          cols={cols}
         />
       ))}
-    </>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-// Usage: node script.js
+// Usage: node helper.js
 // Description: This script is used to generate the committee.js file which is used to import all the images of the committee members and their details.
 import fs from "node:fs";
 import path from "node:path";
@@ -11,7 +11,11 @@ let out = "";
 
 for (const [index, portfolio] of committees.entries()) {
   for (const committee of portfolio) {
-    out += `import ${committee.name.replace(/\s+/g, "")} from "@/assets/committee/${PORTFOLIOS[index]}/${committee.name}.webp";\n`;
+    // TODO: replace with the commented code below when the images are ready
+    out += `import ${committee.name.replace(/\s+/g, "")}Still from "@/assets/images/committee/stills/sample/sample-1.webp";\n`;
+    out += `import ${committee.name.replace(/\s+/g, "")}Animated from "@/assets/images/committee/animated/sample/sample-1.webp";\n`;
+    // out += `import ${committee.name.replace(/\s+/g, "")}Still from "@/assets/images/committee/stills/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
+    // out += `import ${committee.name.replace(/\s+/g, "")}Animated from "@/assets/images/committee/animated/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
   }
 }
 
@@ -22,13 +26,18 @@ for (const portfolio of committees) {
     out += "{";
     for (const [k, v] of Object.entries(committee)) {
       if (typeof v === "number") {
-        out += `"${k}": ${v},`;
+        out += `${k}: ${v},`;
       } else {
-        out += `"${k}": "${v}",`;
+        if (!v) {
+          continue;
+        }
+        out += `${k}: "${v.trim()}",`;
       }
     }
-    out += `"image": ${committee.name.replace(/\s+/g, "")},`;
-    out += "},";
+    out += "image: {";
+    out += `still: ${committee.name.replace(/\s+/g, "")}Still,`;
+    out += `animated: ${committee.name.replace(/\s+/g, "")}Animated,`;
+    out += "},},";
   }
   out += "],";
 }

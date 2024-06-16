@@ -2,9 +2,7 @@
 
 import { type EmblaOptionsType } from "embla-carousel";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
-
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Carousel,
@@ -13,57 +11,96 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-import { actionAtom, indexAtom } from "@/lib/atoms/committee";
+import { indexAtom } from "@/lib/atoms/committee";
+import { DEFAULT_COMMITTEE_COLS, PORTFOLIOS } from "@/lib/constants";
 import { type Committee } from "@/lib/types";
+import { cn } from "@/lib/utils";
+
+import CommiteeCard from "./committee-card";
 
 export default function CommitteesCarousel({
   committees,
   row,
+  cols = DEFAULT_COMMITTEE_COLS,
 }: CommitteesCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const direction: Required<EmblaOptionsType>["direction"] =
     row % 2 === 0 ? "ltr" : "rtl";
-  const [action] = useAtom(actionAtom);
   const [index] = useAtom(indexAtom);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(
+        ([entry]) => {
+          setIsIntersecting(entry?.isIntersecting ?? false);
+        },
+        { rootMargin: "128px" },
+      ),
+    [],
+  );
 
   useEffect(() => {
     if (!api) {
       return;
     }
+    api.scrollTo(index);
+  }, [api, index]);
 
-    if (action === "NEXT") {
-      api.scrollNext();
+  useEffect(() => {
+    if (!carouselRef.current) {
+      return;
     }
-    if (action === "PREV") {
-      api.scrollPrev();
-    }
-  }, [api, index, action]);
+    observer.observe(carouselRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [carouselRef, observer]);
+
+  const currentIndex = api?.selectedScrollSnap() ?? 0;
+  const prevIndex = (currentIndex - 1 + PORTFOLIOS.length) % PORTFOLIOS.length;
+  const nextIndex = (currentIndex + 1) % PORTFOLIOS.length;
 
   return (
     <Carousel
+      ref={carouselRef}
       opts={{
         align: "start",
         direction,
         loop: true,
         watchDrag: false,
+        duration: 40,
       }}
       dir={direction}
       setApi={setApi}
+      className={cn(isIntersecting ? "visibile" : "invisible")}
     >
       <CarouselContent>
         {committees.map((portfolioCommittees, index) => (
           // we want to for full + 2 halves in a row
-          <CarouselItem className="transition-opacity duration-100" key={index}>
-            <div className="p-1 flex flex-row justify-around h-full">
+          <CarouselItem
+            className="transition-opacity duration-100"
+            key={PORTFOLIOS[index]}
+          >
+            <div
+              className={cn(
+                "p-1 flex justify-around h-full",
+                direction === "ltr" ? "flex-row" : "flex-row-reverse",
+                [prevIndex, currentIndex, nextIndex].includes(index)
+                  ? "visible"
+                  : "invisible",
+              )}
+            >
               {portfolioCommittees.map((committee) => (
-                // TODO: replace placeholder with actual component
-                <Card key={committee.name}>
-                  <CardContent className="flex aspect-square items-center justify-center p-6 w-40">
-                    <span className="text-3xl font-semibold">
-                      {committee.name}
-                    </span>
-                  </CardContent>
-                </Card>
+                <CommiteeCard
+                  key={committee.name}
+                  committee={committee}
+                  className="px-3 sm:px-5 md:px-6 lg:px-7 xl:px-10"
+                  style={{
+                    width: `${100 / cols}%`,
+                  }}
+                />
               ))}
             </div>
           </CarouselItem>
@@ -76,4 +113,5 @@ export default function CommitteesCarousel({
 export type CommitteesCarouselProps = {
   committees: Committee[][];
   row: number;
+  cols: number;
 };

@@ -24,10 +24,14 @@ export type MerchCartItem = ArrElement<MerchCart>;
 
 export type Committee = {
   name: string;
+  nickname?: string;
   portfolio: string;
   position: string;
   og: number;
   major: string;
   year: number;
-  image: StaticImageData;
+  image: {
+    still: StaticImageData;
+    animated: StaticImageData;
+  };
 };

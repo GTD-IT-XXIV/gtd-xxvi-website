@@ -9,7 +9,7 @@ export function useHasMounted() {
 
 // Use only on client-side javascript when has finished mounting
 export function useScreenSize() {
-  const isSm = useMediaQuery({ query: "(min-width: 640px)" });
+  const isSm = useMediaQuery({ query: "(min-width: 540px)" });
   const isMd = useMediaQuery({ query: "(min-width: 768px)" });
   const isLg = useMediaQuery({ query: "(min-width: 1024px)" });
   const isXl = useMediaQuery({ query: "(min-width: 1280px)" });
