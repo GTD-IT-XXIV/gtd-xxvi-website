@@ -38,8 +38,9 @@ export default function TextParallaxContent({
           <Image
             src={imgUrl}
             alt="background-1"
-            layout="fill"
             className="z-0 object-cover"
+            fill
+            priority
           />
         </div>
         <div
