@@ -60,8 +60,7 @@ export const ROUTES = [
 ];
 
 /**
- * Note that for now by default the for length would be equal to 2
- * Thus, the configuration for each portfolio sections will not be parameterized (tentatively).
+ * The default number of columns to display the committees.
  */
 export const DEFAULT_COMMITTEE_COLS = 2;
 
@@ -74,4 +73,4 @@ export const PORTFOLIOS = [
   "Welfare",
 ] as const;
 
-export const COMMITTEES = committees as Committee[][];
+export const COMMITTEES: Committee[][] = committees satisfies Committee[][];

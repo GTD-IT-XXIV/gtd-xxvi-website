@@ -51,6 +51,7 @@ export default function CommiteesHeader() {
         <CarouselContent>
           {PORTFOLIOS.map((portfolio) => (
             // we want to for full + 2 halves in a row
+            // TODO: replace with actual component
             <CarouselItem className="basis" key={portfolio}>
               <div className="p-1">
                 <Card>
