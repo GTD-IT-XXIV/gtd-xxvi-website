@@ -49,7 +49,6 @@ export default function CommiteeCard({
           size="large"
           className="inset-0 z-10"
         />
-        <div className="absolute inset-0 bg-black opacity-80"></div>{" "}
         {/* Overlay div */}
         <div className="absolute flex flex-col items-center justify-center text-center text-white p-6 rounded-lg h-full w-full z-20">
           <div className="pb-5 mb-5">

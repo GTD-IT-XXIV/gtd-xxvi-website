@@ -1,7 +1,7 @@
 "use client";
 
 import { type EmblaOptionsType } from "embla-carousel";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -26,7 +26,7 @@ export default function CommitteesCarousel({
   const [api, setApi] = useState<CarouselApi>();
   const direction: Required<EmblaOptionsType>["direction"] =
     row % 2 === 0 ? "ltr" : "rtl";
-  const [index] = useAtom(indexAtom);
+  const currentIndex = useAtomValue(indexAtom);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -42,13 +42,6 @@ export default function CommitteesCarousel({
   );
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
-    api.scrollTo(index);
-  }, [api, index]);
-
-  useEffect(() => {
     if (!carouselRef.current) {
       return;
     }
@@ -58,7 +51,13 @@ export default function CommitteesCarousel({
     };
   }, [carouselRef, observer]);
 
-  const currentIndex = api?.selectedScrollSnap() ?? 0;
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+    api.scrollTo(currentIndex);
+  }, [api, currentIndex]);
+
   const prevIndex = (currentIndex - 1 + PORTFOLIOS.length) % PORTFOLIOS.length;
   const nextIndex = (currentIndex + 1) % PORTFOLIOS.length;
 

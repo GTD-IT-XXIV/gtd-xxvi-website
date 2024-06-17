@@ -52,12 +52,7 @@ export default function FrameImage({
           )}
         </div>
       </div>
-      <div
-        className={cn(
-          "absolute bottom-0 w-full h-[14%] inset-x-0 z-10",
-          large ? "-mb-8" : "-mb-2",
-        )}
-      >
+      <div className="absolute bottom-0 w-full h-[14%] inset-x-0 z-10 -mb-2">
         {large ? (
           <Image
             src={nameFrameSvg}
