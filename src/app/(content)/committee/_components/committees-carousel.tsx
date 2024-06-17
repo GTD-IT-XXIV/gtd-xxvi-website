@@ -79,29 +79,25 @@ export default function CommitteesCarousel({
         {committees.map((portfolioCommittees, index) => (
           // we want to for full + 2 halves in a row
           <CarouselItem
-            className="transition-opacity duration-100"
             key={PORTFOLIOS[index]}
+            className={cn(
+              "flex justify-around h-full",
+              direction === "ltr" ? "flex-row" : "flex-row-reverse",
+              [prevIndex, currentIndex, nextIndex].includes(index)
+                ? "visible"
+                : "invisible",
+            )}
           >
-            <div
-              className={cn(
-                "p-1 flex justify-around h-full",
-                direction === "ltr" ? "flex-row" : "flex-row-reverse",
-                [prevIndex, currentIndex, nextIndex].includes(index)
-                  ? "visible"
-                  : "invisible",
-              )}
-            >
-              {portfolioCommittees.map((committee) => (
-                <CommiteeCard
-                  key={committee.name}
-                  committee={committee}
-                  className="px-3 sm:px-5 md:px-6 lg:px-7 xl:px-10"
-                  style={{
-                    width: `${100 / cols}%`,
-                  }}
-                />
-              ))}
-            </div>
+            {portfolioCommittees.map((committee) => (
+              <CommiteeCard
+                key={committee.name}
+                committee={committee}
+                className="mx-3 sm:mx-5 md:mx-6 lg:mx-7 xl:mx-10"
+                style={{
+                  width: `${100 / cols}%`,
+                }}
+              />
+            ))}
           </CarouselItem>
         ))}
       </CarouselContent>
