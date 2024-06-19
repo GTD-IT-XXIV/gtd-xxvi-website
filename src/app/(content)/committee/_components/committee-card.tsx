@@ -69,7 +69,7 @@ export default function CommiteeCard({
           <Button
             type="button"
             size="icon"
-            className="absolute top-[5.5%] right-[7.5%] p-2 rounded-full bg-transparent text-brown-700 hover:bg-transparent border-none z-40 size-12"
+            className="absolute top-[6.5%] right-[6.5%] p-2 rounded-full bg-transparent text-brown-700 hover:bg-transparent border-none z-40 size-12"
           >
             <X className="size-8" color="#D2B48C" />
             <span className="sr-only">Close</span>

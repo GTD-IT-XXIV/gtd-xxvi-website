@@ -4,8 +4,8 @@ import React, { type HTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 import nameFrame from "../_assets/name-frame.png";
-import nameFrameSvg from "../_assets/name-frame.svg?url";
 import photoFrame from "../_assets/photo-frame.png";
+import NameFrame from "./name-frame";
 import PhotoFrame from "./photo-frame";
 
 export type FrameImageProps = {
@@ -40,14 +40,14 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
         {...props}
       >
         {/* Photo Frame */}
-        <div className="relative h-auto w-full aspect-[3/4]">
+        <div className="relative h-auto w-full aspect-[3/4] grid place-items-center">
           {large ? (
-            <PhotoFrame />
+            <PhotoFrame className="drop-shadow-lg" />
           ) : (
             <Image src={photoFrame} alt="Photo frame" />
           )}
           {/* Photo */}
-          <div className="absolute top-[5%] left-[6.5%] w-[87%] h-auto aspect-[3/4]">
+          <div className="absolute w-[88.5%] h-auto aspect-[3/4]">
             <Image
               src={src}
               alt={nickname}
@@ -58,18 +58,27 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
             />
           </div>
         </div>
-        <div className="absolute bottom-0 w-full h-[14%] inset-x-0 z-10 -mb-2">
-          <Image
-            src={large ? nameFrameSvg : nameFrame}
-            alt="Name Frame"
-            className="object-contain -z-10"
-            sizes="(max-width: 540px) 40vw, (max-width: 768px) 25vw, 18vw"
-            fill
-          />
+        <div
+          className={cn(
+            "absolute bottom-0 w-full h-[14%] inset-x-0 z-10",
+            large ? "-mb-4" : "-mb-2",
+          )}
+        >
+          {large ? (
+            <NameFrame className="absolute h-full left-[17.5%] -z-10" />
+          ) : (
+            <Image
+              src={nameFrame}
+              alt="Name Frame"
+              className="object-contain -z-10"
+              sizes="(max-width: 540px) 40vw, (max-width: 768px) 25vw, 18vw"
+              fill
+            />
+          )}
           {/* Name */}
           <div className="size-full flex justify-center items-center">
             {large ? (
-              <p className="text-3xl sm:text-5xl font-serif text-center bg-black/80 text-transparent text-shadow-[1px_2px_3px_#9C7A61] bg-clip-text">
+              <p className="text-3xl sm:text-5xl font-serif text-center bg-black text-transparent text-shadow-[1px_2px_4px_#9C7A61] bg-clip-text">
                 {nickname}
               </p>
             ) : (
