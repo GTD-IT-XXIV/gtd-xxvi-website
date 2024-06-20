@@ -29,6 +29,7 @@ let nextConfig = {
     ],
   },
   output: "standalone",
+  transpilePackages: ["three"],
 };
 
 if (shouldAnalyzeBundles) {

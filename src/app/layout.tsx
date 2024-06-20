@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Egyptian_Hieroglyphs } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { type WebSite, type WithContext } from "schema-dts";
@@ -12,6 +12,11 @@ import { BASE_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const hieroglyph = Noto_Sans_Egyptian_Hieroglyphs({
+  subsets: ["egyptian-hieroglyphs"],
+  weight: "400",
+  variable: "--font-hieroglyph",
+});
 
 const bluuNext = localFont({
   src: [
@@ -50,7 +55,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(inter.variable, bluuNext.variable)}>
+    <html
+      lang="en"
+      className={cn(inter.variable, bluuNext.variable, hieroglyph.variable)}
+    >
       <head>
         <script
           type="application/ld+json"
