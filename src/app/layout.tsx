@@ -1,7 +1,13 @@
+import { Provider } from "jotai";
 import type { Metadata } from "next";
-import { Inter, Slackey } from "next/font/google";
+import {
+  Inter,
+  Noto_Sans_Egyptian_Hieroglyphs,
+  Slackey,
+} from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import ReactDOM from "react-dom";
 import { type WebSite, type WithContext } from "schema-dts";
 
 import "@/styles/globals.css";
@@ -16,6 +22,11 @@ const slackey = Slackey({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-slackey",
+});
+const hieroglyph = Noto_Sans_Egyptian_Hieroglyphs({
+  subsets: ["egyptian-hieroglyphs"],
+  weight: "400",
+  variable: "--font-hieroglyph",
 });
 
 const bluuNext = localFont({
@@ -54,10 +65,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  ReactDOM.preload("/committee-background.webp", { as: "image" });
   return (
     <html
       lang="en"
-      className={cn(inter.variable, bluuNext.variable, slackey.variable)}
+      className={cn(
+        inter.variable,
+        bluuNext.variable,
+        slackey.variable,
+        hieroglyph.variable,
+      )}
     >
       <head>
         <script
@@ -71,7 +88,9 @@ export default function RootLayout({
         ></Script>
       </head>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Provider>{children}</Provider>
+        </TRPCReactProvider>
       </body>
     </html>
   );
