@@ -3,14 +3,16 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import Vinyl from "@/assets/images/Ellipse 20.png";
-import DvDPoleBefore from "@/assets/images/Property 1=before click.png";
-import baseVinyl from "@/assets/images/Rectangle 6.png";
-import rectangle1 from "@/assets/images/Rectangle 8.png";
-import rectangle2 from "@/assets/images/Rectangle 9.png";
-import Scroll from "@/assets/images/Scroll.png";
-import playButton from "@/assets/images/play button for cd player.png";
-import scrollBackground from "@/assets/images/scroll-background.png";
+import { cn } from "@/lib/utils";
+
+import Vinyl from "../_assets/Ellipse 20.png";
+import DvDPoleBefore from "../_assets/Property 1=before click.png";
+import baseVinyl from "../_assets/Rectangle 6.png";
+import rectangle1 from "../_assets/Rectangle 8.png";
+import rectangle2 from "../_assets/Rectangle 9.png";
+import Scroll from "../_assets/Scroll.png";
+import playButton from "../_assets/play button for cd player.png";
+import scrollBackground from "../_assets/scroll-background.png";
 
 export default function Anthem() {
   const [spin, setSpin] = useState(false);
@@ -21,7 +23,7 @@ export default function Anthem() {
 
   return (
     <div className="bg-[#0F172A]">
-      <h1 className="text-center text-white font-bold text-2xl font-serif font-['Bluu_Next'] pt-10">
+      <h1 className="text-center text-white font-bold text-2xl font-serif pt-10">
         Anthem
       </h1>
       <div>
@@ -37,7 +39,7 @@ export default function Anthem() {
             alt="Scroll image"
             className="mx-auto w-[370px]"
           />
-          <p className="mx-auto w-[200px] text-xs text-center font-serif font-['Bluu_Next']">
+          <p className="mx-auto w-[200px] text-xs text-center font-serif">
             From different places, <br />
             different times <br /> With a common goal in our mind <br /> We want
             to enjoy this moment <br /> while it lasts <br /> Have you ever
@@ -62,9 +64,12 @@ export default function Anthem() {
             <Image
               src={Vinyl}
               alt="Vinyl"
-              className={`${spin ? "animate-spin" : "animate-none"} w-[40%] absolute top-[15%] left-[17%] z-10`}
+              className={cn(
+                "w-[40%] absolute top-[15%] left-[17%] z-10",
+                spin ? "animate-spin" : "animate-none",
+              )}
             />
-            <p className="text-center z-10 absolute top-[50%] right-14 font-['Slackey'] text-white">
+            <p className="text-center z-10 absolute top-[50%] right-14 font-slackey text-white">
               Click to <br /> Play
             </p>
             <button
@@ -86,7 +91,10 @@ export default function Anthem() {
             <Image
               src={DvDPoleBefore}
               alt="DvD Pole"
-              className={`z-10 absolute top-[-10%] right-[18%] transition-transform duration-500 ${spin ? "-rotate-45" : ""}`}
+              className={cn(
+                "z-10 absolute top-[-10%] right-[18%] transition-transform duration-500",
+                spin && "-rotate-45",
+              )}
             />
           </div>
         </div>

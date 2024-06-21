@@ -1,25 +1,23 @@
 import Image from "next/image";
 
-import backgroundContacts from "@/assets/images/Rectangle 24.png";
-import instagramLogo from "@/assets/images/instagram logo.png";
-import telegramLogo from "@/assets/images/telegram logo.png";
+import backgroundContacts from "../_assets/Rectangle 24.png";
+import instagramLogo from "../_assets/instagram logo.png";
+import telegramLogo from "../_assets/telegram logo.png";
 
 export default function Contacts() {
   return (
     <>
       <div className="bg-[#0F172A] text-center">
-        <h1 className="text-white text-3xl p-10 bg-[#0F172A] font-serif font-['Bluu_Next']">
+        <h1 className="text-white text-3xl p-10 bg-[#0F172A] font-serif">
           Contact Us
         </h1>
-        <div className="flex flex-col gap-10 font-serif font-['Bluu_Next'] items-center justify-center text-[#402A10]">
+        <div className="flex flex-col gap-10 font-serif items-center justify-center text-[#402A10]">
           <div className="relative">
             <div className="absolute top-[-30%] inset-0 flex flex-col justify-center">
-              <p className="text-xl font-bold font-serif font-['Bluu_Next'] z-10">
+              <p className="text-xl font-bold font-serif z-10">
                 Telegram <br />
               </p>
-              <p className="font-serif font-['Bluu_Next'] z-10">
-                www.telegram.com
-              </p>
+              <p className="font-serif z-10">www.telegram.com</p>
             </div>
             <Image
               src={backgroundContacts}
@@ -34,12 +32,10 @@ export default function Contacts() {
           </div>
           <div className="relative">
             <div className="absolute top-[-30%] inset-0 flex flex-col justify-center">
-              <p className="text-xl font-bold font-serif font-['Bluu_Next'] z-10">
+              <p className="text-xl font-bold font-serif z-10">
                 Instagram <br />
               </p>
-              <p className="font-serif font-['Bluu_Next'] z-10">
-                www.instagram.com
-              </p>
+              <p className="font-serif z-10">www.instagram.com</p>
             </div>
             <Image
               src={backgroundContacts}
