@@ -25,7 +25,10 @@ export default function Storyline({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <section
-      className={cn("relative z-0 w-full bg-slate-900 text-white", className)}
+      className={cn(
+        "relative z-0 w-full bg-gradient-to-b from-slate-900 from-70% to-black text-white",
+        className,
+      )}
       {...props}
     >
       <StorylineTextPath duration="120s" className="-z-10 inset-0" />

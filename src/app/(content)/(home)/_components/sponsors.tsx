@@ -47,13 +47,15 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
   }, []);
   return (
     <div
-      className="relative w-full h-[336px] content-center"
+      className="relative z-0 w-full h-[336px] content-center"
       style={{
         backgroundImage: `url(${bgUrl})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "top center",
       }}
     >
+      <div className="absolute -z-10 inset-0 bg-gradient-to-b from-black to-transparent to-35%" />
       <div className="text-center text-white mb-6">
         <h2 className="text-2xl font-serif">Sponsored by</h2>
       </div>
