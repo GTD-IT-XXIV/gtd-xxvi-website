@@ -41,7 +41,7 @@ export default function Storyline({
                 />
               }
             >
-              <StorylineLectern className="-z-20" />
+              <StorylineLectern />
             </Suspense>
           </div>
           <div className="basis-1/2 grow self-center pb-8">
@@ -74,7 +74,7 @@ export default function Storyline({
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-[3%] flex justify-center">
-        <Link href="/event">
+        <Link href="/events" target="_self">
           <GTDButton className="sm:py-2.5 sm:px-10 sm:text-lg md:py-3 md:px-12 md:text-xl lg:py-4 lg:px-16 lg:text-2xl">
             Learn More
           </GTDButton>

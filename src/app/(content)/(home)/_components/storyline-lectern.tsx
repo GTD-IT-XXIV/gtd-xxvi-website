@@ -22,10 +22,9 @@ export default function StorylineLectern({
   return (
     <Canvas className={className} camera={{ position: [0, 0, 1.5] }}>
       <OrbitControls
+        enableZoom={false}
         enablePan={false}
-        minDistance={1}
-        maxDistance={1.5}
-        minPolarAngle={Math.PI / 4}
+        minPolarAngle={Math.PI / 2}
         maxPolarAngle={Math.PI / 2}
         minAzimuthAngle={-Math.PI / 6}
         maxAzimuthAngle={Math.PI / 6}

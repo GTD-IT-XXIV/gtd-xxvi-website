@@ -7,17 +7,20 @@ import { cn } from "@/lib/utils";
 
 import GTDButtonBackground from "./gtd-button-background";
 
-const buttonVariants = cva("relative z-0 font-serif text-[#402A10] py-2 px-6", {
-  variants: {
-    size: {
-      default: "text-sm",
-      lg: "text-lg",
+const buttonVariants = cva(
+  "relative z-0 font-serif text-[#402A10] transition hover:scale-105",
+  {
+    variants: {
+      size: {
+        default: "py-2 px-6 text-sm",
+        lg: "py-2.5 px-10 text-lg",
+      },
+    },
+    defaultVariants: {
+      size: "default",
     },
   },
-  defaultVariants: {
-    size: "default",
-  },
-});
+);
 
 export default function GTDButton({
   children,
