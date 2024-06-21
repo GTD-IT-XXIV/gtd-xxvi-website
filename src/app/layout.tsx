@@ -1,7 +1,9 @@
+import { Provider } from "jotai";
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_Egyptian_Hieroglyphs } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import ReactDOM from "react-dom";
 import { type WebSite, type WithContext } from "schema-dts";
 
 import "@/styles/globals.css";
@@ -54,6 +56,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  ReactDOM.preload("/committee-background.webp", { as: "image" });
   return (
     <html
       lang="en"
@@ -71,7 +74,9 @@ export default function RootLayout({
         ></Script>
       </head>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Provider>{children}</Provider>
+        </TRPCReactProvider>
       </body>
     </html>
   );
