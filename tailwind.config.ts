@@ -22,6 +22,10 @@ export default {
       fontFamily: {
         sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
         serif: ["var(--font-bluu-next)", ...defaultTheme.fontFamily.serif],
+        hieroglyph: [
+          "var(--font-hieroglyph)",
+          ...defaultTheme.fontFamily.serif,
+        ],
       },
       colors: {
         gtd: {
@@ -129,10 +133,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "infinite-scroll": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "infinite-scroll": "infinite-scroll 10s linear infinite",
       },
     },
   },

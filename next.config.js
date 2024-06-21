@@ -29,6 +29,7 @@ let nextConfig = {
     ],
   },
   output: "standalone",
+  transpilePackages: ["three"],
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     /* eslint-disable */
