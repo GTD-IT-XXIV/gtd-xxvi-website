@@ -37,7 +37,7 @@ export default function CommiteesContent() {
   );
 
   return (
-    <div className="bg-repeat bg-[url('/committee-background.webp')] min-h-screen bg-contain pt-12 space-y-4">
+    <div className="bg-repeat bg-[url('/committee-background.webp')] min-h-screen bg-contain py-12 space-y-4">
       {hasMounted &&
         committeesGrid.map((committeesRow, index) => (
           <CommitteesCarousel

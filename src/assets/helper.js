@@ -11,11 +11,8 @@ let out = "";
 
 for (const [index, portfolio] of committees.entries()) {
   for (const committee of portfolio) {
-    // TODO: replace with the commented code below when the images are ready
-    out += `import ${committee.name.replace(/\s+/g, "")}Still from "@/assets/images/committee/stills/sample/sample-1.webp";\n`;
-    out += `import ${committee.name.replace(/\s+/g, "")}Animated from "@/assets/images/committee/animated/sample/sample-1.webp";\n`;
-    // out += `import ${committee.name.replace(/\s+/g, "")}Still from "@/assets/images/committee/stills/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
-    // out += `import ${committee.name.replace(/\s+/g, "")}Animated from "@/assets/images/committee/animated/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
+    out += `import ${committee.name.replace(/\s+/g, "")}Still from "@/assets/images/committee/stills/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
+    out += `import ${committee.name.replace(/\s+/g, "")}Animated from "@/assets/images/committee/animated/${PORTFOLIOS[index]}/${committee.name.trim()}.webp";\n`;
   }
 }
 
