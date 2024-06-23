@@ -1,6 +1,10 @@
 import { Provider } from "jotai";
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_Egyptian_Hieroglyphs } from "next/font/google";
+import {
+  Inter,
+  Noto_Sans_Egyptian_Hieroglyphs,
+  Slackey,
+} from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import ReactDOM from "react-dom";
@@ -14,6 +18,11 @@ import { BASE_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const slackey = Slackey({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-slackey",
+});
 const hieroglyph = Noto_Sans_Egyptian_Hieroglyphs({
   subsets: ["egyptian-hieroglyphs"],
   weight: "400",
@@ -60,7 +69,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(inter.variable, bluuNext.variable, hieroglyph.variable)}
+      className={cn(
+        inter.variable,
+        bluuNext.variable,
+        slackey.variable,
+        hieroglyph.variable,
+      )}
     >
       <head>
         <script

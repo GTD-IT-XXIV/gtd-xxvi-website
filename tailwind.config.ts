@@ -22,6 +22,7 @@ export default {
       fontFamily: {
         sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
         serif: ["var(--font-bluu-next)", ...defaultTheme.fontFamily.serif],
+        slackey: ["var(--font-slackey)", ...defaultTheme.fontFamily.serif],
         hieroglyph: [
           "var(--font-hieroglyph)",
           ...defaultTheme.fontFamily.serif,
