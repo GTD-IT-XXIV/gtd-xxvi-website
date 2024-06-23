@@ -35,7 +35,7 @@ export default function HomePageBody({ className = "" }: HomePageBodyProps) {
       <TopSection />
       <HouseSection />
       <Storyline />
-      <main className="flex justify-center">
+      <main className="flex justify-center items-center">
         <Sponsors bgUrl={bg.src} logos={logos} />
       </main>
     </section>
