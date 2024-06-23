@@ -1,7 +1,7 @@
 import AboutCarousel from "./_components/about-carousel";
 import Anthem from "./_components/anthem";
 import Contacts from "./_components/contacts";
-import FAQ from "./_components/faq";
+import FAQAccordion from "./_components/faq-accordion";
 
 export default function AboutPage() {
   return (
@@ -10,7 +10,7 @@ export default function AboutPage() {
         About PINTU GTD
       </h1>
       <AboutCarousel />
-      <FAQ />
+      <FAQAccordion className="px-7" />
       <Contacts />
       <Anthem />
     </div>
