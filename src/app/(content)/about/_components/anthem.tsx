@@ -23,7 +23,7 @@ export default function Anthem() {
 
   return (
     <div className="bg-[#0F172A]">
-      <h1 className="text-center text-white font-bold text-2xl font-serif pt-10">
+      <h1 className="text-center text-white font-bold text-3xl font-serif pt-10">
         Anthem
       </h1>
       <div>
@@ -39,7 +39,7 @@ export default function Anthem() {
             alt="Scroll image"
             className="mx-auto w-[370px]"
           />
-          <p className="mx-auto w-[200px] text-xs text-center font-serif">
+          <p className="mx-auto w-[200px] text-xs text-center font-serif text-black">
             From different places, <br />
             different times <br /> With a common goal in our mind <br /> We want
             to enjoy this moment <br /> while it lasts <br /> Have you ever

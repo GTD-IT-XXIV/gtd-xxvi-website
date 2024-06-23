@@ -35,7 +35,11 @@ export default function FAQAccordion({
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
   const faqarray = faqdatas?.map((faqdata) => (
-    <AccordionItem key={faqdata.index} value={faqdata.index}>
+    <AccordionItem
+      key={faqdata.index}
+      value={faqdata.index}
+      className="border-0"
+    >
       <AccordionTrigger className="font-serif text-xl">
         {faqdata.question}
       </AccordionTrigger>

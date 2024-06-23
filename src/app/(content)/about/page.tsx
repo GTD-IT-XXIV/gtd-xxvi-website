@@ -5,7 +5,7 @@ import FAQAccordion from "./_components/faq-accordion";
 
 export default function AboutPage() {
   return (
-    <div className="">
+    <div className="text-white">
       <h1 className="font-serif text-3xl text-center my-5 text-white">
         About PINTU GTD
       </h1>

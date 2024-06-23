@@ -40,7 +40,7 @@ const AboutCarousel = () => {
   };
 
   return (
-    <div>
+    <div className="mb-6">
       <Carousel
         className="w-full h-60"
         setApi={setApi}
