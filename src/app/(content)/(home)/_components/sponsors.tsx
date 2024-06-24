@@ -47,7 +47,7 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
   }, []);
   return (
     <div
-      className="relative z-0 w-full h-[336px] content-center"
+      className="relative z-0 w-full h-auto aspect-[4/3] content-center"
       style={{
         backgroundImage: `url(${bgUrl})`,
         backgroundSize: "cover",
@@ -56,24 +56,25 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
       }}
     >
       <div className="absolute -z-10 inset-0 bg-gradient-to-b from-black to-transparent to-35%" />
-      <div className="text-center text-white mb-6">
+      <div className="mt-auto text-center text-white">
         <h2 className="text-2xl font-serif">Sponsored by</h2>
       </div>
-      <div ref={scrollerRef} className="scroller">
-        <div className="w-max flex flex-nowrap gap-3 sm:gap-5 md:gap-10 animate-infinite-scroll hover:animation-pause">
+      <div ref={scrollerRef} className="h-1/2 scroller">
+        <div className="h-full w-max flex flex-nowrap items-stretch gap-3 sm:gap-5 md:gap-10 animate-infinite-scroll hover:animation-pause">
           {logos.map((logo, index) => {
             return (
-              <Link key={index} href={logo.url} className=" p-1">
+              <Link
+                key={index}
+                href={logo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:scale-105 transition"
+              >
                 <Image
                   src={logo.src}
                   alt={`logo ${index + 1}`}
-                  height={100}
-                  width={100}
                   sizes="(max-width: 640px) 100px, (max-width: 768px) 125px, 150px"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
+                  className="h-full w-full object-contain"
                 />
               </Link>
             );
