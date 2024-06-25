@@ -13,20 +13,19 @@ import Sponsors from "./sponsors";
 import Storyline from "./storyline";
 import TopSection from "./top-section";
 
-const logos = [
-  { src: kingdomFoodGroupLogo, url: "https://www.instagram.com/captainkimsg" },
-  { src: weCinemasLogo, url: "https://www.wecinemas.com.sg/" },
-  { src: kotexLogo, url: "https://www.kotex.com.sg/" },
-  { src: mgpLogo, url: "https://mgplabel.com/" },
-  { src: lumosLogo, url: "https://lumosprojector.com/" },
-  { src: playnationLogo, url: "https://playnation.com.sg/" },
-  { src: kingdomFoodGroupLogo, url: "https://www.instagram.com/captainkimsg" },
-  { src: weCinemasLogo, url: "https://www.wecinemas.com.sg/" },
-  { src: kotexLogo, url: "https://www.kotex.com.sg/" },
-  { src: mgpLogo, url: "https://mgplabel.com/" },
-  { src: lumosLogo, url: "https://lumosprojector.com/" },
-  { src: playnationLogo, url: "https://playnation.com.sg/" },
-];
+const logos = new Array(3)
+  .fill([
+    {
+      src: kingdomFoodGroupLogo,
+      url: "https://www.instagram.com/captainkimsg",
+    },
+    { src: weCinemasLogo, url: "https://www.wecinemas.com.sg/" },
+    { src: kotexLogo, url: "https://www.kotex.com.sg/" },
+    { src: mgpLogo, url: "https://mgplabel.com/" },
+    { src: lumosLogo, url: "https://lumosprojector.com/" },
+    { src: playnationLogo, url: "https://playnation.com.sg/" },
+  ])
+  .flat();
 
 export type HomePageBodyProps = {
   className?: string;

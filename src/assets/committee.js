@@ -697,6 +697,7 @@ const committees = [
     },
     {
       name: "Mathew Owen Prajogo",
+      nickname: "MO",
       portfolio: "BFM",
       position: "Subcommittee",
       og: 7,
@@ -719,6 +720,7 @@ const committees = [
     },
     {
       name: "Oliver Kevin Onggowarsito",
+      nickname: "OK",
       portfolio: "BFM",
       position: "Subcommittee",
       og: 7,
@@ -1847,6 +1849,7 @@ const committees = [
     },
     {
       name: "Nathanael Lowie",
+      nickname: "Lowie",
       portfolio: "Welfare",
       position: "Subcommittee",
       og: 1,
