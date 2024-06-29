@@ -4,6 +4,8 @@ import type { House } from "@/lib/types";
 
 import podiumBg from "../_assets/podium-bg.webp";
 
+import Image from "next/image";
+
 type Winner = {
   og: string;
   house: House;
