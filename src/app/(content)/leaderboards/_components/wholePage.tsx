@@ -9,6 +9,14 @@ import Title from "./title";
 import { Elsie_Swash_Caps } from "next/font/google";
 import logoshadow from "../_assets/logo-image-shadow.png";
 
+type House = "wanderer" | "changeling" | "timeturner" | "healer";
+
+type Winner = {
+  og: string;
+  house: House;
+  points: number;
+};
+
 export default function WholePage() {
   const BACKEND_URL = "http://localhost:8080";
   const [data, setData] = useState<{
@@ -34,7 +42,7 @@ export default function WholePage() {
     return <div className="font-serif">Loading...</div>;
   }
 
-  const ogNameMapping:Record<number, string> = {
+  const ogNameMapping: Record<number, string> = {
     1: "Sijilink",
     2: "Nimboosh",
     3: "Mashark Stitch",
@@ -51,6 +59,26 @@ export default function WholePage() {
     { bottom: 165, left: 265 },
   ];
 
+  const winners: Winner[] = data.top3OG.slice(0, 3).map((og) => {
+    let houseName: House = "healer";
+    if (og.number === "1" || og.number === "2") {
+      houseName = "wanderer";
+    } else if (og.number === "3" || og.number === "4") {
+      houseName = "changeling";
+    } else if (og.number === "5" || og.number === "6") {
+      houseName = "timeturner";
+    }
+    return {
+      og: og.number,
+      house: houseName,
+      points: og.points,
+    };
+  });
+
+  while (winners.length < 3) {
+    winners.push({ og: "", house: "healer", points: 0 });
+  }
+
   return (
     <div className="relative min-h-screen">
       <div className="mb-[60px]">
@@ -64,23 +92,7 @@ export default function WholePage() {
       </div>
       <div className="w-[369px] bottom-0 absolute left-1/2 transform -translate-x-1/2"></div>
       <Podium
-        winners={data.top3OG.slice(0, 3).map((og) => {
-          let houseName = "";
-          if (og.number === "1" || og.number === "2") {
-            houseName = "wanderer";
-          } else if (og.number === "3" || og.number === "4") {
-            houseName = "changeling";
-          } else if (og.number === "5" || og.number === "6") {
-            houseName = "timeturner";
-          } else {
-            houseName = "healer";
-          }
-          return {
-            og: og.number,
-            house: houseName,
-            points: og.points,
-          };
-        })}
+        winners={winners as [Winner, Winner, Winner]}
         className="absolute bottom-0 inset-x-0 px-8"
       />
       {data.top3OG.slice(0, 3).map((og, index) => {
