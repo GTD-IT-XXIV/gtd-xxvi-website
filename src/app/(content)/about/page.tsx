@@ -5,7 +5,7 @@ import FAQ from "./_components/faq";
 
 export default function AboutPage() {
   return (
-    <div className="">
+    <div className="w-3/5 mx-auto">
       <h1 className="font-serif text-3xl text-center my-5 text-white">
         About PINTU GTD
       </h1>

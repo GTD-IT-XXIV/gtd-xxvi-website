@@ -40,17 +40,17 @@ const AboutCarousel = () => {
   };
 
   return (
-    <div>
+    <div className="w-full h-full">
       <Carousel
-        className="w-full h-60"
+        className="w-full h-full"
         setApi={setApi}
         opts={{ startIndex: 1, slidesToScroll: 1 }}
       >
-        <CarouselContent className="w-full h-48 ml-0">
+        <CarouselContent className="w-full h-full ml-0">
           {slides.map((index) => (
             <CarouselItem
               key={index}
-              className={cn(colors[index], "basis-[85%] pl-0")}
+              className={cn(colors[index], "basis-[85%] pl-0 aspect-video")}
             >
               {/* Content */}
               {/* TODO: add content images */}
@@ -67,6 +67,7 @@ const AboutCarousel = () => {
                     "rounded-full w-5 h-5 flex items-center justify-center",
                     animationName[animationIndex],
                     "lightning-left",
+                    "md:w-6 md:h-6 md:mx-1"
                   )}
                 >
                   <HiLightningBolt
@@ -79,6 +80,7 @@ const AboutCarousel = () => {
                   className={cn(
                     "px-1 mx-1 rounded-full w-3 h-3",
                     colors[index],
+                    "md:w-4 md:h-4"
                   )}
                 ></div>
               ),
@@ -103,11 +105,11 @@ const AboutCarousel = () => {
         </div>
       </Carousel>
 
-      <div className="px-[7.5%] test">
+      <div className="px-[7.5%] md:w-[50vw] md:mx-auto md:mt-6">
         {texts.map((text, index) => (
           <div
             key={index}
-            className="test text-xs font-light text-white"
+            className="test text-xs font-light text-white md:text-lg"
             hidden={selectedIndex - 1 !== index}
           >
             {text}
