@@ -20,29 +20,28 @@ const Housegl: React.FC<Props> = (props) => {
   const [hover, setHover] = useState([0, 0]);
   return (
     <div className="relative">
-      <Image src={backgroundgl} width={800} height={200} alt="background gl" />
-      <div className="absolute top-0 flex flex-col items-center pt-[16%] px-[20%]">
-        <p className="font-serif text-red-500 text-md sm:text-xl md:text-3xl">
+      <Image src={backgroundgl} alt="background gl" className="w-full" />
+      <div className="absolute flex flex-col items-center top-[20%] right-[20%] left-[20%] ">
+        <p className="font-serif text-red-500 text-md sm:text-xl md:text-3xl xl:text-xl">
           House {props.house}
         </p>
-        <p className="font-serif text-2xl sm:text-3xl mb-[5%] md:text-5xl">
+        <p className="font-serif text-2xl sm:text-3xl mb-[5%] md:text-5xl xl:text-3xl">
           Group Leaders
         </p>
-        <div className="flex">
+        <div className="flex w-full">
           <Link
             href={"/"}
-            className="flex flex-col items-center pr-[5%] cursor-pointer"
+            className="flex flex-col items-center pr-[5%] cursor-pointer flex-1 w-full"
             onMouseEnter={() => setHover([1, 0])}
             onMouseLeave={() => setHover([0, 0])}
           >
             <Image
               src={props.glphoto1}
               alt="GL photo 1"
-              width={800}
-              height={200}
               className={clsx(
                 hover[0] &&
                   `transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75`,
+                "w-full",
               )}
             />
             {hover[0] ? (
@@ -57,18 +56,17 @@ const Housegl: React.FC<Props> = (props) => {
           </Link>
           <Link
             href={"/"}
-            className="flex flex-col items-center cursor-pointer"
+            className="flex flex-col items-center cursor-pointer flex-1 w-full"
             onMouseEnter={() => setHover([0, 1])}
             onMouseLeave={() => setHover([0, 0])}
           >
             <Image
               src={props.glphoto2}
               alt="GL photo 2"
-              width={800}
-              height={200}
               className={clsx(
                 hover[1] &&
                   `transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75`,
+                "w-full",
               )}
             />
             {hover[1] ? (

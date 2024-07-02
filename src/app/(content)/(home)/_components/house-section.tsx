@@ -3,14 +3,13 @@
 import Image from "next/image";
 import React, { useState } from "react";
 
-import blueflag from "../_assets/blueflag.png";
+import BannerChangeling from "../_assets/banner-changeling.svg";
+import BannerHealer from "../_assets/banner-healer.svg";
+import BannerTimeturner from "../_assets/banner-timeturner.svg";
+import BannerWanderer from "../_assets/banner-wanderer.svg";
 import chooseyourhouse from "../_assets/chooseyourhouse.png";
 import glclose from "../_assets/glclose.png";
 import glphoto from "../_assets/glphoto.png";
-import greenflag from "../_assets/greenflag.png";
-import redflag from "../_assets/redflag.png";
-import yellowflag from "../_assets/yellowflag.png";
-import style from "./house-section.module.css";
 import HouseGl from "./housegl";
 
 const HouseSection = () => {
@@ -36,134 +35,66 @@ const HouseSection = () => {
   };
 
   return (
-    <div className="bg-slate-900 flex flex-col">
-      <div className="relative mt-20">
-        <Image
-          className="w-full"
-          src={chooseyourhouse}
-          alt="choose your house"
-          width={400}
-          height={100}
-        />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <p className="text-white font-serif sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-            Choose your house
-          </p>
+    <div className="bg-slate-900 flex flex-col xl:flex-row xl:content-between mx-5 mt-5">
+      <div className="xl:flex-1 xl:px-5">
+        <div className="relative">
+          <Image
+            className="w-full"
+            src={chooseyourhouse}
+            alt="choose your house"
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <p className="text-white font-serif sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+              Choose your house
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-4 pb-5 pt-2">
+          <div className="flex flex-col overflow-hidden relative px-1">
+            <BannerWanderer
+              onClick={() => handleClick(1)}
+              className={`${toggle[0] ? "translate-y-0" : "-translate-y-1/4"} z-10 transform transition-transform duration-500 ease-in-out ${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "hover:translate-y-0" : ""} ${toggle[0] ? "cursor-pointer" : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "cursor-pointer" : ""}`}
+            ></BannerWanderer>
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+              Wanderer
+            </p>
+          </div>
+          <div className="flex flex-col overflow-hidden relative px-1">
+            <BannerHealer
+              onClick={() => handleClick(2)}
+              className={`${toggle[1] ? "translate-y-0" : "-translate-y-1/4"} z-10 transform transition-transform duration-500 ease-in-out ${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "hover:translate-y-0" : ""} ${toggle[1] ? "cursor-pointer" : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "cursor-pointer" : ""}`}
+            ></BannerHealer>
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+              Healer
+            </p>
+          </div>
+          <div className="flex flex-col overflow-hidden relative px-1">
+            <BannerChangeling
+              onClick={() => handleClick(3)}
+              className={`${toggle[2] ? "translate-y-0" : "-translate-y-1/4"} z-10 transform transition-transform duration-500 ease-in-out ${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "hover:translate-y-0" : ""} ${toggle[2] ? "cursor-pointer" : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "cursor-pointer" : ""}`}
+            ></BannerChangeling>
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+              Changeling
+            </p>
+          </div>
+          <div className="flex flex-col overflow-hidden relative px-1">
+            <BannerTimeturner
+              onClick={() => handleClick(4)}
+              className={`${toggle[3] ? "translate-y-0" : "-translate-y-1/4"} z-10 transform transition-transform duration-500 ease-in-out ${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "hover:translate-y-0" : ""} ${toggle[3] ? "cursor-pointer" : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] ? "cursor-pointer" : ""}`}
+            ></BannerTimeturner>
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+              Timeturner
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* <div
-        className="mb-1 justify-center px-7 py-2 bg-slate-900 rounded-full 
-          border border-sky-500 font-serif text-white self-center flex mt-10 xl:mt-20
-          sm:py-2 sm:px-7 sm:text-lg 
-          md:py-3 md:px-8 md:text-xl 
-          lg:py-4 lg:px-10 lg:text-2xl 
-          xl:py-5 xl:px-12 xl:text-3xl"
-      >
-        Choose your house
-      </div> */}
-      <div className="flex px-10 mb-16 sm:mb-24 md:mb-36 lg:mb-44 xl:mb-44 md:px-16 lg:px-32 xl:px-52 relative">
-        <div className="flex flex-col">
-          <div className="relative">
-            <Image
-              onClick={() => handleClick(1)}
-              src={redflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
-              ${toggle[0] ? style.onflag : style.offflag} `}
-            />
-            <Image
-              src={redflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`pt-3 px-1.5`}
-            />
-          </div>
-          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
-            House A
-          </p>
-        </div>
-        <div className="flex flex-col">
-          <div className="relative">
-            <Image
-              onClick={() => handleClick(2)}
-              src={greenflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
-              ${toggle[1] ? style.onflag : style.offflag} `}
-            />
-            <Image
-              src={greenflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`pt-3 px-1.5`}
-            />
-          </div>
-          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
-            House B
-          </p>
-        </div>
-        <div className="flex flex-col">
-          <div className="relative">
-            <Image
-              onClick={() => handleClick(3)}
-              src={blueflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
-              ${toggle[2] ? style.onflag : style.offflag} `}
-            />
-            <Image
-              src={blueflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`pt-3 px-1.5`}
-            />
-          </div>
-          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
-            House C
-          </p>
-        </div>
-        <div className="flex flex-col">
-          <div className="relative">
-            <Image
-              onClick={() => handleClick(4)}
-              src={yellowflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`${!toggle[0] && !toggle[1] && !toggle[2] && !toggle[3] && style.flag} pt-3 absolute px-1.5 
-              ${toggle[3] ? style.onflag : style.offflag} `}
-            />
-            <Image
-              src={yellowflag}
-              width={800}
-              height={200}
-              alt="redflag"
-              className={`pt-3 px-1.5`}
-            />
-          </div>
-          <p className="text-white font-serif pt-2 lg:pt-3 self-center md:text-xl lg:text-2xl xl:text-3xl">
-            House D
-          </p>
-        </div>
-      </div>
-      <div className="justify-center self-center pb-10 lg:pb-20 transition-opacity duration-1000 ease-in-out">
+      <div className="xl:flex-1 xl:px-5 justify-center transition-opacity duration-1000 ease-in-out">
         {housetoggle === 0 ? (
           <div>
             <Image
               className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 0 ? "opacity-100" : "opacity-0"}`}
               src={glclose}
-              width={800}
-              height={200}
               alt="paper frame"
             />
           </div>
@@ -174,7 +105,7 @@ const HouseSection = () => {
             <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
-              house={"A"}
+              house={"Wanderer"}
               og={[1, 2]}
             />
           </div>
@@ -185,7 +116,7 @@ const HouseSection = () => {
             <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
-              house={"B"}
+              house={"Healer"}
               og={[3, 4]}
             />
           </div>
@@ -196,7 +127,7 @@ const HouseSection = () => {
             <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
-              house={"C"}
+              house={"Changeling"}
               og={[5, 6]}
             />
           </div>
@@ -205,7 +136,7 @@ const HouseSection = () => {
             <HouseGl
               glphoto1={glphoto}
               glphoto2={glphoto}
-              house={"D"}
+              house={"Timeturner"}
               og={[7, 8]}
             />
           </div>
