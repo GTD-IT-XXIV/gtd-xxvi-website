@@ -6,8 +6,7 @@ import pic from "../_assets/leaderboards-bg.png";
 import Banner from "./banner";
 import Podium from "./podium";
 import Title from "./title";
-import { Elsie_Swash_Caps } from "next/font/google";
-import logoshadow from "../_assets/logo-image-shadow.png";
+import shadow from "../_assets/shadow-linear.png";
 
 type House = "wanderer" | "changeling" | "timeturner" | "healer";
 
@@ -17,25 +16,28 @@ type Winner = {
   points: number;
 };
 
+type LeaderboardData = {
+  topHouse: { name: string };
+  top3OG: { number: string; og: string; house: string; points: number }[];
+};
+
 export default function WholePage() {
   const BACKEND_URL = "http://localhost:8080";
-  const [data, setData] = useState<{
-    topHouse: { name: string };
-    top3OG: { number: string; og: string; house: string; points: number }[];
-  } | null>(null);
+  const [data, setData] = useState<LeaderboardData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/leaderboards/0`); // Replace '/endpoint' with the actual endpoint
-        const data = await response.json();
-        console.log(data); // Print the data to the console
-        setData(data);
+        const response = await fetch(`${BACKEND_URL}/leaderboards/0`);
+        const result = (await response.json()) as LeaderboardData;
+        console.log(result); // Print the data to the console
+        setData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
+
+    void fetchData();
   }, []);
 
   if (!data) {
@@ -54,9 +56,9 @@ export default function WholePage() {
   };
 
   const podiumPositions = [
-    { bottom: 295, left: 145 },
-    { bottom: 205, left: 25 },
-    { bottom: 165, left: 265 },
+    { bottom: 320, left: 140 },
+    { bottom: 240, left: 25 },
+    { bottom: 210, left: 255 },
   ];
 
   const winners: Winner[] = data.top3OG.slice(0, 3).map((og) => {
@@ -80,20 +82,22 @@ export default function WholePage() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      <div className="mb-[60px]">
-        <Image src={pic} alt="Leaderboards" width={430} className="relative" />
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="mb-[60px] flex justify-center">
+        <Image src={pic} alt="Leaderboards" width={400} className="relative max-w-full" />
       </div>
-      <div className="absolute top-0 flex flex-col items-center justify-center">
+      <div className="absolute bottom-0 left-0 w-full z-10">
+        <Image src={shadow} alt="shadow" className="w-full" />
+      </div>
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[400px] max-w-full">
         <Banner winningTeam={data.topHouse.name} />
       </div>
-      <div className="absolute top-[76px] left-1/2 transform -translate-x-1/2">
+      <div className="absolute top-[76px] left-1/2 transform -translate-x-1/2 max-w-full">
         <Title winningTeam={data.topHouse.name} />
       </div>
-      <div className="w-[369px] bottom-0 absolute left-1/2 transform -translate-x-1/2"></div>
       <Podium
         winners={winners as [Winner, Winner, Winner]}
-        className="absolute bottom-0 inset-x-0 px-8"
+        className="absolute bottom-0 inset-x-0 sm:px-8 mb-[40px] px-4"
       />
       {data.top3OG.slice(0, 3).map((og, index) => {
         const position = podiumPositions[index];
@@ -101,13 +105,13 @@ export default function WholePage() {
           position && (
             <text
               key={og.number}
-              className={`z-60 absolute transform text-[15px] font-serif w-[144px] text-center justify-center`}
+              className={`z-60 absolute transform text-[15px] font-serif sm:w-[120px] text-center justify-center w-[100px]`}
               style={{
                 bottom: `${position.bottom}px`,
                 left: `${position.left}px`,
               }}
             >
-              {ogNameMapping[parseInt(og.number, 10)] || og.og}
+              {ogNameMapping[parseInt(og.number, 10)] ?? og.og}
             </text>
           )
         );

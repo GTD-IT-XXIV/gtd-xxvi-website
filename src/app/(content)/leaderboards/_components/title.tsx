@@ -11,18 +11,22 @@ import TimeturnerTitle from "../_assets/winner-title/timeturnertitle.svg";
 export default function Title({winningTeam}: {winningTeam: string}) {
     let TitleComponent;
     switch (winningTeam){
-        case "Wanderer":
+        case "Wanderer": {
             TitleComponent = WandererTitle;
             break;
-        case "Healer":
+        }
+        case "Healer": {
             TitleComponent = HealerTitle;
             break;
-        case "Timeturner":
+        }
+        case "Timeturner": {
             TitleComponent = TimeturnerTitle;
             break;
-        case "Changeling":
+        }
+        case "Changeling": {
             TitleComponent = ChangelingTitle;
             break;
+        }
     }
     return (
         <div className="justify-center items-center">
