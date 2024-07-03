@@ -115,7 +115,7 @@ const HouseSection = () => {
         </div>
       </div>
 
-      <div className="relative xl:flex-1 xl:px-5 justify-center overflow-hidden h-[45vh] sm:h-[60vh] md:h-[65vh] lg:h-[60vh] xl:h-[60vh] 2xl:h-[70vh] w-full">
+      <div className="relative xl:flex-1 xl:px-5 justify-center overflow-hidden h-[45vh] sm:h-[60vh] md:h-[65vh] lg:h-[65vh] xl:h-[70vh] 2xl:h-[75vh] w-full">
         <div className="relative overflow-hidden h-full w-full">
           <div className="absolute z-10 top-0 left-0">
             <Image className="w-full h-auto" src={glclose} alt="paper frame" />
