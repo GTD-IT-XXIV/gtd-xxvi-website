@@ -13,21 +13,47 @@ import glphoto from "../_assets/glphoto.png";
 import HouseGl from "./housegl";
 
 const HouseSection = () => {
+  const [og, setOg] = useState([1, 2]);
+  const [houseName, setHouseName] = useState("");
+  const [glphoto1, setGlphoto1] = useState(glphoto);
+  const [glphoto2, setGlphoto2] = useState(glphoto);
   const [housetoggle, setHousetoggle] = useState(0);
   const [toggle, setToggle] = useState([0, 0, 0, 0]);
 
   const handleClick = (toggleValue: number) => {
+    if (housetoggle === 0 && toggleValue === 1) {
+      setGlphoto1(glphoto);
+      setGlphoto2(glphoto);
+      setHouseName("Wanderer");
+      setOg([1, 2]);
+    } else if (housetoggle === 0 && toggleValue === 2) {
+      setGlphoto1(glphoto);
+      setGlphoto2(glphoto);
+      setHouseName("Healer");
+      setOg([3, 4]);
+    } else if (housetoggle === 0 && toggleValue === 3) {
+      setGlphoto1(glphoto);
+      setGlphoto2(glphoto);
+      setHouseName("Changeling");
+      setOg([5, 6]);
+    } else if (housetoggle === 0 && toggleValue === 4) {
+      setGlphoto1(glphoto);
+      setGlphoto2(glphoto);
+      setHouseName("Timeturner");
+      setOg([7, 8]);
+    }
+
     if (toggle[toggleValue - 1] === 1) {
       setToggle([0, 0, 0, 0]);
       setHousetoggle(0);
     } else {
-      if (toggleValue === 1) {
+      if (housetoggle === 0 && toggleValue === 1) {
         setToggle([1, 0, 0, 0]);
-      } else if (toggleValue === 2) {
+      } else if (housetoggle === 0 && toggleValue === 2) {
         setToggle([0, 1, 0, 0]);
-      } else if (toggleValue === 3) {
+      } else if (housetoggle === 0 && toggleValue === 3) {
         setToggle([0, 0, 1, 0]);
-      } else if (toggleValue === 4) {
+      } else if (housetoggle === 0 && toggleValue === 4) {
         setToggle([0, 0, 0, 1]);
       }
       setHousetoggle(toggleValue);
@@ -89,58 +115,22 @@ const HouseSection = () => {
         </div>
       </div>
 
-      <div className="xl:flex-1 xl:px-5 justify-center transition-opacity duration-1000 ease-in-out">
-        {housetoggle === 0 ? (
-          <div>
-            <Image
-              className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 0 ? "opacity-100" : "opacity-0"}`}
-              src={glclose}
-              alt="paper frame"
-            />
+      <div className="relative xl:flex-1 xl:px-5 justify-center overflow-hidden h-[45vh] sm:h-[60vh] md:h-[65vh] lg:h-[60vh] xl:h-[60vh] 2xl:h-[70vh] w-full">
+        <div className="relative overflow-hidden h-full w-full">
+          <div className="absolute z-10 top-0 left-0">
+            <Image className="w-full h-auto" src={glclose} alt="paper frame" />
           </div>
-        ) : housetoggle === 1 ? (
           <div
-            className={`transition duration-1000 ease-in-out ${housetoggle === 1 ? "opacity-100" : "opacity-0"}`}
+            className={`absolute z-0 top-0 left-0 transition duration-500 ease-in-out ${housetoggle !== 0 ? "-translate-y-[0%]" : "-translate-y-[69%]"}`}
           >
             <HouseGl
-              glphoto1={glphoto}
-              glphoto2={glphoto}
-              house={"Wanderer"}
-              og={[1, 2]}
+              glphoto1={glphoto1}
+              glphoto2={glphoto2}
+              house={houseName}
+              og={og}
             />
           </div>
-        ) : housetoggle === 2 ? (
-          <div
-            className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 2 ? "opacity-100" : "opacity-0"}`}
-          >
-            <HouseGl
-              glphoto1={glphoto}
-              glphoto2={glphoto}
-              house={"Healer"}
-              og={[3, 4]}
-            />
-          </div>
-        ) : housetoggle === 3 ? (
-          <div
-            className={`transition-opacity duration-1000 ease-in-out ${housetoggle === 3 ? "opacity-100" : "opacity-0"}`}
-          >
-            <HouseGl
-              glphoto1={glphoto}
-              glphoto2={glphoto}
-              house={"Changeling"}
-              og={[5, 6]}
-            />
-          </div>
-        ) : (
-          <div>
-            <HouseGl
-              glphoto1={glphoto}
-              glphoto2={glphoto}
-              house={"Timeturner"}
-              og={[7, 8]}
-            />
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

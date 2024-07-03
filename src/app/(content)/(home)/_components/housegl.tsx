@@ -19,7 +19,7 @@ type Props = {
 const Housegl: React.FC<Props> = (props) => {
   const [hover, setHover] = useState([0, 0]);
   return (
-    <div className="relative">
+    <div className={`relative`}>
       <Image src={backgroundgl} alt="background gl" className="w-full" />
       <div className="absolute flex flex-col items-center top-[20%] right-[20%] left-[20%] ">
         <p className="font-serif text-red-500 text-md sm:text-xl md:text-3xl xl:text-xl">
