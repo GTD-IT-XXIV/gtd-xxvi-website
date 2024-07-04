@@ -20,36 +20,50 @@ import CommitteeHeaderBg from "./committee-header-bg";
 
 const videoTiming: {
   start: number;
+  loopStart: number;
+  loopEnd: number;
   end: number;
 }[] = [
   {
     // TOPS
     start: 1.3,
+    loopStart: 2.3,
+    loopEnd: 4.65,
     end: 6,
   },
   {
     // BFM
     start: 6.5,
+    loopStart: 7.35,
+    loopEnd: 10.85,
     end: 12.1,
   },
   {
     // GL
     start: 14.5,
+    loopStart: 15.45,
+    loopEnd: 17.45,
     end: 18.4,
   },
   {
     // POLOG
     start: 19.4,
+    loopStart: 20.7,
+    loopEnd: 23.1,
     end: 25.1,
   },
   {
     // PPIT
     start: 26.8,
+    loopStart: 28.1,
+    loopEnd: 31.35,
     end: 32.4,
   },
   {
     // Welfare
     start: 33.4,
+    loopStart: 34.9,
+    loopEnd: 37.1,
     end: 38.94,
   },
 ];
@@ -118,38 +132,42 @@ export default function CommitteeHeader() {
             onTimeUpdate={(ev) => {
               const el = ev.target as HTMLVideoElement;
               const currTiming = videoTiming[index]!;
-              switch (videoAction) {
-                case "loop": {
-                  el.playbackRate = 1;
-                  if (
-                    el.currentTime < currTiming.start ||
-                    el.currentTime > currTiming.end
-                  ) {
-                    el.currentTime = currTiming.start;
-                  }
-                  break;
+
+              if (videoAction === "loop") {
+                if (
+                  el.currentTime < currTiming.start ||
+                  el.currentTime > currTiming.loopEnd
+                ) {
+                  el.currentTime = currTiming.loopStart;
                 }
-                case "prev": {
-                  el.playbackRate = 1.25;
-                  if (el.currentTime > currTiming.end) {
-                    setIndex(
-                      (index - 1 + PORTFOLIOS.length) % PORTFOLIOS.length,
-                    );
-                    api?.scrollPrev();
-                    setVideoAction("loop");
-                    setIsLoading(false);
-                  }
-                  break;
+                return;
+              }
+
+              if (el.currentTime < currTiming.loopEnd) {
+                el.currentTime = currTiming.loopEnd + 0.15;
+              }
+
+              if (videoAction === "prev") {
+                const prevTiming =
+                  videoTiming[
+                    (index - 1 + PORTFOLIOS.length) % PORTFOLIOS.length
+                  ]!;
+                if (el.currentTime > currTiming.end) {
+                  el.currentTime = prevTiming.start;
+                  setIndex((index - 1 + PORTFOLIOS.length) % PORTFOLIOS.length);
+                  api?.scrollPrev();
+                  setVideoAction("loop");
+                  setIsLoading(false);
                 }
-                case "next": {
-                  el.playbackRate = 1.25;
-                  if (el.currentTime > currTiming.end) {
-                    setIndex((index + 1) % PORTFOLIOS.length);
-                    api?.scrollNext();
-                    setVideoAction("loop");
-                    setIsLoading(false);
-                  }
-                  break;
+              } else {
+                const nextTiming =
+                  videoTiming[(index + 1) % PORTFOLIOS.length]!;
+                if (el.currentTime > currTiming.end) {
+                  el.currentTime = nextTiming.start;
+                  setIndex((index + 1) % PORTFOLIOS.length);
+                  api?.scrollNext();
+                  setVideoAction("loop");
+                  setIsLoading(false);
                 }
               }
             }}
