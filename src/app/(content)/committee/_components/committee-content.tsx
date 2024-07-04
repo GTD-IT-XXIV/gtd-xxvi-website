@@ -21,11 +21,11 @@ export default function CommitteeContent() {
   switch (screenSize) {
     case "2xl":
     case "xl":
-    case "lg":
-    case "md": {
+    case "lg": {
       cols = 4;
       break;
     }
+    case "md":
     case "sm": {
       cols = 3;
       break;

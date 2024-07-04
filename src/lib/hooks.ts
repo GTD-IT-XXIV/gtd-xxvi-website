@@ -13,7 +13,7 @@ export function useScreenSize() {
   const isMd = useMediaQuery({ query: "(min-width: 768px)" });
   const isLg = useMediaQuery({ query: "(min-width: 1024px)" });
   const isXl = useMediaQuery({ query: "(min-width: 1280px)" });
-  const is2Xl = useMediaQuery({ query: "(min-width: 1400px)" });
+  const is2Xl = useMediaQuery({ query: "(min-width: 1536px)" });
   if (is2Xl) {
     return "2xl";
   }

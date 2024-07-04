@@ -82,7 +82,7 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
                 {nickname}
               </p>
             ) : (
-              <p className="text-sm lg:text-base xl:text-xl 2xl:text-2xl font-serif text-center bg-black/80 text-transparent text-shadow-[0.5px_1px_2px_#9C7A61] bg-clip-text">
+              <p className="text-sm md:text-base xl:text-xl 2xl:text-2xl font-serif text-center bg-black/80 text-transparent text-shadow-[0.5px_1px_2px_#9C7A61] bg-clip-text">
                 {nickname}
               </p>
             )}
