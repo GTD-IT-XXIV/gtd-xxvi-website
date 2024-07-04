@@ -26,7 +26,7 @@ const videoTiming: {
 }[] = [
   {
     // TOPS
-    start: 1.3,
+    start: 1.29,
     loopStart: 2.3,
     loopEnd: 4.65,
     end: 6,
@@ -172,8 +172,8 @@ export default function CommitteeHeader() {
               }
             }}
           >
-            <source src="/mctops-vp9.webm" type="video/webm" />
-            <source src="/mctops-h264.mp4" type="video/mp4" />
+            <source src="/mctops-vp9.webm#t=1.3" type="video/webm" />
+            <source src="/mctops-h264.mp4#t=1.3" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
