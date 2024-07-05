@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import brass1 from "../_assets/photo-frame-brass-1.png";
-import brass2 from "../_assets/photo-frame-brass-2.png";
+import brass1 from "../_assets/photo-frame-brass-1.webp";
+import brass2 from "../_assets/photo-frame-brass-2.webp";
 
 const PhotoFrame = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
