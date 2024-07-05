@@ -42,6 +42,9 @@ next-env.d.ts
 # editor/IDE
 .vscode
 
+# docker cache
+/.dockercache
+
 prisma/migrations
 prisma/generated
 *.prisma

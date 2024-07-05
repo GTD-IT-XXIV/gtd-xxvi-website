@@ -9,9 +9,11 @@ WORKDIR /app
 
 ENV HUSKY=0
 
-COPY package.json pnpm-lock.yaml prisma ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store corepack enable pnpm \
-  && pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+  --mount=type=bind,source=package.json,target=package.json \
+  --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+  --mount=type=bind,source=prisma,target=prisma \
+  corepack enable pnpm && pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -30,7 +32,8 @@ COPY .env.development.loca[l] .env.production.local
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN corepack enable pnpm && pnpm build
+RUN --mount=type=cache,id=next,target=.next/cache \
+  corepack enable pnpm && pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -40,10 +43,9 @@ RUN mkdir .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/standalone /app/.env* ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/publi[c] ./public
-COPY --from=builder /app/.env* ./
 
 FROM gcr.io/distroless/nodejs20-debian11
 WORKDIR /app

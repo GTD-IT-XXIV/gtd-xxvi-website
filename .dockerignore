@@ -7,3 +7,5 @@ README.md
 .git
 .github
 .vscode
+docker
+.dockercache
