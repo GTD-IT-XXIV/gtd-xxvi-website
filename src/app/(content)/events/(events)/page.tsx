@@ -28,7 +28,7 @@ export default async function EventsPage() {
     <section>
       {/* Events page */}
       <TopSection />
-      <div className="relative">
+      <div className="relative mb-8">
         <Image
           src={eventsPageMap}
           alt="Event Page Map"
@@ -39,8 +39,8 @@ export default async function EventsPage() {
           <ViewDetailText
             day="DAY 1"
             title="NIGHT GAME"
-            place=""
-            date=""
+            place="NTU"
+            date="2 August"
             time=""
           />
           <div>
@@ -51,8 +51,8 @@ export default async function EventsPage() {
           <ViewDetailText
             day="DAY 2"
             title="BEACH DAY"
-            place=""
-            date=""
+            place="Sentosa"
+            date="3 August"
             time=""
           />
           <div>
@@ -62,9 +62,9 @@ export default async function EventsPage() {
           </div>
           <ViewDetailText
             day="DAY 3"
-            title="AROUND SG"
-            place=""
-            date=""
+            title="FIELD DAY"
+            place="Around Singapore"
+            date="4 August"
             time=""
           />
           <div>
@@ -76,7 +76,7 @@ export default async function EventsPage() {
             day="DAY 4"
             title="AWARDS NIGHT"
             place=""
-            date=""
+            date="5 August"
             time=""
           />
           <div>
