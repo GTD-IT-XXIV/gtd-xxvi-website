@@ -1,11 +1,12 @@
 "use client";
 
-import clsx from "clsx";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import React from "react";
+
+import { cn } from "@/lib/utils";
 
 import backgroundgl from "../_assets/backgroundgl.png";
 
@@ -13,7 +14,7 @@ type Props = {
   glphoto1: StaticImageData;
   glphoto2: StaticImageData;
   house: string;
-  og: number[];
+  og: string[];
 };
 
 const Housegl: React.FC<Props> = (props) => {
@@ -30,7 +31,7 @@ const Housegl: React.FC<Props> = (props) => {
         </p>
         <div className="flex w-full">
           <Link
-            href={"/"}
+            href="/committee"
             className="flex flex-col items-center pr-[5%] cursor-pointer flex-1 w-full"
             onMouseEnter={() => setHover([1, 0])}
             onMouseLeave={() => setHover([0, 0])}
@@ -38,24 +39,24 @@ const Housegl: React.FC<Props> = (props) => {
             <Image
               src={props.glphoto1}
               alt="GL photo 1"
-              className={clsx(
+              className={cn(
                 hover[0] &&
-                  `transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75`,
-                "w-full",
+                  "transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75",
+                "w-full rounded-lg",
               )}
             />
             {hover[0] ? (
               <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
-                OG {props.og[0]} &gt;
+                {props.og[0]} &gt;
               </p>
             ) : (
               <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
-                OG {props.og[0]}
+                {props.og[0]}
               </p>
             )}
           </Link>
           <Link
-            href={"/"}
+            href="/committee"
             className="flex flex-col items-center cursor-pointer flex-1 w-full"
             onMouseEnter={() => setHover([0, 1])}
             onMouseLeave={() => setHover([0, 0])}
@@ -63,19 +64,19 @@ const Housegl: React.FC<Props> = (props) => {
             <Image
               src={props.glphoto2}
               alt="GL photo 2"
-              className={clsx(
+              className={cn(
                 hover[1] &&
-                  `transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75`,
-                "w-full",
+                  "transform transition-transform duration-300 ease-in-out scale-105 shadow-lg brightness-75",
+                "w-full rounded-lg",
               )}
             />
             {hover[1] ? (
               <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
-                OG {props.og[1]} &gt;
+                {props.og[1]} &gt;
               </p>
             ) : (
               <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
-                OG {props.og[1]}
+                {props.og[1]}
               </p>
             )}
           </Link>
