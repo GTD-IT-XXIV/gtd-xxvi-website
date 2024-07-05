@@ -2,7 +2,7 @@ import { type SVGProps } from "react";
 
 import type { Portfolio } from "@/lib/types";
 
-import textureMCTops from "../_assets/committee-header-bg-mctops.png";
+import textureMCTops from "../_assets/committee-header-bg-mctops.webp";
 import textureOthers from "../_assets/committee-header-bg-others.webp";
 
 export type CommitteeHeaderBgProps = {

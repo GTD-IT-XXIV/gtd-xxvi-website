@@ -3,8 +3,8 @@ import React, { type HTMLAttributes, forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-import nameFrame from "../_assets/name-frame.png";
-import photoFrame from "../_assets/photo-frame.png";
+import nameFrame from "../_assets/name-frame.webp";
+import photoFrame from "../_assets/photo-frame.webp";
 import NameFrame from "./name-frame";
 import PhotoFrame from "./photo-frame";
 

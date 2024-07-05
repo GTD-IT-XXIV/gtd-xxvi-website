@@ -1,6 +1,6 @@
 import { type SVGProps } from "react";
 
-import texture from "../_assets/brass-texture.png";
+import texture from "../_assets/brass-texture.webp";
 
 const CommitteeBorder = (props: SVGProps<SVGSVGElement>) => (
   <svg

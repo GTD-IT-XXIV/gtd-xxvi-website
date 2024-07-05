@@ -3,7 +3,7 @@ import { type SVGProps } from "react";
 
 import type { Portfolio } from "@/lib/types";
 
-import texture from "../_assets/brass-texture-light.png";
+import texture from "../_assets/brass-texture-light.webp";
 
 export type CommitteePortfolioFrameProps = {
   portfolio: Portfolio;

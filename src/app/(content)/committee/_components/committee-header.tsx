@@ -127,7 +127,7 @@ export default function CommitteeHeader() {
             playsInline
             disablePictureInPicture
             preload="none"
-            poster="/mctops-thumb.jpg"
+            poster="/mctops-thumb.webp"
             className="w-auto h-full"
             onTimeUpdate={(ev) => {
               const el = ev.target as HTMLVideoElement;
