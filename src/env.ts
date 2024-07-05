@@ -61,6 +61,10 @@ export const env = createEnv({
         (str) => !(str === ""),
         "You forgot to add your Stripe API publishable key",
       ),
+    NEXT_PUBLIC_BACKEND_URL: z
+      .string()
+      .url()
+      .refine((str) => !(str === ""), "You forgot to add your backend URL"),
   },
 
   /**
@@ -78,6 +82,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_EMAIL: process.env.GOOGLE_CLIENT_EMAIL,
     GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
     SHEETS_ID: process.env.SHEETS_ID,
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful for Docker builds.

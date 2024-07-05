@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import videoFrameBrass from "../_assets/video-frame-brass.png";
+import videoFrameBrass from "../_assets/video-frame-brass.webp";
 
 const VideoFrame = (props: React.SVGProps<SVGSVGElement>) => (
   <svg

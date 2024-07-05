@@ -35,3 +35,5 @@ export type Committee = {
     animated: StaticImageData;
   };
 };
+
+export type House = "wanderer" | "healer" | "changeling" | "timeturner";

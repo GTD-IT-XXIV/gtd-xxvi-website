@@ -3,56 +3,53 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import logogtd from "@/assets/images/logo-gtd-white-transparent.png";
+import GTDButton from "@/app/_components/gtd-button";
 
-import registerbutton from "../_assets/registerbutton.png";
-import registerbuttonhover from "../_assets/registerbuttonhover.png";
-import topbackground from "../_assets/topbackground.png";
+import logogtd from "../_assets/logo-gtd.png";
+import topbgdesktop from "../_assets/top-section-bg-desktop.webp";
+import topbg from "../_assets/top-section-bg.webp";
 
 const TopSection = () => {
-  const [hover, setHover] = useState(false);
-  const handleHover = () => {
-    setHover(!hover);
-  };
+  const [imageSrc, setImageSrc] = useState(topbg);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1280) {
+        setImageSrc(topbg);
+      } else {
+        setImageSrc(topbgdesktop);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="relative">
       <Image
-        src={topbackground}
+        src={imageSrc}
         alt="background"
-        width={440}
-        height={494}
-        className="w-full bg-cover bg-center md:h-[600px] xl:h-[1000px] 2xl:h-[1200]"
+        className="object-bottom md:h-dvh xl:h-auto"
       />
-      <div className="absolute top-0 inset-12 flex flex-col items-center justify-center">
-        <Image
-          src={logogtd}
-          alt="logo gtd"
-          width={350}
-          height={100}
-          className="justify-center self-center md:w-[450px] xl:w-[600px] 2xl:w-[800px]"
-        />
-        <Link
-          href="/"
-          className=""
-          onMouseEnter={handleHover}
-          onMouseLeave={handleHover}
-        >
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div>
+          <Image
+            src={logogtd}
+            alt="logo gtd"
+            className="justify-center self-center w-[250px] sm:w-[300px] md:w-[350px] xl:w-[350px] 2xl:w-[400px] mb-10"
+          />
+        </div>
+        <Link href="/" className="">
           <div className="relative flex flex-col">
-            <Image
-              src={hover ? registerbutton : registerbuttonhover}
-              alt="register button"
-              width={400}
-              height={100}
-              className="w-40 sm:w-48 md:w-56 lg:w-64 xl:w-72 justify-center items-center transition-all 
-              ease-out duration-200 transform"
-            />
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <p className="sm:text-md md:text-lg lg:text-xl xl:text-2xl text-center font-serif">
-                Register
-              </p>
-            </div>
+            <GTDButton>Register</GTDButton>
           </div>
         </Link>
       </div>
