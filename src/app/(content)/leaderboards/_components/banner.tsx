@@ -1,33 +1,38 @@
-import healerBanner from "../_assets/winner-banner/healerBanner.png";
-import changelingBanner from "../_assets/winner-banner/changelingBanner.png";
-import wandererBanner from "../_assets/winner-banner/wandererBanner.png";
-import timeturnerBanner from "../_assets/winner-banner/timeturnerBanner.png";
-import Image from "next/image";
-import { type StaticImport } from "next/dist/shared/lib/get-img-props";
+import Image, { type StaticImageData } from "next/image";
 
-export default function Banner({winningTeam}: {winningTeam: string}) {
-    let titleComponent: string | StaticImport = "";
-    switch (winningTeam){
-        case "Wanderer": {
-            titleComponent = wandererBanner;
-            break;
-        }
-        case "Healer": {
-            titleComponent = healerBanner;
-            break;
-        }
-        case "Timeturner": {
-            titleComponent = timeturnerBanner;
-            break;
-        }
-        case "Changeling": {
-            titleComponent = changelingBanner;
-            break;
-        }
+import changelingBanner from "../_assets/winner-banner/changeling.webp";
+import healerBanner from "../_assets/winner-banner/healer.webp";
+import placeholderBanner from "../_assets/winner-banner/placeholder.webp";
+import timeturnerBanner from "../_assets/winner-banner/timeturner.webp";
+import wandererBanner from "../_assets/winner-banner/wanderer.webp";
+
+export default function Banner({ winningTeam }: { winningTeam: string }) {
+  let titleComponent: StaticImageData;
+  switch (winningTeam) {
+    case "Wanderer": {
+      titleComponent = wandererBanner;
+      break;
     }
-    return (
-        <div className="flex justify-center items-center">
-            <Image src={titleComponent} alt="Banner" width = {400}/>
-        </div>
-    );
+    case "Healer": {
+      titleComponent = healerBanner;
+      break;
+    }
+    case "Timeturner": {
+      titleComponent = timeturnerBanner;
+      break;
+    }
+    case "Changeling": {
+      titleComponent = changelingBanner;
+      break;
+    }
+    default: {
+      titleComponent = placeholderBanner;
+      break;
+    }
+  }
+  return (
+    <div className="flex justify-center items-center">
+      <Image src={titleComponent} alt="Banner" width={400} />
+    </div>
+  );
 }
