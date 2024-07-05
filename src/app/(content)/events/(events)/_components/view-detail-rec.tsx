@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type SVGProps } from "react";
 
-import recImg from "../_assets/rec-img.png";
+import recImg from "../_assets/rec-img.webp";
 
 const ViewDetailRec = (props: SVGProps<SVGSVGElement>) => (
   <svg
