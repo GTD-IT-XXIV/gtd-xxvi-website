@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import brass from "../_assets/name-frame-brass.png";
+import brass from "../_assets/name-frame-brass.webp";
 
 const NameFrame = (props: React.SVGProps<SVGSVGElement>) => (
   <svg

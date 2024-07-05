@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import * as React from "react";
 
 import brass from "./gtd-button-brass.jpeg";
-import texture from "./gtd-button-texture.png";
+import texture from "./gtd-button-texture.webp";
 
 export type GTDButtonBackgroundProps = {
   isHovered?: boolean;

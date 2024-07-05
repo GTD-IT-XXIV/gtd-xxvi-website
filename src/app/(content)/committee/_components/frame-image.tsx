@@ -3,8 +3,8 @@ import React, { type HTMLAttributes, forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-import nameFrame from "../_assets/name-frame.png";
-import photoFrame from "../_assets/photo-frame.png";
+import nameFrame from "../_assets/name-frame.webp";
+import photoFrame from "../_assets/photo-frame.webp";
 import NameFrame from "./name-frame";
 import PhotoFrame from "./photo-frame";
 
@@ -82,7 +82,7 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
                 {nickname}
               </p>
             ) : (
-              <p className="text-sm lg:text-base xl:text-xl 2xl:text-2xl font-serif text-center bg-black/80 text-transparent text-shadow-[0.5px_1px_2px_#9C7A61] bg-clip-text">
+              <p className="text-sm md:text-base xl:text-xl 2xl:text-2xl font-serif text-center bg-black/80 text-transparent text-shadow-[0.5px_1px_2px_#9C7A61] bg-clip-text">
                 {nickname}
               </p>
             )}
