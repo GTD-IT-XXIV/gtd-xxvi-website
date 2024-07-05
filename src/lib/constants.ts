@@ -6,6 +6,10 @@ import {
   LuUsers as Users,
 } from "react-icons/lu";
 
+import committees from "@/assets/committee";
+
+import type { Committee } from "./types";
+
 export const MAX_BUNDLE_PURCHASES = 99;
 export const MAX_TRANSACTION_RETRIES = 3;
 
@@ -54,3 +58,19 @@ export const ROUTES = [
     icon: Info,
   },
 ];
+
+/**
+ * The default number of columns to display the committees.
+ */
+export const DEFAULT_COMMITTEE_COLS = 2;
+
+export const PORTFOLIOS = [
+  "TOPS & MC",
+  "BFM",
+  "GL",
+  "POLOG",
+  "PPIT",
+  "Welfare",
+] as const;
+
+export const COMMITTEES: Committee[][] = committees satisfies Committee[][];
