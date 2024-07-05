@@ -46,7 +46,7 @@ export default function FAQAccordion({
   ));
 
   return (
-    <section className={cn("w-full", className)} {...props}>
+    <section className={cn("w-full", className, "px-[7.5%]")} {...props}>
       <h2 className="text-3xl font-serif text-center mb-3">FAQ</h2>
       <Accordion type="single" collapsible className="w-full">
         {faqarray}
