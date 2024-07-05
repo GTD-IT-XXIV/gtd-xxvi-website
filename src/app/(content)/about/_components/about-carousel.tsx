@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import { HiChevronLeft, HiChevronRight, HiLightningBolt } from "react-icons/hi";
 
@@ -12,7 +13,13 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import { animationName, colors, textColors, texts } from "../_constants/const";
+import {
+  animationName,
+  colors,
+  images,
+  textColors,
+  texts,
+} from "../_constants/carousel";
 import "../_styles/carousel.css";
 
 const AboutCarousel = () => {
@@ -53,7 +60,13 @@ const AboutCarousel = () => {
               className={cn(colors[index], "basis-[85%] pl-0 aspect-video")}
             >
               {/* Content */}
-              {/* TODO: add content images */}
+              {index >= 1 && index <= 4 && (
+                <Image
+                  src={images[index - 1]!}
+                  alt="Event documentation"
+                  className="h-full object-contain"
+                />
+              )}
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -67,7 +80,7 @@ const AboutCarousel = () => {
                     "rounded-full w-5 h-5 flex items-center justify-center",
                     animationName[animationIndex],
                     "lightning-left",
-                    "md:w-6 md:h-6 md:mx-1"
+                    "md:w-6 md:h-6 md:mx-1",
                   )}
                 >
                   <HiLightningBolt
@@ -80,7 +93,7 @@ const AboutCarousel = () => {
                   className={cn(
                     "px-1 mx-1 rounded-full w-3 h-3",
                     colors[index],
-                    "md:w-4 md:h-4"
+                    "md:w-4 md:h-4",
                   )}
                 ></div>
               ),
@@ -105,15 +118,15 @@ const AboutCarousel = () => {
         </div>
       </Carousel>
 
-      <div className="px-[7.5%] md:w-[50vw] md:mx-auto md:mt-6">
+      <div className="px-[7.5%] md:mx-auto md:mt-6">
         {texts.map((text, index) => (
-          <div
+          <p
             key={index}
             className="test text-xs font-light text-white md:text-lg"
             hidden={selectedIndex - 1 !== index}
           >
             {text}
-          </div>
+          </p>
         ))}
       </div>
     </div>
