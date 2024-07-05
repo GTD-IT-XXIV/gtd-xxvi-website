@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import GTDButton from "@/app/_components/gtd-button";
 
 import logogtd from "../_assets/logo-gtd.png";
-import topbgdesktop from "../_assets/top-section-bg-desktop.png";
-import topbg from "../_assets/top-section-bg.png";
+import topbgdesktop from "../_assets/top-section-bg-desktop.webp";
+import topbg from "../_assets/top-section-bg.webp";
 
 const TopSection = () => {
   const [imageSrc, setImageSrc] = useState(topbg);

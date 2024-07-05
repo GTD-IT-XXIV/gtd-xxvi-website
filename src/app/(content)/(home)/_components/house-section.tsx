@@ -10,7 +10,7 @@ import BannerHealer from "../_assets/banner-healer.svg";
 import BannerTimeturner from "../_assets/banner-timeturner.svg";
 import BannerWanderer from "../_assets/banner-wanderer.svg";
 import chooseyourhouse from "../_assets/choose-your-house.svg?url";
-import glclose from "../_assets/glclose.png";
+import glclose from "../_assets/glclose.webp";
 import og1Photo from "../_assets/og-1.webp";
 import og2Photo from "../_assets/og-2.webp";
 import og3Photo from "../_assets/og-3.webp";

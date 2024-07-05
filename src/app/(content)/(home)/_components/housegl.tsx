@@ -8,7 +8,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import backgroundgl from "../_assets/backgroundgl.png";
+import backgroundgl from "../_assets/backgroundgl.webp";
 
 type Props = {
   glphoto1: StaticImageData;
