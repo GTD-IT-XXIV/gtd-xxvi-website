@@ -100,7 +100,7 @@ importers:
         version: 1.11.11
       embla-carousel:
         specifier: ^8.1.5
-        version: 8.1.5
+        version: 8.1.6
       embla-carousel-react:
         specifier: ^8.1.5
         version: 8.1.5(react@18.3.1)
@@ -3932,6 +3932,9 @@ packages:
 
   embla-carousel@8.1.5:
     resolution: {integrity: sha512-R6xTf7cNdR2UTNM6/yUPZlJFRmZSogMiRjJ5vXHO65II5MoUlrVYUAP0fHQei/py82Vf15lj+WI+QdhnzBxA2g==}
+
+  embla-carousel@8.1.6:
+    resolution: {integrity: sha512-9n7FVsbPAs1KD+JmO84DnEDOZMXPBQbLujjMQqvsBRN2CDWwgZ9hRSNapztdPnyJfzOIxowGmj0BUQ8ACYAPkA==}
 
   emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
@@ -10535,6 +10538,8 @@ snapshots:
       embla-carousel: 8.1.5
 
   embla-carousel@8.1.5: {}
+
+  embla-carousel@8.1.6: {}
 
   emoji-regex@10.3.0: {}
 

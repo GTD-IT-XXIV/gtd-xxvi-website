@@ -6,7 +6,7 @@ import GTDButton from "@/app/_components/gtd-button";
 
 import { cn } from "@/lib/utils";
 
-import staticLectern from "../_assets/wizard-book-stands-static.png";
+import staticLectern from "../_assets/wizard-book-stands-static.webp";
 import StorylineLectern from "./storyline-lectern";
 import StorylineTextPath from "./storyline-text-path";
 import VideoFrame from "./video-frame";
