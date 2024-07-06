@@ -4,7 +4,7 @@ import kingdomFoodGroupLogo from "@/assets/images/sponsors/kingdom-food-group-lo
 import kotexLogo from "@/assets/images/sponsors/kotex-logo.png";
 import lumosLogo from "@/assets/images/sponsors/lumos-logo.png";
 import mgpLogo from "@/assets/images/sponsors/mgp-logo.png";
-import oatsideLogo from "@/assets/images/sponsors/oatside-logo.webp";
+import oatbedientLogo from "@/assets/images/sponsors/oatbedient-logo.jpg";
 import playnationLogo from "@/assets/images/sponsors/playnation-logo.jpeg";
 import weCinemasLogo from "@/assets/images/sponsors/we-cinemas-logo.jpg";
 
@@ -25,7 +25,7 @@ const logos = new Array(3)
     { src: mgpLogo, url: "https://mgplabel.com/" },
     { src: lumosLogo, url: "https://lumosprojector.com/" },
     { src: playnationLogo, url: "https://playnation.com.sg/" },
-    { src: oatsideLogo, url: "https://oatside.com/" },
+    { src: oatbedientLogo, url: "https://www.oatbedient.com/" },
   ])
   .flat();
 
