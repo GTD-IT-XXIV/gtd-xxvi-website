@@ -96,12 +96,13 @@ export default function CommitteeHeader() {
   }, [api, index, setIndex]);
 
   useEffect(() => {
+    const el = itemRef.current;
     const observer = new ResizeObserver((entries) => {
       setVideoHeight(entries[0]?.contentRect.height ?? "auto");
     });
-    itemRef.current && observer.observe(itemRef.current);
+    el && observer.observe(el);
     return () => {
-      itemRef.current && observer.unobserve(itemRef.current);
+      el && observer.unobserve(el);
     };
   }, []);
 

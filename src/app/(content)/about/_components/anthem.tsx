@@ -79,7 +79,8 @@ export default function Anthem() {
             onPause={() => setSpin(false)}
             className="mb-0.5"
           >
-            <source src="/gtd-theme-song.wav" />
+            <source src="/gtd-theme-song-aac.mp4" type="audio/mp4" />
+            <source src="/gtd-theme-song-mp3.mp3" type="audio/mpeg" />
             <p>
               Your browser does not support HTML audio. Access the song{" "}
               <Link
