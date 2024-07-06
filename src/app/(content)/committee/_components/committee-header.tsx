@@ -1,6 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
@@ -174,7 +175,11 @@ export default function CommitteeHeader() {
           >
             <source src="/mctops-vp9.webm#t=1.3" type="video/webm" />
             <source src="/mctops-h264.mp4#t=1.3" type="video/mp4" />
-            Your browser does not support the video tag.
+            <p>
+              Your browser does not support the video tag. Access the video{" "}
+              <Link href="/mctops-vp9.webm">here (WEBM)</Link> or{" "}
+              <Link href="/mctops-h264.mp4">here (MP4)</Link> instead.
+            </p>
           </video>
         </div>
         <CarouselContent>

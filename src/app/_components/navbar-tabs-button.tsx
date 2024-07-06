@@ -12,6 +12,7 @@ const navbarTabsButtonVariants = cva(
       variant: {
         default: "hover:bg-accent",
         gtdfest: "hover:bg-white/25",
+        dark: "hover:bg-white/25",
       },
       selected: {
         true: "text-gtd-primary-30 hover:text-gtd-primary-30 font-semibold",
