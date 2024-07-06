@@ -46,7 +46,7 @@ export default function FAQAccordion({
       value={faqdata.index}
       className="border-0"
     >
-      <AccordionTrigger className="font-serif text-xl">
+      <AccordionTrigger className="text-left font-serif text-xl">
         {faqdata.question}
       </AccordionTrigger>
       <AccordionContent className="font-sans font-light">

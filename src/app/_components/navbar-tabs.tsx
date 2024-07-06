@@ -13,6 +13,7 @@ const navbarTabsVariants = cva("w-full flex overflow-x-auto", {
     variant: {
       default: "bg-white",
       gtdfest: "bg-slate-900 text-white",
+      dark: "bg-slate-900 text-white",
     },
   },
   defaultVariants: {
