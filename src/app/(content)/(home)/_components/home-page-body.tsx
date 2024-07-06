@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 
+import cnkLogo from "@/assets/images/sponsors/cnk-logo.png";
 import kingdomFoodGroupLogo from "@/assets/images/sponsors/kingdom-food-group-logo.webp";
 import kotexLogo from "@/assets/images/sponsors/kotex-logo.png";
 import lumosLogo from "@/assets/images/sponsors/lumos-logo.png";
@@ -26,6 +27,7 @@ const logos = new Array(3)
     { src: lumosLogo, url: "https://lumosprojector.com/" },
     { src: playnationLogo, url: "https://playnation.com.sg/" },
     { src: oatbedientLogo, url: "https://www.oatbedient.com/" },
+    { src: cnkLogo, url: "https://www.charleskeith.com/sg" },
   ])
   .flat();
 
