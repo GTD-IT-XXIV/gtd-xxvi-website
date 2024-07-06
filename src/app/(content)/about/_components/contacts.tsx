@@ -9,22 +9,6 @@ import telegramLogoBG from "../_assets/socmed-bg.svg?url";
 import telegramLogo from "../_assets/tele-logo.svg?url";
 
 export default function Contacts() {
-  function handleClickTele() {
-    window.open(
-      "https://t.me/pascaltheodores",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  }
-
-  function handleClickIg() {
-    window.open(
-      "https://www.instagram.com/pintugtd",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  }
-
   return (
     <>
       <div className="bg-[#0F172A] text-center">
@@ -37,7 +21,6 @@ export default function Contacts() {
             target="_blank"
             rel="noopener noreferrer"
             className="relative w-[312px] hover:scale-105 transition"
-            onClick={handleClickTele}
           >
             <div className="absolute top-[-10%] inset-0 flex flex-col justify-center">
               <p className="text-2xl font-serif italic z-[5] bg-black/80 text-transparent text-shadow-[1px_2px_4px_#9C7A61] bg-clip-text">
@@ -68,7 +51,6 @@ export default function Contacts() {
             target="_blank"
             rel="noopener noreferrer"
             className="relative w-[312px] hover:scale-105 transition"
-            onClick={handleClickIg}
           >
             <div className="absolute top-[-10%] inset-0 flex flex-col justify-center">
               <p className="text-2xl font-serif italic z-[5] bg-black/80 text-transparent text-shadow-[1px_2px_4px_#9C7A61] bg-clip-text">
