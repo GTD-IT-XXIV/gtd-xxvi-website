@@ -27,7 +27,7 @@ const Housegl: React.FC<Props> = (props) => {
           House {props.house}
         </p>
         <p className="font-serif text-2xl sm:text-3xl mb-[5%] md:text-5xl xl:text-3xl">
-          Group Leaders
+          Orientation Groups
         </p>
         <div className="flex w-full">
           <Link
@@ -37,6 +37,7 @@ const Housegl: React.FC<Props> = (props) => {
             onMouseLeave={() => setHover([0, 0])}
           >
             <Image
+              key={props.glphoto1.src}
               src={props.glphoto1}
               alt="GL photo 1"
               className={cn(
@@ -62,6 +63,7 @@ const Housegl: React.FC<Props> = (props) => {
             onMouseLeave={() => setHover([0, 0])}
           >
             <Image
+              key={props.glphoto2.src}
               src={props.glphoto2}
               alt="GL photo 2"
               className={cn(

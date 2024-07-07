@@ -176,7 +176,7 @@ const HouseSection = () => {
           <div
             className={cn(
               "absolute z-0 top-0 left-0 transition duration-500 ease-in-out",
-              housetoggle !== 0 ? "-translate-y-[0%]" : "-translate-y-[69%]",
+              housetoggle !== 0 ? "translate-y-[0%]" : "-translate-y-[69%]",
             )}
           >
             <HouseGl

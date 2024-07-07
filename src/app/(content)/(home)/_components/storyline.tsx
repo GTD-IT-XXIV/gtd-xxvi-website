@@ -12,8 +12,9 @@ import StorylineTextPath from "./storyline-text-path";
 import VideoFrame from "./video-frame";
 
 const story = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+  "In a realm where honor and legacy intertwine, a tradition of champions emerges every decade.",
+  "As the torch of tradition passes to a new generation, the quest for glory reignites.",
+  "An epic battle of honor and skill awaits. Who will rise as the ultimate champion?",
 ];
 
 const trailerUrl =
@@ -54,6 +55,9 @@ export default function Storyline({
             <p className="pr-6 md:pr-10 lg:pr-14 font-extralight md:text-lg/relaxed lg:text-xl/relaxed">
               {story[0]}
             </p>
+            <p className="hidden sm:block mt-4 pr-6 md:pr-10 lg:pr-14 font-extralight md:text-lg/relaxed lg:text-xl/relaxed">
+              {story[1]}
+            </p>
           </div>
         </div>
         <div className="mx-auto relative z-0 w-[95%] sm:w-4/5 shadow-lg shadow-[#816463]/50">
@@ -72,7 +76,7 @@ export default function Storyline({
       <div className="absolute inset-x-0 top-[78%]">
         <div className="mx-auto w-4/5">
           <p className="text-center font-serif text-xl md:text-2xl lg:text-3xl sm:px-2 drop-shadow-[0_4px_3px_rgba(163,103,103,0.62)]">
-            {story[1]}
+            {story[2]}
           </p>
         </div>
       </div>

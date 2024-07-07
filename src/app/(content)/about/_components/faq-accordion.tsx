@@ -19,7 +19,7 @@ export const faqdatas = [
   },
   {
     index: "2",
-    question: "How can I to register?",
+    question: "How can I register?",
     answer:
       "You can register yourself by filling up the registration form attached in this page. If you have further questions feel free to DM us on instagram @pintugtd. To reach us via telegram, please refer to the Contact Us section on this page.",
   },
