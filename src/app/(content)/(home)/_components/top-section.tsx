@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 
 import GTDButton from "@/app/_components/gtd-button";
 
-import logogtd from "../_assets/logo-gtd.png";
+import logogtd from "@/assets/images/logo-gtd-vaelora.webp";
+
 import topbgdesktop from "../_assets/top-section-bg-desktop.webp";
 import topbg from "../_assets/top-section-bg.webp";
 
