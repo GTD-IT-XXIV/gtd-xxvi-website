@@ -67,7 +67,7 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
                   alt={`logo ${index + 1}`}
                   height={100}
                   width={100}
-                  sizes="(max-width: 640px) 100px, (max-width: 768px) 125px, 150px"
+                  sizes="(max-width: 640px) 250px, (max-width: 768px) 325px, 400px"
                   style={{
                     width: "100%",
                     height: "auto",
