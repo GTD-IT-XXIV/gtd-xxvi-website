@@ -73,7 +73,9 @@ export default function Sponsors({ bgUrl, logos }: SponsorsProps) {
                 <Image
                   src={logo.src}
                   alt={`logo ${index + 1}`}
-                  sizes="(max-width: 640px) 100px, (max-width: 768px) 125px, 150px"
+                  height={100}
+                  width={100}
+                  sizes="(max-width: 640px) 250px, (max-width: 768px) 325px, 400px"
                   className="h-full w-full object-contain"
                 />
               </Link>
