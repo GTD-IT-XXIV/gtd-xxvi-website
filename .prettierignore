@@ -41,6 +41,10 @@ next-env.d.ts
 # editor/IDE
 .vscode
 
+# docker cache
+/.dockercache
+
 prisma/migrations
 prisma/generated
 pnpm-lock.yaml
+src/assets/helper.js

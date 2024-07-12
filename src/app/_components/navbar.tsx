@@ -10,8 +10,9 @@ import { LuMenu as Menu, LuX as X } from "react-icons/lu";
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-import logoGTD from "@/assets/images/logo-gtd-black-transparent.png";
+import logoGTDBlack from "@/assets/images/logo-gtd-black-transparent.png";
 import logoGTDTopi from "@/assets/images/logo-gtd-white-transparent-topi.png";
+import logoGTDWhite from "@/assets/images/logo-gtd-white-transparent.png";
 
 import NavbarButton from "./navbar-button";
 
@@ -22,6 +23,7 @@ const navbarVariants = cva(
       variant: {
         default: "bg-white",
         gtdfest: "bg-slate-900 text-white",
+        dark: "bg-slate-900 text-white",
       },
     },
     defaultVariants: {
@@ -37,6 +39,7 @@ const sidebarVariants = cva(
       variant: {
         default: "bg-white",
         gtdfest: "bg-slate-900",
+        dark: "bg-slate-900",
       },
     },
     defaultVariants: {
@@ -70,7 +73,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
       ) : (
         <Link href="/">
           <Image
-            src={logoGTD}
+            src={variant === "dark" ? logoGTDWhite : logoGTDBlack}
             alt="Logo PINTU Get Together Day"
             className="h-16 w-16 mx-6 object-cover"
           />

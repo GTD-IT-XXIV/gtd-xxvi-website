@@ -1,0 +1,44 @@
+.test {
+  transition: all 0.3s;
+  animation: textAnimation 1s;
+}
+
+@keyframes textAnimation {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.lightning-left {
+  transition: all 0.25s;
+  animation: lightningAnimationLeft 0.25s linear;
+}
+.lightning-right {
+  transition: all 0.25s;
+  animation: lightningAnimationRight 0.25s linear;
+}
+
+@keyframes lightningAnimationLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lightningAnimationRight {
+  0% {
+    opacity: 1;
+    transform: translateX(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

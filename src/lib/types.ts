@@ -1,5 +1,7 @@
+import { type StaticImageData } from "next/image";
 import { type z } from "zod";
 
+import { type PORTFOLIOS } from "./constants";
 import { type cartSchema, type merchCartSchema } from "./schemas";
 import { type ArrElement } from "./utils";
 
@@ -20,3 +22,21 @@ export type OrderMetadata = {
 export type MerchCart = z.infer<typeof merchCartSchema>;
 
 export type MerchCartItem = ArrElement<MerchCart>;
+
+export type Portfolio = (typeof PORTFOLIOS)[number];
+
+export type Committee = {
+  name: string;
+  nickname?: string;
+  portfolio: string; // different from the Portfolio type
+  position: string;
+  og: number;
+  major: string;
+  year: number;
+  image: {
+    still: StaticImageData;
+    animated: StaticImageData;
+  };
+};
+
+export type House = "wanderer" | "healer" | "changeling" | "timeturner";

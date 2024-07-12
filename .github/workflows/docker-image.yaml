@@ -9,6 +9,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: $${{ secrets.PROD_STRIPE_PUBLISHABLE_KEY }}
+  NEXT_PUBLIC_BACKEND_URL: $${{ secrets.PROD_BACKEND_URL }}
 
 jobs:
   build-and-push:

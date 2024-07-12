@@ -14,6 +14,7 @@ env:
   GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
   GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
   SHEETS_ID: ${{ secrets.DEV_SHEETS_ID }}
+  NEXT_PUBLIC_BACKEND_URL: ${{ secrets.DEV_BACKEND_URL }}
 
 jobs:
   build:

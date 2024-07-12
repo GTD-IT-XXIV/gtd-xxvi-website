@@ -18,26 +18,6 @@ export type FooterProps = {
 export default function Footer({ className }: FooterProps) {
   return (
     <footer className={cn("p-12 bg-slate-900 text-white space-y-3", className)}>
-      {/* <div className="flex items-start">
-        <p className="w-1/3 max-w-32 md:text-2xl font-medium">Events</p>
-        <div className="flex flex-col py-0.5">
-          <Link href="/" className="text-sm md:text-lg">
-            GTD Fest x Escape Room
-          </Link>
-        </div>
-      </div>
-      <div className="flex items-start">
-        <p className="w-1/3 max-w-32 md:text-2xl font-medium">General</p>
-        <div className="flex flex-col py-0.5">
-          <Link href="/" className="text-sm md:text-lg">
-            Committee
-          </Link>
-          <Link href="/" className="text-sm md:text-lg">
-            About Us
-          </Link>
-        </div>
-      </div>
-      <hr className="border-slate-500 rounded-full" /> */}
       <div className="flex items-center gap-2">
         <Image
           src={logoGTD}

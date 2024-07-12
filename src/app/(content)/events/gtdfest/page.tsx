@@ -6,7 +6,7 @@ import { api } from "@/server/trpc";
 import gtdFestBg1 from "@/assets/images/gtdfest-background-1.webp";
 import gtdFestBg2 from "@/assets/images/gtdfest-background-2.webp";
 import gtdFestBg3 from "@/assets/images/gtdfest-background-3.webp";
-import logoGTDFest from "@/assets/images/logo-gtdfest.png";
+import logoGTDFest from "@/assets/images/logo-gtdfest.webp";
 
 import escapeRoomImage from "./_assets/escape-room.webp";
 import GTDFestMerchSection from "./_components/gtdfest-merch-section";
