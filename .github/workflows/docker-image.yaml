@@ -26,6 +26,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PROD_STRIPE_PUBLISHABLE_KEY }}
+          envkey_NEXT_PUBLIC_BACKEND_URL: ${{ secrets.PROD_BACKEND_URL }}
           file_name: .env.production
           fail_on_empty: true
 

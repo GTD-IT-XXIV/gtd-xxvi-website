@@ -1,0 +1,40 @@
+name: Fetch Database
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 */5 * *"
+
+env:
+  DEV_URL: ${{ secrets.DEV_DIRECT_URL }}
+  PROD_URL: ${{ secrets.PROD_DIRECT_URL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+        pnpm-version: [9.1.0]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm ${{ matrix.pnpm-version }}
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fetch from development database
+        run: pnpm prisma db execute --url ${{ env.DEV_URL }} --file ./prisma/fetch.sql }}
+
+      - name: Fetch from development database
+        run: pnpm prisma db execute --url ${{ env.PROD_URL }} --file ./prisma/fetch.sql }}
