@@ -27,6 +27,10 @@ export default {
           "var(--font-hieroglyph)",
           ...defaultTheme.fontFamily.serif,
         ],
+        "reggae-one": [
+          "var(--font-reggae-one)",
+          ...defaultTheme.fontFamily.serif,
+        ],
       },
       colors: {
         gtd: {

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import {
   Inter,
   Noto_Sans_Egyptian_Hieroglyphs,
+  Reggae_One,
   Slackey,
 } from "next/font/google";
 import localFont from "next/font/local";
@@ -27,6 +28,11 @@ const hieroglyph = Noto_Sans_Egyptian_Hieroglyphs({
   subsets: ["egyptian-hieroglyphs"],
   weight: "400",
   variable: "--font-hieroglyph",
+});
+const reggaeOne = Reggae_One({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-reggae-one",
 });
 
 const bluuNext = localFont({
@@ -74,6 +80,7 @@ export default function RootLayout({
         bluuNext.variable,
         slackey.variable,
         hieroglyph.variable,
+        reggaeOne.variable,
       )}
     >
       <head>

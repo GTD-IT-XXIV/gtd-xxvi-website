@@ -5,10 +5,12 @@ import React from "react";
 
 import { api } from "@/server/trpc";
 
+import TopSection from "../../(home)/_components/top-section";
 import gtdfest from "../gtdfest/_assets/arcade-3.webp";
 import escaperoom from "../gtdfest/_assets/escape-room.webp";
 import scbd from "./_assets/scbd.webp";
-import TextParallaxContent from "./_components/TextParralaxContent";
+import GTDSection from "./_components/gtd-section";
+import TextParallaxContent from "./_components/text-parralax-content";
 
 dayjs.extend(utc);
 
@@ -22,6 +24,9 @@ export default async function EventsPage() {
 
   return (
     <section>
+      {/* Events page */}
+      <TopSection />
+      <GTDSection className="mx-auto w-full sm:w-1/2" />
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 py-2 shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.03] md:top-16">
         <h1 className="text-white text-lg pl-8 font-medium">Latest Events</h1>
