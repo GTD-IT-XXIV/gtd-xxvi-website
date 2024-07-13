@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Fetch from development database
-        run: pnpm prisma db execute --url ${{ env.DEV_URL }} --file ./prisma/fetch.sql }}
+        run: pnpm prisma db execute --url ${{ env.DEV_URL }} --file ./prisma/fetch.sql
 
       - name: Fetch from development database
-        run: pnpm prisma db execute --url ${{ env.PROD_URL }} --file ./prisma/fetch.sql }}
+        run: pnpm prisma db execute --url ${{ env.PROD_URL }} --file ./prisma/fetch.sql
