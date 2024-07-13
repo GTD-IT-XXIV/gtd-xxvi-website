@@ -2,7 +2,22 @@
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { type HTMLAttributes, useRef } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/_components/ui/alert-dialog";
+
+import { Table, TableBody, TableCell } from "@/components/ui/table";
+import { TableHeader } from "@/components/ui/table";
+import { TableRow } from "@/components/ui/table";
+import { TableHead } from "@/components/ui/table";
 
 import { cn } from "@/lib/utils";
 
@@ -11,38 +26,8 @@ import terrain1 from "../_assets/terrain-1.webp";
 import terrain2 from "../_assets/terrain-2.webp";
 import terrain3 from "../_assets/terrain-3.webp";
 import terrain4 from "../_assets/terrain-4.webp";
+import { gtdData } from "../_constants/gtd-data";
 import DayBanner from "./day-banner";
-
-const data = {
-  day1: {
-    title: "I: Night Games",
-    location: "NTU",
-    date: "2 August",
-    time: "19.45 - 23.00",
-    dresscode: "Free Colour T-Shirt",
-  },
-  day2: {
-    title: "II: Beach Day",
-    location: "NTU",
-    date: "3 August",
-    time: "19.45 - 23.00",
-    dresscode: "Free Colour T-Shirt",
-  },
-  day3: {
-    title: "III: Field Day",
-    location: "NTU",
-    date: "4 August",
-    time: "19.45 - 23.00",
-    dresscode: "Free Colour T-Shirt",
-  },
-  day4: {
-    title: "IV: Awards Night",
-    location: "NTU",
-    date: "5 August",
-    time: "19.45 - 23.00",
-    dresscode: "Free Colour T-Shirt",
-  },
-};
 
 const MotionImage = motion(Image);
 
@@ -50,7 +35,7 @@ export default function GTDSection({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  const { day1, day2, day3, day4 } = data;
+  const { day1, day2, day3, day4 } = gtdData;
 
   const terrain1Ref = useRef<HTMLImageElement>(null);
   const terrain1IsInView = useInView(terrain1Ref, {
@@ -107,7 +92,7 @@ export default function GTDSection({
       />
 
       {/* Content */}
-      <div className="absolute inset-0 z-10 w-4/5 mx-auto">
+      <div className="absolute inset-0 z-10 w-4/5 mx-auto overflow-y-hidden">
         <div className="relative w-full">
           <MotionImage
             ref={terrain1Ref}
