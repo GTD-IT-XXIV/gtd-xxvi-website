@@ -9,10 +9,9 @@ import { api } from "@/server/trpc";
 import TopSection from "../../(home)/_components/top-section";
 import gtdfest from "../gtdfest/_assets/arcade-3.webp";
 import escaperoom from "../gtdfest/_assets/escape-room.webp";
-import eventsPageMap from "./_assets/events-page-map.webp";
 import scbd from "./_assets/scbd.webp";
-import TextParallaxContent from "./_components/TextParralaxContent";
-import ViewDetailText from "./_components/view-detail-text";
+import GTDSection from "./_components/gtd-section";
+import TextParallaxContent from "./_components/text-parralax-content";
 
 dayjs.extend(utc);
 
@@ -28,65 +27,7 @@ export default async function EventsPage() {
     <section>
       {/* Events page */}
       <TopSection />
-      <div className="relative mb-8">
-        <Image
-          src={eventsPageMap}
-          alt="Event Page Map"
-          unoptimized
-          className="w-full"
-        />
-        <div className="absolute inset-12 flex flex-col items-center mt-44 space-y-12">
-          <ViewDetailText
-            day="DAY 1"
-            title="NIGHT GAME"
-            place="NTU"
-            date="2 August"
-            time=""
-          />
-          <div>
-            <div className="bg-white bg-auto h-72 w-96 bg-opacity-40">
-              Pic 1
-            </div>
-          </div>
-          <ViewDetailText
-            day="DAY 2"
-            title="BEACH DAY"
-            place="Sentosa"
-            date="3 August"
-            time=""
-          />
-          <div>
-            <div className="bg-white bg-auto h-72 w-96 bg-opacity-40">
-              Pic 2
-            </div>
-          </div>
-          <ViewDetailText
-            day="DAY 3"
-            title="FIELD DAY"
-            place="Around Singapore"
-            date="4 August"
-            time=""
-          />
-          <div>
-            <div className="bg-white bg-auto h-72 w-96 bg-opacity-40">
-              Pic 3
-            </div>
-          </div>
-          <ViewDetailText
-            day="DAY 4"
-            title="AWARDS NIGHT"
-            place=""
-            date="5 August"
-            time=""
-          />
-          <div>
-            <div className="bg-white bg-auto h-72 w-96 bg-opacity-40">
-              Pic 4
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <GTDSection className="mx-auto w-full sm:w-1/2" />
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 py-2 shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.03] md:top-16">
         <h1 className="text-white text-lg pl-8 font-medium">Latest Events</h1>
