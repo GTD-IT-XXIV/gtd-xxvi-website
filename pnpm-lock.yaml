@@ -274,8 +274,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(prettier@3.3.2)
       prettier-plugin-sql:
-        specifier: ^0.18.0
-        version: 0.18.0(prettier@3.3.2)
+        specifier: ^0.18.1
+        version: 0.18.1(prettier@3.3.2)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.5
         version: 0.6.5(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.3.2))(prettier@3.3.2)
@@ -5423,8 +5423,8 @@ packages:
     peerDependencies:
       prettier: '>=2 || >=3'
 
-  prettier-plugin-sql@0.18.0:
-    resolution: {integrity: sha512-E7WXooLNtWyv79sYYHtQbfvXZ5B/OOR0ySBsB2evfrfvD4wJos1OKLBvVLC/a7+7YpG30bSUTgc2DEwz8ctPmQ==}
+  prettier-plugin-sql@0.18.1:
+    resolution: {integrity: sha512-2+Nob2sg7hzLAKJoE6sfgtkhBZCqOzrWHZPvE4Kee/e80oOyI4qwy9vypeltqNBJwTtq3uiKPrCxlT03bBpOaw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       prettier: ^3.0.3
@@ -12238,7 +12238,7 @@ snapshots:
       '@prisma/prisma-schema-wasm': 4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584
       prettier: 3.3.2
 
-  prettier-plugin-sql@0.18.0(prettier@3.3.2):
+  prettier-plugin-sql@0.18.1(prettier@3.3.2):
     dependencies:
       jsox: 1.2.119
       node-sql-parser: 4.18.0
