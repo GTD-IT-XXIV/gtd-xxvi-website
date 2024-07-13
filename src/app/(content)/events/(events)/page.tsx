@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { type Metadata } from "next";
-import Image from "next/image";
 import React from "react";
 
 import { api } from "@/server/trpc";
