@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 let uri: string | undefined = undefined;
 
@@ -16,6 +16,7 @@ export async function generateTestPrismaClient() {
     env: {
       ...process.env,
       DATABASE_URL: uri,
+      DIRECT_URL: uri,
     },
     stdio: "ignore",
   });
@@ -38,6 +39,7 @@ export function resetTestDatabase(uri: string) {
     env: {
       ...process.env,
       DATABASE_URL: uri,
+      DIRECT_URL: uri,
     },
     stdio: "ignore",
   });
