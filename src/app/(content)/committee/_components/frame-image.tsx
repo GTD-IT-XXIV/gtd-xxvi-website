@@ -53,7 +53,7 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
               alt={nickname}
               className={cn("object-cover", large && "brightness-[0.2]")}
               unoptimized={animated}
-              sizes="(max-width: 540px) 40vw, (max-width: 768px) 25vw, 18vw"
+              sizes="(max-width: 540px) 40vw, (max-width: 1024px) 25vw, 18vw"
               fill
             />
           </div>
@@ -71,7 +71,7 @@ const FrameImage = forwardRef<HTMLDivElement, FrameImageProps>(
               src={nameFrame}
               alt="Name Frame"
               className="object-contain -z-10"
-              sizes="(max-width: 540px) 40vw, (max-width: 768px) 25vw, 18vw"
+              sizes="(max-width: 540px) 40vw, (max-width: 1024px) 25vw, 18vw"
               fill
             />
           )}

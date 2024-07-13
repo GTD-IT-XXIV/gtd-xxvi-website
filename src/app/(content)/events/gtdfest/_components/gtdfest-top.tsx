@@ -66,6 +66,7 @@ export default function GTDFestTop({
       <Image
         src={backgroundImage}
         alt="Background 1"
+        sizes="100vw"
         className="h-screen object-cover"
       />
       <div
@@ -79,6 +80,7 @@ export default function GTDFestTop({
             ref={logoRef}
             src={logo}
             alt="Logo GTD Fest"
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="shrink min-h-0 h-auto min-w-0 max-h-[80%] w-auto aspect-[0.87/1] object-cover"
           />
           <div className="grow md:grow-0 text-center space-y-4">

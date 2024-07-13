@@ -22,4 +22,4 @@ jobs:
           git remote set-url --push origin ${{ vars.DESTINATION_REPO }}
           git fetch -p origin
           git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
-          git push --mirror
+          git push --mirror --force
