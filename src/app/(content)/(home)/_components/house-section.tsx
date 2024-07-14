@@ -28,24 +28,24 @@ const HouseSection = () => {
   const [glphoto2, setGlphoto2] = useState(og2Photo);
   const [housetoggle, setHousetoggle] = useState(0);
   const [toggle, setToggle] = useState([0, 0, 0, 0]);
-
+  const [isInitialPlace, setIsInitialPlace] = useState(false);
   const handleClick = (toggleValue: number) => {
-    if (housetoggle === 0 && toggleValue === 1) {
+    if (toggleValue === 1) {
       setGlphoto1(og1Photo);
       setGlphoto2(og2Photo);
       setHouseName("Wanderer");
       setOg(["Sijilink", "Nimboosh"]);
-    } else if (housetoggle === 0 && toggleValue === 2) {
+    } else if (toggleValue === 2) {
       setGlphoto1(og3Photo);
       setGlphoto2(og4Photo);
       setHouseName("Healer");
       setOg(["Mashark Stitch", "Sirius Duck"]);
-    } else if (housetoggle === 0 && toggleValue === 3) {
+    } else if (toggleValue === 3) {
       setGlphoto1(og5Photo);
       setGlphoto2(og6Photo);
       setHouseName("Changeling");
       setOg(["Azkapan-kapan", "Loop~ah"]);
-    } else if (housetoggle === 0 && toggleValue === 4) {
+    } else if (toggleValue === 4) {
       setGlphoto1(og7Photo);
       setGlphoto2(og8Photo);
       setHouseName("Timeturner");
@@ -55,23 +55,29 @@ const HouseSection = () => {
     if (toggle[toggleValue - 1] === 1) {
       setToggle([0, 0, 0, 0]);
       setHousetoggle(0);
+      setIsInitialPlace(false);
     } else {
-      if (housetoggle === 0 && toggleValue === 1) {
+      if (toggleValue === 1) {
         setToggle([1, 0, 0, 0]);
-      } else if (housetoggle === 0 && toggleValue === 2) {
+      } else if (toggleValue === 2) {
         setToggle([0, 1, 0, 0]);
-      } else if (housetoggle === 0 && toggleValue === 3) {
+      } else if (toggleValue === 3) {
         setToggle([0, 0, 1, 0]);
-      } else if (housetoggle === 0 && toggleValue === 4) {
+      } else if (toggleValue === 4) {
         setToggle([0, 0, 0, 1]);
+      }
+      if (housetoggle !== 0) {
+        setIsInitialPlace(true);
+      } else {
+        setIsInitialPlace(false);
       }
       setHousetoggle(toggleValue);
     }
   };
 
   return (
-    <div className="bg-slate-900 flex flex-col xl:flex-row xl:content-between mx-5 mt-5">
-      <div className="xl:flex-1 xl:px-5">
+    <div className="bg-slate-900 flex flex-col lg:flex-row lg:content-between mx-5 mt-5 lg:mt-20">
+      <div className="lg:flex-1 lg:px-5">
         <div className="relative">
           <Image
             className="w-full"
@@ -79,7 +85,7 @@ const HouseSection = () => {
             alt="choose your house"
           />
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <p className="text-white font-serif sm:text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-3xl">
+            <p className="text-white font-serif sm:text-xl md:text-2xl lg:text-xl xl:text-2xl 2xl:text-3xl">
               Choose your house
             </p>
           </div>
@@ -89,19 +95,11 @@ const HouseSection = () => {
             <BannerWanderer
               onClick={() => handleClick(1)}
               className={cn(
-                "z-10 transform transition-transform duration-500 ease-in-out",
+                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[0] ? "translate-y-0" : "-translate-y-1/4",
-                !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                  ? "hover:translate-y-0"
-                  : "",
-                toggle[0]
-                  ? "cursor-pointer"
-                  : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                    ? "cursor-pointer"
-                    : "",
               )}
             ></BannerWanderer>
-            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
               Wanderer
             </p>
           </div>
@@ -109,19 +107,11 @@ const HouseSection = () => {
             <BannerHealer
               onClick={() => handleClick(2)}
               className={cn(
-                "z-10 transform transition-transform duration-500 ease-in-out",
+                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[1] ? "translate-y-0" : "-translate-y-1/4",
-                !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                  ? "hover:translate-y-0"
-                  : "",
-                toggle[1]
-                  ? "cursor-pointer"
-                  : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                    ? "cursor-pointer"
-                    : "",
               )}
             ></BannerHealer>
-            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
               Healer
             </p>
           </div>
@@ -129,19 +119,11 @@ const HouseSection = () => {
             <BannerChangeling
               onClick={() => handleClick(3)}
               className={cn(
-                "z-10 transform transition-transform duration-500 ease-in-out",
+                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[2] ? "translate-y-0" : "-translate-y-1/4",
-                !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                  ? "hover:translate-y-0"
-                  : "",
-                toggle[2]
-                  ? "cursor-pointer"
-                  : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                    ? "cursor-pointer"
-                    : "",
               )}
             ></BannerChangeling>
-            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
               Changeling
             </p>
           </div>
@@ -149,26 +131,18 @@ const HouseSection = () => {
             <BannerTimeturner
               onClick={() => handleClick(4)}
               className={cn(
-                "z-10 transform transition-transform duration-500 ease-in-out",
+                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[3] ? "translate-y-0" : "-translate-y-1/4",
-                !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                  ? "hover:translate-y-0"
-                  : "",
-                toggle[3]
-                  ? "cursor-pointer"
-                  : !toggle[0] && !toggle[1] && !toggle[2] && !toggle[3]
-                    ? "cursor-pointer"
-                    : "",
               )}
             ></BannerTimeturner>
-            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
               Timeturner
             </p>
           </div>
         </div>
       </div>
 
-      <div className="relative xl:flex-1 xl:px-5 justify-center overflow-hidden h-[45vh] sm:h-[60vh] md:h-[65vh] lg:h-[65vh] xl:h-[70vh] 2xl:h-[75vh] w-full">
+      <div className="relative lg:flex-1 lg:px-5 justify-center overflow-hidden h-[80vw] sm:h-[80vw] md:h-[80vw] lg:h-[70vh] xl:h-[75vh] 2xl:h-[80vh] w-full">
         <div className="relative overflow-hidden h-full w-full">
           <div className="absolute z-10 top-0 left-0">
             <Image className="w-full h-auto" src={glclose} alt="paper frame" />
@@ -176,6 +150,7 @@ const HouseSection = () => {
           <div
             className={cn(
               "absolute z-0 top-0 left-0 transition duration-500 ease-in-out",
+              isInitialPlace ? "-translate-y-[69%]" : "translate-y-[0%]",
               housetoggle !== 0 ? "translate-y-[0%]" : "-translate-y-[69%]",
             )}
           >

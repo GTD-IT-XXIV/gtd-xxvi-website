@@ -22,11 +22,11 @@ const Housegl: React.FC<Props> = (props) => {
   return (
     <div className={`relative`}>
       <Image src={backgroundgl} alt="background gl" className="w-full" />
-      <div className="absolute flex flex-col items-center top-[20%] right-[20%] left-[20%] ">
-        <p className="font-serif text-red-500 text-md sm:text-xl md:text-3xl xl:text-xl">
+      <div className="absolute flex flex-col items-center top-[20%] right-[18%] left-[19%] ">
+        <p className="font-serif text-red-500 text-sm sm:text-lg md:text-2xl lg:text-xl">
           House {props.house}
         </p>
-        <p className="font-serif text-2xl sm:text-3xl mb-[5%] md:text-5xl xl:text-3xl">
+        <p className="font-serif text-sm sm:text-lg mb-[5%] md:text-2xl lg:text-2xl">
           Orientation Groups
         </p>
         <div className="flex w-full">
@@ -48,11 +48,11 @@ const Housegl: React.FC<Props> = (props) => {
               )}
             />
             {hover[0] ? (
-              <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
+              <p className="font-serif pt-[5%] md:text-lg lg:text-md xl:text-md sm:text-md text-xs transition-transform duration-500 ease-in-out">
                 {props.og[0]} &gt;
               </p>
             ) : (
-              <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
+              <p className="font-serif pt-[5%] md:text-lg lg:text-md xl:text-md sm:text-md text-xs transition-transform duration-500 ease-in-out">
                 {props.og[0]}
               </p>
             )}
@@ -74,11 +74,11 @@ const Housegl: React.FC<Props> = (props) => {
               )}
             />
             {hover[1] ? (
-              <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
+              <p className="font-serif pt-[5%] md:text-lg lg:text-md xl:text-md sm:text-md text-xs transition-transform duration-500 ease-in-out">
                 {props.og[1]} &gt;
               </p>
             ) : (
-              <p className="font-serif pt-[5%] md:text-xl sm:text-lg text-sm transition-transform duration-500 ease-in-out">
+              <p className="font-serif pt-[5%] md:text-lg lg:text-md xl:text-md sm:text-md text-xs transition-transform duration-500 ease-in-out">
                 {props.og[1]}
               </p>
             )}
