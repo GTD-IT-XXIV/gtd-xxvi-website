@@ -65,6 +65,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
       {variant === "gtdfest" ? (
         <Link href="/">
           <Image
+            key={logoGTDTopi.src}
             src={logoGTDTopi}
             alt="Logo PINTU Get Together Day"
             className="h-8 w-12 mx-[1.9rem] mb-[1.4rem] mt-3 object-cover"
@@ -73,6 +74,7 @@ export default function Navbar({ className, variant }: NavbarProps) {
       ) : (
         <Link href="/">
           <Image
+            key={variant === "dark" ? logoGTDWhite.src : logoGTDBlack.src}
             src={variant === "dark" ? logoGTDWhite : logoGTDBlack}
             alt="Logo PINTU Get Together Day"
             className="h-16 w-16 mx-6 object-cover"
