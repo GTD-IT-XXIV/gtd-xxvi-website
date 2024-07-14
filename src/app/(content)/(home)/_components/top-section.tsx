@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useEffect, useState } from "react";
+import { LuChevronDown } from "react-icons/lu";
 
 import GTDButton from "@/app/_components/gtd-button";
 
@@ -38,21 +39,24 @@ const TopSection = () => {
       <Image
         src={imageSrc}
         alt="background"
-        className="object-bottom md:h-dvh xl:h-auto"
+        className="object-bottom md:h-[92dvh] xl:h-auto"
       />
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div>
-          <Image
-            src={logogtd}
-            alt="logo gtd"
-            className="justify-center self-center w-[250px] sm:w-[300px] md:w-[350px] xl:w-[350px] 2xl:w-[400px] mb-10"
-          />
-        </div>
-        <Link href="/" className="">
-          <div className="relative flex flex-col">
-            <GTDButton>Register</GTDButton>
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div>
+            <Image
+              src={logogtd}
+              alt="logo gtd"
+              className="justify-center self-center w-[250px] sm:w-[300px] md:w-[350px] xl:w-[350px] 2xl:w-[400px] mb-10"
+            />
           </div>
-        </Link>
+          <Link href="/" className="">
+            <div className="relative flex flex-col">
+              <GTDButton>Register</GTDButton>
+            </div>
+          </Link>
+        </div>
+        <LuChevronDown className="size-8 animate-bounce text-white" />
       </div>
     </div>
   );
