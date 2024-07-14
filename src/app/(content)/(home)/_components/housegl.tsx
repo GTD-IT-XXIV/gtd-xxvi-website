@@ -66,6 +66,7 @@ const Housegl: React.FC<Props> = (props) => {
             <Image
               key={props.glphoto2.src}
               src={props.glphoto2}
+              placeholder="blur"
               alt="GL photo 2"
               className={cn(
                 hover[1] &&

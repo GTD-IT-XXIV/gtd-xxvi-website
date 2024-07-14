@@ -98,7 +98,7 @@ export const gtdData = {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button className="underline underline-offset-2 hover:underline-offset-4">
-            See Details
+            View Details
           </button>
         </AlertDialogTrigger>
         <AlertDialogContent className="bg-slate-900 text-white border-slate-800">
@@ -169,7 +169,7 @@ export const gtdData = {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button className="underline underline-offset-2 hover:underline-offset-4">
-            See Details
+            View Details
           </button>
         </AlertDialogTrigger>
         <AlertDialogContent className="bg-slate-900 text-white border-slate-800">
