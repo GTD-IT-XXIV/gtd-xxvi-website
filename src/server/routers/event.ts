@@ -9,7 +9,9 @@ import { nameKeySchema } from "./schemas";
 
 export const eventRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.event.findMany();
+    return ctx.db.event.findMany({
+      orderBy: { startDate: "desc" },
+    });
   }),
 
   getAllAvailable: publicProcedure.query(({ ctx }) => {
