@@ -50,7 +50,11 @@ const TopSection = () => {
               className="justify-center self-center w-[250px] sm:w-[300px] md:w-[350px] xl:w-[350px] 2xl:w-[400px] mb-10"
             />
           </div>
-          <Link href="/" className="">
+          <Link
+            href="https://forms.gle/pjoyrjRkwwJayBw68"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <div className="relative flex flex-col">
               <GTDButton>Register</GTDButton>
             </div>

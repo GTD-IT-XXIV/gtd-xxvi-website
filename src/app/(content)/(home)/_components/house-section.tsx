@@ -38,17 +38,17 @@ const HouseSection = () => {
     } else if (toggleValue === 2) {
       setGlphoto1(og3Photo);
       setGlphoto2(og4Photo);
-      setHouseName("Healer");
+      setHouseName("Changeling");
       setOg(["Mashark Stitch", "Sirius Duck"]);
     } else if (toggleValue === 3) {
       setGlphoto1(og5Photo);
       setGlphoto2(og6Photo);
-      setHouseName("Changeling");
+      setHouseName("Timeturner");
       setOg(["Azkapan-kapan", "Loop~ah"]);
     } else if (toggleValue === 4) {
       setGlphoto1(og7Photo);
       setGlphoto2(og8Photo);
-      setHouseName("Timeturner");
+      setHouseName("Healer");
       setOg(["Jaheal", "Curema"]);
     }
 
@@ -104,23 +104,11 @@ const HouseSection = () => {
             </p>
           </div>
           <div className="flex flex-col overflow-hidden relative px-1">
-            <BannerHealer
+            <BannerChangeling
               onClick={() => handleClick(2)}
               className={cn(
                 "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[1] ? "translate-y-0" : "-translate-y-1/4",
-              )}
-            ></BannerHealer>
-            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
-              Healer
-            </p>
-          </div>
-          <div className="flex flex-col overflow-hidden relative px-1">
-            <BannerChangeling
-              onClick={() => handleClick(3)}
-              className={cn(
-                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
-                toggle[2] ? "translate-y-0" : "-translate-y-1/4",
               )}
             ></BannerChangeling>
             <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
@@ -129,14 +117,26 @@ const HouseSection = () => {
           </div>
           <div className="flex flex-col overflow-hidden relative px-1">
             <BannerTimeturner
+              onClick={() => handleClick(3)}
+              className={cn(
+                "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
+                toggle[2] ? "translate-y-0" : "-translate-y-1/4",
+              )}
+            ></BannerTimeturner>
+            <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
+              Timeturner
+            </p>
+          </div>
+          <div className="flex flex-col overflow-hidden relative px-1">
+            <BannerHealer
               onClick={() => handleClick(4)}
               className={cn(
                 "z-10 transform transition-transform duration-500 ease-in-out hover:translate-y-0 cursor-pointer",
                 toggle[3] ? "translate-y-0" : "-translate-y-1/4",
               )}
-            ></BannerTimeturner>
+            ></BannerHealer>
             <p className="text-white self-center pt-3 font-serif absolute bottom-[15%] text-xs sm:text-md md:text-xl lg:text-sm xl:text-xl">
-              Timeturner
+              Healer
             </p>
           </div>
         </div>

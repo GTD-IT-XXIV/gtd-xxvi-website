@@ -32,7 +32,7 @@ export const faqdatas = [
     index: "4",
     question: "How much does the orientation cost?",
     answer:
-      "$25. This price includes our annual GTD T-Shirt, dinner & bus accommodation on August 3, and many more!",
+      "$30. This price includes our annual GTD T-Shirt, dinner & bus accommodation on August 3, and many more!",
   },
 ];
 
