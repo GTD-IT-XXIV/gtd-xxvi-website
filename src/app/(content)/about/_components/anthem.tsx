@@ -102,7 +102,7 @@ export default function Anthem() {
             href="https://soundcloud.com/steveprat/get-together-day-anthem"
             title="Get Together Day Anthem"
             rel="noopener noreferrer"
-            className="text-[10px] text-neutral-300 hover:underline underline-offset-2 overflow-hidden whitespace-nowrap overflow-ellipsis"
+            className="text-[10px] text-neutral-300/85 hover:underline underline-offset-2 overflow-hidden whitespace-nowrap overflow-ellipsis"
             target="_blank"
           >
             Get Together Day Anthem · SoundCloud
