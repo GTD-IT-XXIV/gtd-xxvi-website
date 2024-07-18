@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  LuFacebook as Facebook,
   LuInstagram as Instagram,
   LuLinkedin as Linkedin,
 } from "react-icons/lu";
+import { TbBrandTiktok as Tiktok } from "react-icons/tb";
 
 import { cn } from "@/lib/utils";
 
@@ -35,11 +35,11 @@ export default function Footer({ className }: FooterProps) {
           </div>
           <div className="flex gap-3">
             <Link
-              href="https://www.facebook.com/PINTUGTD/"
+              href="https://www.tiktok.com/@pintugtd"
               rel="noreferrer noopener"
               target="_blank"
             >
-              <Facebook className="size-4 md:size-6" />
+              <Tiktok className="size-4 md:size-6" />
             </Link>
             <Link
               href="https://www.instagram.com/pintugtd"

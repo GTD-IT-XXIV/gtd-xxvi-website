@@ -2,22 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { type HTMLAttributes, useRef } from "react";
-
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog";
-
-import { Table, TableBody, TableCell } from "@/components/ui/table";
-import { TableHeader } from "@/components/ui/table";
-import { TableRow } from "@/components/ui/table";
-import { TableHead } from "@/components/ui/table";
 
 import { cn } from "@/lib/utils";
 

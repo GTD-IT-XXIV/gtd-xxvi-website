@@ -4,7 +4,7 @@ import { getPageSession } from "@/server/auth";
 
 import { publicProcedure } from "@/lib/trpc/config";
 
-export const dashboardProcedure = publicProcedure.use(async ({ ctx, next }) => {
+export const dashboardProcedure = publicProcedure.use(async ({ next }) => {
   const session = await getPageSession();
   if (!session) {
     throw new TRPCError({ code: "UNAUTHORIZED" });

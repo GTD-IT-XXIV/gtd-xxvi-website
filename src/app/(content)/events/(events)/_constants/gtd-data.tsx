@@ -49,7 +49,7 @@ const beachDayDresscode = [
   },
 ];
 
-const fieldDayDresscode = [
+const outdoorDresscode = [
   {
     house: "Wanderer",
     logo: wandererLogo,
@@ -63,7 +63,7 @@ const fieldDayDresscode = [
   {
     house: "Timeturner",
     logo: timeturnerLogo,
-    color: "Blue",
+    color: "Red",
   },
   {
     house: "Healer",
@@ -77,7 +77,7 @@ export const gtdData = {
     title: "I: Night Games",
     location: "NTU TR NS/SS",
     date: "Fri, 2 Aug",
-    time: "19.15 - 23.45",
+    time: "19.15 - 23.15",
     dresscode: "Non-Black T-Shirt",
   },
   day2: {
@@ -161,7 +161,7 @@ export const gtdData = {
     ),
   },
   day3: {
-    title: "III: Field Day",
+    title: "III: Outdoor",
     location: "All Around SG",
     date: "Sun, 4 Aug",
     time: "12.45 - 18.30",
@@ -176,7 +176,7 @@ export const gtdData = {
           <AlertDialogHeader>
             <div className="flex flex-row items-center gap-4">
               <AlertDialogTitle className="flex-1">
-                Field Day Dresscode
+                Outdoor Dresscode
               </AlertDialogTitle>
               <AlertDialogCancel asChild>
                 <Button
@@ -204,7 +204,7 @@ export const gtdData = {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {fieldDayDresscode.map(({ house, logo, color }) => (
+                  {outdoorDresscode.map(({ house, logo, color }) => (
                     <TableRow
                       key={house}
                       className="hover:bg-muted-foreground/25 border-muted-foreground"
