@@ -55,23 +55,6 @@ export default function WholePage() {
     };
   }, [toast]);
 
-  const ogNameMapping: Record<number, string> = {
-    1: "Sijilink",
-    2: "Nimboosh",
-    3: "Mashark Stitch",
-    4: "Sirius Duck",
-    5: "Azkapan-kapan",
-    6: "Loop~ah",
-    7: "Jaheal",
-    8: "Curema",
-  };
-
-  const podiumPositions = [
-    { bottom: 300, left: 150 },
-    { bottom: 230, left: 35 },
-    { bottom: 195, left: 260 },
-  ];
-
   const winners: Winner[] =
     data?.top3OG.slice(0, 3).map((og) => {
       let houseName: House = "healer";
@@ -116,23 +99,6 @@ export default function WholePage() {
         winners={winners as [Winner, Winner, Winner]}
         className="absolute bottom-0 inset-x-0 sm:px-8 mb-[40px] px-4"
       />
-      {data?.top3OG.slice(0, 3).map((og, index) => {
-        const position = podiumPositions[index];
-        return (
-          position && (
-            <p
-              key={og.number}
-              className="z-60 absolute font-serif sm:w-[100px] text-center justify-center w-[80px] drop-shadow-lg"
-              style={{
-                bottom: `${position.bottom}px`,
-                left: `${position.left}px`,
-              }}
-            >
-              {ogNameMapping[parseInt(og.number, 10)] ?? og.og}
-            </p>
-          )
-        );
-      })}
     </div>
   );
 }

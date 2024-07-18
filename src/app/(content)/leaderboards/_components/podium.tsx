@@ -21,7 +21,32 @@ const podiumColor: Record<House, string> = {
   timeturner: "#FACC15",
 };
 
-const Podium = ({ winners, ...props }: PodiumProps) => (
+const ogNameMapping: Record<number, string> = {
+  1: "Sijilink",
+  2: "Nimboosh",
+  3: "Mashark Stitch",
+  4: "Sirius Duck",
+  5: "Azkapan-kapan",
+  6: "Loop~ah",
+  7: "Jaheal",
+  8: "Curema",
+};
+
+const splitText = (text: string) => {
+  const splitIndex = text.indexOf(' ') !== -1 ? text.indexOf(' ') : text.indexOf('-');
+  if (splitIndex === -1) {
+    return [text, '']; // Return the whole text as the first line if no space or hyphen
+  }
+  const firstHalf = text.slice(0, splitIndex);
+  const secondHalf = text.slice(splitIndex + 1);
+  return [firstHalf, secondHalf];
+}
+
+const Podium = ({ winners, ...props }: PodiumProps) => {
+  const [firstLine0, secondLine0] = splitText(ogNameMapping[parseInt(winners[0].og, 10)] ?? winners[0].og);
+  const [firstLine1, secondLine1] = splitText(ogNameMapping[parseInt(winners[1].og, 10)] ?? winners[1].og);
+  const [firstLine2, secondLine2] = splitText(ogNameMapping[parseInt(winners[2].og, 10)] ?? winners[2].og);
+  return (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -87,7 +112,28 @@ const Podium = ({ winners, ...props }: PodiumProps) => (
         </text>
       </g>
     </g>
-
+    <text
+      x={60.5}
+      y={secondLine1 ? 100 : 110} // Adjust y if there's only one line
+      fill="#FFFFFF"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      className="text-xl font-serif"
+    >
+      {firstLine1}
+    </text>
+    {secondLine1 && (
+      <text
+        x={60.5}
+        y={120}
+        fill="#FFFFFF"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="text-xl font-serif"
+      >
+        {secondLine1}
+      </text>
+    )}
     {/* 3rd Place */}
     <g clipPath="url(#podium-g)">
       <path
@@ -152,6 +198,28 @@ const Podium = ({ winners, ...props }: PodiumProps) => (
         </text>
       </g>
     </g>
+    <text
+      x={309}
+      y={secondLine2 ? 140 : 150} // Adjust y if there's only one line
+      fill="#FFFFFF"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      className="text-xl font-serif"
+    >
+      {firstLine2}
+    </text>
+    {secondLine2 && (
+      <text
+        x={309}
+        y={160}
+        fill="#FFFFFF"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="text-xl font-serif"
+      >
+        {secondLine2}
+      </text>
+    )}
 
     {/* 1st Place */}
     <path
@@ -210,6 +278,28 @@ const Podium = ({ winners, ...props }: PodiumProps) => (
         points
       </text>
     </g>
+    <text
+      x={185.5}
+      y={secondLine0 ? 14 : 24}
+      fill="#FFFFFF"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      className="text-xl font-serif"
+    >
+      {firstLine0}
+    </text>
+    {secondLine0 && (
+      <text
+        x={185.5}
+        y={34}
+        fill="#FFFFFF"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        className="text-xl font-serif"
+      >
+        {secondLine0}
+      </text>
+    )}
 
     <defs>
       <filter id="podium-label-shadow">
@@ -422,4 +512,5 @@ const Podium = ({ winners, ...props }: PodiumProps) => (
     </defs>
   </svg>
 );
+}
 export default Podium;
