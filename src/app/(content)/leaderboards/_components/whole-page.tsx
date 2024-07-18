@@ -55,23 +55,6 @@ export default function WholePage() {
     };
   }, [toast]);
 
-  const ogNameMapping: Record<number, string> = {
-    1: "Sijilink",
-    2: "Nimboosh",
-    3: "Mashark Stitch",
-    4: "Sirius Duck",
-    5: "Azkapan-kapan",
-    6: "Loop~ah",
-    7: "Jaheal",
-    8: "Curema",
-  };
-
-  const podiumPositions = [
-    { bottom: 300, left: 150 },
-    { bottom: 230, left: 35 },
-    { bottom: 195, left: 260 },
-  ];
-
   const winners: Winner[] =
     data?.top3OG.slice(0, 3).map((og) => {
       let houseName: House = "healer";
