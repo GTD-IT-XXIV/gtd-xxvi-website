@@ -11,6 +11,11 @@ import DvDPole from "../_assets/tiang untuk cd.svg?url";
 import Vinyl from "../_assets/vinyl.webp";
 import VinylPlayer from "./vinyl-player";
 
+const anthemSrc = {
+  aac: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/gtd-theme-song-aac.mp4?t=2024-07-18T02%3A02%3A46.900Z",
+  mp3: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/gtd-theme-song-mp3.mp3?t=2024-07-18T02%3A04%3A10.080Z",
+};
+
 export default function Anthem() {
   const [showControls, setShowControls] = useState(false);
   const [spin, setSpin] = useState(false);
@@ -79,8 +84,8 @@ export default function Anthem() {
             onPause={() => setSpin(false)}
             className="mb-0.5"
           >
-            <source src="/gtd-theme-song-aac.mp4" type="audio/mp4" />
-            <source src="/gtd-theme-song-mp3.mp3" type="audio/mpeg" />
+            <source src={anthemSrc.aac} type="audio/mp4" />
+            <source src={anthemSrc.mp3} type="audio/mpeg" />
             <p>
               Your browser does not support HTML audio. Access the song{" "}
               <Link

@@ -19,6 +19,11 @@ import { PORTFOLIOS } from "@/lib/constants";
 
 import CommitteeHeaderBg from "./committee-header-bg";
 
+const videoSrc = {
+  vp9: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/mctops-vp9.webm?t=2024-07-18T02%3A01%3A51.011Z",
+  h264: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/mctops-h264.mp4?t=2024-07-18T02%3A02%3A13.339Z",
+};
+
 const videoTiming: {
   start: number;
   loopStart: number;
@@ -174,8 +179,8 @@ export default function CommitteeHeader() {
               }
             }}
           >
-            <source src="/mctops-vp9.webm#t=1.3" type="video/webm" />
-            <source src="/mctops-h264.mp4#t=1.3" type="video/mp4" />
+            <source src={`${videoSrc.vp9}#t=1.3`} type="video/webm" />
+            <source src={`${videoSrc.h264}#t=1.3`} type="video/mp4" />
             <p>
               Your browser does not support the video tag. Access the video{" "}
               <Link href="/mctops-vp9.webm">here (WEBM)</Link> or{" "}
