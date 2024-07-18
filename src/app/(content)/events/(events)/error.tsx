@@ -1,9 +1,5 @@
 "use client";
 
-export default function EventsPageError({
-  error,
-}: {
-  error: Error & { digest?: string };
-}) {
+export default function EventsPageError() {
   return <p>An error occurred while fetching events.</p>;
 }
