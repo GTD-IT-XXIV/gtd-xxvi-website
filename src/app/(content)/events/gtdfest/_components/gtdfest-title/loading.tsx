@@ -1,6 +1,6 @@
 export default function GTDFestTitleLoading() {
-  const startDateLabel = "18 Feb";
-  const endDateLabel = "3 Mar 2024";
+  const startDateLabel = "17 Feb";
+  const endDateLabel = "18 Feb 2024";
 
   return (
     <hgroup className="space-y-3">
