@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { Suspense } from "react";
 
 import { api } from "@/server/trpc";
 
@@ -11,6 +12,8 @@ import logoGTDFest from "@/assets/images/logo-gtdfest.webp";
 import escapeRoomImage from "./_assets/escape-room.webp";
 import GTDFestMerchSection from "./_components/gtdfest-merch-section";
 import GTDFestSection from "./_components/gtdfest-section";
+import GTDFestTitle from "./_components/gtdfest-title";
+import GTDFestTitleLoading from "./_components/gtdfest-title/loading";
 import GTDFestTop from "./_components/gtdfest-top";
 import {
   arcadeImages,
@@ -23,24 +26,17 @@ import {
 
 dayjs.extend(utc);
 
-export default async function GTDFestPage() {
-  const gtdFest = await api.event.getByName({ name: "GTD Fest" });
-  const escapeRoom = await api.event.getByName({ name: "Escape Room" });
-
-  if (!gtdFest) {
-    throw new Error(`GTD Fest event not found`);
-  }
-  if (!escapeRoom) {
-    throw new Error(`Escape Room event not found`);
-  }
-
+export default function GTDFestPage() {
   return (
     <main className="bg-slate-900 text-white">
       <GTDFestTop
         backgroundImage={gtdFestBg1}
         logo={logoGTDFest}
-        gtdFest={gtdFest}
-        escapeRoom={escapeRoom}
+        title={
+          <Suspense fallback={<GTDFestTitleLoading />}>
+            <GTDFestTitle />
+          </Suspense>
+        }
       />
       <GTDFestMerchSection />
       {/* Other Sections */}
