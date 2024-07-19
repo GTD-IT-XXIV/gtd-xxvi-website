@@ -35,6 +35,8 @@ export default function Footer({ className }: FooterProps) {
           </div>
           <div className="flex gap-3">
             <Link
+              id="footer-tiktok-button"
+              data-umami-event="footer-tiktok-button"
               href="https://www.tiktok.com/@pintugtd"
               rel="noreferrer noopener"
               target="_blank"
@@ -42,6 +44,8 @@ export default function Footer({ className }: FooterProps) {
               <Tiktok className="size-4 md:size-6" />
             </Link>
             <Link
+              id="footer-instagram-button"
+              data-umami-event="footer-instagram-button"
               href="https://www.instagram.com/pintugtd"
               rel="noreferrer noopener"
               target="_blank"
@@ -49,6 +53,8 @@ export default function Footer({ className }: FooterProps) {
               <Instagram className="size-4 md:size-6" />
             </Link>
             <Link
+              id="footer-linkedin-button"
+              data-umami-event="footer-linkedin-button"
               href="https://www.linkedin.com/company/pintu-gtd/"
               rel="noreferrer noopener"
               target="_blank"

@@ -88,6 +88,7 @@ const VinylPlayer = ({ onPlay, ...props }: VinylProps) => (
       }}
     >
       <path
+        id="vinyl-player-button"
         fill="#D9BA19"
         fillOpacity={0.85}
         d="m287 184-32.25 18.187v-36.374L287 184Z"

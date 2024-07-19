@@ -17,6 +17,8 @@ export default function Contacts() {
         </h1>
         <div className="flex flex-col gap-14 p-10 font-serif items-center justify-center text-[#402A10] md:flex md:flex-row flex-wrap">
           <Link
+            id="contact-telegram-button"
+            data-umami-event="contact-telegram-button"
             href="https://t.me/pascaltheodores"
             target="_blank"
             rel="noopener noreferrer"
@@ -47,6 +49,8 @@ export default function Contacts() {
             />
           </Link>
           <Link
+            id="contact-instagram-button"
+            data-umami-event="contact-instagram-button"
             href="https://www.instagram.com/pintugtd"
             target="_blank"
             rel="noopener noreferrer"

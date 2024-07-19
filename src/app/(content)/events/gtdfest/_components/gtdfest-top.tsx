@@ -109,6 +109,8 @@ export default function GTDFestTop({
             </hgroup>
             <div className="flex md:flex-col justify-center items-center gap-4">
               <Button
+                id="gtdfest-photos-button"
+                data-umami-event="gtdfest-photos-button"
                 type="button"
                 className="bg-gtd-primary-30 hover:bg-gtd-primary-20 md:px-8 md:h-12 md:text-xl font-semibold"
                 asChild
