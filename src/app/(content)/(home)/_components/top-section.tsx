@@ -56,7 +56,12 @@ const TopSection = () => {
             rel="noreferrer noopener"
           >
             <div className="relative flex flex-col">
-              <GTDButton>Register</GTDButton>
+              <GTDButton
+                id="gtd-register-button"
+                data-umami-event="gtd-register-button"
+              >
+                Register
+              </GTDButton>
             </div>
           </Link>
         </div>

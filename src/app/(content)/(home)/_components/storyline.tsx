@@ -89,7 +89,12 @@ export default function Storyline({
       </div>
       <div className="absolute inset-x-0 bottom-[3%] flex justify-center">
         <Link href="/events" target="_self">
-          <GTDButton>Learn More</GTDButton>
+          <GTDButton
+            id="gtd-learn-more-button"
+            data-umami-event="gtd-learn-more-button"
+          >
+            Learn More
+          </GTDButton>
         </Link>
       </div>
     </section>
