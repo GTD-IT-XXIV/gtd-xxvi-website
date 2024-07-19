@@ -48,6 +48,12 @@ export const env = createEnv({
         (str) => !(str === ""),
         "You forgot to add your Google Sheets ID",
       ),
+    LEADERBOARDS_SHEETS_ID: z
+      .string()
+      .refine(
+        (str) => !(str === ""),
+        "You forgot to add your leaderboards Google Sheets ID",
+      ),
   },
 
   /**
@@ -84,6 +90,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_EMAIL: process.env.GOOGLE_CLIENT_EMAIL,
     GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
     SHEETS_ID: process.env.SHEETS_ID,
+    LEADERBOARDS_SHEETS_ID: process.env.LEADERBOARDS_SHEETS_ID,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
   /**

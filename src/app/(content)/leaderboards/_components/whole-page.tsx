@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { useToast } from "@/app/_components/ui/use-toast";
 
+import { getLeaderboardsData } from "@/server/actions/get-leaderboards-sheets";
+
 import type { House } from "@/lib/types";
 
 import pic from "../_assets/leaderboards-bg.webp";
@@ -21,8 +23,8 @@ const placeholderWinners: Winner[] = [
 ];
 
 type LeaderboardData = {
-  topHouse: { name: string };
-  top3OG: { number: string; og: string; house: string; points: number }[];
+  topHouse: { name: string; points: number };
+  top3OG: { number: string; points: number }[];
 };
 
 export default function WholePage() {
@@ -38,11 +40,16 @@ export default function WholePage() {
         const result = (await response.json()) as LeaderboardData;
         setData(result);
       } catch (error) {
-        toast({
-          title: "Failed to Fetch Data",
-          description: "Please refresh the page.",
-          variant: "destructive",
-        });
+        try {
+          const result = await getLeaderboardsData();
+          setData(result);
+        } catch (error) {
+          toast({
+            title: "Failed to Fetch Data",
+            description: "Please refresh the page.",
+            variant: "destructive",
+          });
+        }
       }
     };
 
