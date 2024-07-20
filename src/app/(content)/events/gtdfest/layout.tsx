@@ -24,6 +24,11 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
+  openGraph: {
+    siteName: "PINTU GTD",
+    url: `${BASE_URL}/events/gtdfest`,
+    type: "website",
+  },
 };
 
 export default function GTDFestLayout({ children }: { children: ReactNode }) {

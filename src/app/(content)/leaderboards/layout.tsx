@@ -4,6 +4,8 @@ import type { BreadcrumbList, ListItem, WithContext } from "schema-dts";
 
 import { Toaster } from "@/app/_components/ui/toaster";
 
+import { BASE_URL } from "@/lib/constants";
+
 const breadcrumb: WithContext<BreadcrumbList> = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -18,6 +20,11 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "Leaderboards",
+  openGraph: {
+    siteName: "PINTU GTD",
+    url: `${BASE_URL}/leaderboards`,
+    type: "website",
+  },
 };
 
 export default function ContentLayout({ children }: { children: ReactNode }) {

@@ -2,6 +2,8 @@ import { type Metadata } from "next";
 import { type ReactNode } from "react";
 import type { BreadcrumbList, ListItem, WithContext } from "schema-dts";
 
+import { BASE_URL } from "@/lib/constants";
+
 const breadcrumb: WithContext<BreadcrumbList> = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -16,6 +18,11 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "Committee",
+  openGraph: {
+    siteName: "PINTU GTD",
+    url: `${BASE_URL}/committee`,
+    type: "website",
+  },
 };
 
 export default function ContentLayout({ children }: { children: ReactNode }) {

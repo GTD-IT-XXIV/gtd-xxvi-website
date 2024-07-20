@@ -4,9 +4,10 @@ import type {
   BreadcrumbList,
   FAQPage,
   ListItem,
-  Question,
   WithContext,
 } from "schema-dts";
+
+import { BASE_URL } from "@/lib/constants";
 
 import { faqdatas } from "./_components/faq-accordion";
 
@@ -37,6 +38,11 @@ const faq: WithContext<FAQPage> = {
 
 export const metadata: Metadata = {
   title: "About Us",
+  openGraph: {
+    siteName: "PINTU GTD",
+    url: `${BASE_URL}/about`,
+    type: "website",
+  },
 };
 
 export default function ContentLayout({ children }: { children: ReactNode }) {

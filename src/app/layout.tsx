@@ -64,11 +64,6 @@ export const metadata: Metadata = {
     default: "PINTU Get Together Day",
   },
   description: "Get Together Day is an annual orientation event held by PINTU.",
-  openGraph: {
-    siteName: "PINTU GTD",
-    url: BASE_URL,
-    type: "website",
-  },
 };
 
 export default function RootLayout({

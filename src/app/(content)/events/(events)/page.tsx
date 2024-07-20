@@ -2,6 +2,8 @@ import { type Metadata } from "next";
 import { Suspense } from "react";
 import type { BreadcrumbList, ListItem, WithContext } from "schema-dts";
 
+import { BASE_URL } from "@/lib/constants";
+
 import TopSection from "../../(home)/_components/top-section";
 import GTDSection from "./_components/gtd-section";
 import PastEvents from "./_components/past-events";
@@ -20,6 +22,11 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "Events",
+  openGraph: {
+    siteName: "PINTU GTD",
+    url: `${BASE_URL}/events`,
+    type: "website",
+  },
 };
 
 export default async function EventsPage() {
