@@ -24,6 +24,14 @@ export const metadata: Metadata = {
     siteName: "PINTU GTD",
     url: `${BASE_URL}/leaderboards`,
     type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/opengraph-image.png`,
+        width: 1000,
+        height: 1000,
+        alt: "Logo PINTU Get Together Day",
+      },
+    ],
   },
 };
 
