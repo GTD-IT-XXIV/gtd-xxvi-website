@@ -18,7 +18,7 @@ const story = [
 ];
 
 const trailerUrl =
-  "https://www.youtube.com/embed/f8HRM_Tx7DU?si=K769bc7p8p8JO0b8";
+  "https://www.youtube.com/embed/1bpwlXJpHDo?si=AHQYiI8HX91Oblfl";
 
 export default function Storyline({
   className = "",
@@ -62,13 +62,12 @@ export default function Storyline({
         </div>
         <div className="mx-auto relative z-0 w-[95%] sm:w-4/5 shadow-lg shadow-[#816463]/50">
           <VideoFrame />
-          {/* Placeholder for trailer video */}
+          {/* Placeholder for trailer video
           <div className="absolute top-[6.25%] left-[4.25%] h-[86%] w-auto aspect-video grid place-content-center bg-gtd-secondary-30">
             <p className="font-serif text-3xl md:text-4xl lg:text-5xl">
               Trailer Coming Soon!
             </p>
-          </div>
-          {/* TODO: Replace with trailer video
+          </div>*/}
           <iframe
             src={trailerUrl}
             title="YouTube video player"
@@ -77,7 +76,7 @@ export default function Storyline({
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
             className="border-0 absolute top-[6.25%] left-[4.25%] h-[86%] w-auto aspect-video"
-          />*/}
+          />
         </div>
       </div>
       <div className="absolute inset-x-0 top-[78%]">
