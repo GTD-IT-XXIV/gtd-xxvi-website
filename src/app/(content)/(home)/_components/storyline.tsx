@@ -18,7 +18,7 @@ const story = [
 ];
 
 const trailerUrl =
-  "https://www.youtube.com/embed/1bpwlXJpHDo?si=AHQYiI8HX91Oblfl";
+  "https://www.youtube.com/embed/QA05V4OW2jo?si=iIz5ob7kM6bk4Jv-";
 
 export default function Storyline({
   className = "",
