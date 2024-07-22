@@ -51,7 +51,7 @@ const TopSection = () => {
             />
           </div>
           <Link
-            href="https://forms.gle/pjoyrjRkwwJayBw68"
+            href="https://bit.ly/GTD26Registration"
             target="_blank"
             rel="noreferrer noopener"
           >

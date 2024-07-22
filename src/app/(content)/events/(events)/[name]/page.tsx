@@ -48,7 +48,7 @@ export default async function EventPage({
     ] satisfies ListItem[],
   };
   return (
-    <h1>
+    <h1 className="text-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}

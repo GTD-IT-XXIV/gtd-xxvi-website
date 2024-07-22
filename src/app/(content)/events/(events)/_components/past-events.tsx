@@ -7,6 +7,7 @@ import escaperoom from "@/app/(content)/events/gtdfest/_assets/escape-room.webp"
 import { api } from "@/server/trpc";
 
 import scbd from "../_assets/scbd.webp";
+import seniorCamp from "../_assets/senior-camp.webp";
 import TextParallaxContent from "./text-parralax-content";
 
 dayjs.extend(utc);
@@ -34,10 +35,15 @@ export default async function PastEvents() {
           imgUrl = escaperoom;
         } else if (event.name === "Subcommittee Bonding Day") {
           imgUrl = scbd;
+        } else if (event.name === "Senior Camp") {
+          imgUrl = seniorCamp;
         }
 
         let buttonDisabled = false;
-        if (event.name === "Subcommittee Bonding Day") {
+        if (
+          event.name === "Subcommittee Bonding Day" ||
+          event.name === "Senior Camp"
+        ) {
           buttonDisabled = true;
         }
 

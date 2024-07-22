@@ -20,8 +20,8 @@ import { PORTFOLIOS } from "@/lib/constants";
 import CommitteeHeaderBg from "./committee-header-bg";
 
 const videoSrc = {
-  vp9: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/mctops-vp9.webm?t=2024-07-18T02%3A01%3A51.011Z",
-  h264: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/mctops-h264.mp4?t=2024-07-18T02%3A02%3A13.339Z",
+  vp9: "/mctops-vp9.webm",
+  h264: "/mctops-h264.mp4",
 };
 
 const videoTiming: {
