@@ -12,8 +12,8 @@ import Vinyl from "../_assets/vinyl.webp";
 import VinylPlayer from "./vinyl-player";
 
 const anthemSrc = {
-  aac: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/gtd-theme-song-aac.mp4?t=2024-07-18T02%3A02%3A46.900Z",
-  mp3: "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/gtd-theme-song-mp3.mp3?t=2024-07-18T02%3A04%3A10.080Z",
+  aac: "/gtd-theme-song-aac.mp4",
+  mp3: "/gtd-theme-song-mp3.mp3",
 };
 
 export default function Anthem() {

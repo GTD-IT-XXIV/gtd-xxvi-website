@@ -5,8 +5,7 @@ import { Canvas, type GroupProps, useLoader } from "@react-three/fiber";
 import { Euler, MathUtils } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-const modelSrc =
-  "https://ddjhntpphokusdgpaxuv.supabase.co/storage/v1/object/public/gtd-xxvi-website/wizard-book-stands.glb?t=2024-07-18T01%3A20%3A30.916Z";
+const modelSrc = "/wizard-book-stands.glb";
 
 function LecternModel(props: GroupProps) {
   const gltf = useLoader(GLTFLoader, modelSrc);
