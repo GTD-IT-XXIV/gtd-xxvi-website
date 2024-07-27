@@ -17,9 +17,9 @@ import Podium, { type Winner } from "./podium";
 import Title from "./title";
 
 const placeholderWinners: Winner[] = [
-  { og: "5", house: "changeling", points: 100 },
-  { og: "5", house: "changeling", points: 100 },
-  { og: "5", house: "changeling", points: 100 },
+  { og: "3", house: "changeling", points: 100 },
+  { og: "3", house: "changeling", points: 100 },
+  { og: "3", house: "changeling", points: 100 },
 ];
 
 type LeaderboardData = {
