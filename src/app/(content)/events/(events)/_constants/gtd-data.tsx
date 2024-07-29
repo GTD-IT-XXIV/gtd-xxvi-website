@@ -244,7 +244,7 @@ export const gtdData = {
       </Link>
     ),
     date: "Mon, 5 Aug",
-    time: "17.00 - 22.00",
+    time: "17.00 - 22.30",
     dresscode: "GTD T-Shirt",
   },
 };
