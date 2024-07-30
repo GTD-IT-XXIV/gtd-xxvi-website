@@ -18,6 +18,9 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "Committee",
+  alternates: {
+    canonical: `${BASE_URL}/committee`,
+  },
   openGraph: {
     siteName: "PINTU GTD",
     url: `${BASE_URL}/committee`,

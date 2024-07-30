@@ -24,6 +24,9 @@ const breadcrumb: WithContext<BreadcrumbList> = {
 
 export const metadata: Metadata = {
   title: "GTD Fest x Escape Room",
+  alternates: {
+    canonical: `${BASE_URL}/events/gtdfest`,
+  },
   openGraph: {
     siteName: "PINTU GTD",
     url: `${BASE_URL}/events/gtdfest`,

@@ -38,6 +38,9 @@ const faq: WithContext<FAQPage> = {
 
 export const metadata: Metadata = {
   title: "About Us",
+  alternates: {
+    canonical: `${BASE_URL}/about`,
+  },
   openGraph: {
     siteName: "PINTU GTD",
     url: `${BASE_URL}/about`,
